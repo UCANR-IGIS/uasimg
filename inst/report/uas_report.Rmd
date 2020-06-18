@@ -72,6 +72,7 @@ cat("<table>")
 if (params$local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>")
 if (!is.na(params$meta_extra$data_url)) cat("<tr><td>__Data URL__:</td><td>",  params$meta_extra$data_url, "</td></tr>")
 cat("<tr><td>__Num images__:</td><td>", nrow(params$pts), "</td></tr>")
+cat("<tr><td>__Total file size__:</td><td>", params$size_mb, " MB</td></tr>")
 cat("<tr><td>__Area__:</td><td>", round(msq2acres(params$area_m2),2), "acres</td></tr>")
 cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>")
 cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>")
@@ -231,4 +232,4 @@ if (!identical(params$fp, NA)) {
 }
 ```
 
-<hr/><p style="text-align:center; color:#556B2F;"><em>Created with <a href="https://github.com/UCANR-IGIS/uasimg" target="_blank">Drone Image Utils</a> for R</em><br/></p>
+<hr/><p style="text-align:center; color:#556B2F;"><em>Created with <a href="https://github.com/ucanr-igis/uasimg" target="_blank">Drone Image Utils</a> for R</em><br/></p>
