@@ -1,0 +1,28 @@
+/* Additional styles for the flight report html output */
+h1.title {
+  font-size: 150%;
+  font-weight: bold;
+  color: MidnightBlue;
+}
+h2 {
+  font-size: 150%;
+  font-weight: bold;
+  color: MidnightBlue;
+}
+h4.date {
+  font-size: 100%;
+  font-weight: normal;
+}
+table {
+  border-collapse: collapse;
+}
+td {
+  border: 0px solid black;
+  padding: 0.3em 1em;
+}
+td.ralign {
+  text-align: right;
+  color: red;
+}
+
+}

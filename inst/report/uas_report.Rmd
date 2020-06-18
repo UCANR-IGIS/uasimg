@@ -1,0 +1,234 @@
+---
+title: "UAS Images Catalog"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document: 
+    self_contained: yes
+    smart: no
+    css: uas_report.css
+params:
+  local_dir: TRUE
+  pts: !r NA
+  fp: !r NA
+  img_dir: !r NA
+  data_url: !r NA
+  area_m2: !r NA
+  mcp: !r NA
+  date_flown: !r NA
+  size_mb: !r NA
+  col: "yellow"
+  group_img: !r TRUE
+  meta_extra: !r NA
+---
+
+```{css echo = FALSE}
+h1.title {
+  color: #305230;
+  font-size:18px;
+}
+```
+
+```{r setup, include=FALSE}
+## Setup
+knitr::opts_chunk$set(echo = TRUE)
+library(htmltools)
+
+## Import database of known sensors
+cameras_fn <- system.file("cameras/cameras.csv", package="uasimg")
+sensors_df <- read.csv(cameras_fn, stringsAsFactors = FALSE)
+
+## Search for this sensor
+camera_make <- params$pts[1, "make", drop = TRUE]
+camera_model <- params$pts[1, "model", drop = TRUE]
+camera_filetype <- params$pts[1, "filetype", drop = TRUE]
+
+sensor_this_df <- dplyr::filter(sensors_df, model==camera_model & filetype==camera_filetype)
+
+## Get the composite camera name from the sensor database
+if (nrow(sensor_this_df)==0) {
+  camera_name <- "unknown"
+} else {
+  camera_name <- sensor_this_df[1, "camera_name"]
+}
+
+## Get the image dimensions
+img_pixels <- paste0(params$pts[1, "img_width", drop = TRUE], " x ", params$pts[1, "img_height", drop = TRUE])
+
+## Get the start and end time formatted
+dt_posix <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
+dt_range <- format(range(dt_posix), "%b %d %Y, %I:%M:%S %p")
+
+```
+
+
+```{r data_url_insert, results="asis", echo=FALSE}
+if (is.na(params$meta_extra$collection_name)) {
+  cat("<h2>", basename(params$img_dir), "</h2>\n")
+} else {
+  cat("<h2>", basename(params$meta_extra$collection_name), "</h2>\n")
+}
+
+cat("<table>")
+if (params$local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>")
+if (!is.na(params$meta_extra$data_url)) cat("<tr><td>__Data URL__:</td><td>",  params$meta_extra$data_url, "</td></tr>")
+cat("<tr><td>__Num images__:</td><td>", nrow(params$pts), "</td></tr>")
+cat("<tr><td>__Area__:</td><td>", round(msq2acres(params$area_m2),2), "acres</td></tr>")
+cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>")
+cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>")
+cat("<tr><td>__Camera__:</td><td>", camera_name, "</td></tr>")
+cat("<tr><td>__Image size__:</td><td>", img_pixels, "</td></tr>")
+cat("</table>")
+```
+
+## Maps {.tabset}
+
+### Centers
+
+```{r leaflet_ctr, echo=FALSE, message=FALSE}
+## Initiate a new leaflet object
+m <- leaflet(width="800px", height="600px",
+             options = leafletOptions(maxZoom = 23))
+
+## Add tiles properties
+tiles_esri_url = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+tiles_esri_attr = "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+
+m <- m %>% addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) %>% addTiles(group="Open Street Map") %>% addLayersControl(baseGroups = c("Satellite", "Open Street Map"), options = layersControlOptions(collapsed = FALSE))
+
+## Create a leaflet object for the points
+lng_rng <- range(params$pts$gps_long)
+lat_rng <- range(params$pts$gps_lat)
+m_pts <- m %>% fitBounds(lng_rng[1], lat_rng[1], lng_rng[2], lat_rng[2])
+
+if (group_img) {
+
+  ## Group points to the 5th decimal place (approx 1m on the ground)
+  leaf_pts_tbl <- params$pts %>% st_drop_geometry() %>% 
+    mutate(gps_long_rnd = round(gps_long, 5), 
+         gps_lat_rnd = round(gps_lat, 5),
+         pts_dt = as.POSIXct(date_time, format="%Y:%m:%d %H:%M:%S")) %>% 
+    select(gps_long, gps_long_rnd, gps_lat, gps_lat_rnd, file_name, pts_dt) %>% 
+    group_by(gps_long_rnd, gps_lat_rnd) %>% 
+    summarise(count = n(), first_dt = first(pts_dt), 
+              balloon_html = paste0("<b>", file_name, "</b>. ", 
+                      format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), collapse = "<br/>")) %>% 
+    arrange(first_dt)
+
+  ## Compute colors for the pts and fp 
+  if (is.na(params$col)) {
+    #print("Params is NA. Creating a rainbow")
+    col_use <- rainbow(nrow(leaf_pts_tbl), end=5/6)
+  } else {
+    col_use <- params$col
+  }
+
+  ## Add circle markers
+  m_pts <- m_pts %>% addCircleMarkers(data = leaf_pts_tbl,
+                   lng = ~gps_long_rnd, lat = ~gps_lat_rnd, 
+                   radius = 5, fillColor = col_use, fillOpacity = 1,  
+                   stroke = (max(leaf_pts_tbl$count) > 1), 
+                   color = "black", weight = 2,
+                   popup = ~balloon_html)
+
+} else {
+
+  ## No grouping
+  
+  ## Create the balloons
+  pts_dt <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
+  balloons_html <- paste0("<p><b>", params$pts$file_name, "</b><br/>", format(pts_dt, "%b %d, %Y"), "<br/>", format(pts_dt, "%I:%M:%S %p"), "</p>")
+
+  ## Compute colors  
+  if (is.na(params$col)) {
+    col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+  } else {
+    col_use <- params$col
+  }
+
+  ## Add the circle markers
+  m_pts <- m_pts %>% addCircleMarkers(lng = params$pts$gps_long, lat = params$pts$gps_lat, 
+                                   radius = 4, fillColor = col_use, fillOpacity = 1, 
+                                   stroke = FALSE, popup = balloons_html)
+  
+}
+
+## Display HTML Widget
+m_pts
+```
+
+### Footprints
+
+```{r leaflet_fp, echo=FALSE, message=FALSE}
+
+if (identical(params$fp, NA)) {
+  
+  div(p("Image footprints not computed! (perhaps because yaw or AGL altitude was not saved in the EXIF)"), hr())
+  
+
+} else {  
+  ## Reproject footprints to lat-long (required by leaflet)
+    
+  # crsLatLong <- CRS("+proj=longlat +datum=WGS84")
+  # fpLL <- spTransform(geometry(params$fp), crsLatLong)
+  fp_ll_sf <- params$fp %>% st_geometry() %>%  st_transform(crs = 4326)
+  
+  ## Set the bounding box
+  #fp_ll_bbox <- fp_ll_sf %>% st_bbox()
+  #m_fp <- m %>% fitBounds(fp_ll_bbox[1], fp_ll_bbox[2], fp_ll_bbox[3], fp_ll_bbox[4])
+  
+  ## Create the map definition with piping syntax
+  ## myleaf_map <- leaflet( x3[[1]]$fp %>% st_transform(crs = 4326)) %>% addTiles() %>%  addPolygons(fillOpacity=0.1) 
+   ## x3[[1]]$fp %>% st_transform(crs = 4326)
+
+  #fpBBox <- bbox(fpLL)
+  # m_fp <- m %>% fitBounds(fpBBox[1,1], fpBBox[2,1], fpBBox[1,2], fpBBox[2,2])
+  
+  #outline_color <- c("yellow", "LightPink")[1]
+  #outline_color <- rainbow(length(fpLL), end=5/6)
+  
+  ## Add polygons
+  #m_fp <- m_fp %>% addPolygons(data=fp_ll_sf, fill=FALSE, stroke=TRUE, color=params$col, weight=2, dashArray="1,2")
+  
+    ## Compute colors  
+  if (is.na(params$col)) {
+    col_use <- rainbow(nrow(params$fp), end=5/6)
+  } else {
+    col_use <- params$col
+  }
+
+  m_fp <- m %>% addPolygons(data=fp_ll_sf, fill=FALSE, stroke=TRUE, color=col_use, weight=2, dashArray="1,2")
+  
+  ## Display HTML Widget
+  m_fp
+}
+  
+
+```
+
+## EXIF Data Analysis
+
+```{r nothingtodo, echo=FALSE}
+if (!"gsd" %in% names(params$pts) && (!"alt_agl" %in% names(params$pts)) && (identical(params$fp, NA))) {
+  htmltools::p("Estimates of ground sampling distance, above ground elevation, and footprints not available")
+}
+```
+
+```{r echo=FALSE}
+if ("gsd" %in% names(params$pts)) {
+  hist(cm2in(params$pts$gsd), col="grey50", breaks=20, main="Ground Sampling Distance", xlab="estimated GSD (inches)", ylab="freq")
+}
+```
+
+```{r echo=FALSE}
+if ("alt_agl" %in% names(params$pts)) {
+  hist(m2ft(params$pts$alt_agl), col="grey50", breaks=20, main=" Altitude", xlab="recorded altitude above launch (ft)", ylab="freq")
+}
+```
+
+```{r echo=FALSE}
+if (!identical(params$fp, NA)) {
+  hist(params$fp$fwd_ovrlap, col="grey50", breaks=20, main="Forward Overlap", xlab="estimated overlap (%)", ylab="freq")
+}
+```
+
+<hr/><p style="text-align:center; color:#556B2F;"><em>Created with <a href="https://github.com/UCANR-IGIS/uasimg" target="_blank">Drone Image Utils</a> for R</em><br/></p>

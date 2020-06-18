@@ -1,0 +1,15 @@
+Changes in version 1.2.5 (2020-06-14)
+=========================
+* Added <pre>meta_extra</pre> argument to <pre>uas_info</pre>
+* Added <pre>toc_csv</pre> argument to <pre>uas_report</pre>
+
+Changes in version 1.2.4 (2020-04-03)
+=========================
+* Initial release of uasimg
+* Adapted from uavimg
+    * All prefixes changed from uavimg_ to uas_
+    * Converted all functions to the `sf` package
+    * Added <pre>overwrite</pre> argument to <pre>uas_exp</pre> and <pre>uas_report</pre>
+    * Added support for paths with spaces: <pre>uas_info</pre>
+    * Added <pre>sf</pre>, <pre>tidyr</pre> and <pre>crayon</pre> as dependencies
+    * Fixed a bug in <pre>findonpath</pre> when path values had trailing slashes
