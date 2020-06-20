@@ -1,3 +1,10 @@
+Changes in version 1.2.6 (2020-06-20)
+=========================
+* Added 'description' element to <pre>meta_extra</pre> argument to <pre>uas_info</pre>
+* Added <pre>cache_dir</pre> and <pre>cache_update</pre> to <pre>uas_info</pre>
+* Split <pre>overwrite</pre> argument in <pre>uas_report</pre> into <pre>overwrite_html</pre> and <pre>overwrite_png</pre>
+
+
 Changes in version 1.2.5 (2020-06-14)
 =========================
 * Added <pre>meta_extra</pre> argument to <pre>uas_info</pre>

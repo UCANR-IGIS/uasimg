@@ -1,0 +1,7 @@
+# This is an example of a 'metadata_extra.txt' file
+# If you put this file in the same folder as the images, it will be read by
+# uas_info.
+
+collection_name: Hopland Research Extension Center, Watershed 1, Flight 1
+data_url: https://ucdavis.box.com/s/nnhni2na00opgdsfsdfsd6r
+description: First of two flights over Watershed 1 at Hopland REC (pre-restoration)

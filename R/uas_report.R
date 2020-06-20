@@ -15,7 +15,8 @@
 #' @param png_map Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)
 #' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
 #' @param google_api API key for Google Static Maps, see Details.
-#' @param overwrite Overwrite existing files without warning, YN
+#' @param overwrite_html Overwrite existing HTML files without warning, YN
+#' @param overwrite_png Overwrite existing PNG files without warning, YN
 #' @param toc_csv CSV file for catalog table-of-contents
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
@@ -44,7 +45,8 @@
 uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=TRUE,
                        output_file=NULL, report_rmd=NULL, open_report=FALSE,
                        local_dir=TRUE, self_contained=TRUE, png_map=FALSE, png_exp=0.2,
-                       google_api=NULL, overwrite=FALSE, toc_csv=NULL,
+                       google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE,
+                       toc_csv=NULL,
                        quiet=FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
@@ -102,7 +104,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         output_file_use <- output_file
       }
 
-      if (overwrite || !file.exists(file.path(output_dir_use, output_file_use))) {
+      if (overwrite_html || !file.exists(file.path(output_dir_use, output_file_use))) {
 
         ## In order to create HTML output which is *not* self-contained, we must
         ## manually copy the css file to the output dir. We must also
@@ -170,7 +172,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
           map_fn <- paste0(tools::file_path_sans_ext(basename(output_file)), ".png")
         }
 
-        if (overwrite || !file.exists(file.path(output_dir_use, map_fn))) {
+        if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
 
           ## Lets make a png map
 
@@ -243,8 +245,11 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
       }  ## if png_make
 
       if (!is.null(toc_csv)) {
+        ## (in the future, meta data fields will be encoded in the HTML so this won't be needed)
         entry_df <- data.frame(report_date = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
                                collection_name = x[[i]]$meta_extra$collection_name,
+                               description = x[[i]]$meta_extra$description,
+                               contact = x[[i]]$meta_extra$contact,
                                html_dir = output_dir_use,
                                html_fn = output_file_use,
                                png_fn = ifelse(png_map, map_fn, NA),
@@ -257,10 +262,15 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         #write.table(entry_df, file=toc_csv, row.names = FALSE, sep = ",", dec = ".", append = file.exists(toc_csv))
 
         if (file.exists(toc_csv)) {
-         toc_df <- rbind(read.csv(toc_csv), entry_df) %>% dplyr::distinct()
+         toc_df <- rbind(read.csv(toc_csv), entry_df)
         } else {
          toc_df <- entry_df
         }
+
+        ## Keep just the most recent record for each HTML file
+        toc_df <- toc_df %>% arrange(desc(report_date)) %>%
+          distinct(html_fn, .keep_all = TRUE) %>%
+          arrange(collection_name)
         write.csv(toc_df, file=toc_csv, row.names = FALSE)
 
       }

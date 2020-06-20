@@ -11,7 +11,9 @@ uas_info(
   alt_agl = NULL,
   fwd_overlap = TRUE,
   cameras = NULL,
-  data_url = NULL,
+  meta_extra = NULL,
+  cache_dir = NULL,
+  cache_update = FALSE,
   quiet = FALSE
 )
 }
@@ -28,7 +30,11 @@ uas_info(
 
 \item{cameras}{Location of the cameras.csv file. Is NULL the package csv file will be used.}
 
-\item{data_url}{A URL to the data (see Details)}
+\item{meta_extra}{A list of additional meta data (see Details)}
+
+\item{cache_dir}{Directory to cache exif data}
+
+\item{cache_update}{Whether to update the cached}
 
 \item{quiet}{Don't show messages}
 }
@@ -47,7 +53,18 @@ This function uses a free command line tool called EXIFtool to read the EXIF dat
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
-\code{data_url} is an optional URL to data (e.g., a zip file, directory, Box folder, etc.) If omitted, it will look for a file called data_url.txt in the same folder as the images, and if found use the first line of the file as the data URL.
+\code{meta_extra} is an optional named list containing additional metadata field. Supported list elements include
+\code{collection_name}, \code{data_url}, \code{description} and \code{contact}.
+
+If \code{meta_extra} is not passed, an alternative way to pass these additional metadata
+fields is to put them in a text file called 'meta_extra.txt' in the same directory as the images. The structure of the
+text file should be a key:value pair on each line (no delimiters). For example:
+
+collection_name: Hopland Research and Extension Center, Watershed II
+
+Lines starting with a hash or forward slash will be interpreted as comments and ignored.
+
+\code{cache_dir} is the name of a directory where EXIF data gets cached
 }
 \seealso{
 \link{uas_report}, \link{uas_exp}

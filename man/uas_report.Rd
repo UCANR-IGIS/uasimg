@@ -13,11 +13,14 @@ uas_report(
   output_file = NULL,
   report_rmd = NULL,
   open_report = FALSE,
+  local_dir = TRUE,
   self_contained = TRUE,
   png_map = FALSE,
   png_exp = 0.2,
   google_api = NULL,
-  overwrite = FALSE,
+  overwrite_html = FALSE,
+  overwrite_png = FALSE,
+  toc_csv = NULL,
   quiet = FALSE
 )
 }
@@ -38,6 +41,8 @@ uas_report(
 
 \item{open_report}{Open the HTML file in a browser}
 
+\item{local_dir}{Whether to show the local image directory, TF}
+
 \item{self_contained}{Make the output HTML file self-contained}
 
 \item{png_map}{Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)}
@@ -46,7 +51,11 @@ uas_report(
 
 \item{google_api}{API key for Google Static Maps, see Details.}
 
-\item{overwrite}{Overwrite existing files without warning, YN}
+\item{overwrite_html}{Overwrite existing HTML files without warning, YN}
+
+\item{overwrite_png}{Overwrite existing PNG files without warning, YN}
+
+\item{toc_csv}{CSV file for catalog table-of-contents}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }

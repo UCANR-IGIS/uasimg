@@ -26,6 +26,9 @@ h1.title {
   color: #305230;
   font-size:18px;
 }
+tr {
+  vertical-align:top;
+}
 ```
 
 ```{r setup, include=FALSE}
@@ -69,6 +72,8 @@ if (is.na(params$meta_extra$collection_name)) {
 }
 
 cat("<table>")
+if (!is.na(params$meta_extra$description)) cat("<tr><td>__Description__:</td><td>",  params$meta_extra$description, "</td></tr>")
+
 if (params$local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>")
 if (!is.na(params$meta_extra$data_url)) cat("<tr><td>__Data URL__:</td><td>",  params$meta_extra$data_url, "</td></tr>")
 cat("<tr><td>__Num images__:</td><td>", nrow(params$pts), "</td></tr>")
