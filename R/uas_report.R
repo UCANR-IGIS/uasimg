@@ -17,7 +17,6 @@
 #' @param google_api API key for Google Static Maps, see Details.
 #' @param overwrite_html Overwrite existing HTML files without warning, YN
 #' @param overwrite_png Overwrite existing PNG files without warning, YN
-#' @param toc_csv CSV file for catalog table-of-contents
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -40,14 +39,16 @@
 #'
 #' @seealso \link{uas_info}
 #'
+#' @import crayon
+#' @importFrom grDevices dev.off png rainbow
+#' @importFrom utils browseURL packageVersion
+#' @importFrom methods is
 #' @export
 
 uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=TRUE,
                        output_file=NULL, report_rmd=NULL, open_report=FALSE,
                        local_dir=TRUE, self_contained=TRUE, png_map=FALSE, png_exp=0.2,
-                       google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE,
-                       toc_csv=NULL,
-                       quiet=FALSE) {
+                       google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE, quiet=FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -70,7 +71,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
     }
 
     if (make_png) {
-      if (!requireNamespace("ggmap")) stop("Package ggmap required to make the png map")
+      if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
       if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
     }
 
@@ -97,7 +98,92 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
       }
       if (!file.exists(output_dir_use)) stop("Could not find output directory")
 
-      ## Get the output filename
+      ##################################################################
+      ## Make the PNG map
+      if (make_png) {
+
+        ## Construct the map.png filename
+        if (is.null(output_file)) {
+          map_fn <- paste0(basename(img_dir), "_map.png")
+        } else {
+          map_fn <- paste0(tools::file_path_sans_ext(basename(output_file)), ".png")
+        }
+
+        if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
+
+          ## Lets make a png map
+
+          ## Compute colors for the pts
+          ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
+          if (is.null(col)) {
+            col_use <- grDevices::rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+          } else {
+            col_use <- col
+          }
+
+          # First put the colors as a column in the data frame (which ggmap requires)
+          # x[[img_dir]]$pts$col <- col_use
+
+          # Define the extent and center point of the flight area
+          pts_ext <- x[[img_dir]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
+          lon_idx <- c(1, 3)
+          lat_idx <- c(2, 4)
+          ctr_ll <- c(mean(pts_ext[lon_idx]), mean(pts_ext[lat_idx]))
+
+          ## Compute the Zoom level (use a minimum of 18)
+          zoom_lev <- min(18, ggmap::calc_zoom(lon = range( pts_ext[lon_idx]),
+                                               lat = range( pts_ext[lat_idx]),
+                                               adjust=as.integer(-1)))
+
+          if (is.null(google_api) && !ggmap::has_google_key()) {
+            ## Grab a Stamen map
+            if (!quiet) message(crayon::yellow("Downloading a PNG image from STAMEN"))
+            dx <- diff(pts_ext[lon_idx]) * png_exp
+            dy <- diff(pts_ext[lat_idx]) * png_exp
+            pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
+            m <- ggmap::get_stamenmap(bbox=pts_ext, zoom=zoom_lev, maptype="terrain")
+          } else {
+            if (!is.null(google_api)) {
+              ggmap::register_google(key=google_api)
+            }
+            if (!quiet) message(crayon::yellow("Downloading a PNG image from GOOGLE"))
+            m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev,
+                                          format="png8", maptype="satellite"))
+            if (is(m, "try-error")) {
+              warning("Failed to retrieve static map from Google Maps, check your API key. To use Stamen, don't pass google_api (if you saved it, run Sys.unsetenv('GGMAP_GOOGLE_API_KEY') )")
+              m <- NULL
+            }
+          }
+
+          if (!is.null(m)) {
+
+            # Create the ggmap object and save to a variable
+            pts_ggmap <- ggmap::ggmap(m) + geom_point(
+              data=x[[img_dir]]$pts %>% sf::st_drop_geometry(),
+              aes(gps_long, gps_lat), colour = col_use,
+              show.legend=F, size=3) +
+              theme_void()
+
+            ## Open the PNG driver
+            grDevices::png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
+
+            ## Print the map
+            print(pts_ggmap)
+
+            ## Close the PNG driver
+            grDevices::dev.off()
+
+          }
+
+        } else {
+          if (!quiet) message(crayon::yellow(map_fn, "already exists. Skipping."))
+        }
+
+
+      }  ## if png_make
+      ###########################################
+
+      ## Get the HTML report output filename
       if (is.null(output_file)) {
         output_file_use <- paste0(basename(img_dir), "_report.html")
       } else {
@@ -146,7 +232,9 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
                                        output_options=output_options,
                                        params=c(x[[img_dir]], list(col=col_use, img_dir=img_dir,
                                                                    group_img=group_img,
-                                                                   local_dir=local_dir)))
+                                                                   local_dir=local_dir,
+                                                                   map_fn=map_fn
+                                                                   )))
 
         report_fn_vec <- c(report_fn_vec, report_fn)
 
@@ -162,119 +250,6 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         message(crayon::yellow(output_file_use, "already exists. Skipping."))
       }
 
-      ## Make the PNG map
-      if (make_png) {
-
-        ## Construct the map.png filename
-        if (is.null(output_file)) {
-          map_fn <- paste0(basename(img_dir), "_map.png")
-        } else {
-          map_fn <- paste0(tools::file_path_sans_ext(basename(output_file)), ".png")
-        }
-
-        if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
-
-          ## Lets make a png map
-
-          ## Compute colors for the pts
-          ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
-          if (is.null(col)) {
-            col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
-          } else {
-            col_use <- col
-          }
-
-          # First put the colors as a column in the data frame (which ggmap requires)
-          # x[[img_dir]]$pts$col <- col_use
-
-          # Define the extent and center point of the flight area
-          pts_ext <- x[[img_dir]]$pts %>% st_transform(4326) %>% st_bbox() %>% as.numeric()
-          lon_idx <- c(1, 3)
-          lat_idx <- c(2, 4)
-          ctr_ll <- c(mean(pts_ext[lon_idx]), mean(pts_ext[lat_idx]))
-
-          ## Compute the Zoom level (use a minimum of 18)
-          zoom_lev <- min(18, ggmap::calc_zoom(lon = range( pts_ext[lon_idx]),
-                                       lat = range( pts_ext[lat_idx]),
-                                       adjust=as.integer(-1)))
-
-          if (is.null(google_api) && !ggmap::has_google_key()) {
-            ## Grab a Stamen map
-            if (!quiet) message(crayon::yellow("Downloading a PNG image from STAMEN"))
-            dx <- diff(pts_ext[lon_idx]) * png_exp
-            dy <- diff(pts_ext[lat_idx]) * png_exp
-            pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
-            m <- ggmap::get_stamenmap(bbox=pts_ext, zoom=zoom_lev, maptype="terrain")
-          } else {
-            if (!is.null(google_api)) {
-              register_google(key=google_api)
-            }
-            if (!quiet) message(crayon::yellow("Downloading a PNG image from GOOGLE"))
-            m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev, format="png8", maptype="satellite"))
-            if (is(m, "try-error")) {
-              warning("Failed to retrieve static map from Google Maps, check your API key. To use Stamen, don't pass google_api (if you saved it, run Sys.unsetenv('GGMAP_GOOGLE_API_KEY') )")
-              m <- NULL
-            }
-          }
-
-          if (!is.null(m)) {
-
-            # Create the ggmap object and save to a variable
-            pts_ggmap <- ggmap(m) + geom_point(
-                 data=x[[img_dir]]$pts %>% st_drop_geometry(),
-                 aes(gps_long, gps_lat), colour = col_use,
-                 show.legend=F, size=3) +
-              theme_void()
-
-            ## Open the PNG driver
-            png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
-
-            ## Print the map
-            print(pts_ggmap)
-
-            ## Close the PNG driver
-            dev.off()
-
-          }
-
-        } else {
-          if (!quiet) message(crayon::yellow(map_fn, "already exists. Skipping."))
-        }
-
-
-      }  ## if png_make
-
-      if (!is.null(toc_csv)) {
-        ## (in the future, meta data fields will be encoded in the HTML so this won't be needed)
-        entry_df <- data.frame(report_date = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
-                               collection_name = x[[i]]$meta_extra$collection_name,
-                               description = x[[i]]$meta_extra$description,
-                               contact = x[[i]]$meta_extra$contact,
-                               html_dir = output_dir_use,
-                               html_fn = output_file_use,
-                               png_fn = ifelse(png_map, map_fn, NA),
-                               num_img = nrow(x[[1]]$pts),
-                               size_mb = x[[1]]$size_mb,
-                               date_flown = x[[1]]$date_flown,
-                               area_m2 = x[[1]]$area_m2)
-
-        #write.csv(entry_df, file=toc_csv, row.names = FALSE, append = file.exists(toc_csv))
-        #write.table(entry_df, file=toc_csv, row.names = FALSE, sep = ",", dec = ".", append = file.exists(toc_csv))
-
-        if (file.exists(toc_csv)) {
-         toc_df <- rbind(read.csv(toc_csv), entry_df)
-        } else {
-         toc_df <- entry_df
-        }
-
-        ## Keep just the most recent record for each HTML file
-        toc_df <- toc_df %>% arrange(desc(report_date)) %>%
-          distinct(html_fn, .keep_all = TRUE) %>%
-          arrange(collection_name)
-        write.csv(toc_df, file=toc_csv, row.names = FALSE)
-
-      }
-
     }
 
     message(crayon::green("Done."))
@@ -282,7 +257,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
     ## Open the file(s)
     if (open_report) {
         for (report_fn in report_fn_vec) {
-            browseURL(report_fn)
+          browseURL(report_fn)
         }
     }
 

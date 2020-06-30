@@ -39,7 +39,8 @@ uas_info(
 \item{quiet}{Don't show messages}
 }
 \value{
-A named list with three elements: 1) SpatialPointsDataFrame with the image centroids, and 2) a SpatialPolygonsDataFrame of the image footprints, and 3) the image directory. An HTML report of the images can be created with \link{uas_report}.
+A named list with elements including the image centroids (as a sf data frame), footprints, total area,
+minimum convex polygon, total directory size, the data flown, and extra meta data.
 }
 \description{
 Extracts info from geotagged images taken from a drone
@@ -64,7 +65,10 @@ collection_name: Hopland Research and Extension Center, Watershed II
 
 Lines starting with a hash or forward slash will be interpreted as comments and ignored.
 
-\code{cache_dir} is the name of a directory where EXIF data gets cached
+\code{cache_dir} is the name of a directory where EXIF data gets cached. Cached EXIF data is connected to a directory of images
+based on the directory name and total size of all image files. So if images are added or removed from the directory,
+the cache should be automatically rebuilt the next time the function is run. \code{cache_update} is a Logical value
+which forces an update of cached data when true.
 }
 \seealso{
 \link{uas_report}, \link{uas_exp}

@@ -33,12 +33,23 @@
 #'
 #' Lines starting with a hash or forward slash will be interpreted as comments and ignored.
 #'
-#' \code{cache_dir} is the name of a directory where EXIF data gets cached
+#' \code{cache_dir} is the name of a directory where EXIF data gets cached. Cached EXIF data is connected to a directory of images
+#' based on the directory name and total size of all image files. So if images are added or removed from the directory,
+#' the cache should be automatically rebuilt the next time the function is run. \code{cache_update} is a Logical value
+#' which forces an update of cached data when true.
 #'
-#' @return A named list with three elements: 1) SpatialPointsDataFrame with the image centroids, and 2) a SpatialPolygonsDataFrame of the image footprints, and 3) the image directory. An HTML report of the images can be created with \link{uas_report}.
+#' @return A named list with elements including the image centroids (as a sf data frame), footprints, total area,
+#' minimum convex polygon, total directory size, the data flown, and extra meta data.
 #'
 #' @seealso \link{uas_report}, \link{uas_exp}
 #'
+#' @import crayon
+#' @import dplyr
+#' @import sf
+#' @importFrom grDevices chull
+#' @importFrom digest digest
+#' @importFrom tidyr replace_na
+#' @importFrom utils read.csv
 #' @export
 
 uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
@@ -108,7 +119,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       dir_files <- list.files(img_dir, all.files = FALSE, full.names = TRUE)
       dir_files <- dir_files[!grepl(".txt$|.bak$", dir_files)]
       dir_size <- as.character(sum(file.size(dir_files)))
-      cache_fn <- paste0(digest::digest(paste0(img_dir, dir_size),
+      cache_fn <- paste0(digest(paste0(img_dir, dir_size),
                                         algo='md5', serialize = FALSE), ".RData")
 
       if (file.exists(cache_dir) && !cache_update) {
@@ -369,7 +380,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
             ## Compute the area of intersection of each footprint with the next one
             area_intersection_with_next <- sapply(idx_minus_one, function(i)
               st_intersection(fp_utm_sf[i, "geometry"], fp_utm_sf[i+1, "geometry"]) %>%
-                st_area()) %>% as.numeric() %>% tidyr::replace_na(0)
+                st_area()) %>% as.numeric() %>% replace_na(0)
 
             ## Add the precent overlap to the sf dataframe
             fp_utm_sf$fwd_overlap <- c(area_intersection_with_next / area_polys, NA)

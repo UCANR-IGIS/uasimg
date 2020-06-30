@@ -20,7 +20,6 @@ uas_report(
   google_api = NULL,
   overwrite_html = FALSE,
   overwrite_png = FALSE,
-  toc_csv = NULL,
   quiet = FALSE
 )
 }
@@ -54,8 +53,6 @@ uas_report(
 \item{overwrite_html}{Overwrite existing HTML files without warning, YN}
 
 \item{overwrite_png}{Overwrite existing PNG files without warning, YN}
-
-\item{toc_csv}{CSV file for catalog table-of-contents}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }

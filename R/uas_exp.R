@@ -18,6 +18,8 @@
 #'
 #' @seealso \link{uas_info}
 #'
+#' @import crayon
+#' @importFrom sf st_write
 #' @export
 
 uas_exp <- function(x, ctr=FALSE, fp=FALSE, mcp=FALSE, shp_dir=NULL, create_dir=TRUE,

@@ -1,6 +1,5 @@
 ---
-title: "UAS Images Catalog"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+title: "UAS Image Collection"
 output: 
   html_document: 
     self_contained: yes
@@ -16,6 +15,7 @@ params:
   mcp: !r NA
   date_flown: !r NA
   size_mb: !r NA
+  map_fn: !r NA
   col: "yellow"
   group_img: !r TRUE
   meta_extra: !r NA
@@ -65,24 +65,38 @@ dt_range <- format(range(dt_posix), "%b %d %Y, %I:%M:%S %p")
 
 
 ```{r data_url_insert, results="asis", echo=FALSE}
+## Insert meta tags
+cat("<meta name='map_fn' content='", params$map_fn, "'>\n")
+cat("<meta name='date_flown' content='", params$date_flown, "'>\n")
+cat("<meta name='area_m2' content='", round(params$area_m2), "'>\n")
+
 if (is.na(params$meta_extra$collection_name)) {
   cat("<h2>", basename(params$img_dir), "</h2>\n")
 } else {
-  cat("<h2>", basename(params$meta_extra$collection_name), "</h2>\n")
+  cat("<h2><span id='collection_name'>", basename(params$meta_extra$collection_name), "</span></h2>\n")
 }
 
 cat("<table>")
-if (!is.na(params$meta_extra$description)) cat("<tr><td>__Description__:</td><td>",  params$meta_extra$description, "</td></tr>")
+
+if (!is.na(params$meta_extra$description)) cat("<tr><td>__Description__:</td><td><span id='description'>",  params$meta_extra$description, "</span></td></tr>")
+
+if (!is.na(params$meta_extra$contact)) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$meta_extra$contact, "</span></td></tr>")
 
 if (params$local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>")
+
 if (!is.na(params$meta_extra$data_url)) cat("<tr><td>__Data URL__:</td><td>",  params$meta_extra$data_url, "</td></tr>")
-cat("<tr><td>__Num images__:</td><td>", nrow(params$pts), "</td></tr>")
-cat("<tr><td>__Total file size__:</td><td>", params$size_mb, " MB</td></tr>")
+
+cat("<tr><td>__Num images__:</td><td><span id='num_img'>", nrow(params$pts), "</span></td></tr>")
+
+cat("<tr><td>__Total file size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>")
+
 cat("<tr><td>__Area__:</td><td>", round(msq2acres(params$area_m2),2), "acres</td></tr>")
 cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>")
 cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>")
 cat("<tr><td>__Camera__:</td><td>", camera_name, "</td></tr>")
 cat("<tr><td>__Image size__:</td><td>", img_pixels, "</td></tr>")
+
+
 cat("</table>")
 ```
 
@@ -237,4 +251,10 @@ if (!identical(params$fp, NA)) {
 }
 ```
 
-<hr/><p style="text-align:center; color:#556B2F;"><em>Created with <a href="https://github.com/ucanr-igis/uasimg" target="_blank">Drone Image Utils</a> for R</em><br/></p>
+<hr/>
+<p style="color:#556B2F; font-style:italic;"><span style="display:inline-block; float:right;">`r format(Sys.time(), '%d %B, %Y')`</span>Created with <a href="https://github.com/ucanr-igis/uasimg" target="_blank" rel="noopener">Drone Image Utils</a> for R</p>
+<p>&nbsp;</p>
+
+
+
+

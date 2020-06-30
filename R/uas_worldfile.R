@@ -35,6 +35,8 @@
 #'
 #' @seealso \link{uas_info}
 #'
+#' @importFrom sf st_crs st_coordinates
+#' @import crayon
 #' @export
 
 uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "auto", prj = FALSE,
@@ -65,10 +67,7 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
       files_gen <- NULL
 
       ## Get the CRS which will be used to generate the prj files.
-      # img_crs <- x[[iinfo_idx]]$pts@proj4string
-      # img_wkt <- showWKT(img_crs@projargs)
-      ##img_crs <- x[[iinfo_idx]]$pts %>% st_crs()
-      img_wkt <- (x[[iinfo_idx]]$pts %>% st_crs())$proj4string
+      img_wkt <- (x[[iinfo_idx]]$pts %>% sf::st_crs())$proj4string
 
       ## Loop through the rows
       if (is.null(idx)) {
@@ -94,7 +93,7 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
         img_fp_width <- x[[iinfo_idx]]$fp[i, "fp_width", drop = TRUE]
         img_fp_height <- x[[iinfo_idx]]$fp[i, "fp_height", drop = TRUE]
         #img_ctr <- coordinates(x[[iinfo_idx]]$pts[i,])
-        img_ctr <- x[[iinfo_idx]]$pts %>% slice(i) %>% st_coordinates()
+        img_ctr <- x[[iinfo_idx]]$pts %>% slice(i) %>% sf::st_coordinates()
 
         if (rotated) {
           ## Extract the yaw

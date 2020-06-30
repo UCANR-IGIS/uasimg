@@ -1,9 +1,14 @@
+Changes in version 1.2.7 (2020-06-30)
+=========================
+* Changed uas_report and uas_report.Rmd, metadata now encoded in HTML
+* Argument <pre>toc_csv</pre> deprecated
+* <pre>summary.uas_info</pre> replaced with <pre>print.uas_info</pre> (generic print method)
+
 Changes in version 1.2.6 (2020-06-20)
 =========================
 * Added 'description' element to <pre>meta_extra</pre> argument to <pre>uas_info</pre>
 * Added <pre>cache_dir</pre> and <pre>cache_update</pre> to <pre>uas_info</pre>
 * Split <pre>overwrite</pre> argument in <pre>uas_report</pre> into <pre>overwrite_html</pre> and <pre>overwrite_png</pre>
-
 
 Changes in version 1.2.5 (2020-06-14)
 =========================

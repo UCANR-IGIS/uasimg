@@ -5,10 +5,11 @@
 
 `uasimg` helps manage images taken from an Unmanned Aerial System (i.e.,
 drone) that have been taken with the intent to stitch together to make
-high resoultion orthomosaics. The package does not stitch images, but
-helps you create catalogs of your images, visulize their locations,
-export image centroids and estmiated footprints as GIS files, and create
-world files so images can be viewed in GIS software.
+high resoultion orthomosaics and other data products. The package does
+**not** stitch images, but helps you create catalogs of your images,
+visulize their locations, export image centroids and estmiated
+footprints as GIS files, and create world files so images can be viewed
+in GIS software.
 
 ##### Applications
 
@@ -16,8 +17,8 @@ world files so images can be viewed in GIS software.
 
 1.  Doing a quick check in the field to review the distribution of a set
     of images, and the estimated image overlap. This (along with
-    checking the images for bluriness) can help a pilot determine if a
-    flight was successful or needs to be redone.
+    checking the images for blurriness) can help a pilot determine if a
+    flight was successful, or needs to be redone.
 
 2.  Subsetting images for further processing with a photogrammetry
     (stitching) program like Pix4D or Agisoft. Omitting images with an
@@ -48,15 +49,19 @@ entered manually as an argument.
 Requirements for using the package include:
 
   - the images must have been taken by a camera that saved the GPS
-    coordinates
-  - the images to be analyzed should all be in one folder (preferably
-    containing one flight only)
+    coordinates  
+  - the images to be analyzed should all be in one folder (typically
+    containing one flight)
   - the camera model must be one of the ones known by the package (see
     below)
+
+Additional requirements in order to generate estimated footprints:
+
   - the height above ground level must be saved in the image files, or
     passed as an argument. If passed as an argument, the assumption is
-    that all images were taken from the same height.
-  - images were taken at nadir (camera pointing straight down)
+    that all images were taken from the same height.  
+  - it is presumed that images were taken at nadir (camera pointing
+    straight down)
 
 ##### Accuracy of the Estimated GSD and Image Footprints
 
@@ -76,8 +81,8 @@ This package is not yet on CRAN, but you can install it from GitHub.
 Note: if you’re using a Windows machine, you must have RTools installed
 to build packages from source files (which is what you do when you
 install from GitHub). RTools is not a R package, rather its a set of
-utilities. You can download the setup file from
-<https://cran.r-project.org/bin/windows/Rtools/> OR install it from
+utilities that you install separately. You can download the setup file
+from <https://cran.r-project.org/bin/windows/Rtools/> OR install it from
 within R by running:
 
 ``` r
@@ -98,34 +103,36 @@ available, see the note about dependencies below.
 
 ### Dependencies
 
-The package requires the *dplyr*, *sf*, and *leaflet* packages. If you
-get an error message when installing *uasimg*, install the dependent
-packages separately (i.e., from the ‘Packages’ pane in RStudio). Then
-run `install_github("ucanr-igis/uasimg", dependencies=FALSE)`.
+The package requires several packages, including *sf*, *leaflet*,
+*dplyr*, *tidyr*, and *htmltools* (for a complete list see the
+DESCRIPTION file). If you get an error message when installing *uasimg*,
+install the dependent packages separately (i.e., from the ‘Packages’
+pane in RStudio). Then run `remotes::install_github("ucanr-igis/uasimg",
+dependencies=FALSE)`.
 
 ### Exiftool
 
-To read the EXIF data from the image files, the package requires a free
-command line tool called ’exiftool. This can be installed in three
-steps:
+To read the EXIF data from the image files, the package requires an
+external free command line tool called ’exiftool. This can be installed
+in three steps:
 
 1.  download the file from
     <http://www.sno.phy.queensu.ca/~phil/exiftool/>
 2.  uncompress / unzip
 3.  rename the executable file from *exiftool(-k).exe* to
     *exiftool.exe*  
-    Note: if you have file extensions hidden in Windows Explorer, you
-    won’t see .exe in the filename. Ub that case, just rename
-    ‘exiftool(-k)’ to ‘exiftool’.
+    **Note**: if you have file extensions hidden in Windows Explorer,
+    you won’t see *.exe* in the filename. In that case, just rename
+    ‘*exiftool(-k)*’ to ‘*exiftool*’.
 4.  move the executable file to a directory on the path (e.g.,
     c:\\windows). Note: putting it in c:\\windows\\system32 does *not*
     seem to work.
 
 ## Usage
 
-To see a list of known cameras (sensors), run `cameras()` with no
-arguments. If your camera is not listed, see the help page (`?cameras`)
-or contact the package author.
+To see a list of known cameras (sensors), run `uas_cameras()` with no
+arguments. If your camera is not listed, see the help page
+(`?uas_cameras`) or contact the package author.
 
 There are three main functions you’ll use to manage your image data:
 
