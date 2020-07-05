@@ -1,6 +1,12 @@
+Changes in version 1.3 (2020-07-04)
+=========================
+* Added <pre>uas_getcachedir</pre> and <pre>uas_setcachedir</pre> to manage cache directory for EXIF data
+* Renamed cache arguments on <pre>uas_info</pre> to <pre>cache</pre> and <pre>update_cache</pre>
+* Added <pre>uas_toc</pre>
+
 Changes in version 1.2.7 (2020-06-30)
 =========================
-* Changed uas_report and uas_report.Rmd, metadata now encoded in HTML
+* Modified <pre>uas_report</pre> and uas_report.Rmd, metadata now encoded in HTML
 * Argument <pre>toc_csv</pre> deprecated
 * <pre>summary.uas_info</pre> replaced with <pre>print.uas_info</pre> (generic print method)
 

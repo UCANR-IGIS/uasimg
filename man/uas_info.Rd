@@ -12,8 +12,8 @@ uas_info(
   fwd_overlap = TRUE,
   cameras = NULL,
   meta_extra = NULL,
-  cache_dir = NULL,
-  cache_update = FALSE,
+  cache = NULL,
+  update_cache = FALSE,
   quiet = FALSE
 )
 }
@@ -32,9 +32,9 @@ uas_info(
 
 \item{meta_extra}{A list of additional meta data (see Details)}
 
-\item{cache_dir}{Directory to cache exif data}
+\item{cache}{Logical or a directory where EXIF data should be cached (see Details)}
 
-\item{cache_update}{Whether to update the cached}
+\item{update_cache}{Whether to update the cache}
 
 \item{quiet}{Don't show messages}
 }
@@ -55,21 +55,25 @@ from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
 \code{meta_extra} is an optional named list containing additional metadata field. Supported list elements include
-\code{collection_name}, \code{data_url}, \code{description} and \code{contact}.
+\code{collection_name}, \code{data_url}, \code{description}, \code{contact}, and \code{pilot}.
 
 If \code{meta_extra} is not passed, an alternative way to pass these additional metadata
 fields is to put them in a text file called 'meta_extra.txt' in the same directory as the images. The structure of the
 text file should be a key:value pair on each line (no delimiters). For example:
 
-collection_name: Hopland Research and Extension Center, Watershed II
+\code{collection_name: Hopland Research and Extension Center, Watershed II
+data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
+description: These data were collected as part of a pre-restoration monitoring program}
 
 Lines starting with a hash or forward slash will be interpreted as comments and ignored.
 
-\code{cache_dir} is the name of a directory where EXIF data gets cached. Cached EXIF data is connected to a directory of images
-based on the directory name and total size of all image files. So if images are added or removed from the directory,
-the cache should be automatically rebuilt the next time the function is run. \code{cache_update} is a Logical value
-which forces an update of cached data when true.
+\code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
+If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
+to a directory of images based on the directory name and total size of all image files.
+So if images are added or removed from the directory, the cache will be automatically rebuilt
+the next time the function is run. \code{update_cache} is a logical value
+which forces an update of cached data when TRUE.
 }
 \seealso{
-\link{uas_report}, \link{uas_exp}
+\code{\link{uas_getcachedir}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
 }

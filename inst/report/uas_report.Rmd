@@ -14,6 +14,7 @@ params:
   area_m2: !r NA
   mcp: !r NA
   date_flown: !r NA
+  camera_name: !r NA
   size_mb: !r NA
   map_fn: !r NA
   col: "yellow"
@@ -35,24 +36,25 @@ tr {
 ## Setup
 knitr::opts_chunk$set(echo = TRUE)
 library(htmltools)
+library(leaflet)
 
 ## Import database of known sensors
-cameras_fn <- system.file("cameras/cameras.csv", package="uasimg")
-sensors_df <- read.csv(cameras_fn, stringsAsFactors = FALSE)
+# cameras_fn <- system.file("cameras/cameras.csv", package="uasimg")
+# sensors_df <- read.csv(cameras_fn, stringsAsFactors = FALSE)
 
 ## Search for this sensor
-camera_make <- params$pts[1, "make", drop = TRUE]
-camera_model <- params$pts[1, "model", drop = TRUE]
-camera_filetype <- params$pts[1, "filetype", drop = TRUE]
-
-sensor_this_df <- dplyr::filter(sensors_df, model==camera_model & filetype==camera_filetype)
+# camera_make <- params$pts[1, "make", drop = TRUE]
+# camera_model <- params$pts[1, "model", drop = TRUE]
+# camera_filetype <- params$pts[1, "filetype", drop = TRUE]
+# 
+# sensor_this_df <- dplyr::filter(sensors_df, model==camera_model & filetype==camera_filetype)
 
 ## Get the composite camera name from the sensor database
-if (nrow(sensor_this_df)==0) {
-  camera_name <- "unknown"
-} else {
-  camera_name <- sensor_this_df[1, "camera_name"]
-}
+# if (nrow(sensor_this_df)==0) {
+#   camera_name <- "unknown"
+# } else {
+#   camera_name <- sensor_this_df[1, "camera_name"]
+# }
 
 ## Get the image dimensions
 img_pixels <- paste0(params$pts[1, "img_width", drop = TRUE], " x ", params$pts[1, "img_height", drop = TRUE])
@@ -80,6 +82,8 @@ cat("<table>")
 
 if (!is.na(params$meta_extra$description)) cat("<tr><td>__Description__:</td><td><span id='description'>",  params$meta_extra$description, "</span></td></tr>")
 
+if (!is.na(params$meta_extra$pilot)) cat("<tr><td>__Pilot__:</td><td><span id='pilot'>",  params$meta_extra$pilot, "</span></td></tr>")
+
 if (!is.na(params$meta_extra$contact)) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$meta_extra$contact, "</span></td></tr>")
 
 if (params$local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>")
@@ -88,14 +92,17 @@ if (!is.na(params$meta_extra$data_url)) cat("<tr><td>__Data URL__:</td><td>",  p
 
 cat("<tr><td>__Num images__:</td><td><span id='num_img'>", nrow(params$pts), "</span></td></tr>")
 
+cat("<tr><td>__Camera__:</td><td><span id='camera_name'>", params$camera_name, "</span></td></tr>")
+
 cat("<tr><td>__Total file size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>")
 
 cat("<tr><td>__Area__:</td><td>", round(msq2acres(params$area_m2),2), "acres</td></tr>")
-cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>")
-cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>")
-cat("<tr><td>__Camera__:</td><td>", camera_name, "</td></tr>")
-cat("<tr><td>__Image size__:</td><td>", img_pixels, "</td></tr>")
 
+cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>")
+
+cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>")
+
+cat("<tr><td>__Image size__:</td><td>", img_pixels, "</td></tr>")
 
 cat("</table>")
 ```

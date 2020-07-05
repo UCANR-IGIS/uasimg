@@ -33,7 +33,16 @@
 #' The HTML report is generated from a RMarkdown file. If you know how to edit RMarkdown, you can modify the default template and pass the filename
 #' of your preferred template using the \code{report_rmd} argument.
 #'
-#' \code{png_map} controls whether a PNG version of the map will be created in \code{output_dir}. If TRUE, a PNG file at the default dimensions (480x480) will be created. If a single integer is passed, it will be taken to be the width and height on the PNG file in pixels. \code{png_exp} is a percentage of the points bounding box that will be used as a buffer for the background map. If the map seems too cropped, or you get a warning message about rows removed, try increasing it. By default, the background image will be a satellite photo from Google Maps. However this requires a valid API Key for the Google Maps Static service (for details see \url{https://developers.google.com/maps/documentation/maps-static/} as well as \link[ggmap]{register_google}), which you pass with the \code{google_api} argument. If this is not passed, you'll probably get a terrain map from Stamen.
+#' \code{png_map} controls whether a PNG version of the map will be created in \code{output_dir}.
+#' If TRUE, a PNG file at the default dimensions (480x480) will be created. If a single integer
+#' is passed, it will be taken to be the width and height on the PNG file in pixels.
+#' \code{png_exp} is a percentage of the points bounding box that will be used as a buffer
+#' for the background map. If the map seems too cropped, or you get a warning message about rows
+#' removed, try increasing it. By default, the background image will be a satellite photo from
+#' Google Maps. However this requires a valid API Key for the Google Maps Static service (for
+#' details see \url{https://developers.google.com/maps/documentation/maps-static/} as well
+#' as \link[ggmap]{register_google}), which you pass with the \code{google_api} argument.
+#' If this is not passed, you'll probably get a terrain map from Stamen.
 #'
 #' @return The filename of the HTML report generated
 #'
@@ -42,6 +51,7 @@
 #' @import crayon
 #' @importFrom grDevices dev.off png rainbow
 #' @importFrom utils browseURL packageVersion
+#' @importFrom tools file_path_sans_ext
 #' @importFrom methods is
 #' @export
 
@@ -96,7 +106,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
       } else {
         output_dir_use <- output_dir
       }
-      if (!file.exists(output_dir_use)) stop("Could not find output directory")
+      if (!file.exists(output_dir_use)) stop("Could not find report output directory")
 
       ##################################################################
       ## Make the PNG map
@@ -106,7 +116,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         if (is.null(output_file)) {
           map_fn <- paste0(basename(img_dir), "_map.png")
         } else {
-          map_fn <- paste0(tools::file_path_sans_ext(basename(output_file)), ".png")
+          map_fn <- paste0(file_path_sans_ext(basename(output_file)), ".png")
         }
 
         if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
@@ -180,7 +190,9 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         }
 
 
-      }  ## if png_make
+      } else {
+        map_fn <- ""
+      } ## if png_make
       ###########################################
 
       ## Get the HTML report output filename

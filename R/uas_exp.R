@@ -1,6 +1,6 @@
-#' Export spatial data locations from UAS images
+#' Export spatial data from a UAS image collection
 #'
-#' Export spatial data files from UAS images
+#' Export spatial data from a UAS image collection
 #'
 #' @param x A list of class 'uas_info'
 #' @param ctr Export the image centroids as a Shapefile, T/F or a filename
@@ -12,9 +12,14 @@
 #' @param quiet Supress messages and printing of the pandoc command line, T/F
 #'
 #' @details
-#' \code{ctr}, \code{fp}, and \code{mcp} can be logical (TRUE/FALSE) or a filename (minus the shp extension).  If Logical values are pased, a Shapefile name will be constructed based on the name of parent folder. Exporting objects to Shapefile requires the \code{rgdal} package to be installed. You can specify which directory the Shapefiles will be exported to using the \code{shp_dir} argument. The default is to save them in a subdirectory called 'map' in the images directory.
 #'
-#' @return A vector of Shapefiles saved
+#' \code{ctr}, \code{fp}, and \code{mcp} can be logical (TRUE/FALSE) or a filename
+#' (minus the shp extension). If logical values are passed, a Shapefile name will
+#' be constructed based on the name of parent folder. You can specify which directory
+#' the Shapefiles will be exported to using the \code{shp_dir} argument. The default
+#' is to save them in a sub-directory of the images directory called 'map'.
+#'
+#' @return A vector of Shapefile filenames
 #'
 #' @seealso \link{uas_info}
 #'

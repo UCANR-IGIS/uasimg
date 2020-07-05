@@ -1,0 +1,137 @@
+---
+title: "`r params$toc_title`"
+output: 
+  html_document: 
+    self_contained: no
+    smart: no
+params:
+  toc_title: "UAS Image Collections"
+  html_reports: !r NA
+  output_dir: !r NA
+---
+
+```{css echo=FALSE}
+h1.title {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+h3 {
+  font-weight: 700;
+  color: Navy;
+  margin-bottom: 0.2 em;
+}
+p.compact {
+  margin-bottom: 0;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup_stuff, include=FALSE}
+library(htmltools); library(XML); library(knitr)
+make_path_relative <- function(base, target) {
+  base <- tolower(gsub("\\\\", "/", base))
+  target <- tolower(gsub("\\\\", "/", target))
+  if (substr(base, 1, 1) == substr(target, 1, 1)) {
+    common <- sub('^([^|]*)[^|]*(?:\\|\\1[^|]*)$', '^\\1/?', paste0(base, '|', target))
+    paste0(gsub("/$", "", paste0(gsub('[^/]+/?', '../', sub(common, '', base)),
+           sub(common, '', target))), "/")
+  } else {
+    ## warning("Resources are on different. Links may not work.")
+    paste0(target, "/")
+  }
+}
+```
+
+
+```{r list_data2, results='asis', echo=FALSE}
+href_target <- " target='_blank' rel='noopener'"
+
+for (i in 1:length(params$html_reports)) {
+  
+  html_full <- params$html_reports[i]
+  
+  if (file.exists(html_full)) {
+    html_fn <- basename(html_full)
+    #html_dir_abs <- dirname(html_full)
+    
+    html_dir_rel <- make_path_relative(params$output_dir, dirname(html_full))
+    
+    ## Parse the HTML page
+    html_tree <- htmlTreeParse(readLines(html_full), useInternalNodes = TRUE)
+  
+    ## Extract the metadata
+    imgcol <- list()
+    
+    ## Grab content encoded in spans
+    span_ids <- c("collection_name", "description", "contact", "pilot", "num_img", "size_mb", "camera_name")
+    for (j in 1:length(span_ids)) {
+      id_find_xp <- paste0("//span[@id='", span_ids[j], "']//text()")
+      imgcol[[span_ids[j]]] <- paste(trimws(xpathSApply(html_tree, id_find_xp, xmlValue)), collapse=" ")
+    }
+    
+    ## Grab content encoded in meta tags
+    meta_tags <- c("map_fn", "date_flown", "area_m2")
+    for (j in 1:length(meta_tags)) {
+      metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
+      imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
+    }
+    
+    ## Print the HTML code
+    if (imgcol$map_fn != "") {
+      
+      img_fn <- paste0(html_dir_rel, imgcol$map_fn )
+
+      print(HTML(paste0("<div style='float:right;'><a href='", html_dir_rel, html_fn,
+                        "'", href_target, "><img src='", html_dir_rel, imgcol$map_fn,
+                      "' style='width:220px; padding:20px;'/></a></div>")))
+    }
+    
+    print(HTML(paste0("<h3><a href='", html_dir_rel, html_fn, "'", href_target,
+                      ">", imgcol$collection_name, "</a></h3>")))
+    
+    if (imgcol$description != "") {
+      print(HTML(paste0("<p><em>", imgcol$description, "</em></p>")))
+    }
+  
+    print(HTML(paste0("<p class='compact'><strong>Date captured:</strong> ",
+                      imgcol$date_flown, "</p>")))
+    
+    if (imgcol$pilot != "") {
+      print(HTML(paste0("<p class='compact'><strong>Pilot:</strong> ", 
+                        imgcol$pilot, "</p>")))
+    }
+
+    print(HTML(paste0("<p class='compact'><strong>Camera:</strong> ",
+                      imgcol$camera_name, "</p>")))
+    
+    print(HTML(paste0("<p class='compact'><strong>Num images:</strong> ",
+                      imgcol$num_img, "</p>")))
+    
+    print(HTML(paste0("<p class='compact'><strong>Area:</strong> ",
+                      round(as.numeric(imgcol$area_m2) / 4046.86, 1), " acres</p>")))
+    
+    print(HTML(paste0("<p class='compact'><strong>Data size:</strong> ",
+                      format(as.numeric(imgcol$size_mb), big.mark = ","), " MB</p>")))
+
+    if (imgcol$contact != "") {
+      print(HTML(paste0("<p class='compact'><strong>Contact:</strong> ", 
+                        imgcol$contact, "</p>")))
+    }
+
+        print(HTML("<hr style='clear:both;'></hr>"))
+      
+  } else {
+    print(HTML(paste0("<p>File not found:<br/><em>", html_full, "</em></p>")))
+    print(HTML("<hr style='clear:both;'></hr>"))
+  }
+  
+
+}
+```
+
+
+

@@ -22,8 +22,9 @@ print.uas_info <- function(x, meta_extra = TRUE, ...) {
       cat(crayon::green(x[[i]]$meta_extra$collection_name), "\n")
       cat(crayon::yellow(" dir:"), names(x)[i], "\n")
       cat(crayon::yellow(" images:"), nrow(x[[i]]$pts), "\n")
-      cat(crayon::yellow(" area:"), msq2acres(x[[i]]$area_m2), " acres\n")
-      cat(crayon::yellow(" size:"), format(x[[i]]$size_mb, big.mark = ","), " MB\n")
+      cat(crayon::yellow(" camera:"), x[[i]]$camera_name, "\n")
+      cat(crayon::yellow(" area:"), round(msq2acres(x[[i]]$area_m2), 2), "acres\n")
+      cat(crayon::yellow(" size:"), format(x[[i]]$size_mb, big.mark = ","), "MB\n")
       cat(crayon::yellow(" date flown:"), x[[i]]$date_flown, "\n")
       if (meta_extra) {
         for (j in 1:length(x[[i]]$meta_extra)) {

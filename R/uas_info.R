@@ -9,8 +9,8 @@
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
 #' @param meta_extra A list of additional meta data (see Details)
-#' @param cache_dir Directory to cache exif data
-#' @param cache_update Whether to update the cached
+#' @param cache Logical or a directory where EXIF data should be cached (see Details)
+#' @param update_cache Whether to update the cache
 #' @param quiet Don't show messages
 #'
 #' @details
@@ -23,25 +23,29 @@
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
 #' \code{meta_extra} is an optional named list containing additional metadata field. Supported list elements include
-#' \code{collection_name}, \code{data_url}, \code{description} and \code{contact}.
+#' \code{collection_name}, \code{data_url}, \code{description}, \code{contact}, and \code{pilot}.
 #'
 #' If \code{meta_extra} is not passed, an alternative way to pass these additional metadata
 #' fields is to put them in a text file called 'meta_extra.txt' in the same directory as the images. The structure of the
 #' text file should be a key:value pair on each line (no delimiters). For example:
 #'
-#' collection_name: Hopland Research and Extension Center, Watershed II
+#' \code{collection_name: Hopland Research and Extension Center, Watershed II
+#' data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
+#' description: These data were collected as part of a pre-restoration monitoring program}
 #'
 #' Lines starting with a hash or forward slash will be interpreted as comments and ignored.
 #'
-#' \code{cache_dir} is the name of a directory where EXIF data gets cached. Cached EXIF data is connected to a directory of images
-#' based on the directory name and total size of all image files. So if images are added or removed from the directory,
-#' the cache should be automatically rebuilt the next time the function is run. \code{cache_update} is a Logical value
-#' which forces an update of cached data when true.
+#' \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
+#' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
+#' to a directory of images based on the directory name and total size of all image files.
+#' So if images are added or removed from the directory, the cache will be automatically rebuilt
+#' the next time the function is run. \code{update_cache} is a logical value
+#' which forces an update of cached data when TRUE.
 #'
 #' @return A named list with elements including the image centroids (as a sf data frame), footprints, total area,
 #' minimum convex polygon, total directory size, the data flown, and extra meta data.
 #'
-#' @seealso \link{uas_report}, \link{uas_exp}
+#' @seealso \code{\link{uas_getcachedir}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
 #'
 #' @import crayon
 #' @import dplyr
@@ -54,7 +58,7 @@
 
 uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
                      fwd_overlap=TRUE, cameras=NULL, meta_extra = NULL,
-                     cache_dir=NULL, cache_update=FALSE, quiet=FALSE) {
+                     cache=NULL, update_cache=FALSE, quiet=FALSE) {
 
   ## See if all directory(s) exist
   for (img_dir in img_dirs) {
@@ -111,30 +115,60 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
     if (!quiet) message(crayon::magenta$bold(img_dir))
 
+    save_to_cache <- FALSE
     cache_loaded <- FALSE
-    if (!is.null(cache_dir)) {
 
-      ## Construct the cache file name based on the image dir and total size
-      ## (excluding txt and bak files)
-      dir_files <- list.files(img_dir, all.files = FALSE, full.names = TRUE)
-      dir_files <- dir_files[!grepl(".txt$|.bak$", dir_files)]
-      dir_size <- as.character(sum(file.size(dir_files)))
-      cache_fn <- paste0(digest(paste0(img_dir, dir_size),
-                                        algo='md5', serialize = FALSE), ".RData")
+    if (!is.null(cache)) {
 
-      if (file.exists(cache_dir) && !cache_update) {
-        ## Look for a cache file
+      ## Get the cache directory
+      cache_dir_use <- NA
+      if (is.logical(cache)) {
+        ## Cache is T/F
+        if (cache) {
+          cache_dir_use <- uas_getcachedir(quiet=TRUE, create_default=TRUE)
+          if (!is.na(cache_dir_use)) save_to_cache <- TRUE
+        } else {
+          ## cache = FALSE. Take no action because
+          ## cache_dir_use is already NA.
+        }
 
-        if (file.exists(file.path(cache_dir, cache_fn))) {
-          load(file.path(cache_dir, cache_fn))
-          cache_loaded <- TRUE
-          if (!quiet) message(crayon::yellow("Using cached data"))
+
+      } else {
+        ## String was passed, we presume this is a directory
+        if (file.exists(cache)) {
+          cache_dir_use <- cache
+          save_to_cache <- TRUE
+        } else {
+          stop(paste0(cache, " does not exist. Please create and try again, or omit."))
         }
       }
-    }
 
-    #save(imgs_ctr_utm_sf, fp_utm_sf, area_m2, mcp_sf, total_size_mb, flight_date_str,
-    #     file = file.path(cache_dir, paste0(cache_fn, ".RData")))
+      ## If a cache directory exists, look for a cached file for this folder
+      if (!is.na(cache_dir_use)) {
+
+        ## Construct the cache file name based on the image dir and total size
+        ## Keep only image files for the purposes of computing the total file size
+        dir_files <- list.files(img_dir, all.files = FALSE, full.names = TRUE)
+        dir_files <- dir_files[grepl(".jpg$|.jpeg$|.tif$|.tiff$|.raw$", dir_files, ignore.case=TRUE)]
+        #dir_files <- dir_files[!grepl(".txt$|.bak$", dir_files)]
+
+        dir_size <- as.character(sum(file.size(dir_files)))
+        cache_fn <- paste0("uas_", digest(paste0(img_dir, dir_size),
+                                  algo='md5', serialize = FALSE), ".RData")
+
+        ## If we're not doing auto-update, look for a file and load it if found
+        if (!update_cache) {
+          ## Look for a cache file
+          if (file.exists(file.path(cache_dir_use, cache_fn))) {
+            load(file.path(cache_dir_use, cache_fn))
+            cache_loaded <- TRUE
+            if (!quiet) message(crayon::yellow("Using cached data"))
+          }
+        }
+
+      }
+
+    }
 
     if (!cache_loaded) {
 
@@ -429,24 +463,21 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
     }
 
     ## Cache results (if not already cached)
-    if (!is.null(cache_dir)) {
-      if (file.exists(cache_dir)) {
-        if (cache_update || !cache_loaded) {
-          # cache_fn <- digest::digest(img_dir, algo='md5', serialize = FALSE)
-          save(imgs_ctr_utm_sf, fp_utm_sf, area_m2, mcp_sf, total_size_mb, flight_date_str,
-               file = file.path(cache_dir, cache_fn))
-          if (!quiet) message(crayon::yellow("Cache saved"))
-        }
-      } else {
-        warning(paste0("Can not find cache directory: ", cache_dir))
+    if (save_to_cache) {
+      if (update_cache || !cache_loaded) {
+        ## Store the image folder name in case the cache data is used on its own
+        img_folder <- img_dir
+        save(img_folder, imgs_ctr_utm_sf, fp_utm_sf, area_m2, mcp_sf, total_size_mb,
+             flight_date_str, camera_name, file = file.path(cache_dir_use, cache_fn))
+        if (!quiet) message(crayon::yellow("Cache saved"))
       }
     }
 
-    ## Load the additional meta data (not cached!)
+    ## Load the additional meta data (which is not cached!)
     ## Get the extra metadata either by an argument or finding an meta_extra.txt file
     if (is.null(meta_extra)) {
       meta_extra_use <- list(data_url=NA, collection_name=NA,
-                             description=NA, contact=NA)
+                             description=NA, contact=NA, pilot=NA)
     } else {
       meta_extra_use<- meta_extra
     }
@@ -488,30 +519,13 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
           }
 
-          # ln_parts <- trimws(strsplit(one_line, split = ":", fixed = TRUE)[[1]])
-          # if (length(ln_parts) == 2 ) {
-          #   cat("Found: ", ln_parts[1], " -- ", ln_parts[2], "\n", sep ="")
-          #   if (ln_parts[1] %in% names(meta_extra_use)) {
-          #     meta_extra_use[[ln_parts[1]]] <- ln_parts[2]
-          #   }
-          # }
-
         }
 
         close(fcon)
 
-        # x <- alllines
-        # y <- trimws(strsplit(x[1], split = ":", fixed = TRUE)[[1]])
-
-        # browser()
-        # alllines <- readLines(fcon, warn = FALSE)
-        # data_url_use <- readLines(f, n=1, warn = FALSE)
-
       }
 
     } ## if isnull (meta_extra)
-
-
 
     ## Add to the result list
     res[[img_dir]] <- list(pts = imgs_ctr_utm_sf,
@@ -520,6 +534,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
                            mcp = mcp_sf,
                            size_mb = total_size_mb,
                            date_flown = flight_date_str,
+                           camera_name = camera_name,
                            meta_extra = meta_extra_use)
 
 

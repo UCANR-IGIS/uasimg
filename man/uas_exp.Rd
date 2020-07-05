@@ -2,7 +2,7 @@
 % Please edit documentation in R/uas_exp.R
 \name{uas_exp}
 \alias{uas_exp}
-\title{Export spatial data locations from UAS images}
+\title{Export spatial data from a UAS image collection}
 \usage{
 uas_exp(
   x,
@@ -33,13 +33,17 @@ uas_exp(
 \item{quiet}{Supress messages and printing of the pandoc command line, T/F}
 }
 \value{
-A vector of Shapefiles saved
+A vector of Shapefile filenames
 }
 \description{
-Export spatial data files from UAS images
+Export spatial data from a UAS image collection
 }
 \details{
-\code{ctr}, \code{fp}, and \code{mcp} can be logical (TRUE/FALSE) or a filename (minus the shp extension).  If Logical values are pased, a Shapefile name will be constructed based on the name of parent folder. Exporting objects to Shapefile requires the \code{rgdal} package to be installed. You can specify which directory the Shapefiles will be exported to using the \code{shp_dir} argument. The default is to save them in a subdirectory called 'map' in the images directory.
+\code{ctr}, \code{fp}, and \code{mcp} can be logical (TRUE/FALSE) or a filename
+(minus the shp extension). If logical values are passed, a Shapefile name will
+be constructed based on the name of parent folder. You can specify which directory
+the Shapefiles will be exported to using the \code{shp_dir} argument. The default
+is to save them in a sub-directory of the images directory called 'map'.
 }
 \seealso{
 \link{uas_info}
