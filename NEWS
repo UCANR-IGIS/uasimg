@@ -1,3 +1,11 @@
+Changes in version 1.3.1 (2020-08-01)
+=========================
+* Renamed <pre>uas_getcache</pre> and <pre>uas_setcache</pre>
+* Added <pre>uas_grp_flt</pre> and <pre>uas_grps2col</pre>
+* Added <pre>uas_getflds</pre> and <pre>uas_setflds</pre>
+* Added Mavic 2 Pro to camera database
+* renamed <pre>meta_extra</pre> argument to <pre>metadata</pre> in <pre>uas_info</pre>
+
 Changes in version 1.3 (2020-07-04)
 =========================
 * Added <pre>uas_getcachedir</pre> and <pre>uas_setcachedir</pre> to manage cache directory for EXIF data

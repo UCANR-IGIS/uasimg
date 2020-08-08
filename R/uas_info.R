@@ -8,7 +8,7 @@
 #' @param alt_agl The elevation above ground level in meters (optional for images with the relevative altitude saved)
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
-#' @param meta_extra A list of additional meta data (see Details)
+#' @param metadata A list of additional meta data (see Details)
 #' @param cache Logical or a directory where EXIF data should be cached (see Details)
 #' @param update_cache Whether to update the cache
 #' @param quiet Don't show messages
@@ -22,12 +22,12 @@
 #' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
-#' \code{meta_extra} is an optional named list containing additional metadata field. Supported list elements include
+#' \code{metadata} is an optional named list containing additional metadata field. Supported list elements include
 #' \code{collection_name}, \code{data_url}, \code{description}, \code{contact}, and \code{pilot}.
 #'
-#' If \code{meta_extra} is not passed, an alternative way to pass these additional metadata
-#' fields is to put them in a text file called 'meta_extra.txt' in the same directory as the images. The structure of the
-#' text file should be a key:value pair on each line (no delimiters). For example:
+#' If \code{metadata} is not passed, an alternative way to pass these additional metadata
+#' fields is to put them in a text file called 'metadata.txt' in the same directory as the images. The structure of the
+#' text file should be YAML, in other words a key:value pair on each line (no delimiters). For example:
 #'
 #' \code{collection_name: Hopland Research and Extension Center, Watershed II
 #' data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
@@ -45,7 +45,7 @@
 #' @return A named list with elements including the image centroids (as a sf data frame), footprints, total area,
 #' minimum convex polygon, total directory size, the data flown, and extra meta data.
 #'
-#' @seealso \code{\link{uas_getcachedir}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
+#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
 #'
 #' @import crayon
 #' @import dplyr
@@ -57,7 +57,7 @@
 #' @export
 
 uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
-                     fwd_overlap=TRUE, cameras=NULL, meta_extra = NULL,
+                     fwd_overlap=TRUE, cameras=NULL, metadata = NULL,
                      cache=NULL, update_cache=FALSE, quiet=FALSE) {
 
   ## See if all directory(s) exist
@@ -125,7 +125,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       if (is.logical(cache)) {
         ## Cache is T/F
         if (cache) {
-          cache_dir_use <- uas_getcachedir(quiet=TRUE, create_default=TRUE)
+          cache_dir_use <- uas_getcache(quiet=TRUE, default=TRUE)
           if (!is.na(cache_dir_use)) save_to_cache <- TRUE
         } else {
           ## cache = FALSE. Take no action because
@@ -474,27 +474,27 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
     }
 
     ## Load the additional meta data (which is not cached!)
-    ## Get the extra metadata either by an argument or finding an meta_extra.txt file
-    if (is.null(meta_extra)) {
-      meta_extra_use <- list(data_url=NA, collection_name=NA,
+    ## Get the extra metadata either by an argument or finding an metadata.txt file
+    if (is.null(metadata)) {
+      metadata_use <- list(data_url=NA, collection_name=NA,
                              description=NA, contact=NA, pilot=NA)
     } else {
-      meta_extra_use<- meta_extra
+      metadata_use<- metadata
     }
 
-    ## If meta_exta was not passed, look for meta_extra.txt
+    ## If meta_exta was not passed, look for metadata.txt
 
     ## Look for an info.txt file
-    if (is.null(meta_extra)) {
+    if (is.null(metadata)) {
 
       ## Look for an info.txt file in the folder
-      meta_extra_fn <- file.path(img_dir, "meta_extra.txt")
+      metadata_fn <- file.path(img_dir, "metadata.txt")
 
-      if (file.exists(meta_extra_fn)) {
+      if (file.exists(metadata_fn)) {
         ## Read the first line
-        if (!quiet) message(crayon::yellow("Found meta_extra.txt"))
+        if (!quiet) message(crayon::yellow("Found metadata.txt"))
 
-        fcon <- file(meta_extra_fn, open = "r")
+        fcon <- file(metadata_fn, open = "r")
         while ( TRUE ) {
           one_line <- readLines(fcon, n = 1, warn = FALSE)
           if ( length(one_line) == 0 ) {
@@ -510,8 +510,8 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
               ## Key (before colon)
               ln_key <- trimws(substring(one_line, 1, colon_pos - 1)[1])
 
-              if (ln_key %in% names(meta_extra_use)) {
-                meta_extra_use[[ln_key]] <- gsub("\"", "'",
+              if (ln_key %in% names(metadata_use)) {
+                metadata_use[[ln_key]] <- gsub("\"", "'",
                                                  trimws(substring(one_line, colon_pos + 1)[1]))
               }
 
@@ -525,7 +525,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       }
 
-    } ## if isnull (meta_extra)
+    } ## if isnull (metadata)
 
     ## Add to the result list
     res[[img_dir]] <- list(pts = imgs_ctr_utm_sf,
@@ -535,10 +535,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
                            size_mb = total_size_mb,
                            date_flown = flight_date_str,
                            camera_name = camera_name,
-                           meta_extra = meta_extra_use)
-
-
-
+                           metadata = metadata_use)
   }
 
 

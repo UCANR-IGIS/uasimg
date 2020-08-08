@@ -8,9 +8,9 @@ GoPro,HERO4 Black,JPEG,Hero4 Black/Silver,6.2,4.65,CMOS,rolling,4000,3000,3,none
 DJI,M100_X3,JPEG,DJI ZenMuse X3,6.3175,4.73813,CMOS,rolling,4000,3000,3.61,CameraYaw,RelativeAltitude,https://www.dji.com/zenmuse-x3/info,
 MicaSense,RedEdge,TIFF,MicaSense RedEdge,4.8,3.6,CMOS,global,1280,960,5.5,none,none,https://support.micasense.com/hc/en-us/articles/225933127-RedEdge-Manual-Overview-and-Table-of-Contents,
 DJI,FLIR,TIFF,DJI Zenmuse XT,9,6.8,CMOS,unknown,640,512,13,GimbalYawDegree,RelativeAltitude,https://www.dji.com/zenmuse-xt/info,
-DJI,FC6310,JPEG,DJI Phantom 4 Pro,13.2,8.8,CMOS,global,5472,3648,8.8,CameraYaw,RelativeAltitude,https://www.dji.com/phantom-4-pro/info; https://www.dxomark.com/Cameras/DJI/Phantom4-Pro,1 inch CMOS
+DJI,FC6310,JPEG,DJI Phantom 4 Pro,12.83331744,8.55554496,CMOS,global,5472,3648,8.579701,CameraYaw,RelativeAltitude,https://www.dji.com/phantom-4-pro/info; https://www.dxomark.com/Cameras/DJI/Phantom4-Pro,1 inch CMOS
 DJI,FC330,JPEG,DJI Phantom 4,6.31748,4.73811,CMOS,unknown,4000,3000,3.61,CameraYaw,RelativeAltitude,https://www.dxomark.com/Cameras/DJI/Phantom-4 ; https://www.dji.com/phantom-4/info,1/2.3 CMOS
 DJI,FC220,JPEG,DJI Mavic Pro,6.32692,4.74519,CMOS,unknown,4000,3000,4.861305,CameraYaw,RelativeAltitude,Pix4D Camera Database v19,1/2.3 CMOS
-DJI,xxxxxx,JPEG,DJI Mavic 2 Pro,13.2,8.8,CMOS,unknown,10,10,99,,,https://forum.dji.com/thread-167017-1-1.html,
+Hasselblad,L1D-20c,JPEG,DJI Mavic 2 Pro,12.825,8.55,CMOS,unknown,5472,3648,10.478508,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19,1 inch CMOS
 DJI,FC300X,JPEG,DJI Phantom 3 Pro,6.31748,4.73811,CMOS,rolling,4000,3000,3.61,CameraYaw,RelativeAltitude,Pix4D Camera Database v19,1/2.3 sensor
 senseFly,S.O.D.A.,JPEG,senseFly S.O.D.A.,13.1328,8.7552,CMOS,global,5472,3648,10.633008,Yaw,none,Pix4D Camera Database v19: S.O.D.A._10.6_5472x3648,

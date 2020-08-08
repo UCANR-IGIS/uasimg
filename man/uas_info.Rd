@@ -11,7 +11,7 @@ uas_info(
   alt_agl = NULL,
   fwd_overlap = TRUE,
   cameras = NULL,
-  meta_extra = NULL,
+  metadata = NULL,
   cache = NULL,
   update_cache = FALSE,
   quiet = FALSE
@@ -30,7 +30,7 @@ uas_info(
 
 \item{cameras}{Location of the cameras.csv file. Is NULL the package csv file will be used.}
 
-\item{meta_extra}{A list of additional meta data (see Details)}
+\item{metadata}{A list of additional meta data (see Details)}
 
 \item{cache}{Logical or a directory where EXIF data should be cached (see Details)}
 
@@ -54,12 +54,12 @@ This function uses a free command line tool called EXIFtool to read the EXIF dat
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
-\code{meta_extra} is an optional named list containing additional metadata field. Supported list elements include
+\code{metadata} is an optional named list containing additional metadata field. Supported list elements include
 \code{collection_name}, \code{data_url}, \code{description}, \code{contact}, and \code{pilot}.
 
-If \code{meta_extra} is not passed, an alternative way to pass these additional metadata
-fields is to put them in a text file called 'meta_extra.txt' in the same directory as the images. The structure of the
-text file should be a key:value pair on each line (no delimiters). For example:
+If \code{metadata} is not passed, an alternative way to pass these additional metadata
+fields is to put them in a text file called 'metadata.txt' in the same directory as the images. The structure of the
+text file should be YAML, in other words a key:value pair on each line (no delimiters). For example:
 
 \code{collection_name: Hopland Research and Extension Center, Watershed II
 data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
@@ -75,5 +75,5 @@ the next time the function is run. \code{update_cache} is a logical value
 which forces an update of cached data when TRUE.
 }
 \seealso{
-\code{\link{uas_getcachedir}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
+\code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
 }
