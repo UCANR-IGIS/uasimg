@@ -1,4 +1,8 @@
-Changes in version 1.3.1 (2020-08-01)
+Changes in version 1.3.2 (2020-08-08)
+=========================
+* Supported file names metadata.txt expanded to metadata*.txt
+
+Changes in version 1.3.1 (2020-08-07)
 =========================
 * Renamed <pre>uas_getcache</pre> and <pre>uas_setcache</pre>
 * Added <pre>uas_grp_flt</pre> and <pre>uas_grps2col</pre>

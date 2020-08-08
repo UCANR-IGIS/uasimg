@@ -11,7 +11,7 @@ uas_info(
   alt_agl = NULL,
   fwd_overlap = TRUE,
   cameras = NULL,
-  metadata = NULL,
+  metadata = "metadata.*\\\\.txt",
   cache = NULL,
   update_cache = FALSE,
   quiet = FALSE
@@ -30,7 +30,7 @@ uas_info(
 
 \item{cameras}{Location of the cameras.csv file. Is NULL the package csv file will be used.}
 
-\item{metadata}{A list of additional meta data (see Details)}
+\item{metadata}{A filename pattern for a metadata file, or a metadata list object (see Details)}
 
 \item{cache}{Logical or a directory where EXIF data should be cached (see Details)}
 
@@ -54,18 +54,19 @@ This function uses a free command line tool called EXIFtool to read the EXIF dat
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
-\code{metadata} is an optional named list containing additional metadata field. Supported list elements include
-\code{collection_name}, \code{data_url}, \code{description}, \code{contact}, and \code{pilot}.
+\code{metadata} is an optional argument to pass external metadata that can not be extracted from the
+images (e.g., location name, pilot). It can be a regular expression for a metadata filename
+(in YAML format, see below) that should be in the same folder as the images. Or it can be a named list containing
+metadata fields. For supported field names, see \code{\link{uas_getflds}}.
 
-If \code{metadata} is not passed, an alternative way to pass these additional metadata
-fields is to put them in a text file called 'metadata.txt' in the same directory as the images. The structure of the
-text file should be YAML, in other words a key:value pair on each line (no delimiters). For example:
+\code{metadata} cam also be a pattern for a filename (see \code{\link{list.files}}). If multiple files match the
+pattern, they will all be read. Metadata files should be plain text in YAML format. Each line should contain a
+key:value pair (with no quotes or delimiters). Lines starting with a hash or forward slash will be interpreted
+as comments and ignored. For example:
 
 \code{collection_name: Hopland Research and Extension Center, Watershed II
 data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
 description: These data were collected as part of a pre-restoration monitoring program}
-
-Lines starting with a hash or forward slash will be interpreted as comments and ignored.
 
 \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
 If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked

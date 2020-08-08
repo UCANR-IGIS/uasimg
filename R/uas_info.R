@@ -8,7 +8,7 @@
 #' @param alt_agl The elevation above ground level in meters (optional for images with the relevative altitude saved)
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
-#' @param metadata A list of additional meta data (see Details)
+#' @param metadata A filename pattern for a metadata file, or a metadata list object (see Details)
 #' @param cache Logical or a directory where EXIF data should be cached (see Details)
 #' @param update_cache Whether to update the cache
 #' @param quiet Don't show messages
@@ -22,18 +22,19 @@
 #' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
-#' \code{metadata} is an optional named list containing additional metadata field. Supported list elements include
-#' \code{collection_name}, \code{data_url}, \code{description}, \code{contact}, and \code{pilot}.
+#' \code{metadata} is an optional argument to pass external metadata that can not be extracted from the
+#' images (e.g., location name, pilot). It can be a regular expression for a metadata filename
+#' (in YAML format, see below) that should be in the same folder as the images. Or it can be a named list containing
+#' metadata fields. For supported field names, see \code{\link{uas_getflds}}.
 #'
-#' If \code{metadata} is not passed, an alternative way to pass these additional metadata
-#' fields is to put them in a text file called 'metadata.txt' in the same directory as the images. The structure of the
-#' text file should be YAML, in other words a key:value pair on each line (no delimiters). For example:
+#' \code{metadata} cam also be a pattern for a filename (see \code{\link{list.files}}). If multiple files match the
+#' pattern, they will all be read. Metadata files should be plain text in YAML format. Each line should contain a
+#' key:value pair (with no quotes or delimiters). Lines starting with a hash or forward slash will be interpreted
+#' as comments and ignored. For example:
 #'
 #' \code{collection_name: Hopland Research and Extension Center, Watershed II
 #' data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
 #' description: These data were collected as part of a pre-restoration monitoring program}
-#'
-#' Lines starting with a hash or forward slash will be interpreted as comments and ignored.
 #'
 #' \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
 #' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
@@ -57,7 +58,7 @@
 #' @export
 
 uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
-                     fwd_overlap=TRUE, cameras=NULL, metadata = NULL,
+                     fwd_overlap=TRUE, cameras=NULL, metadata = "metadata.*\\.txt",
                      cache=NULL, update_cache=FALSE, quiet=FALSE) {
 
   ## See if all directory(s) exist
@@ -154,7 +155,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
         dir_size <- as.character(sum(file.size(dir_files)))
         cache_fn <- paste0("uas_", digest(paste0(img_dir, dir_size),
-                                  algo='md5', serialize = FALSE), ".RData")
+                                          algo='md5', serialize = FALSE), ".RData")
 
         ## If we're not doing auto-update, look for a file and load it if found
         if (!update_cache) {
@@ -270,9 +271,9 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       ## Filter out images with incomplete EXIF info
       idx_incomplete <- which(is.na(exif_df$gpslatitude) |
-                              is.na(exif_df$gpslongitude) |
-                              is.na(exif_df$model) |
-                              is.na(exif_df$filetype))
+                                is.na(exif_df$gpslongitude) |
+                                is.na(exif_df$model) |
+                                is.na(exif_df$filetype))
       if (length(idx_incomplete) > 0) exif_df <- exif_df[-idx_incomplete, ]
 
 
@@ -475,57 +476,73 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
     ## Load the additional meta data (which is not cached!)
     ## Get the extra metadata either by an argument or finding an metadata.txt file
+
     if (is.null(metadata)) {
-      metadata_use <- list(data_url=NA, collection_name=NA,
-                             description=NA, contact=NA, pilot=NA)
-    } else {
+      flds_md <- uas_getflds()
+      metadata_use <- rep(NA, length(flds_md))
+      names(metadata_use) <- flds_md
+
+    } else if (is.list(metadata)) {
       metadata_use<- metadata
-    }
 
-    ## If meta_exta was not passed, look for metadata.txt
+    } else if (is.character(metadata)) {
+      ## Presume this is a file name pattern
+      ## metadata_fn <- file.path(img_dir, "metadata.txt")
+      metadata_fn <- list.files(img_dir, metadata, full.names = TRUE)
 
-    ## Look for an info.txt file
-    if (is.null(metadata)) {
+      if (length(metadata_fn) == 0) {
+        if (!quiet) message(crayon::yellow("Metadata file not found"))
+        metadata_use <- rep(NA, length(flds_md))
+        names(metadata_use) <- flds_md
 
-      ## Look for an info.txt file in the folder
-      metadata_fn <- file.path(img_dir, "metadata.txt")
+      } else {
 
-      if (file.exists(metadata_fn)) {
-        ## Read the first line
-        if (!quiet) message(crayon::yellow("Found metadata.txt"))
+        metadata_use <- list()
 
-        fcon <- file(metadata_fn, open = "r")
-        while ( TRUE ) {
-          one_line <- readLines(fcon, n = 1, warn = FALSE)
-          if ( length(one_line) == 0 ) {
-            ## You've gotten to the end
-            break
-          }
+        for (md_fn in metadata_fn) {
 
-          first_char <- trimws(substr(one_line, 1, 1))
-          if (first_char != "#" && first_char != "/") {
-            colon_pos <- regexpr(":", one_line)
-            if (colon_pos > 0) {
+          if (!quiet) message(crayon::yellow("Reading", basename(md_fn)))
 
-              ## Key (before colon)
-              ln_key <- trimws(substring(one_line, 1, colon_pos - 1)[1])
+          fcon <- file(md_fn, open = "r")
+          while ( TRUE ) {
+            one_line <- readLines(fcon, n = 1, warn = FALSE)
+            if ( length(one_line) == 0 ) {
+              ## You've gotten to the end
+              break
+            }
 
-              if (ln_key %in% names(metadata_use)) {
+            first_char <- trimws(substr(one_line, 1, 1))
+            if (first_char != "#" && first_char != "/") {
+              colon_pos <- regexpr(":", one_line)
+              if (colon_pos > 0) {
+
+                ## Key (before colon)
+                ln_key <- trimws(substring(one_line, 1, colon_pos - 1)[1])
+
+                ##if (ln_key %in% names(metadata_use)) {  }
+
                 metadata_use[[ln_key]] <- gsub("\"", "'",
-                                                 trimws(substring(one_line, colon_pos + 1)[1]))
+                                               trimws(substring(one_line, colon_pos + 1)[1]))
+
+
               }
 
             }
 
-          }
+          }  ## while TRUE
 
-        }
+          close(fcon)
 
-        close(fcon)
+        }    ## for (md_fn in metadata_fn)
 
       }
 
-    } ## if isnull (metadata)
+
+    } else {
+      warning("Unknown object for metadata")
+      metadata_use <- rep(NA, length(flds_md))
+      names(metadata_use) <- flds_md
+    }
 
     ## Add to the result list
     res[[img_dir]] <- list(pts = imgs_ctr_utm_sf,

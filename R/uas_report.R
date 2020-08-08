@@ -60,220 +60,220 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
                        local_dir=TRUE, self_contained=TRUE, png_map=FALSE, png_exp=0.2,
                        google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE, quiet=FALSE) {
 
-    if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
+  if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
-    ## Get the Rmd template
-    if (is.null(report_rmd)) {
-      report_rmd <- system.file("report/uas_report.Rmd", package="uasimg")
+  ## Get the Rmd template
+  if (is.null(report_rmd)) {
+    report_rmd <- system.file("report/uas_report.Rmd", package="uasimg")
+  }
+  if (!file.exists(report_rmd)) stop("Cant find the report template")
+
+  ## Set the size of the PNG map
+  make_png <- FALSE
+  if (identical(png_map, TRUE)) {
+    png_dim <- c(480,480)
+    make_png <- TRUE
+  } else if (is.numeric(png_map)) {
+    if (length(png_map)==1) png_map <- rep(png_map,2)
+    if (length(png_map)!=2) stop("Invalid value for png_map")
+    png_dim <- png_map
+    make_png <- TRUE
+  }
+
+  if (make_png) {
+    if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
+    if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
+  }
+
+  report_fn_vec <- NULL
+
+  ## Start the loop
+  for (i in 1:length(x)) {
+    img_dir <- names(x)[i]
+
+    if (identical(x[[img_dir]]$pts, NA)) {
+      warning(paste0("Centroids not found for ", img_dir, ". Skipping report."))
+      next
     }
-    if (!file.exists(report_rmd)) stop("Cant find the report template")
 
-    ## Set the size of the PNG map
-    make_png <- FALSE
-    if (identical(png_map, TRUE)) {
-      png_dim <- c(480,480)
-      make_png <- TRUE
-    } else if (is.numeric(png_map)) {
-      if (length(png_map)==1) png_map <- rep(png_map,2)
-      if (length(png_map)!=2) stop("Invalid value for png_map")
-      png_dim <- png_map
-      make_png <- TRUE
+    ## Get the output dir
+    if (is.null(output_dir)) {
+      output_dir_use <- file.path(img_dir, "map")
+      if (!file.exists(output_dir_use) && create_dir) {
+        message(crayon::green("Creating", output_dir_use))
+        dir.create(output_dir_use)
+      }
+    } else {
+      output_dir_use <- output_dir
     }
+    if (!file.exists(output_dir_use)) stop("Could not find report output directory")
 
+    ##################################################################
+    ## Make the PNG map
     if (make_png) {
-      if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
-      if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
-    }
 
-    report_fn_vec <- NULL
-
-    ## Start the loop
-    for (i in 1:length(x)) {
-      img_dir <- names(x)[i]
-
-      if (identical(x[[img_dir]]$pts, NA)) {
-        warning(paste0("Centroids not found for ", img_dir, ". Skipping report."))
-        next
-      }
-
-      ## Get the output dir
-      if (is.null(output_dir)) {
-        output_dir_use <- file.path(img_dir, "map")
-        if (!file.exists(output_dir_use) && create_dir) {
-          message(crayon::green("Creating", output_dir_use))
-          dir.create(output_dir_use)
-        }
-      } else {
-        output_dir_use <- output_dir
-      }
-      if (!file.exists(output_dir_use)) stop("Could not find report output directory")
-
-      ##################################################################
-      ## Make the PNG map
-      if (make_png) {
-
-        ## Construct the map.png filename
-        if (is.null(output_file)) {
-          map_fn <- paste0(basename(img_dir), "_map.png")
-        } else {
-          map_fn <- paste0(file_path_sans_ext(basename(output_file)), ".png")
-        }
-
-        if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
-
-          ## Lets make a png map
-
-          ## Compute colors for the pts
-          ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
-          if (is.null(col)) {
-            col_use <- grDevices::rainbow(nrow(x[[img_dir]]$pts), end=5/6)
-          } else {
-            col_use <- col
-          }
-
-          # First put the colors as a column in the data frame (which ggmap requires)
-          # x[[img_dir]]$pts$col <- col_use
-
-          # Define the extent and center point of the flight area
-          pts_ext <- x[[img_dir]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
-          lon_idx <- c(1, 3)
-          lat_idx <- c(2, 4)
-          ctr_ll <- c(mean(pts_ext[lon_idx]), mean(pts_ext[lat_idx]))
-
-          ## Compute the Zoom level (use a minimum of 18)
-          zoom_lev <- min(18, ggmap::calc_zoom(lon = range( pts_ext[lon_idx]),
-                                               lat = range( pts_ext[lat_idx]),
-                                               adjust=as.integer(-1)))
-
-          if (is.null(google_api) && !ggmap::has_google_key()) {
-            ## Grab a Stamen map
-            if (!quiet) message(crayon::yellow("Downloading a PNG image from STAMEN"))
-            dx <- diff(pts_ext[lon_idx]) * png_exp
-            dy <- diff(pts_ext[lat_idx]) * png_exp
-            pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
-            m <- ggmap::get_stamenmap(bbox=pts_ext, zoom=zoom_lev, maptype="terrain")
-          } else {
-            if (!is.null(google_api)) {
-              ggmap::register_google(key=google_api)
-            }
-            if (!quiet) message(crayon::yellow("Downloading a PNG image from GOOGLE"))
-            m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev,
-                                          format="png8", maptype="satellite"))
-            if (is(m, "try-error")) {
-              warning("Failed to retrieve static map from Google Maps, check your API key. To use Stamen, don't pass google_api (if you saved it, run Sys.unsetenv('GGMAP_GOOGLE_API_KEY') )")
-              m <- NULL
-            }
-          }
-
-          if (!is.null(m)) {
-
-            # Create the ggmap object and save to a variable
-            pts_ggmap <- ggmap::ggmap(m) + geom_point(
-              data=x[[img_dir]]$pts %>% sf::st_drop_geometry(),
-              aes(gps_long, gps_lat), colour = col_use,
-              show.legend=F, size=3) +
-              theme_void()
-
-            ## Open the PNG driver
-            grDevices::png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
-
-            ## Print the map
-            print(pts_ggmap)
-
-            ## Close the PNG driver
-            grDevices::dev.off()
-
-          }
-
-        } else {
-          if (!quiet) message(crayon::yellow(map_fn, "already exists. Skipping."))
-        }
-
-
-      } else {
-        map_fn <- ""
-      } ## if png_make
-      ###########################################
-
-      ## Get the HTML report output filename
+      ## Construct the map.png filename
       if (is.null(output_file)) {
-        output_file_use <- paste0(basename(img_dir), "_report.html")
+        map_fn <- paste0(basename(img_dir), "_map.png")
       } else {
-        output_file_use <- output_file
+        map_fn <- paste0(file_path_sans_ext(basename(output_file)), ".png")
       }
 
-      if (overwrite_html || !file.exists(file.path(output_dir_use, output_file_use))) {
+      if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
 
-        ## In order to create HTML output which is *not* self-contained, we must
-        ## manually copy the css file to the output dir. We must also
-        ## temporarily copy the RMd file to the output dir, because knitr
-        ## creates the lib_dir relative to the location of the Rmd file (with no
-        ## other arguments or options)
+        ## Lets make a png map
 
-        if (self_contained) {
-          output_options <- list()
-          report_rmd_use <- report_rmd
-
-        } else {
-          ## Copy the Rmd file to the output_dir (temporarily)
-          ## If output_dir is specfied, only need to do this on the first pass
-          if (is.null(output_dir) || i == 1) {
-            file.copy(from=report_rmd, to=output_dir_use, overwrite = FALSE)
-            report_rmd_use <- file.path(output_dir_use, basename(report_rmd))
-
-            ## Copy the CSS file to the output_dir (permanently)
-            report_css <- system.file("report/uas_report.css", package="uasimg")
-            file.copy(from=report_css, to=output_dir_use, overwrite = FALSE)
-
-            ## Create a list of output options that specify not self contained
-            output_options <- list(self_contained=FALSE, lib_dir="libs")
-          }
-        }
-
-        ## Compute colors for the pts and fp
+        ## Compute colors for the pts
+        ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
         if (is.null(col)) {
-          # col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
-          col_use <- NA
+          col_use <- grDevices::rainbow(nrow(x[[img_dir]]$pts), end=5/6)
         } else {
           col_use <- col
         }
 
-        ## Render the HTML file
-        report_fn <- rmarkdown::render(input=report_rmd_use,
-                                       output_dir=output_dir_use, output_file=output_file_use,
-                                       output_options=output_options,
-                                       params=c(x[[img_dir]], list(col=col_use, img_dir=img_dir,
-                                                                   group_img=group_img,
-                                                                   local_dir=local_dir,
-                                                                   map_fn=map_fn
-                                                                   )))
+        # First put the colors as a column in the data frame (which ggmap requires)
+        # x[[img_dir]]$pts$col <- col_use
 
-        report_fn_vec <- c(report_fn_vec, report_fn)
+        # Define the extent and center point of the flight area
+        pts_ext <- x[[img_dir]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
+        lon_idx <- c(1, 3)
+        lat_idx <- c(2, 4)
+        ctr_ll <- c(mean(pts_ext[lon_idx]), mean(pts_ext[lat_idx]))
 
-        ## If not self-contained, delete the temporary copy of the Rmd file
-        if (!self_contained) {
-          if (is.null(output_dir) || i == length(x)) {
-            file.remove(report_rmd_use)
+        ## Compute the Zoom level (use a minimum of 18)
+        zoom_lev <- min(18, ggmap::calc_zoom(lon = range( pts_ext[lon_idx]),
+                                             lat = range( pts_ext[lat_idx]),
+                                             adjust=as.integer(-1)))
+
+        if (is.null(google_api) && !ggmap::has_google_key()) {
+          ## Grab a Stamen map
+          if (!quiet) message(crayon::yellow("Downloading a PNG image from STAMEN"))
+          dx <- diff(pts_ext[lon_idx]) * png_exp
+          dy <- diff(pts_ext[lat_idx]) * png_exp
+          pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
+          m <- ggmap::get_stamenmap(bbox=pts_ext, zoom=zoom_lev, maptype="terrain")
+        } else {
+          if (!is.null(google_api)) {
+            ggmap::register_google(key=google_api)
+          }
+          if (!quiet) message(crayon::yellow("Downloading a PNG image from GOOGLE"))
+          m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev,
+                                        format="png8", maptype="satellite"))
+          if (is(m, "try-error")) {
+            warning("Failed to retrieve static map from Google Maps, check your API key. To use Stamen, don't pass google_api (if you saved it, run Sys.unsetenv('GGMAP_GOOGLE_API_KEY') )")
+            m <- NULL
           }
         }
 
+        if (!is.null(m)) {
+
+          # Create the ggmap object and save to a variable
+          pts_ggmap <- ggmap::ggmap(m) + geom_point(
+            data=x[[img_dir]]$pts %>% sf::st_drop_geometry(),
+            aes(gps_long, gps_lat), colour = col_use,
+            show.legend=F, size=3) +
+            theme_void()
+
+          ## Open the PNG driver
+          grDevices::png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
+
+          ## Print the map
+          print(pts_ggmap)
+
+          ## Close the PNG driver
+          grDevices::dev.off()
+
+        }
 
       } else {
-        message(crayon::yellow(output_file_use, "already exists. Skipping."))
+        if (!quiet) message(crayon::yellow(map_fn, "already exists. Skipping."))
       }
 
+
+    } else {
+      map_fn <- ""
+    } ## if png_make
+    ###########################################
+
+    ## Get the HTML report output filename
+    if (is.null(output_file)) {
+      output_file_use <- paste0(basename(img_dir), "_report.html")
+    } else {
+      output_file_use <- output_file
     }
 
-    message(crayon::green("Done."))
+    if (overwrite_html || !file.exists(file.path(output_dir_use, output_file_use))) {
 
-    ## Open the file(s)
-    if (open_report) {
-        for (report_fn in report_fn_vec) {
-          browseURL(report_fn)
+      ## In order to create HTML output which is *not* self-contained, we must
+      ## manually copy the css file to the output dir. We must also
+      ## temporarily copy the RMd file to the output dir, because knitr
+      ## creates the lib_dir relative to the location of the Rmd file (with no
+      ## other arguments or options)
+
+      if (self_contained) {
+        output_options <- list()
+        report_rmd_use <- report_rmd
+
+      } else {
+        ## Copy the Rmd file to the output_dir (temporarily)
+        ## If output_dir is specfied, only need to do this on the first pass
+        if (is.null(output_dir) || i == 1) {
+          file.copy(from=report_rmd, to=output_dir_use, overwrite = FALSE)
+          report_rmd_use <- file.path(output_dir_use, basename(report_rmd))
+
+          ## Copy the CSS file to the output_dir (permanently)
+          report_css <- system.file("report/uas_report.css", package="uasimg")
+          file.copy(from=report_css, to=output_dir_use, overwrite = FALSE)
+
+          ## Create a list of output options that specify not self contained
+          output_options <- list(self_contained=FALSE, lib_dir="libs")
         }
+      }
+
+      ## Compute colors for the pts and fp
+      if (is.null(col)) {
+        # col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+        col_use <- NA
+      } else {
+        col_use <- col
+      }
+
+      ## Render the HTML file
+      report_fn <- rmarkdown::render(input=report_rmd_use,
+                                     output_dir=output_dir_use, output_file=output_file_use,
+                                     output_options=output_options,
+                                     params=c(x[[img_dir]], list(col=col_use, img_dir=img_dir,
+                                                                 group_img=group_img,
+                                                                 local_dir=local_dir,
+                                                                 map_fn=map_fn
+                                     )))
+
+      report_fn_vec <- c(report_fn_vec, report_fn)
+
+      ## If not self-contained, delete the temporary copy of the Rmd file
+      if (!self_contained) {
+        if (is.null(output_dir) || i == length(x)) {
+          file.remove(report_rmd_use)
+        }
+      }
+
+
+    } else {
+      message(crayon::yellow(output_file_use, "already exists. Skipping."))
     }
 
-    ## Return the filename(s) of the HTML file(s) (invisibly)
-    return(invisible(report_fn_vec))
+  }
+
+  message(crayon::green("Done."))
+
+  ## Open the file(s)
+  if (open_report) {
+    for (report_fn in report_fn_vec) {
+      browseURL(report_fn)
+    }
+  }
+
+  ## Return the filename(s) of the HTML file(s) (invisibly)
+  return(invisible(report_fn_vec))
 }
 
