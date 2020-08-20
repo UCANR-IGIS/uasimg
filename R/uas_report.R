@@ -17,6 +17,7 @@
 #' @param google_api API key for Google Static Maps, see Details.
 #' @param overwrite_html Overwrite existing HTML files without warning, YN
 #' @param overwrite_png Overwrite existing PNG files without warning, YN
+#' @param thumbnails Create thumbails
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -48,17 +49,20 @@
 #'
 #' @seealso \link{uas_info}
 #'
-#' @import crayon
+#' @importFrom crayon green yellow bold
 #' @importFrom grDevices dev.off png rainbow
-#' @importFrom utils browseURL packageVersion
-#' @importFrom tools file_path_sans_ext
+#' @importFrom utils browseURL packageVersion setTxtProgressBar txtProgressBar
+#' @importFrom tools file_path_sans_ext file_ext
 #' @importFrom methods is
+#' @importFrom magick image_read image_write image_scale
+#'
 #' @export
 
 uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=TRUE,
                        output_file=NULL, report_rmd=NULL, open_report=FALSE,
                        local_dir=TRUE, self_contained=TRUE, png_map=FALSE, png_exp=0.2,
-                       google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE, quiet=FALSE) {
+                       google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE,
+                       thumbnails = FALSE, quiet=FALSE) {
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -81,7 +85,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
   }
 
   if (make_png) {
-    if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
+    if (!require("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
     if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
   }
 
@@ -100,7 +104,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
     if (is.null(output_dir)) {
       output_dir_use <- file.path(img_dir, "map")
       if (!file.exists(output_dir_use) && create_dir) {
-        message(crayon::green("Creating", output_dir_use))
+        if (!quiet) message(green("Creating", output_dir_use))
         dir.create(output_dir_use)
       }
     } else {
@@ -147,7 +151,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
 
         if (is.null(google_api) && !ggmap::has_google_key()) {
           ## Grab a Stamen map
-          if (!quiet) message(crayon::yellow("Downloading a PNG image from STAMEN"))
+          if (!quiet) message(yellow("Downloading a PNG image from STAMEN"))
           dx <- diff(pts_ext[lon_idx]) * png_exp
           dy <- diff(pts_ext[lat_idx]) * png_exp
           pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
@@ -156,7 +160,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
           if (!is.null(google_api)) {
             ggmap::register_google(key=google_api)
           }
-          if (!quiet) message(crayon::yellow("Downloading a PNG image from GOOGLE"))
+          if (!quiet) message(yellow("Downloading a PNG image from GOOGLE"))
           m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev,
                                         format="png8", maptype="satellite"))
           if (is(m, "try-error")) {
@@ -186,7 +190,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         }
 
       } else {
-        if (!quiet) message(crayon::yellow(map_fn, "already exists. Skipping."))
+        if (!quiet) message(yellow(map_fn, "already exists. Skipping."))
       }
 
 
@@ -194,6 +198,67 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
       map_fn <- ""
     } ## if png_make
     ###########################################
+
+
+    ##################################################################
+    ## Create image thumbnails
+    if (thumbnails) {
+
+      ## Get the output folder
+      tb_dir_use <- file.path(output_dir_use, "tb")
+      if (!file.exists(tb_dir_use)) {
+        if (!(dir.create(tb_dir_use))) {
+          thumbails <- FALSE
+          warning("Could not create thumbnail direcotry")
+        }
+      }
+
+      if (thumbnails) {  ## if thumbnails is still true
+
+        ## Get the image filenames
+        all_img_fn <- x[[img_dir]]$pts$img_fn
+
+        ## In order to make the image thumbnails have unique filenames (so they can be combined
+        ## in one directory on a server), we compute a suffix based on the filesize
+        all_img_base36 <- sapply(as.integer(file.size(all_img_fn)), int2base36)
+
+        ## Compute the file names of the thumbnail images
+        tb_fn <- tolower(file.path(tb_dir_use,
+                               paste0(file_path_sans_ext(basename(all_img_fn)),
+                               "_tb-", all_img_base36, ".", file_ext(all_img_fn))))
+
+        ## Save the name of the thumbnail in the attribute table for the points
+        x[[img_dir]]$pts$tb_fn <- basename(tb_fn)
+
+        ## If *any* thumbnails are needed, go into a loop
+        if (FALSE %in% file.exists(tb_fn)) {
+
+          if (!quiet) message(yellow("Generating thumbnails for", basename(img_dir)))
+
+          # Setup progress bar
+          pb <- txtProgressBar(min = 0, max = length(all_img_fn), style = 3)
+
+          for (j in 1:length(all_img_fn)) {
+            # Update the progress bar
+            setTxtProgressBar(pb, j)
+
+            if (!file.exists(tb_fn[j])) {
+              image_read(all_img_fn[j]) %>%
+                image_scale("600") %>%
+                image_write(path = tb_fn[j], format = "jpeg", quality = 75)
+            }
+
+          }
+          close(pb)
+
+        }
+
+      }
+
+    }  ## if thumbnails = TRUE
+
+    ## If thumbnails is still FALSE, fill the column with NA
+    if (!thumbnails) x[[img_dir]]$pts$tb_fn <- NA
 
     ## Get the HTML report output filename
     if (is.null(output_file)) {
@@ -238,6 +303,11 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         col_use <- col
       }
 
+      # browser()
+      # params2 <- c(x[[img_dir]], list(col=col_use, img_dir=img_dir, group_img=group_img,
+      #                             local_dir=local_dir, map_fn=map_fn,
+      #                             thumbnails=thumbnails, tb_fn=basename(tb_fn)))
+
       ## Render the HTML file
       report_fn <- rmarkdown::render(input=report_rmd_use,
                                      output_dir=output_dir_use, output_file=output_file_use,
@@ -245,8 +315,9 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
                                      params=c(x[[img_dir]], list(col=col_use, img_dir=img_dir,
                                                                  group_img=group_img,
                                                                  local_dir=local_dir,
-                                                                 map_fn=map_fn
-                                     )))
+                                                                 map_fn=map_fn,
+                                                                 thumbnails=thumbnails)
+                                              ))
 
       report_fn_vec <- c(report_fn_vec, report_fn)
 
@@ -259,12 +330,12 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
 
 
     } else {
-      message(crayon::yellow(output_file_use, "already exists. Skipping."))
+      message(yellow(output_file_use, "already exists. Skipping."))
     }
 
   }
 
-  message(crayon::green("Done."))
+  message(green("Done."))
 
   ## Open the file(s)
   if (open_report) {

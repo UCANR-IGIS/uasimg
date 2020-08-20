@@ -36,12 +36,9 @@ uas_getflds <- function() {
 
 }
 
-#' Set default metadata fields
-#'
-#' @describeIn uas_getflds
+#' @describeIn uas_getflds Set default fields for image collection metadata
 #' @param flds Name of metadata fields
 #' @param reset Use orginal values
-#' @param quiet Show messages, logical
 
 uas_setflds <- function(flds=NULL, reset=FALSE) {
 
@@ -73,6 +70,8 @@ uas_setflds <- function(flds=NULL, reset=FALSE) {
 
 
 }
+
+#' @describeIn uas_getflds Get a standard set of image collection metedata fields
 
 uas_flds_oem <- function() {
   c("proj", "loc", "collection_name", "description", "contact", "pilot", "data_url", "tags")

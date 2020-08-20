@@ -8,8 +8,10 @@ uas_grp_flt(
   x,
   interflt_val = 10,
   interflt_units = c("med_int", "secs")[1],
-  init_flt_num = 1,
+  init_fltnum = 1,
   min_images = 5,
+  combine_dirs = TRUE,
+  options = NULL,
   quiet = FALSE
 )
 }
@@ -20,12 +22,19 @@ uas_grp_flt(
 
 \item{interflt_units}{Time units between flights, see details "med_int" or "secs"}
 
-\item{init_flt_num}{Initial flight number}
+\item{init_fltnum}{Initial flight number}
 
 \item{min_images}{Minimum number of images to be considered a flight}
+
+\item{combine_dirs}{Parse the images in directories collectively}
+
+\item{options}{Options and overrides for creating groups}
 
 \item{quiet}{Suppress messages}
 }
 \description{
 Group a set of images into flights
+}
+\details{
+
 }

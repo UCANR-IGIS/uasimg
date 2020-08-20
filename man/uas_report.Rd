@@ -20,6 +20,7 @@ uas_report(
   google_api = NULL,
   overwrite_html = FALSE,
   overwrite_png = FALSE,
+  thumbnails = FALSE,
   quiet = FALSE
 )
 }
@@ -53,6 +54,8 @@ uas_report(
 \item{overwrite_html}{Overwrite existing HTML files without warning, YN}
 
 \item{overwrite_png}{Overwrite existing PNG files without warning, YN}
+
+\item{thumbnails}{Create thumbails}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }

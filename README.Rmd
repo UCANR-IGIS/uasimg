@@ -4,6 +4,10 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
+
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -140,15 +144,17 @@ Image Collection metadata includes information extracted from the image files, s
 
 ## Image Collection Summary Report
 
-`uas_report()` creates a summary report of an image collection in HTML format. The report includes an embedded interactive leaflet map ([sample](https://ucanr-igis.github.io/webassets/hrec_watershed1_rpt.html)), as well as summary statistics of the estimated above ground height and overlap. 
+`uas_report()` creates a summary report of an image collection in HTML format. The report includes an embedded interactive leaflet map ([sample](https://ucanr-igis.github.io/webassets/hrec_watershed1_rpt.html)), with an option for clickable thumbnail images. The summary report will also present histograms of the estimated i) above ground altitude, ii) image GSD, and iii) forward overlap. 
 
-`uas_report()` includes an option to generate a thumbnail image of the camera locations. The thumbnail image does not appear in the HTML report, but is useful for other types of previews, including markdown and the master table of contents (below).  To create a thumbnail with a satellite image background, you must pass a Google Maps API key to `uas_report()`. Alternately the thumbnail will contain a background terrain map from Stamen. See the help page for details.
+`uas_report()` includes an option to generate a thumbnail image of the entire flight area. The thumbnail image does not appear in the HTML report, but is useful for other types of previews, including markdown and the master Table of Contents (below).  To create a thumbnail with a satellite image background, you must pass a Google Maps API key to `uas_report()`. Alternately the thumbnail will contain a background terrain map from Stamen. See the help page for details.
 
 ## Creating a Master Table of Contents
 
 Whereas `uas_report()` creates HTML summaries for individual directories (flights), `uas_toc()` creates a master table of contents of those summaries. The main argument in `uas_toc()` is a vector of HTML file names. 
 
 Options in `uas_report()` include gathering (i.e., copying) the HTML files to a single directory. You can also provide a custom title for the TOC, as well as a header and footer for branding purposes.
+
+For an example Table of Contents, see <http://gis-ubuntu.ucanr.edu/uas/ptpinole/>
 
 ## Exporting Image Collection Geometry
 

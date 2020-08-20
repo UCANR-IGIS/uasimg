@@ -65,7 +65,7 @@ uas_getcache <- function(default=TRUE, quiet=FALSE) {
 
     } else {
       if (!quiet) {
-        message("A cache directory for EXIF data has not been saved. Run uas_setcachedir.")
+        message("A cache directory for EXIF data has not been saved. Run uas_setcache.")
       }
       NA
     }

@@ -6,6 +6,7 @@
 #' @param exiftool The path to the exiftool command line tool (omit if on the OS path)
 #' @param csv The file name of a new csv file where the exif data will be saved (omit to make a temp one)
 #' @param alt_agl The elevation above ground level in meters (optional for images with the relevative altitude saved)
+#' @param fp Compute image foot prints, T/F
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
 #' @param metadata A filename pattern for a metadata file, or a metadata list object (see Details)
@@ -43,8 +44,9 @@
 #' the next time the function is run. \code{update_cache} is a logical value
 #' which forces an update of cached data when TRUE.
 #'
-#' @return A named list with elements including the image centroids (as a sf data frame), footprints, total area,
-#' minimum convex polygon, total directory size, the data flown, and extra meta data.
+#' @return A UAS Image Collection object. This is a named list with elements for
+#' image centroids (as a sf data frame), footprints, total area, minimum convex polygon,
+#' total directory size, the data flown, and external metadata.
 #'
 #' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
 #'
@@ -58,7 +60,7 @@
 #' @export
 
 uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
-                     fwd_overlap=TRUE, cameras=NULL, metadata = "metadata.*\\.txt",
+                     fp=TRUE, fwd_overlap=fp, cameras=NULL, metadata = "metadata.*\\.txt",
                      cache=NULL, update_cache=FALSE, quiet=FALSE) {
 
   ## See if all directory(s) exist
@@ -339,7 +341,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
         imgs_ctr_utm_sf <- imgs_ctr_ll_sf %>% st_transform(utm_crs)
 
         ## Compute footprints
-        if (!agl_avail || camera_tag_yaw == "none") {
+        if (!fp || !agl_avail || camera_tag_yaw == "none") {
           fp_utm_sf <- NA
           if (!quiet) message(crayon::yellow("Skipping footprints"))
           nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
@@ -492,6 +494,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       if (length(metadata_fn) == 0) {
         if (!quiet) message(crayon::yellow("Metadata file not found"))
+        flds_md <- uas_getflds()
         metadata_use <- rep(NA, length(flds_md))
         names(metadata_use) <- flds_md
 

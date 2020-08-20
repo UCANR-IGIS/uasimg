@@ -20,6 +20,7 @@ params:
   col: "yellow"
   group_img: !r TRUE
   metadata: !r NA
+  thumbnails: !r NA
 ---
 
 ```{css echo = FALSE}
@@ -127,23 +128,37 @@ lng_rng <- range(params$pts$gps_long)
 lat_rng <- range(params$pts$gps_lat)
 m_pts <- m %>% fitBounds(lng_rng[1], lat_rng[1], lng_rng[2], lat_rng[2])
 
+## Create the popup options
+if (params$thumbnails) {
+  #tb_html <- paste0("<img src='tb/", params$pts$tb_fn, "' style='width:300px;'/>")
+  pup_opts <- popupOptions(maxWidth = 400, minWidth = 400,
+                           closeOnClick = TRUE, keepInView = TRUE)
+} else {
+  #tb_html <- ""
+  pup_opts <- NULL
+}
+
 if (group_img) {
 
   ## Group points to the 5th decimal place (approx 1m on the ground)
+  ## There will be one point for each group. The popup window will show the images
+  ## at that location
   leaf_pts_tbl <- params$pts %>% st_drop_geometry() %>% 
     mutate(gps_long_rnd = round(gps_long, 5), 
          gps_lat_rnd = round(gps_lat, 5),
          pts_dt = as.POSIXct(date_time, format="%Y:%m:%d %H:%M:%S")) %>% 
-    select(gps_long, gps_long_rnd, gps_lat, gps_lat_rnd, file_name, pts_dt) %>% 
+    select(gps_long, gps_long_rnd, gps_lat, gps_lat_rnd, file_name, pts_dt, tb_fn) %>% 
     group_by(gps_long_rnd, gps_lat_rnd) %>% 
     summarise(count = n(), first_dt = first(pts_dt), 
-              balloon_html = paste0("<b>", file_name, "</b>. ", 
-                      format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), collapse = "<br/>")) %>% 
+              balloon_html = paste0("<b>", file_name, "</b>. <em>",
+                                    format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), "</em>",
+                                    ifelse(params$thumbnails, paste0("<br/><img src='tb/", tb_fn, "'/>"), ""),
+                                    collapse = "<br/><br/>")
+              ) %>% 
     arrange(first_dt)
 
   ## Compute colors for the pts and fp 
   if (is.na(params$col)) {
-    #print("Params is NA. Creating a rainbow")
     col_use <- rainbow(nrow(leaf_pts_tbl), end=5/6)
   } else {
     col_use <- params$col
@@ -155,15 +170,28 @@ if (group_img) {
                    radius = 5, fillColor = col_use, fillOpacity = 1,  
                    stroke = (max(leaf_pts_tbl$count) > 1), 
                    color = "black", weight = 2,
-                   popup = ~balloon_html)
+                   popup = ~balloon_html,
+                   popupOptions = pup_opts)
 
+  m_pts_base <<- m_pts
+  leaf_pts_tbl_base <<- leaf_pts_tbl
+  
 } else {
 
-  ## No grouping
+  ## NO GROUPING
   
   ## Create the balloons
   pts_dt <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
-  balloons_html <- paste0("<p><b>", params$pts$file_name, "</b><br/>", format(pts_dt, "%b %d, %Y"), "<br/>", format(pts_dt, "%I:%M:%S %p"), "</p>")
+  
+  if (params$thumbnails) {
+    thumbnail_html <- paste0("<br/><img src='tb/", params$pts$tb_fn, "'/>")
+  } else {
+    thumbnail_html <- ""  
+  }
+  
+  balloons_html <- paste0("<p><b>", params$pts$file_name, "</b>. <em>", 
+                          format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), "</em>", 
+                          thumbnail_html, "</p>")
 
   ## Compute colors  
   if (is.na(params$col)) {
@@ -175,7 +203,8 @@ if (group_img) {
   ## Add the circle markers
   m_pts <- m_pts %>% addCircleMarkers(lng = params$pts$gps_long, lat = params$pts$gps_lat, 
                                    radius = 4, fillColor = col_use, fillOpacity = 1, 
-                                   stroke = FALSE, popup = balloons_html)
+                                   stroke = FALSE, popup = balloons_html,
+                                   popupOptions = pup_opts)
   
 }
 
@@ -183,39 +212,27 @@ if (group_img) {
 m_pts
 ```
 
-### Footprints
+```{r fp_tab, echo=FALSE, results='asis', eval = FALSE}
+if (!identical(params$fp, NA)) {
+  cat("### Footprints \n")
+}
+```
 
-```{r leaflet_fp, echo=FALSE, message=FALSE}
+```{r leaflet_fp, echo=FALSE, message=FALSE, results = 'asis' }
 
-if (identical(params$fp, NA)) {
+# if (!identical(params$fp, NA)) {
+#   ## No fp, because fp=F in uas_info, or yaw or AGL altitude was not saved in the EXIF
+#   ## div(p("Image footprints not computed."), hr())
+#   cat("<p>Hi there</p>\n")
+# 
+# } else {  
+
+if (!identical(params$fp, NA)) {
+  cat("### Footprints \n")
   
-  div(p("Image footprints not computed! (perhaps because yaw or AGL altitude was not saved in the EXIF)"), hr())
-  
-
-} else {  
   ## Reproject footprints to lat-long (required by leaflet)
-    
-  # crsLatLong <- CRS("+proj=longlat +datum=WGS84")
-  # fpLL <- spTransform(geometry(params$fp), crsLatLong)
   fp_ll_sf <- params$fp %>% st_geometry() %>%  st_transform(crs = 4326)
-  
-  ## Set the bounding box
-  #fp_ll_bbox <- fp_ll_sf %>% st_bbox()
-  #m_fp <- m %>% fitBounds(fp_ll_bbox[1], fp_ll_bbox[2], fp_ll_bbox[3], fp_ll_bbox[4])
-  
-  ## Create the map definition with piping syntax
-  ## myleaf_map <- leaflet( x3[[1]]$fp %>% st_transform(crs = 4326)) %>% addTiles() %>%  addPolygons(fillOpacity=0.1) 
-   ## x3[[1]]$fp %>% st_transform(crs = 4326)
 
-  #fpBBox <- bbox(fpLL)
-  # m_fp <- m %>% fitBounds(fpBBox[1,1], fpBBox[2,1], fpBBox[1,2], fpBBox[2,2])
-  
-  #outline_color <- c("yellow", "LightPink")[1]
-  #outline_color <- rainbow(length(fpLL), end=5/6)
-  
-  ## Add polygons
-  #m_fp <- m_fp %>% addPolygons(data=fp_ll_sf, fill=FALSE, stroke=TRUE, color=params$col, weight=2, dashArray="1,2")
-  
     ## Compute colors  
   if (is.na(params$col)) {
     col_use <- rainbow(nrow(params$fp), end=5/6)
@@ -228,8 +245,6 @@ if (identical(params$fp, NA)) {
   ## Display HTML Widget
   m_fp
 }
-  
-
 ```
 
 ## EXIF Data Analysis
@@ -254,7 +269,10 @@ if ("alt_agl" %in% names(params$pts)) {
 
 ```{r echo=FALSE}
 if (!identical(params$fp, NA)) {
-  hist(params$fp$fwd_ovrlap, col="grey50", breaks=20, main="Forward Overlap", xlab="estimated overlap (%)", ylab="freq")
+  if (!is.null(params$fp$fwd_ovrlap)) {
+    hist(params$fp$fwd_ovrlap, col="grey50", breaks=20, main="Forward Overlap", 
+         xlab="estimated overlap (%)", ylab="freq")    
+  }
 }
 ```
 

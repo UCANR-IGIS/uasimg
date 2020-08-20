@@ -22,10 +22,11 @@
 #' directory of \code{htmls_reports}. If your HTML reports are scattered across many directories,
 #' consider using \code{gather} which will put them all in one place.
 #'
-#' \code{gather} specifies an optional sub-directory of \code{output_dir} where the HTML files
-#' in \code{htmls_reports} (and any associated PNG files) will be copied. Links in the TOC
-#' will then point to the copies of the HTML files in \code{gather}. If the \code{gather} sub-directory
-#' does not already exist, R will attempt to create it.
+#' \code{gather} specifies an optional \emph{sub-directory} of \code{output_dir} (not absolute) where
+#' the HTML files in \code{htmls_reports} (and any associated PNG and thumbnail files) will be copied.
+#' Links in the TOC will then point to the copies of the HTML files in \code{gather}.
+#' If the \code{gather} sub-directory does not already exist, R will attempt to create it. To gather
+#' HTML files in \code{output_dir} (i.e., not a sub-directory), set \code{gather = '.'}
 #'
 #' \code{header_html} and \code{footer_html} allow you to specify a page header and footer, i.e., to
 #' add branding elements to the TOC.
@@ -57,6 +58,15 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
   }
 
   if (!is.null(gather)) {
+    ## If gather ends with '/', remove it
+    if (substr(gather, nchar(gather), nchar(gather)) == "/") {
+      gather <- substr(gather, 1, nchar(gather) - 1)
+    }
+
+    if (grepl("^(/|[A-Za-z]:|\\\\|~)", gather)) {
+      stop("gather should be relative to output_dir, not an absolute path")
+    }
+
     gather_dir <- file.path(output_dir, gather)
     if (!file.exists(gather_dir)) {
       if (!dir.create(gather_dir)) stop(paste0("Can't create ", gather_dir, ". Specify a different output_dir or omit gather."))
@@ -69,9 +79,7 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
         if (file.copy(from = fn, to = dest_fn, overwrite = overwrite)) {
           html_gathered <- c(html_gathered, dest_fn)
 
-          ## Next, copy the PNG file if found
-
-          ## First, parse the HTML page
+          ## To copy the map_png, we first, parse the HTML page
           html_tree <- htmlTreeParse(readLines(dest_fn), useInternalNodes = TRUE)
 
           ## Grab the map_fn which is encoded in a meta tag
@@ -84,6 +92,25 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
               file.copy(from = src_map_fn, to = dest_map_fn, overwrite = overwrite)
             }
           }
+
+          ## Next, we need to copy the thumbnails folder
+          #browser()
+          tbsrc_dir <- file.path(dirname(fn), "tb")
+          if (file.exists(tbsrc_dir)) {
+            ## Copy the whole folder
+            file.copy(from = tbsrc_dir, to = gather_dir, recursive = TRUE)
+
+            # tbdest_dir <- file.path(gather_dir, "tb")
+            # ## Create the destination tb folder if needed
+            # ## Are these needed?
+            # if (!file.exists(tbdest_dir)) dir.create(tbdest_dir)
+            # if (file.exists(tbdest_dir)) {
+            # }
+
+
+          }
+
+
         }
 
       }

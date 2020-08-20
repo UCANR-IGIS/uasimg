@@ -9,7 +9,8 @@ uas_info(
   exiftool = NULL,
   csv = NULL,
   alt_agl = NULL,
-  fwd_overlap = TRUE,
+  fp = TRUE,
+  fwd_overlap = fp,
   cameras = NULL,
   metadata = "metadata.*\\\\.txt",
   cache = NULL,
@@ -26,6 +27,8 @@ uas_info(
 
 \item{alt_agl}{The elevation above ground level in meters (optional for images with the relevative altitude saved)}
 
+\item{fp}{Compute image foot prints, T/F}
+
 \item{fwd_overlap}{Whether or not to compute the amount of overlap between one image and the next, T/F}
 
 \item{cameras}{Location of the cameras.csv file. Is NULL the package csv file will be used.}
@@ -39,8 +42,9 @@ uas_info(
 \item{quiet}{Don't show messages}
 }
 \value{
-A named list with elements including the image centroids (as a sf data frame), footprints, total area,
-minimum convex polygon, total directory size, the data flown, and extra meta data.
+A UAS Image Collection object. This is a named list with elements for
+image centroids (as a sf data frame), footprints, total area, minimum convex polygon,
+total directory size, the data flown, and external metadata.
 }
 \description{
 Extracts info from geotagged images taken from a drone

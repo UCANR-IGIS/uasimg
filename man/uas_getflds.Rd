@@ -2,10 +2,28 @@
 % Please edit documentation in R/uas_getflds.R
 \name{uas_getflds}
 \alias{uas_getflds}
+\alias{uas_setflds}
+\alias{uas_flds_oem}
 \title{Manage Default Metadata fields}
 \usage{
 uas_getflds()
+
+uas_setflds(flds = NULL, reset = FALSE)
+
+uas_flds_oem()
+}
+\arguments{
+\item{flds}{Name of metadata fields}
+
+\item{reset}{Use orginal values}
 }
 \description{
 View and set default metadata fields
 }
+\section{Functions}{
+\itemize{
+\item \code{uas_setflds}: Set default fields for image collection metadata
+
+\item \code{uas_flds_oem}: Get a standard set of image collection metedata fields
+}}
+

@@ -53,10 +53,11 @@ of the \code{htmls_reports}. At a minimum, this requires \code{output_dir} and
 directory of \code{htmls_reports}. If your HTML reports are scattered across many directories,
 consider using \code{gather} which will put them all in one place.
 
-\code{gather} specifies an optional sub-directory of \code{output_dir} where the HTML files
-in \code{htmls_reports} (and any associated PNG files) will be copied. Links in the TOC
-will then point to the copies of the HTML files in \code{gather}. If the \code{gather} sub-directory
-does not already exist, R will attempt to create it.
+\code{gather} specifies an optional \emph{sub-directory} of \code{output_dir} (not absolute) where
+the HTML files in \code{htmls_reports} (and any associated PNG and thumbnail files) will be copied.
+Links in the TOC will then point to the copies of the HTML files in \code{gather}.
+If the \code{gather} sub-directory does not already exist, R will attempt to create it. To gather
+HTML files in \code{output_dir} (i.e., not a sub-directory), set \code{gather = '.'}
 
 \code{header_html} and \code{footer_html} allow you to specify a page header and footer, i.e., to
 add branding elements to the TOC.

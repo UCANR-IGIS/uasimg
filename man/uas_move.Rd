@@ -39,7 +39,7 @@ uas_move(
 
 \item{alt}{Range of altitude to move}
 
-\item{quiet}{Supress messages}
+\item{quiet}{Suppress messages}
 }
 \value{
 A \link{uas_info} object

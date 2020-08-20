@@ -4,17 +4,17 @@
 \alias{print.uas_info}
 \title{Print a summary of a UAS Image Collection object}
 \usage{
-\method{print}{uas_info}(x, meta_extra = TRUE, ...)
+\method{print}{uas_info}(x, metadata = TRUE, ...)
 }
 \arguments{
-\item{x}{A UAS image collection object}
+\item{x}{A UAS Image Collection object}
 
-\item{meta_extra}{Show additional meta data info}
+\item{metadata}{Show additional meta data info}
 
 \item{...}{Other arguments (unused)}
 }
 \description{
-Print a summary of a UAS Image Colletion object
+Print a summary of a UAS Image Collection object
 }
 \details{
 Prints a summary of a drone images metadata collection object

@@ -12,7 +12,7 @@
 #' @param copymove Move or copy
 #' @param basedir Base dir
 #' @param alt Range of altitude to move
-#' @param quiet Supress messages
+#' @param quiet Suppress messages
 #'
 #' @details This will move the image files into subdirectories
 #'
@@ -22,7 +22,9 @@
 #'
 #' @export
 
-uas_move <- function(x, thresh_units=c("msi", "secs")[1], thresh_val=10, dirnames="", init_flt=1, min_images=5, preview=FALSE, copymove="move", basedir=NULL, alt=NULL, quiet=FALSE) {
+uas_move <- function(x, thresh_units=c("msi", "secs")[1], thresh_val=10, dirnames="",
+                     init_flt=1, min_images=5, preview=FALSE, copymove="move", basedir=NULL,
+                     alt=NULL, quiet=FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
