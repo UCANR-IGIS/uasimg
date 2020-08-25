@@ -5,6 +5,7 @@
 #' @param output_fn Output file name
 #' @param gather Subdirectory where HTML files will be copied
 #' @param toc_title Title to use for the Table of Contents
+#' @param toc_desc A short description to appear under the title
 #' @param header_html HTML file name to use as a page header
 #' @param footer_html HTML file name to use as a page footer
 #' @param overwrite Overwrite existing file, logical
@@ -41,7 +42,7 @@
 
 uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
                     gather = NULL, toc_title = "UAS Image Collections",
-                    header_html = NULL, footer_html = NULL,
+                    toc_desc = NULL, header_html = NULL, footer_html = NULL,
                     overwrite = FALSE, open_toc = FALSE, quiet = FALSE) {
 
   ## Get the HTML report output filename
@@ -67,17 +68,41 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
       stop("gather should be relative to output_dir, not an absolute path")
     }
 
-    gather_dir <- file.path(output_dir, gather)
+    if (gather == "." || gather == "") {
+      gather_dir <- output_dir
+    } else {
+      gather_dir <- file.path(output_dir, gather)
+    }
+
     if (!file.exists(gather_dir)) {
       if (!dir.create(gather_dir)) stop(paste0("Can't create ", gather_dir, ". Specify a different output_dir or omit gather."))
     }
 
-    html_gathered <- NULL
+    html_gathered_full <- NULL
+    html_gathered_base <- NULL
+
+    num_dups <- 0
     for (fn in html_reports) {
+
+      # cat(fn, "exists:", file.exists(fn), "\n")
+      # browser()
+
       if (file.exists(fn)) {
-        dest_fn <- file.path(gather_dir, basename(fn))
+        if (basename(fn) %in% html_gathered_base) {
+          num_dups <- num_dups + 1
+          dest_fn <- file.path(gather_dir,
+                              paste0(file_path_sans_ext(basename(fn)),
+                              "_", num_dups, ".", file_ext(fn)))
+        } else {
+          dest_fn <- file.path(gather_dir, basename(fn))
+        }
+
+        # cat("from = ", fn, "\n")
+        # cat("to = ", dest_fn, "\n\n")
+
         if (file.copy(from = fn, to = dest_fn, overwrite = overwrite)) {
-          html_gathered <- c(html_gathered, dest_fn)
+          html_gathered_full <- c(html_gathered_full, dest_fn)
+          html_gathered_base <- c(html_gathered_base, basename(dest_fn))
 
           ## To copy the map_png, we first, parse the HTML page
           html_tree <- htmlTreeParse(readLines(dest_fn), useInternalNodes = TRUE)
@@ -94,22 +119,11 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           }
 
           ## Next, we need to copy the thumbnails folder
-          #browser()
           tbsrc_dir <- file.path(dirname(fn), "tb")
           if (file.exists(tbsrc_dir)) {
             ## Copy the whole folder
             file.copy(from = tbsrc_dir, to = gather_dir, recursive = TRUE)
-
-            # tbdest_dir <- file.path(gather_dir, "tb")
-            # ## Create the destination tb folder if needed
-            # ## Are these needed?
-            # if (!file.exists(tbdest_dir)) dir.create(tbdest_dir)
-            # if (file.exists(tbdest_dir)) {
-            # }
-
-
           }
-
 
         }
 
@@ -119,10 +133,9 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
     }
 
     if (!quiet) {
-      message(green("Files gathered", "\n"))
-      print(html_gathered)
+      message(green("HTML files gathered:\n", paste("  ", html_gathered_full, sep = "", collapse = "\n"), "\n", sep = ""))
     }
-    html_reports <- html_gathered
+    html_reports <- html_gathered_full
 
   }
 
@@ -139,13 +152,16 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
   output_options <- list(self_contained=FALSE, lib_dir = file.path(output_dir,"libs"),
                          includes = includes_lst)
 
+  #cat("ready to render"); browser()
   toc_fn <- render(input=toc_rmd, output_dir = output_dir, output_file = output_fn,
                    output_options = output_options,
                    params=list(html_reports = html_reports, output_dir = output_dir,
-                               toc_title = toc_title))
+                               toc_title = toc_title, toc_desc = toc_desc))
 
   if (!quiet) message(green("Done."))
 
   if (open_toc) browseURL(toc_fn)
+
+  invisible(toc_fn)
 
 }

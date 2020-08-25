@@ -10,6 +10,7 @@ uas_toc(
   output_fn = "index.html",
   gather = NULL,
   toc_title = "UAS Image Collections",
+  toc_desc = NULL,
   header_html = NULL,
   footer_html = NULL,
   overwrite = FALSE,
@@ -27,6 +28,8 @@ uas_toc(
 \item{gather}{Subdirectory where HTML files will be copied}
 
 \item{toc_title}{Title to use for the Table of Contents}
+
+\item{toc_desc}{A short description to appear under the title}
 
 \item{header_html}{HTML file name to use as a page header}
 

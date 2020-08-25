@@ -480,8 +480,9 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
     ## Get the extra metadata either by an argument or finding an metadata.txt file
 
     if (is.null(metadata)) {
+      ## Create a blank metadata list
       flds_md <- uas_getflds()
-      metadata_use <- rep(NA, length(flds_md))
+      metadata_use <- as.list(rep(as.character(NA), length(flds_md)))
       names(metadata_use) <- flds_md
 
     } else if (is.list(metadata)) {
@@ -495,7 +496,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       if (length(metadata_fn) == 0) {
         if (!quiet) message(crayon::yellow("Metadata file not found"))
         flds_md <- uas_getflds()
-        metadata_use <- rep(NA, length(flds_md))
+        metadata_use <- as.list(rep(as.character(NA), length(flds_md)))
         names(metadata_use) <- flds_md
 
       } else {
@@ -523,7 +524,6 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
                 ln_key <- trimws(substring(one_line, 1, colon_pos - 1)[1])
 
                 ##if (ln_key %in% names(metadata_use)) {  }
-
                 metadata_use[[ln_key]] <- gsub("\"", "'",
                                                trimws(substring(one_line, colon_pos + 1)[1]))
 
@@ -543,7 +543,8 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
     } else {
       warning("Unknown object for metadata")
-      metadata_use <- rep(NA, length(flds_md))
+      flds_md <- uas_getflds()
+      metadata_use <- as.list(rep(as.character(NA), length(flds_md)))
       names(metadata_use) <- flds_md
     }
 

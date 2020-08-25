@@ -19,7 +19,9 @@ print.uas_info <- function(x, metadata = TRUE, ...) {
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
     for (i in 1:length(x)) {
-      cat(green$bold("\n", x[[i]]$metadata$collection_name), "\n")
+      if (!is.na(x[[i]]$metadata$collection_name)) {
+        cat(green$bold("\n", x[[i]]$metadata$collection_name), "\n")
+      }
       cat(yellow(" dir:"), names(x)[i], "\n")
       cat(yellow(" images:"), nrow(x[[i]]$pts), "\n")
       cat(yellow(" camera:"), x[[i]]$camera_name, "\n")
@@ -28,8 +30,10 @@ print.uas_info <- function(x, metadata = TRUE, ...) {
       cat(yellow(" date flown:"), x[[i]]$date_flown, "\n")
       if (metadata) {
         for (j in 1:length(x[[i]]$metadata)) {
-          cat(yellow(" ", names(x[[i]]$metadata)[j], ":", sep=""),
-              x[[i]]$metadata[[j]], "\n")
+          if (names(x[[i]]$metadata)[j] != "collection_name") {
+            cat(yellow(" ", names(x[[i]]$metadata)[j], ":", sep=""),
+                x[[i]]$metadata[[j]], "\n")
+          }
         }
       }
 

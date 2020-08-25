@@ -85,7 +85,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
   }
 
   if (make_png) {
-    if (!require("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
+    if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
     if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
   }
 
@@ -130,7 +130,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         ## Compute colors for the pts
         ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
         if (is.null(col)) {
-          col_use <- grDevices::rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+          col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
         } else {
           col_use <- col
         }
@@ -179,13 +179,13 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
             theme_void()
 
           ## Open the PNG driver
-          grDevices::png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
+          png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
 
           ## Print the map
           print(pts_ggmap)
 
           ## Close the PNG driver
-          grDevices::dev.off()
+          dev.off()
 
         }
 
@@ -225,7 +225,10 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         ## Compute the file names of the thumbnail images
         tb_fn <- tolower(file.path(tb_dir_use,
                                paste0(file_path_sans_ext(basename(all_img_fn)),
-                               "_tb-", all_img_base36, ".", file_ext(all_img_fn))))
+                               "_tb-", all_img_base36, ".jpg")))
+
+        ## this was taken out because the thumbnails will *always* be jpg (even if the originals are tif):
+        ## file_ext(all_img_fn)
 
         ## Save the name of the thumbnail in the attribute table for the points
         x[[img_dir]]$pts$tb_fn <- basename(tb_fn)
@@ -331,6 +334,13 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
 
     } else {
       message(yellow(output_file_use, "already exists. Skipping."))
+
+      ## If the HTML file already exists (but wasn't overwritten), return it just the same
+      if (file.exists(file.path(output_dir_use, output_file_use))) {
+        report_fn_vec <- c(report_fn_vec, file.path(output_dir_use, output_file_use))
+      }
+
+
     }
 
   }

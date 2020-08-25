@@ -6,6 +6,7 @@ output:
     smart: no
 params:
   toc_title: "UAS Image Collections"
+  toc_desc: !r NULL
   html_reports: !r NA
   output_dir: !r NA
 ---
@@ -24,6 +25,12 @@ h3 {
 p.compact {
   margin-bottom: 0;
 }
+p.toc_desc {
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid gray;
+  margin-bottom: 1em;
+  font-style: italic;
+}
 ```
 
 ```{r setup, include=FALSE}
@@ -32,17 +39,40 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r setup_stuff, include=FALSE}
 library(htmltools); library(XML); library(knitr)
+
+## Updated to return "" if target and base are identical
 make_path_relative <- function(base, target) {
   base <- tolower(gsub("\\\\", "/", base))
   target <- tolower(gsub("\\\\", "/", target))
-  if (substr(base, 1, 1) == substr(target, 1, 1)) {
+  if (base == target) {
+    ""
+  } else if (substr(base, 1, 1) == substr(target, 1, 1)) {
     common <- sub('^([^|]*)[^|]*(?:\\|\\1[^|]*)$', '^\\1/?', paste0(base, '|', target))
     paste0(gsub("/$", "", paste0(gsub('[^/]+/?', '../', sub(common, '', base)),
-           sub(common, '', target))), "/")
+                                 sub(common, '', target))), "/")
   } else {
     ## warning("Resources are on different. Links may not work.")
     paste0(target, "/")
   }
+}
+
+# make_path_relative <- function(base, target) {
+#   base <- tolower(gsub("\\\\", "/", base))
+#   target <- tolower(gsub("\\\\", "/", target))
+#   if (substr(base, 1, 1) == substr(target, 1, 1)) {
+#     common <- sub('^([^|]*)[^|]*(?:\\|\\1[^|]*)$', '^\\1/?', paste0(base, '|', target))
+#     paste0(gsub("/$", "", paste0(gsub('[^/]+/?', '../', sub(common, '', base)),
+#            sub(common, '', target))), "/")
+#   } else {
+#     ## warning("Resources are on different. Links may not work.")
+#     paste0(target, "/")
+#   }
+# }
+```
+
+```{r print_title_desc, results = 'asis', echo = FALSE}
+if (!is.null(params$toc_desc)) {
+  print(p(params$toc_desc, class="toc_desc"))
 }
 ```
 
@@ -53,12 +83,15 @@ href_target <- " target='_blank' rel='noopener'"
 for (i in 1:length(params$html_reports)) {
   
   html_full <- params$html_reports[i]
+  #print(h1("Working On: ", html_full))
   
   if (file.exists(html_full)) {
     html_fn <- basename(html_full)
-    #html_dir_abs <- dirname(html_full)
     
     html_dir_rel <- make_path_relative(params$output_dir, dirname(html_full))
+    # print(p("params output_dir = ", params$output_dir))
+    # print(p("dirname(html_full) = ", dirname(html_full)))
+    # print(p("html_dir_rel = ", html_dir_rel))
     
     ## Parse the HTML page
     html_tree <- htmlTreeParse(readLines(html_full), useInternalNodes = TRUE)
@@ -79,19 +112,16 @@ for (i in 1:length(params$html_reports)) {
       metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
       imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
     }
-    
-    ## Print the HTML code
-    if (imgcol$map_fn != "") {
-      
-      img_fn <- paste0(html_dir_rel, imgcol$map_fn )
 
+    if (imgcol$map_fn != "") {
+      img_fn <- paste0(html_dir_rel, imgcol$map_fn )
       print(HTML(paste0("<div style='float:right;'><a href='", html_dir_rel, html_fn,
-                        "'", href_target, "><img src='", html_dir_rel, imgcol$map_fn,
-                      "' style='width:220px; padding:20px;'/></a></div>")))
+                       "'", href_target, "><img src='", html_dir_rel, imgcol$map_fn,
+                     "' style='width:220px; padding:20px;'/></a></div>")))
     }
     
-    print(HTML(paste0("<h3><a href='", html_dir_rel, html_fn, "'", href_target,
-                      ">", imgcol$collection_name, "</a></h3>")))
+    print(HTML(paste0("<h3><a href='", html_dir_rel, html_fn, "'", href_target, ">", 
+                      imgcol$collection_name, "</a></h3>")))
     
     if (imgcol$description != "") {
       print(HTML(paste0("<p><em>", imgcol$description, "</em></p>")))
@@ -131,6 +161,9 @@ for (i in 1:length(params$html_reports)) {
   
 
 }
+
+print(HTML("<div style=\"font-size:90%; font-style:italic; float:right;\">Created with <a href=\"https://github.com/ucanr-igis/uasimg\" target=\"_blank\" rel=\"noopener\">Drone Image Utils</a> for R</div>"))
+
 ```
 
 

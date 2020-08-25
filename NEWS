@@ -1,3 +1,11 @@
+Changes in version 1.3.4 (2020-08-25)
+=========================
+* <pre>uas_report()</pre> modified to return the file name of HTML files that already exist and overwrite = FALSE; corrected the extension for tif thumbnail files
+* Added <pre>uas_metadata_make</pre>
+* Modified <pre>uas_toc</pre> and <pre>uas_toc.Rmd</pre> to support gather='.', handle duplicate HTML names, a description, and default footer
+* Corrected a bug in <pre>uas_info</pre> when no external metadata was found or passed as an argument
+* other minor fixes and enhancements
+
 Changes in version 1.3.3 (2020-08-20)
 =========================
 * Added an option in <pre>uas_report</pre> to create thumbnails previews that appear in the popup windows of the image collection catalog.
