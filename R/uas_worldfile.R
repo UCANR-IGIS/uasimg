@@ -66,6 +66,11 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
         next
       }
 
+      ## Make sure there's footprint info saveed
+      if (is.null(x[[iinfo_idx]]$fp)) {
+        stop("Image footprint info not found. Can't create WorldFile(s).")
+      }
+
       if (identical(x[[iinfo_idx]]$fp, NA)) {
         warning(paste0("Can not generate world file(s). ", names(x)[iinfo_idx], " does not have footprints."))
         next
@@ -79,7 +84,7 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
       files_gen <- NULL
 
       ## Get the CRS which will be used to generate the prj files.
-      img_wkt <- (x[[iinfo_idx]]$pts %>% sf::st_crs())$proj4string
+      img_wkt <- (x[[iinfo_idx]]$pts %>% st_crs())$proj4string
 
       ## Loop through the rows
       if (is.null(idx)) {
@@ -88,10 +93,6 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
         idx_use <- idx
       }
       for (i in idx_use) {
-        ## Make sure there's footprint info saveed
-        if (is.null(x[[iinfo_idx]]$fp)) {
-          stop("Image footprint info not found. Can't create a WorldFile")
-        }
 
         ## Get the input file name (minus path)
         img_fn_in <- x[[iinfo_idx]]$pts[i, "file_name", drop = TRUE]
@@ -198,6 +199,8 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
           files_gen <- c(files_gen, prj_fn)
         }
 
+        #browser()
+        #wld_params[c(5, 1, 3, 6, 2, 4)]
 
       } # for 1 in 1:nrow
 

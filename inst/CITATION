@@ -1,0 +1,17 @@
+citHeader("To cite package 'uasimg' in publications use:")
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+pkg_title <- "uasimg: Drone Images Utilities"
+pkg_url <- meta$URL
+
+citEntry(entry="Manual",
+         title = pkg_title,
+         author = personList(as.person("Andrew Lyons"),
+                              person("R Development Core Team")),
+        year = year,
+        note = vers,
+        url = pkg_url,
+
+        textVersion = paste0("Andrew Lyons and the R Development Core Team (", year, "). ", pkg_title, ". ", vers, ". ", pkg_url)
+        )

@@ -50,13 +50,13 @@
 #'
 #' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
 #'
-#' @import crayon
 #' @import dplyr
 #' @import sf
 #' @importFrom grDevices chull
 #' @importFrom digest digest
 #' @importFrom tidyr replace_na
 #' @importFrom utils read.csv
+#' @importFrom crayon yellow green red magenta bold
 #' @export
 
 uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
@@ -109,14 +109,14 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
   }
   exiftool.exec <- findonpath(exiftool, status = FALSE)
   if (is.null(exiftool.exec)) {
-    message(crayon::red("Cant find exiftool. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows). Download it from http://www.sno.phy.queensu.ca/~phil/exiftool/, then rename Rename 'exiftool(-k).exe' to 'exiftool.exe'."))
+    message(red("Cant find exiftool. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows). Download it from http://www.sno.phy.queensu.ca/~phil/exiftool/, then rename Rename 'exiftool(-k).exe' to 'exiftool.exe'."))
     return(invisible(NULL))
   }
 
   res <- list()
   for (img_dir in img_dirs) {
 
-    if (!quiet) message(crayon::magenta$bold(img_dir))
+    if (!quiet) message(magenta$bold(img_dir))
 
     save_to_cache <- FALSE
     cache_loaded <- FALSE
@@ -165,7 +165,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
           if (file.exists(file.path(cache_dir_use, cache_fn))) {
             load(file.path(cache_dir_use, cache_fn))
             cache_loaded <- TRUE
-            if (!quiet) message(crayon::yellow("Using cached data"))
+            if (!quiet) message(yellow("Using cached data"))
           }
         }
 
@@ -177,7 +177,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       ### Run EXIF tool on the first image to get the camera moodel
       ### (We assume all image files in the directory are from the same sensor, will not check)
-      if (!quiet) message(crayon::yellow("Looking for image files"))
+      if (!quiet) message(yellow("Looking for image files"))
 
       first_fn <- list.files(path=img_dir, full.names=TRUE, pattern="jpg$|JPG$|jpeg$|JPEG$|tif$|TIF$")[1]
       if (is.na(first_fn)) stop(paste0("Couldn't find any jpg or tif files in ", img_dir))
@@ -202,7 +202,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       ## Get the composite camera name from the sensor database
       camera_name <- sensor_this_df[1, "camera_name"]
-      if (!quiet) message(crayon::yellow("Found", camera_name))
+      if (!quiet) message(yellow("Found", camera_name))
 
       ## Get the tag for yaw for this camera
       camera_tag_yaw <- sensor_this_df[1, "tag_yaw"]
@@ -257,9 +257,9 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       str_args <- paste("-", paste(exif_tags, collapse=" -"), " -n -csv ", shQuote(img_dir), sep="")
 
       # Run command
-      if (!quiet) message(crayon::yellow("Running exiftool (this can take a while)..."))
+      if (!quiet) message(yellow("Running exiftool (this can take a while)..."))
       suppressWarnings(system2("exiftool", args=str_args, stdout=csv_fn, stderr=FALSE))
-      if (!quiet) message(crayon::green("Done."))
+      if (!quiet) message(green("Done."))
       if (!file.exists(csv_fn)) {
         stop("exiftool could not create the csv file")
       }
@@ -289,7 +289,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       ## Get the total file size
       total_size_mb <- round(sum(exif_df$filesize) / 1048576)
-      if (!quiet) message(crayon::yellow(paste0("Total file size: ", total_size_mb, " MB")))
+      if (!quiet) message(yellow(paste0("Total file size: ", total_size_mb, " MB")))
 
       ## Get the date flown
       flight_date_dt <- as.Date(exif_df[1, "datetimeoriginal", drop=TRUE], format = "%Y:%m:%d %H:%M:%S")
@@ -337,19 +337,19 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
         imgs_ctr_ll_sf <- sf::st_as_sf(exif_df, coords = c("gpslongitude","gpslatitude"), remove = FALSE, crs = 4326)
 
         ## Convert to UTM
-        utm_crs <- geo2utm(exif_df[1,"gpslongitude"], exif_df[1,"gpslatitude"])
-        imgs_ctr_utm_sf <- imgs_ctr_ll_sf %>% st_transform(utm_crs)
+        utm_epsg <- geo2utm(exif_df[1,"gpslongitude"], exif_df[1,"gpslatitude"])
+        imgs_ctr_utm_sf <- imgs_ctr_ll_sf %>% st_transform(utm_epsg)
 
         ## Compute footprints
         if (!fp || !agl_avail || camera_tag_yaw == "none") {
           fp_utm_sf <- NA
-          if (!quiet) message(crayon::yellow("Skipping footprints"))
+          if (!quiet) message(yellow("Skipping footprints"))
           nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
 
         } else {
           short_names[[tolower(camera_tag_yaw)]] <- "yaw"
 
-          if (!quiet) message(crayon::yellow("Creating footprints..."))
+          if (!quiet) message(yellow("Creating footprints..."))
           corners_sign_mat <- matrix(data=c(-1,1,1,1,1,-1,-1,-1,-1,1), byrow=TRUE, ncol=2, nrow=5)
 
           ctr_utm <- sf::st_coordinates(imgs_ctr_utm_sf)
@@ -401,13 +401,13 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
           ## Create a sf data frame for the footprints, using the attributes from the centroids
           fp_utm_sf <- st_sf(imgs_ctr_utm_sf %>% sf::st_drop_geometry(),
-                             geometry = sf::st_sfc(polys_sf_lst, crs = utm_crs))
+                             geometry = sf::st_sfc(polys_sf_lst, crs = utm_epsg))
 
-          if (!quiet) message(crayon::yellow("Done."))
+          if (!quiet) message(yellow("Done."))
 
           ## Compute the forward overlap
           if (fwd_overlap) {
-            if (!quiet) message(crayon::yellow("Computing forward overlap..."))
+            if (!quiet) message(yellow("Computing forward overlap..."))
 
             idx_minus_one <- 1:(nrow(fp_utm_sf)-1)
 
@@ -422,7 +422,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
             ## Add the precent overlap to the sf dataframe
             fp_utm_sf$fwd_overlap <- c(area_intersection_with_next / area_polys, NA)
 
-            if (!quiet)message(crayon::yellow("Done."))
+            if (!quiet)message(yellow("Done."))
           }
 
           ## Shorten field names in fp_utm_sf
@@ -444,7 +444,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
         ## Turn this into a sf polygon
         mcp_polygon <- st_polygon(list(nodes_all_mat[chull_idx,]), dim = "XY")
-        mcp_sfc <- st_sfc(mcp_polygon, crs = utm_crs)
+        mcp_sfc <- st_sfc(mcp_polygon, crs = utm_epsg)
 
         ## Compute the area
         area_m2 <- mcp_sfc %>% st_area() %>% as.numeric()
@@ -472,7 +472,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
         img_folder <- img_dir
         save(img_folder, imgs_ctr_utm_sf, fp_utm_sf, area_m2, mcp_sf, total_size_mb,
              flight_date_str, camera_name, file = file.path(cache_dir_use, cache_fn))
-        if (!quiet) message(crayon::yellow("Cache saved"))
+        if (!quiet) message(yellow("Cache saved"))
       }
     }
 
@@ -494,7 +494,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       metadata_fn <- list.files(img_dir, metadata, full.names = TRUE)
 
       if (length(metadata_fn) == 0) {
-        if (!quiet) message(crayon::yellow("Metadata file not found"))
+        if (!quiet) message(yellow("Metadata file not found"))
         flds_md <- uas_getflds()
         metadata_use <- as.list(rep(as.character(NA), length(flds_md)))
         names(metadata_use) <- flds_md
@@ -505,7 +505,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
         for (md_fn in metadata_fn) {
 
-          if (!quiet) message(crayon::yellow("Reading", basename(md_fn)))
+          if (!quiet) message(yellow("Reading", basename(md_fn)))
 
           fcon <- file(md_fn, open = "r")
           while ( TRUE ) {
@@ -560,7 +560,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
   }
 
 
-  if (!quiet) message(crayon::green("All done"))
+  if (!quiet) message(green("All done"))
 
   ## Return the results
   class(res) <- c("list", "uas_info")

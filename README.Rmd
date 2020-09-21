@@ -160,6 +160,10 @@ For an example Table of Contents, see <http://gis-ubuntu.ucanr.edu/uas/ptpinole/
 
 You can export the geometry of an image collection metadata object with `uas_exp()`, including image centroids, the (estimated) footprints, and MCP (minimum convex polygon). Layers are exported as Shapefiles, a common format for GIS data.
 
+```{r create_rpt, eval=FALSE}
+## Export 
+uas_exp(hasting_imgs)
+
 ## World Files
 
 Drone images typically save the coordinates of the camera, but do not include the width, length, or compass angle. A "world file" is a small external file that contains these additional parameters, so that when you import an individual image into a GIS program like ArcGIS or QGIS, the image will appear in its approximate footprint on the ground. 
