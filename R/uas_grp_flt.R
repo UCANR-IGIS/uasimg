@@ -12,6 +12,7 @@
 #' @details
 #'
 #' @importFrom crayon green yellow
+#' @importFrom stats median
 #' @export
 
 ## STATUS AND TODO:

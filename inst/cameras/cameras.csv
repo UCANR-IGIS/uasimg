@@ -14,3 +14,4 @@ DJI,FC220,JPEG,DJI Mavic Pro,6.32692,4.74519,CMOS,unknown,4000,3000,4.861305,Cam
 Hasselblad,L1D-20c,JPEG,DJI Mavic 2 Pro,12.825,8.55,CMOS,unknown,5472,3648,10.478508,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19,1 inch CMOS
 DJI,FC300X,JPEG,DJI Phantom 3 Pro,6.31748,4.73811,CMOS,rolling,4000,3000,3.61,CameraYaw,RelativeAltitude,Pix4D Camera Database v19,1/2.3 sensor
 senseFly,S.O.D.A.,JPEG,senseFly S.O.D.A.,13.1328,8.7552,CMOS,global,5472,3648,10.633008,Yaw,none,Pix4D Camera Database v19: S.O.D.A._10.6_5472x3648,
+DJI,FC6540,JPEG,DJI ZenMuse X7,23.55769344,13.21987584,CMOS,lens_dependent_electrical_mechanical_leaf,6016,3376,35,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19: FC6540_DJIDL35mmF2.8LSASPH_35.0_6016x3376,shutter discussion see https://commercialdronepilots.com/threads/zenmuse-x7-for-mapping-modeling.2595/

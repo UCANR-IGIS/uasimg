@@ -37,12 +37,12 @@
 #' @importFrom tools file_path_sans_ext
 #' @export
 
-uas_ctrcrop <- function(x, crp_h = 10, crp_w = 10,
+uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
                         dir_out = ".", out_prefix = "", out_suffix = "_crp",
                         overwrite = FALSE, quiet = FALSE) {
 
   # right now we assume that height and width are going to be numeric constants
-  #   - TODO: if height = "median", compute the median pt-to-pt overlap
+  #   - TODO: if height = "median", compute the median pt-to-pt overlap (add @importFrom stats median)
 
   # - crop images for a poor mans ortho
   # - height and width are expressed in map units

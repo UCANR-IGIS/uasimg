@@ -1,7 +1,13 @@
-# uasimg 1.3.5 (2020-09-xx)
+# uasimg 1.3.6 (2020-09-26)
+
+* Added DJI ZenMuse X7 to camera database
+* `uas_info()` edited to i) check the number of images in the directory before computing forward overlap, ii) add bullet characters to feedback messages
+
+# uasimg 1.3.5 (2020-09-24)
 
 * Added a `NEWS.md` file to track changes to the package.  
 * `geo2utm()` modified to return a EPSG number (to comply with recent changes to rgdal and proj4). After installing this update, users are advised to delete their old cache (see `uas_getcache()`) to prevent warning messages about unknown datums in a proj4string.
+* `uas_cropctr()` added - crops around the center of each image for a better photo mosaic
 
 # Changes in version 1.3.4 (2020-08-25)
 
