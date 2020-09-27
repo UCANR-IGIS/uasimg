@@ -3,13 +3,13 @@
 #' Extracts info from geotagged images taken from a drone
 #'
 #' @param img_dirs Directory(s) where the image files reside
-#' @param exiftool The path to the exiftool command line tool (omit if on the OS path)
-#' @param csv The file name of a new csv file where the exif data will be saved (omit to make a temp one)
 #' @param alt_agl The elevation above ground level in meters (optional for images with the relevative altitude saved)
 #' @param fp Compute image foot prints, T/F
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
 #' @param metadata A filename pattern for a metadata file, or a metadata list object (see Details)
+#' @param exiftool The path to the exiftool command line tool (omit if on the OS path)
+#' @param exif_csv The file name of a new csv file where the exif data will be saved (omit to make a temp one)
 #' @param cache Logical or a directory where EXIF data should be cached (see Details)
 #' @param update_cache Whether to update the cache
 #' @param quiet Don't show messages
@@ -17,7 +17,10 @@
 #' @details
 #' This will read the EXIF header data from a directory of image files, and put out the centroids and image footprints on the ground. Mapping  image locations requires that the images have geostamps. In addition, mapping the image footprints requires that the camera parameters are known, and the flight elevation about ground level is either saved in the EXIF info, or provided in the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data in the EXIF info.
 #'
-#' Camera parameters are saved in a csv file called cameras.csv. To see where this is saved, type \code{system.file("cameras/cameras.csv", package="uasimg")}. If your camera is not detected, please contact the package author or create an issue on \href{https://github.com/UCANR-IGIS/uasimg/issues}{GitHub}.
+#' Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
+#' many popular drone cameras. If your drone camera is not in the database, you can create your own
+#' \emph{cameras.csv} file (see \code{\link{uas_cameras}} for details) and pass the file name as the
+#' \code{cameras} argument. Or contact the package maintainer to add your camera to the database.
 #'
 #' This function uses a free command line tool called EXIFtool to read the EXIF data, which can be downloaded
 #' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
@@ -55,13 +58,15 @@
 #' @importFrom grDevices chull
 #' @importFrom digest digest
 #' @importFrom tidyr replace_na
+#' @importFrom dplyr filter select left_join mutate
 #' @importFrom utils read.csv
+#' @importFrom sf st_as_sf st_coordinates st_polygon st_drop_geometry st_sf st_sfc
 #' @importFrom crayon yellow green red magenta bold
 #' @export
 
-uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
+uas_info <- function(img_dirs, alt_agl=NULL,
                      fp=TRUE, fwd_overlap=fp, cameras=NULL, metadata = "metadata.*\\.txt",
-                     cache=NULL, update_cache=FALSE, quiet=FALSE) {
+                     exiftool=NULL, exif_csv=NULL, cache=NULL, update_cache=FALSE, quiet=FALSE) {
 
   ## See if all directory(s) exist
   for (img_dir in img_dirs) {
@@ -185,7 +190,9 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       csv_first_fn <- tempfile(pattern="~map_uas_", fileext = ".csv")
       system2("exiftool", args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
               stdout=csv_first_fn, stderr=FALSE)
+
       exif_first_df <- read.csv(csv_first_fn, stringsAsFactors = FALSE)
+
       file.remove(csv_first_fn)
       if (nrow(exif_first_df) == 0) stop("Couldn't find EXIF info in the first image file")
 
@@ -194,11 +201,12 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       camera_filetype <- exif_first_df[1, "FileType"]
 
       ## Import database of known sensors
-      sensors_df <- utils::read.csv(cameras_fn, stringsAsFactors = FALSE)
+      # sensors_df <- read.csv(cameras_fn, stringsAsFactors = FALSE)
+      sensors_df <- uas_readcameras(cameras_fn)
 
       ## Search for this sensor
-      sensor_this_df <- dplyr::filter(sensors_df, model==camera_model & filetype==camera_filetype)
-      if (nrow(sensor_this_df)==0) stop(paste(camera_make, camera_model, camera_filetype, "not found in the database of known sensors"))
+      sensor_this_df <- filter(sensors_df, model==camera_model & filetype==camera_filetype) %>% as.data.frame()
+      if (nrow(sensor_this_df)==0) stop(paste(camera_make, camera_model, camera_filetype, "not found in the database of known sensors. To get it added, contact the package author via email, or create an issue on GitHub. "))
 
       ## Get the composite camera name from the sensor database
       camera_name <- sensor_this_df[1, "camera_name"]
@@ -209,7 +217,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       ## See if this camera stores elevation above ground level
       camera_agl_tag <- sensor_this_df[1, "tag_elev_agl"]
-      camera_has_agl <- (camera_agl_tag != "none")
+      camera_has_agl <- (tolower(camera_agl_tag) != "none")
 
       if (is.null(alt_agl) && !camera_has_agl) {
         warning("The altitude above ground was not saved in the images, and no value for alt_agl was passed. Skipping gsd and footprints.")
@@ -221,11 +229,11 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
       ## Still to come - incorporate non-nadir GimbalPitchDegree
 
-      # Construct csv file name
-      if (is.null(csv)) {
-        csv_fn <- tempfile(pattern="map_uas_", fileext = ".csv")
+      # Construct exif_csv file name
+      if (is.null(exif_csv)) {
+        exif_csv_fn <- tempfile(pattern="uasimg_exifdata_", fileext = ".csv")
       } else {
-        csv_fn <- csv
+        exif_csv_fn <- exif_csv
       }
 
       # Identify EXIF tags to extract
@@ -233,40 +241,20 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
                      "GPSAltitude", "Make", "Model", "FocalLength", "ImageWidth", "ImageHeight", camera_tag_yaw)
       if (camera_has_agl) exif_tags <- c(exif_tags, camera_agl_tag)
 
-      ## NOTES
-      ## Next version - check the model, grab appropriate tag
-      ## Unused: "GPSLatitudeRef", "GPSLongitudeRef", "GPSAltitudeRef", (I think these are not needed, Exiftool uses to set sigh of decimal degrees
-      ## FlightYawDegree
-      ##
-      ## "GPSDateStamp", "GPSTimeStamp" - these are the Sequoia only, replaced by DateTimeOriginal (which is an
-      ## ExifID0 tag and saved in local time)
-      ##
-      ## DJI Drones (X5 and X3)
-      ##   GimbalYawDegree is in degrees. 0 is north. 90 is east. -90 is west. 180 is south. -180 is south.
-      ##
-      ## Parrot Sequoia RGB and TIFF
-      ##    no GimbalYawDegree, just'Yaw'
-      ##    Make: Parrot
-      ##    Model: Sequoia
-      ##    Yaw (XMP-Camera)
-      ##    Pitch (XMP-Camera)
-      ##    Roll (XMP-Camera)
-      ##    no tag for RelativeAltitude
-
       ## Construct args
       str_args <- paste("-", paste(exif_tags, collapse=" -"), " -n -csv ", shQuote(img_dir), sep="")
 
       # Run command
       if (!quiet) message(yellow(" - Running exiftool (this can take a while)..."), appendLF = FALSE)
-      suppressWarnings(system2("exiftool", args=str_args, stdout=csv_fn, stderr=FALSE))
+      suppressWarnings(system2("exiftool", args = str_args, stdout = exif_csv_fn, stderr = FALSE))
       if (!quiet) message(yellow("Done."))
-      if (!file.exists(csv_fn)) {
+      if (!file.exists(exif_csv_fn)) {
         stop("exiftool could not create the csv file")
       }
 
       # Import EXIF CSV
-      exif_df <- read.csv(csv_fn, stringsAsFactors=FALSE)
-      if (is.null(csv)) file.remove(csv_fn)
+      exif_df <- read.csv(exif_csv_fn, stringsAsFactors=FALSE)
+      if (is.null(exif_csv)) file.remove(exif_csv_fn)
       names(exif_df) <- tolower(names(exif_df))
 
       ## Right here we need to do some checks for tags
@@ -282,7 +270,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       ## Filter out images with 0 elevation
       if (agl_avail) {
         if (is.null(alt_agl)) {
-          idx_onground <- which(exif_df[[camera_agl_tag]] <= 0)
+          idx_onground <- which(exif_df[[tolower(camera_agl_tag)]] <= 0)
           if (length(idx_onground) > 0) exif_df <- exif_df[-idx_onground, ]
         }
       }
@@ -296,8 +284,8 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       flight_date_str <- format(flight_date_dt, "%Y-%m-%d")
 
       ## Add the sensor dimensions to to exif_df
-      sensor_info_df <- sensors_df %>% dplyr::select(model, filetype, sensor_width, sensor_height)
-      exif_df <- exif_df %>% dplyr::left_join(sensor_info_df, by=c("model" = "model", "filetype" = "filetype"))
+      sensor_info_df <- sensors_df %>% select(model, filetype, sensor_width, sensor_height)
+      exif_df <- exif_df %>% left_join(sensor_info_df, by=c("model" = "model", "filetype" = "filetype"))
 
       ## Add image footprint gsd and dimensions
       ## Based on Pix4D GSD calculator. Assumptions:
@@ -314,8 +302,8 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
           gsd_exprsn <- parse(text=paste("(sensor_width * ", alt_agl,
                                          " * 100) / (focallength * imagewidth)", sep=""))
         }
-        exif_df <- dplyr::mutate(exif_df, gsd=eval(gsd_exprsn))
-        exif_df <- dplyr::mutate(exif_df, foot_w=(gsd*imagewidth)/100, foot_h=(gsd*imageheight)/100)
+        exif_df <- mutate(exif_df, gsd=eval(gsd_exprsn))
+        exif_df <- mutate(exif_df, foot_w=(gsd*imagewidth)/100, foot_h=(gsd*imageheight)/100)
       }
 
       #################################################################
@@ -334,14 +322,14 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
       } else {
 
         ## Create a sf dataframe for the image centroids
-        imgs_ctr_ll_sf <- sf::st_as_sf(exif_df, coords = c("gpslongitude","gpslatitude"), remove = FALSE, crs = 4326)
+        imgs_ctr_ll_sf <- st_as_sf(exif_df, coords = c("gpslongitude","gpslatitude"), remove = FALSE, crs = 4326)
 
         ## Convert to UTM
         utm_epsg <- geo2utm(exif_df[1,"gpslongitude"], exif_df[1,"gpslatitude"])
         imgs_ctr_utm_sf <- imgs_ctr_ll_sf %>% st_transform(utm_epsg)
 
         ## Compute footprints
-        if (!fp || !agl_avail || camera_tag_yaw == "none") {
+        if (!fp || !agl_avail || tolower(camera_tag_yaw) == "none") {
           fp_utm_sf <- NA
           if (!quiet) message(yellow(" - Skipping footprints"))
           nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
@@ -352,7 +340,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
           if (!quiet) message(yellow(" - Creating footprints..."), appendLF = FALSE)
           corners_sign_mat <- matrix(data=c(-1,1,1,1,1,-1,-1,-1,-1,1), byrow=TRUE, ncol=2, nrow=5)
 
-          ctr_utm <- sf::st_coordinates(imgs_ctr_utm_sf)
+          ctr_utm <- st_coordinates(imgs_ctr_utm_sf)
 
           ## Create an empty list to hold the individual st_polygons
           polys_sf_lst <- vector("list", nrow(imgs_ctr_utm_sf))
@@ -381,7 +369,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
 
               # check if the Sequoia Yaw has the same alignment
 
-              theta <- - pi * imgs_ctr_utm_sf[i,tolower(camera_tag_yaw), drop = TRUE] / 180
+              theta <- - pi * imgs_ctr_utm_sf[i, tolower(camera_tag_yaw), drop = TRUE] / 180
               rot_mat <- matrix(data=c(cos(theta),  -sin(theta), sin(theta), cos(theta)),
                                 nrow=2, byrow=TRUE)
               corners_mat <- t(rot_mat %*% t(corners_mat))
@@ -391,7 +379,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
               fp_nodes_mat <- img_ctr_mat + corners_mat
 
               ## Create a polygon for this footprint and add it to the list
-              polys_sf_lst[[i]] <- sf::st_polygon(list(fp_nodes_mat), dim = "XY")
+              polys_sf_lst[[i]] <- st_polygon(list(fp_nodes_mat), dim = "XY")
 
               ## Add the nodes to the master matrix (for the purposes of computing the overall area)
               nodes_all_mat <- rbind(nodes_all_mat, fp_nodes_mat[1:4,])
@@ -400,8 +388,8 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
           }
 
           ## Create a sf data frame for the footprints, using the attributes from the centroids
-          fp_utm_sf <- st_sf(imgs_ctr_utm_sf %>% sf::st_drop_geometry(),
-                             geometry = sf::st_sfc(polys_sf_lst, crs = utm_epsg))
+          fp_utm_sf <- st_sf(imgs_ctr_utm_sf %>% st_drop_geometry(),
+                             geometry = st_sfc(polys_sf_lst, crs = utm_epsg))
 
           if (!quiet) message(yellow("Done."))
 
@@ -424,7 +412,7 @@ uas_info <- function(img_dirs, exiftool=NULL, csv=NULL, alt_agl=NULL,
                 st_intersection(fp_utm_sf[i, "geometry"], fp_utm_sf[i+1, "geometry"]) %>%
                   st_area()) %>% as.numeric() %>% replace_na(0)
 
-              ## Add the precent overlap to the sf dataframe
+              ## Add the percent overlap to the sf dataframe
               fp_utm_sf$fwd_overlap <- c(area_intersection_with_next / area_polys, NA)
 
               if (!quiet)message(yellow("Done."))

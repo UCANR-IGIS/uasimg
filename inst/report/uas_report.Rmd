@@ -21,6 +21,7 @@ params:
   group_img: !r TRUE
   metadata: !r NA
   thumbnails: !r NA
+  gps_coord: !r NA
 ---
 
 ```{css echo = FALSE}
@@ -151,7 +152,12 @@ if (group_img) {
     group_by(gps_long_rnd, gps_lat_rnd) %>% 
     summarise(count = n(), first_dt = first(pts_dt), 
               balloon_html = paste0("<b>", file_name, "</b>. <em>",
-                                    format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), "</em>",
+                                    format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), 
+                                    ifelse(params$gps_coord,
+                                           paste0("<br/>", round(params$pt$gps_long, 5), ", ", 
+                                                  round(params$pt$gps_lat, 5)),
+                                 ""),
+                                 "</em>",
                                     ifelse(params$thumbnails, paste0("<br/><img src='tb/", tb_fn, "'/>"), ""),
                                     collapse = "<br/><br/>")
               ) %>% 
@@ -190,7 +196,11 @@ if (group_img) {
   }
   
   balloons_html <- paste0("<p><b>", params$pts$file_name, "</b>. <em>", 
-                          format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), "</em>", 
+                          format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), 
+                          ifelse(params$gps_coord,
+                                 paste0("<br/> ", round(params$pt$gps_long, 5), ", ",  round(params$pt$gps_lat, 5)),
+                                 ""),
+                          "</em>", 
                           thumbnail_html, "</p>")
 
   ## Compute colors  

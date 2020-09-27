@@ -1,3 +1,10 @@
+# uasimg 1.3.7 (2020-09-27)
+
+* improved help page for `uas_info()` and `uas_cameras()`
+* added `name_only` argument to `uas_cameras()`
+* renamed argument `csv` to `exif_csv` in `uas_info()`
+* added argument `gps_coord` to `uas_report()` & modified `uas_report.Rmd` to show the GPS coordinates in the pop-up windows
+
 # uasimg 1.3.6 (2020-09-26)
 
 * Added DJI ZenMuse X7 to camera database

@@ -18,6 +18,7 @@
 #' @param overwrite_html Overwrite existing HTML files without warning, YN
 #' @param overwrite_png Overwrite existing PNG files without warning, YN
 #' @param thumbnails Create thumbails
+#' @param gps_coord Show GPS coordinates of images in the pop-up windows, YN
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -62,7 +63,7 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
                        output_file=NULL, report_rmd=NULL, open_report=FALSE,
                        local_dir=TRUE, self_contained=TRUE, png_map=FALSE, png_exp=0.2,
                        google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE,
-                       thumbnails = FALSE, quiet=FALSE) {
+                       thumbnails = FALSE, gps_coord = FALSE, quiet=FALSE) {
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -319,7 +320,8 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
                                                                  group_img=group_img,
                                                                  local_dir=local_dir,
                                                                  map_fn=map_fn,
-                                                                 thumbnails=thumbnails)
+                                                                 thumbnails=thumbnails,
+                                                                 gps_coord=gps_coord)
                                               ))
 
       report_fn_vec <- c(report_fn_vec, report_fn)

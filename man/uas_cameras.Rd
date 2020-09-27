@@ -2,16 +2,46 @@
 % Please edit documentation in R/uas_cameras.R
 \name{uas_cameras}
 \alias{uas_cameras}
+\alias{uas_readcameras}
 \title{Cameras}
 \usage{
-uas_cameras()
+uas_cameras(names_only = TRUE)
+
+uas_readcameras(cameras_fn)
+}
+\arguments{
+\item{names_only}{Return only camera names}
+
+\item{cameras_fn}{The file name (including path) of a cameras.csv file}
 }
 \value{
-A character vector containing the names of cameras known in the uavimg package
+A character vector containing the names of cameras known to the uasimg package
 }
 \description{
 Returns the names of known cameras
+
+Read a cameras.csv file
 }
 \details{
-In order to estimate the GSD and image footprint, certain properties of the camera are required, including the physical dimension of the sensor. Properties of several commonly used cameras have been collected and are stored in a csv file. If your camera is not listed, you may edit the csv file yourself (look in the directory where your R packages are saved), or contact the package author to have it added.
+In order to estimate the GSD and image footprint, certain properties of the camera are required,
+including the physical dimension of the sensor. Properties of several commonly used cameras have
+been collected and are stored in a csv file.
+
+If your drone camera is not in the database, you'll get an error message when you try to run \code{\link{uas_info}}.
+In this case, you can contact the package author by email, and/or start an
+issue on \href{https://github.com/ucanr-igis/uasimg/issues}{GitHub}. Alternately, you can create your own
+CSV file based on the one that comes with the package (to see where that lives, run
+\code{system.file("cameras/cameras.csv", package = "uasimg")}), and pass the file name as the value of \code{cameras}
+in \code{\link{uas_info}}.
+
+This utility function will read a cameras.csv file. Note certain columns
+are required. To see an example of a valid CSV file, run \code{uas_cameras(names_only = FALSE)}
+}
+\section{Functions}{
+\itemize{
+\item \code{uas_readcameras}: Read cameras csv file
+}}
+
+\seealso{
+\code{\link{uas_cameras}}
 }

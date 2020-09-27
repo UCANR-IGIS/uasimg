@@ -21,6 +21,7 @@ uas_report(
   overwrite_html = FALSE,
   overwrite_png = FALSE,
   thumbnails = FALSE,
+  gps_coord = FALSE,
   quiet = FALSE
 )
 }
@@ -56,6 +57,8 @@ uas_report(
 \item{overwrite_png}{Overwrite existing PNG files without warning, YN}
 
 \item{thumbnails}{Create thumbails}
+
+\item{gps_coord}{Show GPS coordinates of images in the pop-up windows, YN}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }

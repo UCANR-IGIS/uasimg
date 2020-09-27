@@ -6,13 +6,13 @@
 \usage{
 uas_info(
   img_dirs,
-  exiftool = NULL,
-  csv = NULL,
   alt_agl = NULL,
   fp = TRUE,
   fwd_overlap = fp,
   cameras = NULL,
   metadata = "metadata.*\\\\.txt",
+  exiftool = NULL,
+  exif_csv = NULL,
   cache = NULL,
   update_cache = FALSE,
   quiet = FALSE
@@ -20,10 +20,6 @@ uas_info(
 }
 \arguments{
 \item{img_dirs}{Directory(s) where the image files reside}
-
-\item{exiftool}{The path to the exiftool command line tool (omit if on the OS path)}
-
-\item{csv}{The file name of a new csv file where the exif data will be saved (omit to make a temp one)}
 
 \item{alt_agl}{The elevation above ground level in meters (optional for images with the relevative altitude saved)}
 
@@ -34,6 +30,10 @@ uas_info(
 \item{cameras}{Location of the cameras.csv file. Is NULL the package csv file will be used.}
 
 \item{metadata}{A filename pattern for a metadata file, or a metadata list object (see Details)}
+
+\item{exiftool}{The path to the exiftool command line tool (omit if on the OS path)}
+
+\item{exif_csv}{The file name of a new csv file where the exif data will be saved (omit to make a temp one)}
 
 \item{cache}{Logical or a directory where EXIF data should be cached (see Details)}
 
@@ -52,7 +52,10 @@ Extracts info from geotagged images taken from a drone
 \details{
 This will read the EXIF header data from a directory of image files, and put out the centroids and image footprints on the ground. Mapping  image locations requires that the images have geostamps. In addition, mapping the image footprints requires that the camera parameters are known, and the flight elevation about ground level is either saved in the EXIF info, or provided in the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data in the EXIF info.
 
-Camera parameters are saved in a csv file called cameras.csv. To see where this is saved, type \code{system.file("cameras/cameras.csv", package="uasimg")}. If your camera is not detected, please contact the package author or create an issue on \href{https://github.com/UCANR-IGIS/uasimg/issues}{GitHub}.
+Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
+many popular drone cameras. If your drone camera is not in the database, you can create your own
+\emph{cameras.csv} file (see \code{\link{uas_cameras}} for details) and pass the file name as the
+\code{cameras} argument. Or contact the package maintainer to add your camera to the database.
 
 This function uses a free command line tool called EXIFtool to read the EXIF data, which can be downloaded
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
