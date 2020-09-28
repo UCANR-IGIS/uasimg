@@ -22,6 +22,7 @@ params:
   metadata: !r NA
   thumbnails: !r NA
   gps_coord: !r NA
+  kml_map_fn: !r NA
 ---
 
 ```{css echo = FALSE}
@@ -254,6 +255,18 @@ if (!identical(params$fp, NA)) {
   
   ## Display HTML Widget
   m_fp
+}
+
+
+```
+
+
+```{r kml_links, echo = FALSE, results = 'asis'}
+if (!is.na(params$kml_map_fn)) {
+  ## Clear the tab set
+  ## cat("## {-}\n")
+  cat("## KMLs\n")  
+  cat("<ul><li><a href=\"", kml_map_fn, "\">Flight Area (MCP)</a></li></ul>\n")
 }
 ```
 

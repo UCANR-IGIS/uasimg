@@ -5,20 +5,21 @@
 #' @param x A list of class 'uas_info'
 #' @param col Color value(s) of the centroids and/or footprints
 #' @param group_img Group images within ~1m of each other into 1 point
+#' @param thumbnails Create thumbails
+#' @param gps_coord Show GPS coordinates of images in the pop-up windows, YN
+#' @param local_dir Show the local image directory, TF
+#' @param kml_mcp Export the MCP as a KML
 #' @param output_dir If NULL, then will be placed in a 'map' sub-directory of the images
 #' @param create_dir Create the output directory if it doesn't exist
 #' @param output_file	Name of the HTML file. If NULL a default based on the name of the input directory is chosen.
-#' @param report_rmd Rmd template used to generate the HTML file. See details.
+#' @param overwrite_html Overwrite existing HTML files without warning, YN
 #' @param open_report Open the HTML file in a browser
-#' @param local_dir Whether to show the local image directory, TF
 #' @param self_contained Make the output HTML file self-contained
 #' @param png_map Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)
-#' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
 #' @param google_api API key for Google Static Maps, see Details.
-#' @param overwrite_html Overwrite existing HTML files without warning, YN
 #' @param overwrite_png Overwrite existing PNG files without warning, YN
-#' @param thumbnails Create thumbails
-#' @param gps_coord Show GPS coordinates of images in the pop-up windows, YN
+#' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
+#' @param report_rmd Rmd template used to generate the HTML file. See details.
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -55,15 +56,17 @@
 #' @importFrom utils browseURL packageVersion setTxtProgressBar txtProgressBar
 #' @importFrom tools file_path_sans_ext file_ext
 #' @importFrom methods is
+#' @importFrom sf st_write
 #' @importFrom magick image_read image_write image_scale
 #'
 #' @export
 
-uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=TRUE,
-                       output_file=NULL, report_rmd=NULL, open_report=FALSE,
-                       local_dir=TRUE, self_contained=TRUE, png_map=FALSE, png_exp=0.2,
-                       google_api=NULL, overwrite_html=FALSE, overwrite_png=FALSE,
-                       thumbnails = FALSE, gps_coord = FALSE, quiet=FALSE) {
+uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, gps_coord = FALSE,
+                       local_dir = TRUE, kml_mcp = TRUE, output_dir = NULL, create_dir = TRUE,
+                       output_file = NULL, overwrite_html = FALSE, open_report = FALSE,
+                       self_contained = TRUE, png_map = FALSE, google_api = NULL, png_exp = 0.2,
+                       overwrite_png = FALSE, report_rmd = NULL,
+                       quiet = FALSE) {
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -307,22 +310,29 @@ uas_report <- function(x, col=NULL, group_img=TRUE, output_dir=NULL, create_dir=
         col_use <- col
       }
 
-      # browser()
-      # params2 <- c(x[[img_dir]], list(col=col_use, img_dir=img_dir, group_img=group_img,
-      #                             local_dir=local_dir, map_fn=map_fn,
-      #                             thumbnails=thumbnails, tb_fn=basename(tb_fn)))
+      if (kml_mcp) {
+        kml_map_fn <- paste0(basename(img_dir), "_mcp.kml")
+        if (!file.exists(file.path(output_dir_use, kml_map_fn))) {
+          st_write(x[[img_dir]]$mcp, dsn = file.path(output_dir_use, kml_map_fn), quiet = TRUE)
+        }
+      } else {
+        kml_map_fn <- NA
+      }
 
       ## Render the HTML file
-      report_fn <- rmarkdown::render(input=report_rmd_use,
-                                     output_dir=output_dir_use, output_file=output_file_use,
-                                     output_options=output_options,
-                                     params=c(x[[img_dir]], list(col=col_use, img_dir=img_dir,
-                                                                 group_img=group_img,
-                                                                 local_dir=local_dir,
-                                                                 map_fn=map_fn,
-                                                                 thumbnails=thumbnails,
-                                                                 gps_coord=gps_coord)
-                                              ))
+      report_fn <- rmarkdown::render(input = report_rmd_use,
+                                     output_dir = output_dir_use, output_file = output_file_use,
+                                     output_options = output_options,
+                                     params = c(x[[img_dir]], list(col = col_use, img_dir = img_dir,
+                                                                 group_img = group_img,
+                                                                 local_dir = local_dir,
+                                                                 map_fn = map_fn,
+                                                                 thumbnails = thumbnails,
+                                                                 gps_coord = gps_coord,
+                                                                 kml_map_fn = kml_map_fn
+                                                                 )
+                                              )
+                                     )
 
       report_fn_vec <- c(report_fn_vec, report_fn)
 

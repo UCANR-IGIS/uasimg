@@ -1,3 +1,7 @@
+# uasimg 1.3.8 (2020-09-28)
+
+* added `kml_mcp` to `uas_report()`
+
 # uasimg 1.3.7 (2020-09-27)
 
 * improved help page for `uas_info()` and `uas_cameras()`

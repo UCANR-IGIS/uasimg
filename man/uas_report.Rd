@@ -8,20 +8,21 @@ uas_report(
   x,
   col = NULL,
   group_img = TRUE,
+  thumbnails = FALSE,
+  gps_coord = FALSE,
+  local_dir = TRUE,
+  kml_mcp = TRUE,
   output_dir = NULL,
   create_dir = TRUE,
   output_file = NULL,
-  report_rmd = NULL,
+  overwrite_html = FALSE,
   open_report = FALSE,
-  local_dir = TRUE,
   self_contained = TRUE,
   png_map = FALSE,
-  png_exp = 0.2,
   google_api = NULL,
-  overwrite_html = FALSE,
+  png_exp = 0.2,
   overwrite_png = FALSE,
-  thumbnails = FALSE,
-  gps_coord = FALSE,
+  report_rmd = NULL,
   quiet = FALSE
 )
 }
@@ -32,33 +33,35 @@ uas_report(
 
 \item{group_img}{Group images within ~1m of each other into 1 point}
 
+\item{thumbnails}{Create thumbails}
+
+\item{gps_coord}{Show GPS coordinates of images in the pop-up windows, YN}
+
+\item{local_dir}{Show the local image directory, TF}
+
+\item{kml_mcp}{Export the MCP as a KML}
+
 \item{output_dir}{If NULL, then will be placed in a 'map' sub-directory of the images}
 
 \item{create_dir}{Create the output directory if it doesn't exist}
 
 \item{output_file}{Name of the HTML file. If NULL a default based on the name of the input directory is chosen.}
 
-\item{report_rmd}{Rmd template used to generate the HTML file. See details.}
+\item{overwrite_html}{Overwrite existing HTML files without warning, YN}
 
 \item{open_report}{Open the HTML file in a browser}
-
-\item{local_dir}{Whether to show the local image directory, TF}
 
 \item{self_contained}{Make the output HTML file self-contained}
 
 \item{png_map}{Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)}
 
-\item{png_exp}{A proportion to expand the bounding box of the PNG map, see Details.}
-
 \item{google_api}{API key for Google Static Maps, see Details.}
 
-\item{overwrite_html}{Overwrite existing HTML files without warning, YN}
+\item{png_exp}{A proportion to expand the bounding box of the PNG map, see Details.}
 
 \item{overwrite_png}{Overwrite existing PNG files without warning, YN}
 
-\item{thumbnails}{Create thumbails}
-
-\item{gps_coord}{Show GPS coordinates of images in the pop-up windows, YN}
+\item{report_rmd}{Rmd template used to generate the HTML file. See details.}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }
