@@ -1,6 +1,6 @@
-#' Print a summary of a UAS Image Collection object
+#' Print a summary of UAS metadata
 #'
-#' Print a summary of a UAS Image Collection object
+#' Print a summary of metadata from a UAS image collection
 #'
 #' @param x A UAS Image Collection object
 #' @param metadata Show additional meta data info

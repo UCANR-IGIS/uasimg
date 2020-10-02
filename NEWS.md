@@ -1,3 +1,10 @@
+# uasimg 1.4.0 (2020-10-01)
+
+* `uas_toc()` and `uas_toc.Rmd` updated - new `summary_map` argument displays an interactive mission footprint map
+* `uas_report.Rmd` updated - flight MCP converted to base64 and encoded in a meta tag
+* `uas_report.R` updated - argument `local_dir` renamed `show_local_dir`; `gps_coord` renamed `show_gps_coord`
+* `uas_exp()` renamed `uas_exp_shp()`
+
 # uasimg 1.3.8 (2020-09-28)
 
 * added `kml_mcp` to `uas_report()`

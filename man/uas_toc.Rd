@@ -11,6 +11,7 @@ uas_toc(
   gather = NULL,
   toc_title = "UAS Image Collections",
   toc_desc = NULL,
+  summary_map = TRUE,
   header_html = NULL,
   footer_html = NULL,
   overwrite = FALSE,
@@ -25,11 +26,13 @@ uas_toc(
 
 \item{output_fn}{Output file name}
 
-\item{gather}{Subdirectory where HTML files will be copied}
+\item{gather}{Subdirectory of output_dir where HTML files will be copied}
 
 \item{toc_title}{Title to use for the Table of Contents}
 
 \item{toc_desc}{A short description to appear under the title}
+
+\item{summary_map}{Show a map of all the flight areas, logical}
 
 \item{header_html}{HTML file name to use as a page header}
 

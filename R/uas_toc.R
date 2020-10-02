@@ -3,9 +3,10 @@
 #' @param html_reports File names with path of HTML Image Collection summaries
 #' @param output_dir Output directory
 #' @param output_fn Output file name
-#' @param gather Subdirectory where HTML files will be copied
+#' @param gather Subdirectory of output_dir where HTML files will be copied
 #' @param toc_title Title to use for the Table of Contents
 #' @param toc_desc A short description to appear under the title
+#' @param summary_map Show a map of all the flight areas, logical
 #' @param header_html HTML file name to use as a page header
 #' @param footer_html HTML file name to use as a page footer
 #' @param overwrite Overwrite existing file, logical
@@ -42,7 +43,8 @@
 
 uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
                     gather = NULL, toc_title = "UAS Image Collections",
-                    toc_desc = NULL, header_html = NULL, footer_html = NULL,
+                    toc_desc = NULL, summary_map = TRUE,
+                    header_html = NULL, footer_html = NULL,
                     overwrite = FALSE, open_toc = FALSE, quiet = FALSE) {
 
   ## Get the HTML report output filename
@@ -84,9 +86,6 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
     num_dups <- 0
     for (fn in html_reports) {
 
-      # cat(fn, "exists:", file.exists(fn), "\n")
-      # browser()
-
       if (file.exists(fn)) {
         if (basename(fn) %in% html_gathered_base) {
           num_dups <- num_dups + 1
@@ -97,8 +96,6 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           dest_fn <- file.path(gather_dir, basename(fn))
         }
 
-        # cat("from = ", fn, "\n")
-        # cat("to = ", dest_fn, "\n\n")
 
         if (file.copy(from = fn, to = dest_fn, overwrite = overwrite)) {
           html_gathered_full <- c(html_gathered_full, dest_fn)
@@ -107,7 +104,7 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           ## To copy the map_png, we first, parse the HTML page
           html_tree <- htmlTreeParse(readLines(dest_fn), useInternalNodes = TRUE)
 
-          ## Grab the map_fn which is encoded in a meta tag
+          ## Grab the PNG file (map_fn) which is encoded in a meta tag
           map_fn_meta <- html_tree[paste0("//meta[@name='map_fn']/@content")]
           map_fn <- trimws(as.character(unlist(map_fn_meta)))
           if (length(map_fn) == 1) {
@@ -118,12 +115,25 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
             }
           }
 
+          ## Grab the MCP KML file which is encoded in a meta tag
+          kml_mcp_meta <- html_tree[paste0("//meta[@name='kml_mcp_fn']/@content")]
+          kml_mcp_fn <- trimws(as.character(unlist(kml_mcp_meta)))
+          if (length(kml_mcp_fn) == 1) {
+            src_kml_mcp_fn <- file.path(dirname(fn), kml_mcp_fn)
+            if (file.exists(src_kml_mcp_fn)) {
+              dest_kml_mcp_fn <- file.path(gather_dir, kml_mcp_fn)
+              file.copy(from = src_kml_mcp_fn, to = dest_kml_mcp_fn, overwrite = overwrite)
+            }
+          }
+
           ## Next, we need to copy the thumbnails folder
           tbsrc_dir <- file.path(dirname(fn), "tb")
           if (file.exists(tbsrc_dir)) {
             ## Copy the whole folder
             file.copy(from = tbsrc_dir, to = gather_dir, recursive = TRUE)
           }
+
+
 
         }
 
@@ -156,7 +166,8 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
   toc_fn <- render(input=toc_rmd, output_dir = output_dir, output_file = output_fn,
                    output_options = output_options,
                    params=list(html_reports = html_reports, output_dir = output_dir,
-                               toc_title = toc_title, toc_desc = toc_desc))
+                               toc_title = toc_title, toc_desc = toc_desc,
+                               summary_map = summary_map))
 
   if (!quiet) message(green("Done."))
 

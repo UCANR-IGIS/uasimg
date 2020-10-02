@@ -4,9 +4,9 @@
 \alias{uas_setflds}
 \alias{uas_getflds}
 \alias{uas_flds_oem}
-\title{Manage External Metadata fields}
+\title{Manage supplemental metadata fields}
 \usage{
-uas_setflds(flds = NULL, reset = FALSE)
+uas_setflds(flds = NULL, reset = FALSE, quiet = FALSE)
 
 uas_getflds()
 
@@ -16,18 +16,20 @@ uas_flds_oem()
 \item{flds}{Character vector of metadata fields}
 
 \item{reset}{Use original values}
+
+\item{quiet}{Suppress messages}
 }
 \description{
-Set and view a default set of external metadata fields
+Set and view a default set of supplemental metadata fields
 }
 \details{
-These functions allow you to define a default set of external metadata fields that can be assigned
+These functions allow you to define a default set of supplemental metadata fields that can be assigned
 image collections either as a function argument, or a small text file placed
-in the directory with the images. Note in this context 'external metadata' refers to bits of information
+in the directory with the images. Note in this context 'supplemental metadata' refers to bits of information
 that can not be automatically extracted from the images themselves (e.g., the name of the project
 or pilot.)
 
-Creating a default set of external metadata fields does not make them mandatory, nor does
+Creating a default set of supplemental metadata fields does not make them mandatory, nor does
 it limit the metadata fields you can use. The default set serves as a template when
 a new metadata.txt file is created.
 }
@@ -35,7 +37,7 @@ a new metadata.txt file is created.
 \itemize{
 \item \code{uas_setflds}: Set default fields for image collection metadata.
 
-\item \code{uas_getflds}: Get default external metadata field names.
+\item \code{uas_getflds}: Get default supplemental metadata field names.
 
 \item \code{uas_flds_oem}: Get a standard set of image collection metedata fields
 }}

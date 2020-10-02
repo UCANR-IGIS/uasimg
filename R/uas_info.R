@@ -1,4 +1,4 @@
-#' Extract info from UAS Images
+#' Extract metadata info from UAS images
 #'
 #' Extracts info from geotagged images taken from a drone
 #'
@@ -26,7 +26,7 @@
 #' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
-#' \code{metadata} is an optional argument to pass external metadata that can not be extracted from the
+#' \code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
 #' images (e.g., location name, pilot). It can be a regular expression for a metadata filename
 #' (in YAML format, see below) that should be in the same folder as the images. Or it can be a named list containing
 #' metadata fields. For supported field names, see \code{\link{uas_getflds}}.
@@ -51,7 +51,7 @@
 #' image centroids (as a sf data frame), footprints, total area, minimum convex polygon,
 #' total directory size, the data flown, and external metadata.
 #'
-#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
+#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp_shp}}
 #'
 #' @import dplyr
 #' @import sf
@@ -367,7 +367,7 @@ uas_info <- function(img_dirs, alt_agl=NULL,
               #  -90 = west (rotate 90 degress counter-clockwise)
               # -179, + 179 = south (rotate 180 degrees)
 
-              # check if the Sequoia Yaw has the same alignment
+              # check if the Sequoia 'Yaw' has the same alignment
 
               theta <- - pi * imgs_ctr_utm_sf[i, tolower(camera_tag_yaw), drop = TRUE] / 180
               rot_mat <- matrix(data=c(cos(theta),  -sin(theta), sin(theta), cos(theta)),

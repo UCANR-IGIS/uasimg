@@ -2,42 +2,16 @@
 % Please edit documentation in R/uas_move.R
 \name{uas_move}
 \alias{uas_move}
-\title{Move UAS Images into Sub-Directories by Flight}
+\title{Move UAS images into sub-directories by group}
 \usage{
-uas_move(
-  x,
-  thresh_units = c("msi", "secs")[1],
-  thresh_val = 10,
-  dirnames = "",
-  init_flt = 1,
-  min_images = 5,
-  preview = FALSE,
-  copymove = "move",
-  basedir = NULL,
-  alt = NULL,
-  quiet = FALSE
-)
+uas_move(x, copymove = "move", basedir = NULL, quiet = FALSE)
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{thresh_units}{Units (median sampling interval or seconds)}
-
-\item{thresh_val}{Thresshold value}
-
-\item{dirnames}{Directory names (template??)}
-
-\item{init_flt}{Initial flight number}
-
-\item{min_images}{Minimum number of images to consider a flight worth moving}
-
-\item{preview}{Preview the change only}
-
 \item{copymove}{Move or copy}
 
 \item{basedir}{Base dir}
-
-\item{alt}{Range of altitude to move}
 
 \item{quiet}{Suppress messages}
 }
@@ -45,10 +19,12 @@ uas_move(
 A \link{uas_info} object
 }
 \description{
-Move UAS Images into Sub-Directories by Flight
+Move UAS images into sub-directories by group
 }
 \details{
-This will move the image files into subdirectories
+NOT YET SUPPORTED
+
+This will move groups of image files into subdirectories based on the group they fall into.
 }
 \seealso{
 \link{uas_info}

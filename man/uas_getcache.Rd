@@ -3,7 +3,7 @@
 \name{uas_getcache}
 \alias{uas_getcache}
 \alias{uas_setcache}
-\title{Manage Cache Directory}
+\title{Manage cache directory}
 \usage{
 uas_getcache(default = TRUE, quiet = FALSE)
 

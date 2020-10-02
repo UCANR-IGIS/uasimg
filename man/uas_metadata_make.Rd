@@ -44,3 +44,6 @@ easier to edit them in a text editor). If \code{suffix = 'dir'}, the base name o
 directory will be appended. Suffix can also be a literal string. Both \code{file}
 and \code{suffix} should be of length 1 or equal to the number of \code{dirs}.
 }
+\seealso{
+\code{\link{uas_setflds}}
+}

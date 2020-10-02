@@ -1,13 +1,13 @@
-#' Create report(s) of UAS Images
+#' Flight summaries
 #'
-#' Creates HTML report(s) of a directory of UAS images
+#' Creates image collection summaries for individual flights (folders)
 #'
 #' @param x A list of class 'uas_info'
 #' @param col Color value(s) of the centroids and/or footprints
 #' @param group_img Group images within ~1m of each other into 1 point
 #' @param thumbnails Create thumbails
-#' @param gps_coord Show GPS coordinates of images in the pop-up windows, YN
-#' @param local_dir Show the local image directory, TF
+#' @param show_gps_coord Show GPS coordinates of images in the pop-up windows, YN
+#' @param show_local_dir Show the local image directory, TF
 #' @param kml_mcp Export the MCP as a KML
 #' @param output_dir If NULL, then will be placed in a 'map' sub-directory of the images
 #' @param create_dir Create the output directory if it doesn't exist
@@ -16,9 +16,9 @@
 #' @param open_report Open the HTML file in a browser
 #' @param self_contained Make the output HTML file self-contained
 #' @param png_map Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)
-#' @param google_api API key for Google Static Maps, see Details.
 #' @param overwrite_png Overwrite existing PNG files without warning, YN
 #' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
+#' @param google_api API key for Google Static Maps, see Details.
 #' @param report_rmd Rmd template used to generate the HTML file. See details.
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
@@ -42,10 +42,11 @@
 #' \code{png_exp} is a percentage of the points bounding box that will be used as a buffer
 #' for the background map. If the map seems too cropped, or you get a warning message about rows
 #' removed, try increasing it. By default, the background image will be a satellite photo from
-#' Google Maps. However this requires a valid API Key for the Google Maps Static service (for
-#' details see \url{https://developers.google.com/maps/documentation/maps-static/} as well
-#' as \link[ggmap]{register_google}), which you pass with the \code{google_api} argument.
-#' If this is not passed, you'll probably get a terrain map from Stamen.
+#' Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
+#' pass with \code{google_api} (for
+#' details see \url{https://developers.google.com/maps/documentation/maps-static/}. Alternately you
+#' can save your API key with ggmap::register_google(), after which it will be read automatically.
+#' If a Google API key is not found, a terrain map from Stamen will be substituted.
 #'
 #' @return The filename of the HTML report generated
 #'
@@ -61,11 +62,11 @@
 #'
 #' @export
 
-uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, gps_coord = FALSE,
-                       local_dir = TRUE, kml_mcp = TRUE, output_dir = NULL, create_dir = TRUE,
+uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show_gps_coord = FALSE,
+                       show_local_dir = TRUE, kml_mcp = TRUE, output_dir = NULL, create_dir = TRUE,
                        output_file = NULL, overwrite_html = FALSE, open_report = FALSE,
-                       self_contained = TRUE, png_map = FALSE, google_api = NULL, png_exp = 0.2,
-                       overwrite_png = FALSE, report_rmd = NULL,
+                       self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
+                       overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
                        quiet = FALSE) {
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
@@ -89,7 +90,8 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, gps_
   }
 
   if (make_png) {
-    if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
+    #if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
+    if (!require("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
     if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
   }
 
@@ -311,12 +313,12 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, gps_
       }
 
       if (kml_mcp) {
-        kml_map_fn <- paste0(basename(img_dir), "_mcp.kml")
-        if (!file.exists(file.path(output_dir_use, kml_map_fn))) {
-          st_write(x[[img_dir]]$mcp, dsn = file.path(output_dir_use, kml_map_fn), quiet = TRUE)
+        kml_mcp_fn <- paste0(basename(img_dir), "_mcp.kml")
+        if (!file.exists(file.path(output_dir_use, kml_mcp_fn))) {
+          st_write(x[[img_dir]]$mcp, dsn = file.path(output_dir_use, kml_mcp_fn), quiet = TRUE)
         }
       } else {
-        kml_map_fn <- NA
+        kml_mcp_fn <- NA
       }
 
       ## Render the HTML file
@@ -325,11 +327,11 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, gps_
                                      output_options = output_options,
                                      params = c(x[[img_dir]], list(col = col_use, img_dir = img_dir,
                                                                  group_img = group_img,
-                                                                 local_dir = local_dir,
+                                                                 show_local_dir = show_local_dir,
                                                                  map_fn = map_fn,
                                                                  thumbnails = thumbnails,
-                                                                 gps_coord = gps_coord,
-                                                                 kml_map_fn = kml_map_fn
+                                                                 show_gps_coord = show_gps_coord,
+                                                                 kml_mcp_fn = kml_mcp_fn
                                                                  )
                                               )
                                      )

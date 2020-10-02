@@ -6,7 +6,7 @@ output:
     smart: no
     css: uas_report.css
 params:
-  local_dir: TRUE
+  show_local_dir: TRUE
   pts: !r NA
   fp: !r NA
   img_dir: !r NA
@@ -21,8 +21,8 @@ params:
   group_img: !r TRUE
   metadata: !r NA
   thumbnails: !r NA
-  gps_coord: !r NA
-  kml_map_fn: !r NA
+  show_gps_coord: !r NA
+  kml_mcp_fn: !r NA
 ---
 
 ```{css echo = FALSE}
@@ -40,6 +40,8 @@ tr {
 knitr::opts_chunk$set(echo = TRUE)
 library(htmltools)
 library(leaflet)
+library(base64enc)
+
 
 ## Import database of known sensors
 # cameras_fn <- system.file("cameras/cameras.csv", package="uasimg")
@@ -71,41 +73,48 @@ dt_range <- format(range(dt_posix), "%b %d %Y, %I:%M:%S %p")
 
 ```{r data_url_insert, results="asis", echo=FALSE}
 ## Insert meta tags
-cat("<meta name='map_fn' content='", params$map_fn, "'>\n")
-cat("<meta name='date_flown' content='", params$date_flown, "'>\n")
-cat("<meta name='area_m2' content='", round(params$area_m2), "'>\n")
+cat("<meta name='map_fn' content='", params$map_fn, "'>\n", sep = "")
+cat("<meta name='date_flown' content='", params$date_flown, "'>\n", sep = "")
+cat("<meta name='area_m2' content='", round(params$area_m2), "'>\n", sep = "")
+cat("<meta name='kml_mcp_fn' content='", params$kml_mcp_fn, "'>\n", sep = "")
 
+## Encode the MCP to Base64 (text) and save it in a meta tag
+mcp_raw <- serialize(params$mcp, connection = NULL)
+mcp_b64 <- base64encode(mcp_raw)
+cat("<meta name='mcp_b64' content='", mcp_b64, "'>\n", sep = "")
+
+## Insert the collection name
 if (is.na(params$metadata$collection_name)) {
-  cat("<h2>", basename(params$img_dir), "</h2>\n")
+  cat("<h2>", basename(params$img_dir), "</h2>\n", sep = "")
 } else {
-  cat("<h2><span id='collection_name'>", basename(params$metadata$collection_name), "</span></h2>\n")
+  cat("<h2><span id='collection_name'>", basename(params$metadata$collection_name), "</span></h2>\n", sep = "")
 }
 
 cat("<table>")
 
-if (!is.na(params$metadata$description)) cat("<tr><td>__Description__:</td><td><span id='description'>",  params$metadata$description, "</span></td></tr>")
+if (!is.na(params$metadata$description)) cat("<tr><td>__Description__:</td><td><span id='description'>",  params$metadata$description, "</span></td></tr>", sep = "")
 
-if (!is.na(params$metadata$pilot)) cat("<tr><td>__Pilot__:</td><td><span id='pilot'>",  params$metadata$pilot, "</span></td></tr>")
+if (!is.na(params$metadata$pilot)) cat("<tr><td>__Pilot__:</td><td><span id='pilot'>",  params$metadata$pilot, "</span></td></tr>", sep = "")
 
-if (!is.na(params$metadata$contact)) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$metadata$contact, "</span></td></tr>")
+if (!is.na(params$metadata$contact)) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$metadata$contact, "</span></td></tr>", sep = "")
 
-if (params$local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>")
+if (params$show_local_dir) cat("<tr><td>__Local Directory__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>", sep = "")
 
-if (!is.na(params$metadata$data_url)) cat("<tr><td>__Data URL__:</td><td>",  params$metadata$data_url, "</td></tr>")
+if (!is.na(params$metadata$data_url)) cat("<tr><td>__Data URL__:</td><td>",  params$metadata$data_url, "</td></tr>", sep = "")
 
-cat("<tr><td>__Num images__:</td><td><span id='num_img'>", nrow(params$pts), "</span></td></tr>")
+cat("<tr><td>__Num images__:</td><td><span id='num_img'>", nrow(params$pts), "</span></td></tr>", sep = "")
 
-cat("<tr><td>__Camera__:</td><td><span id='camera_name'>", params$camera_name, "</span></td></tr>")
+cat("<tr><td>__Camera__:</td><td><span id='camera_name'>", params$camera_name, "</span></td></tr>", sep = "")
 
-cat("<tr><td>__Total file size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>")
+cat("<tr><td>__Total file size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>", sep = "")
 
-cat("<tr><td>__Area__:</td><td>", round(msq2acres(params$area_m2),2), "acres</td></tr>")
+cat("<tr><td>__Area__:</td><td>", round(msq2acres(params$area_m2),2), " acres</td></tr>", sep = "")
 
-cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>")
+cat("<tr><td>__Start__:</td><td>", dt_range[1], "</td></tr>", sep = "")
 
-cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>")
+cat("<tr><td>__End__:</td><td>", dt_range[2], "</td></tr>", sep = "")
 
-cat("<tr><td>__Image size__:</td><td>", img_pixels, "</td></tr>")
+cat("<tr><td>__Image size__:</td><td>", img_pixels, "</td></tr>", sep = "")
 
 cat("</table>")
 ```
@@ -115,13 +124,14 @@ cat("</table>")
 ### Centers
 
 ```{r leaflet_ctr, echo=FALSE, message=FALSE}
+## Add tiles properties
+tiles_esri_url <- "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+
+tiles_esri_attr <- "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+
 ## Initiate a new leaflet object
 m <- leaflet(width="800px", height="600px",
              options = leafletOptions(maxZoom = 23))
-
-## Add tiles properties
-tiles_esri_url = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-tiles_esri_attr = "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
 
 m <- m %>% addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) %>% addTiles(group="Open Street Map") %>% addLayersControl(baseGroups = c("Satellite", "Open Street Map"), options = layersControlOptions(collapsed = FALSE))
 
@@ -154,7 +164,7 @@ if (group_img) {
     summarise(count = n(), first_dt = first(pts_dt), 
               balloon_html = paste0("<b>", file_name, "</b>. <em>",
                                     format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), 
-                                    ifelse(params$gps_coord,
+                                    ifelse(params$show_gps_coord,
                                            paste0("<br/>", round(params$pt$gps_long, 5), ", ", 
                                                   round(params$pt$gps_lat, 5)),
                                  ""),
@@ -198,7 +208,7 @@ if (group_img) {
   
   balloons_html <- paste0("<p><b>", params$pts$file_name, "</b>. <em>", 
                           format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), 
-                          ifelse(params$gps_coord,
+                          ifelse(params$show_gps_coord,
                                  paste0("<br/> ", round(params$pt$gps_long, 5), ", ",  round(params$pt$gps_lat, 5)),
                                  ""),
                           "</em>", 
@@ -262,11 +272,13 @@ if (!identical(params$fp, NA)) {
 
 
 ```{r kml_links, echo = FALSE, results = 'asis'}
-if (!is.na(params$kml_map_fn)) {
+## If needed, add links to the KML file(s)
+
+if (!is.na(params$kml_mcp_fn)) {
   ## Clear the tab set
   ## cat("## {-}\n")
   cat("## KMLs\n")  
-  cat("<ul><li><a href=\"", kml_map_fn, "\">Flight Area (MCP)</a></li></ul>\n")
+  cat("<ul><li><a href=\"", kml_mcp_fn, "\">Flight Area (MCP)</a></li></ul>\n", sep = "")
 }
 ```
 

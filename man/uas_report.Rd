@@ -2,15 +2,15 @@
 % Please edit documentation in R/uas_report.R
 \name{uas_report}
 \alias{uas_report}
-\title{Create report(s) of UAS Images}
+\title{Flight summaries}
 \usage{
 uas_report(
   x,
   col = NULL,
   group_img = TRUE,
   thumbnails = FALSE,
-  gps_coord = FALSE,
-  local_dir = TRUE,
+  show_gps_coord = FALSE,
+  show_local_dir = TRUE,
   kml_mcp = TRUE,
   output_dir = NULL,
   create_dir = TRUE,
@@ -19,9 +19,9 @@ uas_report(
   open_report = FALSE,
   self_contained = TRUE,
   png_map = FALSE,
-  google_api = NULL,
   png_exp = 0.2,
   overwrite_png = FALSE,
+  google_api = NULL,
   report_rmd = NULL,
   quiet = FALSE
 )
@@ -35,9 +35,9 @@ uas_report(
 
 \item{thumbnails}{Create thumbails}
 
-\item{gps_coord}{Show GPS coordinates of images in the pop-up windows, YN}
+\item{show_gps_coord}{Show GPS coordinates of images in the pop-up windows, YN}
 
-\item{local_dir}{Show the local image directory, TF}
+\item{show_local_dir}{Show the local image directory, TF}
 
 \item{kml_mcp}{Export the MCP as a KML}
 
@@ -55,11 +55,11 @@ uas_report(
 
 \item{png_map}{Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)}
 
-\item{google_api}{API key for Google Static Maps, see Details.}
-
 \item{png_exp}{A proportion to expand the bounding box of the PNG map, see Details.}
 
 \item{overwrite_png}{Overwrite existing PNG files without warning, YN}
+
+\item{google_api}{API key for Google Static Maps, see Details.}
 
 \item{report_rmd}{Rmd template used to generate the HTML file. See details.}
 
@@ -69,7 +69,7 @@ uas_report(
 The filename of the HTML report generated
 }
 \description{
-Creates HTML report(s) of a directory of UAS images
+Creates image collection summaries for individual flights (folders)
 }
 \details{
 This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -92,10 +92,11 @@ is passed, it will be taken to be the width and height on the PNG file in pixels
 \code{png_exp} is a percentage of the points bounding box that will be used as a buffer
 for the background map. If the map seems too cropped, or you get a warning message about rows
 removed, try increasing it. By default, the background image will be a satellite photo from
-Google Maps. However this requires a valid API Key for the Google Maps Static service (for
-details see \url{https://developers.google.com/maps/documentation/maps-static/} as well
-as \link[ggmap]{register_google}), which you pass with the \code{google_api} argument.
-If this is not passed, you'll probably get a terrain map from Stamen.
+Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
+pass with \code{google_api} (for
+details see \url{https://developers.google.com/maps/documentation/maps-static/}. Alternately you
+can save your API key with ggmap::register_google(), after which it will be read automatically.
+If a Google API key is not found, a terrain map from Stamen will be substituted.
 }
 \seealso{
 \link{uas_info}

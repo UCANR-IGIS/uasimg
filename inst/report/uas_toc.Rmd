@@ -9,6 +9,7 @@ params:
   toc_desc: !r NULL
   html_reports: !r NA
   output_dir: !r NA
+  summary_map: !r NA
 ---
 
 ```{css echo=FALSE}
@@ -35,10 +36,12 @@ p.toc_desc {
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r setup_stuff, include=FALSE}
-library(htmltools); library(XML); library(knitr)
+library(htmltools)
+library(leaflet)
+library(base64enc)
+library(XML); 
+library(knitr); 
+library(base64enc)
 
 ## Updated to return "" if target and base are identical
 make_path_relative <- function(base, target) {
@@ -71,100 +74,172 @@ make_path_relative <- function(base, target) {
 ```
 
 ```{r print_title_desc, results = 'asis', echo = FALSE}
+## Print the subtitle
 if (!is.null(params$toc_desc)) {
   print(p(params$toc_desc, class="toc_desc"))
 }
 ```
 
 
-```{r list_data2, results='asis', echo=FALSE}
-href_target <- " target='_blank' rel='noopener'"
+```{r extract_data, include = FALSE}
+## Parse data
+i_lst <- list()
+
+## Create a NULL object to store the sf objects
+mcp_all_sf <- NULL
+
+## Define some constants
+span_ids <- c("collection_name", "description", "contact", "pilot", "num_img", "size_mb", "camera_name")
+meta_tags <- c("map_fn", "date_flown", "area_m2")
 
 for (i in 1:length(params$html_reports)) {
+  i_lst[[i]] <- list()
+  i_lst[[i]]$html_full <- params$html_reports[i]
   
-  html_full <- params$html_reports[i]
-  #print(h1("Working On: ", html_full))
+  ## Parse the HTML page
+  html_tree <- htmlTreeParse(readLines(i_lst[[i]]$html_full), useInternalNodes = TRUE)
   
-  if (file.exists(html_full)) {
-    html_fn <- basename(html_full)
+  ## Extract the metadata
+  i_lst[[i]]$imgcol <- list()
     
-    html_dir_rel <- make_path_relative(params$output_dir, dirname(html_full))
-    # print(p("params output_dir = ", params$output_dir))
-    # print(p("dirname(html_full) = ", dirname(html_full)))
-    # print(p("html_dir_rel = ", html_dir_rel))
+  ## Grab content encoded in spans
+  for (j in 1:length(span_ids)) {
+    id_find_xp <- paste0("//span[@id='", span_ids[j], "']//text()")
+    i_lst[[i]]$imgcol[[span_ids[j]]] <- paste(trimws(xpathSApply(html_tree, id_find_xp, xmlValue)), collapse=" ")
+  }
     
-    ## Parse the HTML page
-    html_tree <- htmlTreeParse(readLines(html_full), useInternalNodes = TRUE)
+  ## Grab content encoded in meta tags
+  for (j in 1:length(meta_tags)) {
+    metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
+    i_lst[[i]]$imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
+  }
   
-    ## Extract the metadata
-    imgcol <- list()
-    
-    ## Grab content encoded in spans
-    span_ids <- c("collection_name", "description", "contact", "pilot", "num_img", "size_mb", "camera_name")
-    for (j in 1:length(span_ids)) {
-      id_find_xp <- paste0("//span[@id='", span_ids[j], "']//text()")
-      imgcol[[span_ids[j]]] <- paste(trimws(xpathSApply(html_tree, id_find_xp, xmlValue)), collapse=" ")
-    }
-    
-    ## Grab content encoded in meta tags
-    meta_tags <- c("map_fn", "date_flown", "area_m2")
-    for (j in 1:length(meta_tags)) {
-      metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
-      imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
-    }
+  ## Extract the mcp_b64 character
+  mcp_b64_content <- html_tree[paste0("//meta[@name='mcp_b64']/@content")]
+  mcp_b64_txt <- trimws(as.character(unlist(mcp_b64_content)))
+  
+  ## Convert the mcp_b64 character back to sf
+  mcp_raw <- base64decode(mcp_b64_txt)
+  mcp_sf <- unserialize(mcp_raw)
 
-    if (imgcol$map_fn != "") {
-      img_fn <- paste0(html_dir_rel, imgcol$map_fn )
-      print(HTML(paste0("<div style='float:right;'><a href='", html_dir_rel, html_fn,
-                       "'", href_target, "><img src='", html_dir_rel, imgcol$map_fn,
+  mcp_all_sf <- rbind(mcp_all_sf, mcp_sf)
+  
+}
+
+j_lst <<- i_lst
+```
+
+
+```{r mcp_map, echo = FALSE, results = 'asis'}
+
+if (params$summary_map) {
+  print(htmltools::h3("Flight Areas"))
+
+  ## Add tiles properties
+  tiles_esri_url <- "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+  
+  tiles_esri_attr <- "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+  
+  # cols_base <- sample(c("#89C5DA", "#DA5724", "#74D944", "#CE50CA", "#3F4921", "#C0717C",
+  #                  "#CBD588", "#5F7FC7", "#673770", "#D3D93E", "#38333E", "#508578",
+  #                  "#D7C1B1", "#689030", "#AD6F3B", "#CD9BCD", "#D14285", "#6DDE88",
+  #                  "#652926", "#7FDCC0", "#C84248", "#8569D5", "#5E738F", "#D1A33D",
+  #                  "#8A7C64", "#599861"), size = nrow(mcp_all_sf), replace = TRUE)
+
+  cols_base <- rainbow(nrow(mcp_all_sf), end=5/6)[order(runif(nrow(mcp_all_sf)))]
+  
+  # mcp_lbl <- basename(params$html_reports)
+  html_fns <- basename(sapply(1:length(j_lst), function(i) j_lst[[i]]$html_full))
+  
+  mcp_popup <- paste0("<a href='#", html_fns, "'>",   
+                      sapply(1:length(j_lst), function(i) j_lst[[i]]$imgcol$collection_name),
+                      "</a>")
+                      
+  mcp_leaf <- leaflet(mcp_all_sf %>% st_transform(4326), width="650px", height="450px",
+               options = leafletOptions(maxZoom = 23)) %>% 
+    addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) %>%
+    addTiles(group="Open Street Map") %>% 
+    addLayersControl(baseGroups = c("Satellite", "Open Street Map"), 
+                     options = layersControlOptions(collapsed = FALSE)) %>%
+    addPolygons(fillColor = cols_base, fillOpacity = 0.25, 
+                color = cols_base, weight = 3, opacity = 0.5,
+                popup = mcp_popup,
+                highlightOptions = highlightOptions(weight = 5, fillOpacity = 0.3))
+                
+                # label = mcp_lbl, 
+                # labelOptions = labelOptions(noHide = T, textOnly = FALSE,
+                #                             textsize = "12px",
+                #                             direction = "top",
+                #                             opacity = 0.5,
+                #                             interactive = FALSE)) 
+
+  mcp_leaf
+  
+}
+
+```
+
+<hr/>
+
+```{r list_data1, results='asis', echo=FALSE, eval = TRUE}
+href_target <- " target='_blank' rel='noopener'"
+
+for (i in 1:length(i_lst)) {
+  
+  if (file.exists(i_lst[[i]]$html_full)) {
+    html_fn <- basename(i_lst[[i]]$html_full)
+    
+    html_dir_rel <- make_path_relative(params$output_dir, dirname(i_lst[[i]]$html_full))
+
+    if (i_lst[[i]]$imgcol$map_fn != "") {
+      img_fn <- paste0(html_dir_rel, i_lst[[i]]$imgcol$map_fn )
+      print(HTML(paste0("<div style='float:right;' id='", html_fn, "'><a href='", html_dir_rel, html_fn,
+                       "'", href_target, "><img src='", html_dir_rel, i_lst[[i]]$imgcol$map_fn,
                      "' style='width:220px; padding:20px;'/></a></div>")))
     }
     
     print(HTML(paste0("<h3><a href='", html_dir_rel, html_fn, "'", href_target, ">", 
-                      imgcol$collection_name, "</a></h3>")))
-    
-    if (imgcol$description != "") {
-      print(HTML(paste0("<p><em>", imgcol$description, "</em></p>")))
+                      i_lst[[i]]$imgcol$collection_name, "</a></h3>")))
+
+    if (i_lst[[i]]$imgcol$description != "") {
+      print(HTML(paste0("<p><em>", i_lst[[i]]$imgcol$description, "</em></p>")))
     }
   
     print(HTML(paste0("<p class='compact'><strong>Date captured:</strong> ",
-                      imgcol$date_flown, "</p>")))
+                      i_lst[[i]]$imgcol$date_flown, "</p>")))
     
-    if (imgcol$pilot != "") {
+    if (i_lst[[i]]$imgcol$pilot != "") {
       print(HTML(paste0("<p class='compact'><strong>Pilot:</strong> ", 
-                        imgcol$pilot, "</p>")))
+                        i_lst[[i]]$imgcol$pilot, "</p>")))
     }
 
     print(HTML(paste0("<p class='compact'><strong>Camera:</strong> ",
-                      imgcol$camera_name, "</p>")))
+                      i_lst[[i]]$imgcol$camera_name, "</p>")))
     
     print(HTML(paste0("<p class='compact'><strong>Num images:</strong> ",
-                      imgcol$num_img, "</p>")))
+                      i_lst[[i]]$imgcol$num_img, "</p>")))
     
     print(HTML(paste0("<p class='compact'><strong>Area:</strong> ",
-                      round(as.numeric(imgcol$area_m2) / 4046.86, 1), " acres</p>")))
+                      round(as.numeric(i_lst[[i]]$imgcol$area_m2) / 4046.86, 1), " acres</p>")))
     
     print(HTML(paste0("<p class='compact'><strong>Data size:</strong> ",
-                      format(as.numeric(imgcol$size_mb), big.mark = ","), " MB</p>")))
+                      format(as.numeric(i_lst[[i]]$imgcol$size_mb), big.mark = ","), " MB</p>")))
 
-    if (imgcol$contact != "") {
+    if (i_lst[[i]]$imgcol$contact != "") {
       print(HTML(paste0("<p class='compact'><strong>Contact:</strong> ", 
-                        imgcol$contact, "</p>")))
+                        i_lst[[i]]$imgcol$contact, "</p>")))
     }
 
-        print(HTML("<hr style='clear:both;'></hr>"))
-      
-  } else {
-    print(HTML(paste0("<p>File not found:<br/><em>", html_full, "</em></p>")))
     print(HTML("<hr style='clear:both;'></hr>"))
+    
+  } else {
+    print(HTML(paste0("<p>File not found:<br/><em>", i_lst[[i]]$html_full, "</em></p>")))
+    print(HTML("<hr style='clear:both;'></hr>"))
+    
   }
   
-
 }
 
 print(HTML("<div style=\"font-size:90%; font-style:italic; float:right;\">Created with <a href=\"https://github.com/ucanr-igis/uasimg\" target=\"_blank\" rel=\"noopener\">Drone Image Utils</a> for R</div>"))
 
 ```
-
-
-

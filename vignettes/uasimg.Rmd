@@ -1,0 +1,200 @@
+---
+title: "Managing Drone Images with uasimg"
+output: rmarkdown::html_vignette
+author: "Andy Lyons, University of California Division of Agriculture and Natural Resources"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{Managing Drone Images with uasimg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Rationale
+
+Like many R packages, `uasimg` was born to solve a specific practical problem - how to manage thousands of images from drone projects! Creating maps and 3D models with drones begins with collecting still images taken with a lot of overlap. This produces *a lot* of individual images. You then feed these images into photogrammetry or structure from motion (SfM) software, which produces a lot more data (that's another story). 
+
+Most photogrammetry / SfM software expects you, the humble user, to have all your images cleaned and organized ahead of time. For a single project, you can move images around manually, but this quickly becomes unmanageable when you have a lot of projects, and/or a lot of people involved in different parts of the workflow. `uasimg` has functions to semi-automate data management and make it more consistent.
+
+A second need `uasimg` addresses is documenting and sharing collections of drone images. This is needed both to manage projects but also for long-term data archiving and reproducibility. Drone images are the raw data upon which everything else follows. You can always repeat the stitching process, but the images themselves can not be replaced or recreated. Being able to find images, and view their individual and collective properties, is required for sound scientific practice. Sharing the existance of images with colleagues and search engines is likewise part and parcel of being part of scientific community.
+
+`uasimg` does *not* currently:
+
+- plan drone flights  
+- do any photogrammetry or structure from  motion processing
+- manage the intermediate or final ouputs from photogrammetry software
+
+
+# Step 1. Extract Image Metadata
+
+Whether your images are sorted or not, and regardless of which `uasimg` functions you want to ultimately use, the first step is extracting their metadata. This includesn the GPS coordinates of each image, as well as image dimensions, camera name, focal length, drone altitude, bearing, and so forth. 
+
+You extract metadata from folder(s) of images with `uas_info()`:
+
+```{r uas_info, message=FALSE}
+library(uasimg)
+flt1_info <- uas_info("D:/Pix4D/PtPinole/imgs/wg/wg_flt01", cache = TRUE)
+flt1_info
+```
+
+Notes:
+
+- The object returned by `uas_info()` is almost always saved to an object and used as input in other functions. It isn't very useful by itself.
+
+- If your drone camera isn't recognized, you'll get an error message. Don't panic. Contact the package maintainer to get your camera added (takes 24 hours or less), or see the help page for instructions on how to pass the parameters for your camera.
+
+- You can pass a vector of folders to `uas_info()` to extract the  metadata for all of them at once. Those folders could represent individual flights, or images from a single flight that has been spread across multiple directories
+
+- `uas_info()` requires a companion command line utility called `EXIFtool`. See the [README](https://github.com/ucanr-igis/uasimg/) for details.
+
+- Setting `cache = TRUE` is recommended. This will save the image metadata locally so if the command is run on the folder again it won't have to use EXIFtool.
+
+- Most modern drones record the altitude about the launch point, however older cameras like the GoPro and multispectral cameras like the Sequoia don't record relative altitude. In these case, you have the option to pass the relative altitude with the `alt_agl` argument, or simply leaving it out. Omitting the relative altitude is not a big deal. The only thing it prevents is estimating the GSD and image footprints the on-the-ground.
+
+### Details: Accuracy of the Estimated GSD and Image Footprints
+
+The estimated image footprints and GSD are based on the recorded height above ground level (usually taken to be the launch point). If the study area was flat and the flight lines were at the same elevation, using the relative altitude from the image headers, or passing the flight height as an argument, should be relatively accurate. Note however most drones measure height above the launch point based on changes in barometric pressure, the accuracy of which varies.
+
+In hilly areas or where the altitude of camera locations was variable, image footprints and GSD will be over or under estimated. In locations where the distance from the drone to the ground was bigger than the altitude above the launch point, the GSD and footprint will be under-estimated (i.e., smaller than reality). Conversely when the distance to the ground is smaller than the flight altitude, the estimated GSD and footprint will be over-estimated. 
+
+## Supplemental Metadata
+
+Some image metadata can be automatically extracted from the image files, such as the date, time, location, camera type, focal length, etc. However other metadata fields have to be manually provided. These include the name of the pilot, a short description of the mission goals, download link, contact info, etc. These are referred to as *supplemental metadata*. 
+
+There are two ways you can enter supplemental metadata, if you choose to do so. The recommended way is to put them in a little text file in the image folder. The file will be automatically read if the file name starts with 'metadata' and has a 'txt' extension (e.g., *metadata_flt01.txt*). The contents  of the file should like:
+
+```
+collection_name: Point Pinole, West Grove, Flight 03
+description: Flight over west grove of Eucalyptus trees, 390ft, 90% overlap, 75 degrees off-nadir
+contact: Andy Lyons
+pilot: Andy Lyons
+data_url: 
+proj: ptpin
+loc: wg
+```
+
+As seen in the example above, each line of the text file should start with a field name (without spaces), followed by a colon, followed by the value (this formatting style is also known as *YAML*). Blank lines and lines that start with `#` are ignored.
+
+Any supplemental metadata field can be added to the file as long as it follows these rules. However the Flight Summary (see below) will only recognize the following:
+
+```{r}
+uas_flds_oem()
+```
+
+You can manually create _metadata.txt_ files using Notepad or any text editor. Just be sure to save it in the same folder as the images. Alternately the conveniences function `uas_metadata_make()` can be used to create 'blank' _metadata.txt_ files several directories at once:
+
+```{r}
+my_dirs <- c("D:/Pix4D/HREC/Watershed1/Data/2017-01-16_X5/Flight01_1514_1526_400ft",
+             "D:/Pix4D/HREC/Watershed1/Data/2017-01-16_X5/Flight02_1532_1540_400ft")
+uas_metadata_make(dirs = my_dirs)
+```
+
+Additional notes about `uas_metadata_make()`:
+
+- The fields that `uas_metadata_make()` adds to the metadata text file can be customized with `uas_setflds()`. See the help page for details.
+- Include `open = TRUE` in `uas_metadata_make()` to open and edit the metadata files right within RStudio  
+- After you edit a *metadata*.txt* file, you need to (re)run `uas_info()` in order to use the latest values in `uasimg`. Supplemental metadata is not cached.
+
+The second way to save supplemental metadata is by passing a named list as the `metadata` argument in `uas_info()`. The fields supported and their uses are the same as before. For example:
+
+```{r eval = FALSE}
+metadata_lst <- list(collection_name = "Point Pinole, West Grove, Flight 03",
+                     description = "Flight over west grove of Eucalyptus trees",
+                     contact = "Andy Lyons")
+
+flt1_info <- uas_info("D:/Pix4D/PtPinole/imgs/wg/wg_flt01", 
+                      metadata = metadata_lst,
+                      cache = TRUE)
+```
+
+\
+
+# Cataloging Your Data
+
+## Flight Summaries 
+
+`uasimg` can generate simple HTML pages that show the location and properties of images in a folder ([sample](https://github.com/ucanr-igis/uasimg/samples/hrec/Flt03_1501_1517_240ft_report.html)). These as referred to as 'Flight Summaries', or more generally 'Image Collection Summaries' because images from multiple flights are sometimes saved in the same folder. Flight  summaries include an interactive map of the camera locations, their estimated footprints, and image thumbnails. Histograms show the distribution of the estimated ground sampling distance (GSD) and forward overlap. These stand-alone HTML pages can be viewed locally, zipped up and emailed to colleagues, or uploaded to a web server. You can also create a 'Table of Contents' page for several Flight Summaries using `uas_toc()` (see [below](#creating-a-table-of-contents)).
+
+You create Flight Summaries with `uas_report()`. The main argument required is an object from `uas_info()`.
+
+```{r message = TRUE, eval = FALSE}
+uas_report(flt1_info)
+```
+
+Notes:
+
+`uas_report()` has several optional arguments you can use to tailor the Flight Summary:
+
+- `output_dir`. Where to save the HTML file. The default is a sub-folder in the image folder called 'map'.  
+- `thumbnails`. If TRUE, this will generate preview images in the popup windows on the interactive map.  
+- `show_gps_coord`. Display the image GPS coordinate in the popup windows.  
+- `show_local_dir`. Report the local directory where the images are saved.  
+- `png_map`. Create a static png image showing the camera locations (see below).  
+- `kml_mcp`. Create a KML file for the flight area (minimum convex polygon for all the images), and link it in the HTML summary (see below).  
+- `open_report`. Open the HTML page when done.  
+
+If **`png_map = TRUE`**, `uasimg` will attempt to download a background image for the entire flight area from Google Maps or Stamen. This background image will not appear in the Flight Summary, but is useful for other types of previews, including markdown and the Table of Contents ([below](#creating-a-table-of-contents-of-flight-summaries-1)). To use an aerial photo as the background image, you must pass a Google Maps API key with the `google_api` argument or save your API key to an environment variable ahead of time (see the help page for details). Alternately the background image will be a terrain map from Stamen. 
+
+If **`kml_mcp = TRUE`**, the minimum convex polygon for all images will be exported to a KML file, and a link to this file added to the Flight Summary. This is a reasonable proxy for the flight area, and can be used to fly the area again. Many flight planning apps allow you to import a KML file.  
+
+## Creating a Table of Contents of Flight Summaries
+
+`uas_toc()` creates a Table of Contents (TOC) for multiple Flight Summaries created by `uas_report()` ([sample](https://github.com/ucanr-igis/uasimg/samples/hrec/index.html)). The main argument in `uas_toc()` is a character vector of HTML file names. 
+
+The TOC page will include links to the Flight Summaries wherever they may be on your hard drive. The optional `gather` argument allows you to copy the Flight Summary HTML files and their dependencies (e.g., thumbnail images, KML files) to a single folder. This allows you to create a TOC page for Flight Summaries across your hard drive in a single folder, which can then be FTPed to a web server.
+
+Additional arguments you use to customize the appearance of a TOC page include:
+
+- `toc_title`. Title for the page.  
+- `toc_desc`. Short description or tag line.  
+- `summary_map`. Show a summary map of all the flight areas.  
+- `header_html`	and `footer_html`.	Files with HTML code to insert at the top and bottom of the Table of Contents.  
+- `open_toc`. Open the TOC in a browser.  
+
+### Example: Creating an Image Catalog for Several Flights 
+
+The following example illustrates how you could loop through a set of image folders, create a Flight Summary for each one, and then compile a TOC for all of them.
+
+```{r eval = FALSE}
+## Create a character vector of folders
+img_dirs <- c("D:/Pix4D/PtPinole/imgs/eg/eg_flt1_p4p_sw",
+              "D:/Pix4D/PtPinole/imgs/eg/eg_flt1_p4p_se",
+              "D:/Pix4D/PtPinole/imgs/eg/eg_flt2_m2p",
+              "D:/Pix4D/PtPinole/imgs/eg/eg_flt3_m2p",
+              "D:/Pix4D/PtPinole/imgs/wg/wg_flt01",
+              "D:/Pix4D/PtPinole/imgs/wg/wg_flt02",
+              "D:/Pix4D/PtPinole/imgs/wg/wg_flt03")
+
+## Save the metadata from these flights into a single object
+flts_info <- uas_info(img_dirs, cache = TRUE)
+
+## Create individual flight summaries
+flts_sum <- uas_report(flts_info, show_local_dir = TRUE, thumbnails = TRUE,
+                         show_gps_coord = TRUE, overwrite_html = TRUE,
+                         open_report = FALSE, kml_mcp = TRUE, png_map = TRUE)
+
+## Create TOC, copying all the individual HTML files to one place
+uas_toc(flts_sum, output_dir = "D:/Pix4D/catalog/ptpinole",
+        toc_title = "Point Pinole Eucalyptus Survey", 
+        gather = ".", overwrite = TRUE, open_toc = TRUE)
+
+```
+
+\
+
+# Exporting Image Collection Geometry
+
+You can export the geometry of an image collection metadata object with `uas_exp()`, including image centroids, their (estimated) footprints, and MCP (minimum convex polygon). Layers are exported as Shapefiles, a common file format for GIS data.
+
+```{r create_rpt, eval=FALSE}
+## Export 
+uas_exp_shp(hasting_imgs, ctr = T, fp = T, mcp = T)
+```
+
+Notes:
+
+- You have to tell `uas_exp_shp()` what you want to export using the `ctr`, `fp`, and `mcp` arguments.   
+- The `shp_dir` argument lets you specify where you want the shape files exported. The default location is a sub-folder called `map` in the image folder.  
+- `uas_exp_shp()` doesn't actually compute any geometries, it merely exports geometries that were created and saved by `uas_info()`. Hence if footprints were not generated by `uas_info()`, for example because image altitude was missing or you passed `fp = FALSE`, you won't be able to export them with `uas_exp_shp()`.  
+- `uas_exp_shp()` does not give you an option to provide the name of the Shapefile. If you want finer control of the export process, or would like to export the geometries to a different file format, you can dig down into the uas_info object and use an export function from another package like `sf::st_write()`.
+
+ 

@@ -20,6 +20,9 @@
 #' and \code{suffix} should be of length 1 or equal to the number of \code{dirs}.
 #'
 #' @return A character vector of the external metadata text file(s) created.
+#'
+#' @seealso \code{\link{uas_setflds}}
+#'
 #' @importFrom crayon red green bold yellow
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom utils file.edit

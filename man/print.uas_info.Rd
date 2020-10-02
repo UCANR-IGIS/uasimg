@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.uas_info.R
 \name{print.uas_info}
 \alias{print.uas_info}
-\title{Print a summary of a UAS Image Collection object}
+\title{Print a summary of UAS metadata}
 \usage{
 \method{print}{uas_info}(x, metadata = TRUE, ...)
 }
@@ -14,7 +14,7 @@
 \item{...}{Other arguments (unused)}
 }
 \description{
-Print a summary of a UAS Image Collection object
+Print a summary of metadata from a UAS image collection
 }
 \details{
 Prints a summary of a drone images metadata collection object

@@ -1,20 +1,15 @@
-#' Move UAS Images into Sub-Directories by Flight
+#' Move UAS images into sub-directories by group
 #'
-#' Move UAS Images into Sub-Directories by Flight
+#' Move UAS images into sub-directories by group
 #'
 #' @param x A list of class 'uas_info'
-#' @param thresh_units Units (median sampling interval or seconds)
-#' @param thresh_val Thresshold value
-#' @param dirnames Directory names (template??)
-#' @param init_flt Initial flight number
-#' @param min_images Minimum number of images to consider a flight worth moving
-#' @param preview Preview the change only
 #' @param copymove Move or copy
 #' @param basedir Base dir
-#' @param alt Range of altitude to move
 #' @param quiet Suppress messages
 #'
-#' @details This will move the image files into subdirectories
+#' @details NOT YET SUPPORTED
+#'
+#' This will move groups of image files into subdirectories based on the group they fall into.
 #'
 #' @return A \link{uas_info} object
 #'
@@ -22,9 +17,7 @@
 #'
 #' @export
 
-uas_move <- function(x, thresh_units=c("msi", "secs")[1], thresh_val=10, dirnames="",
-                     init_flt=1, min_images=5, preview=FALSE, copymove="move", basedir=NULL,
-                     alt=NULL, quiet=FALSE) {
+uas_move <- function(x, copymove="move", basedir=NULL, quiet=FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 

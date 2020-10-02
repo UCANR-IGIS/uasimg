@@ -2,7 +2,7 @@
 % Please edit documentation in R/uas_info.R
 \name{uas_info}
 \alias{uas_info}
-\title{Extract info from UAS Images}
+\title{Extract metadata info from UAS images}
 \usage{
 uas_info(
   img_dirs,
@@ -61,7 +61,7 @@ This function uses a free command line tool called EXIFtool to read the EXIF dat
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
-\code{metadata} is an optional argument to pass external metadata that can not be extracted from the
+\code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
 images (e.g., location name, pilot). It can be a regular expression for a metadata filename
 (in YAML format, see below) that should be in the same folder as the images. Or it can be a named list containing
 metadata fields. For supported field names, see \code{\link{uas_getflds}}.
@@ -83,5 +83,5 @@ the next time the function is run. \code{update_cache} is a logical value
 which forces an update of cached data when TRUE.
 }
 \seealso{
-\code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp}}
+\code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp_shp}}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/uas_grp_flt.R
 \name{uas_grp_flt}
 \alias{uas_grp_flt}
-\title{Group a set of images into flights}
+\title{Parse an image collection into individual flights}
 \usage{
 uas_grp_flt(
   x,
@@ -33,7 +33,7 @@ uas_grp_flt(
 \item{quiet}{Suppress messages}
 }
 \description{
-Group a set of images into flights
+Parse an image collection into individual flights
 }
 \details{
 

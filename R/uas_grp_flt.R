@@ -1,4 +1,4 @@
-#' Group a set of images into flights
+#' Parse an image collection into individual flights
 #'
 #' @param x A list of class 'uas_info'
 #' @param interflt_val Time value between flights

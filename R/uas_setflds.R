@@ -1,14 +1,14 @@
-#' Manage External Metadata fields
+#' Manage supplemental metadata fields
 #'
-#' Set and view a default set of external metadata fields
+#' Set and view a default set of supplemental metadata fields
 #'
-#' These functions allow you to define a default set of external metadata fields that can be assigned
+#' These functions allow you to define a default set of supplemental metadata fields that can be assigned
 #' image collections either as a function argument, or a small text file placed
-#' in the directory with the images. Note in this context 'external metadata' refers to bits of information
+#' in the directory with the images. Note in this context 'supplemental metadata' refers to bits of information
 #' that can not be automatically extracted from the images themselves (e.g., the name of the project
 #' or pilot.)
 #'
-#' Creating a default set of external metadata fields does not make them mandatory, nor does
+#' Creating a default set of supplemental metadata fields does not make them mandatory, nor does
 #' it limit the metadata fields you can use. The default set serves as a template when
 #' a new metadata.txt file is created.
 #'
@@ -17,11 +17,13 @@
 #'
 #' @param flds Character vector of metadata fields
 #' @param reset Use original values
+#' @param quiet Suppress messages
+#' @importFrom crayon yellow
 #' @export
 
-uas_setflds <- function(flds=NULL, reset=FALSE) {
+uas_setflds <- function(flds=NULL, reset=FALSE, quiet=FALSE) {
 
-  ## If no fields were poassed, use the default
+  ## If no fields were passed, use the default
   if (is.null(flds)) {
     flds <- uas_flds_oem()
   }
@@ -46,11 +48,12 @@ uas_setflds <- function(flds=NULL, reset=FALSE) {
   }
 
   save(flds, file = file.path(cache_dir, "flds_default.RData"))
-
+  if (!quiet) message(yellow(" - Default metadata fields set to:", paste(flds, collapse = ", ")))
+  invisible(flds)
 
 }
 
-#' @describeIn uas_setflds Get default external metadata field names.
+#' @describeIn uas_setflds Get default supplemental metadata field names.
 
 uas_getflds <- function() {
 
@@ -84,6 +87,7 @@ uas_getflds <- function() {
 }
 
 #' @describeIn uas_setflds Get a standard set of image collection metedata fields
+#' @export
 
 uas_flds_oem <- function() {
   c("proj", "loc", "collection_name", "description", "contact", "pilot", "data_url", "tags")

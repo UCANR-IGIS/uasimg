@@ -2,8 +2,8 @@ Package: uasimg
 Type: Package
 Title: Drone Image Utilities
 Description: Manages and analyzes image files taken from a drone. Compute centroid, footprints, overlap, and GSD. Create subdirectories for separate flights. Export image locations and footprints to Shapefiles. Produce summary reports.
-Date: 2020-09-28
-Version: 1.3.8
+Date: 2020-10-01
+Version: 1.4.0
 Authors@R: person("Andy", "Lyons", email = "andlyons@ucanr.edu", role = c("aut", "cre"))
 BugReports: https://github.com/ucanr-igis/uasimg/issues
 URL: https://github.com/ucanr-igis/uasimg
@@ -26,7 +26,10 @@ Imports:
     XML,
     magrittr,
     magick,
-    readr
+    readr,
+    base64enc
 Suggests:
-    ggmap
+    ggmap,
+    knitr
 RoxygenNote: 7.1.1
+VignetteBuilder: knitr

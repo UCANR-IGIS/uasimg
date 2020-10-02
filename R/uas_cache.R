@@ -1,4 +1,4 @@
-#' Manage Cache Directory
+#' Manage cache directory
 #'
 #' View and set the directory where extracted EXIF data are cached
 #'
