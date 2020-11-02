@@ -8,7 +8,8 @@
 #' @param thumbnails Create thumbails
 #' @param show_gps_coord Show GPS coordinates of images in the pop-up windows, YN
 #' @param show_local_dir Show the local image directory, TF
-#' @param kml_mcp Export the MCP as a KML
+#' @param report_title Title to appear at the top of the summary
+#' @param attachments Supplementary files to create and link to the flight summary, see Details.
 #' @param output_dir If NULL, then will be placed in a 'map' sub-directory of the images
 #' @param create_dir Create the output directory if it doesn't exist
 #' @param output_file	Name of the HTML file. If NULL a default based on the name of the input directory is chosen.
@@ -19,7 +20,7 @@
 #' @param overwrite_png Overwrite existing PNG files without warning, YN
 #' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
 #' @param google_api API key for Google Static Maps, see Details.
-#' @param report_rmd Rmd template used to generate the HTML file. See details.
+#' @param report_rmd Rmd template used to generate the HTML file. See Details.
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -45,29 +46,39 @@
 #' Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
 #' pass with \code{google_api} (for
 #' details see \url{https://developers.google.com/maps/documentation/maps-static/}. Alternately you
-#' can save your API key with ggmap::register_google(), after which it will be read automatically.
+#' can save your API key with \code{ggmap::register_google()}, after which it will be read automatically.
 #' If a Google API key is not found, a terrain map from Stamen will be substituted.
 #'
-#' @return The filename of the HTML report generated
+#' \code{attachment} specifies which supplementary files to create and link to the flight summary. Choices are
+#' \code{ctr_kml} and \code{mcp_kml} for KML versions of the camera locations and MCP (minimum convex
+#' polygon around all images). These KML files will be created in the same output directory as the flight
+#' summary.
 #'
-#' @seealso \link{uas_info}
+#' @return The HTML file name(s) of the flight summaries generated
+#'
+#' @seealso \code{\link{uas_info}}, \code{\link{uas_exp_kml}},
 #'
 #' @importFrom crayon green yellow bold
 #' @importFrom grDevices dev.off png rainbow
-#' @importFrom utils browseURL packageVersion setTxtProgressBar txtProgressBar
+#' @importFrom utils browseURL packageVersion
 #' @importFrom tools file_path_sans_ext file_ext
+#' @importFrom rmarkdown render
 #' @importFrom methods is
-#' @importFrom sf st_write
-#' @importFrom magick image_read image_write image_scale
 #'
 #' @export
 
 uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show_gps_coord = FALSE,
-                       show_local_dir = TRUE, kml_mcp = TRUE, output_dir = NULL, create_dir = TRUE,
-                       output_file = NULL, overwrite_html = FALSE, open_report = FALSE,
-                       self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
+                       show_local_dir = TRUE, report_title = "Flight Summary",
+                       attachments = c("mcp_kml", "ctr_kml")[0],
+                       output_dir = NULL, create_dir = TRUE, output_file = NULL, overwrite_html = FALSE,
+                       open_report = FALSE, self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
                        overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
                        quiet = FALSE) {
+
+  ## THE MAGICK.EXE option has been disabled pending testing.
+  ## When asked to process a folder of >1000 images, it quit after ~700 (consistently)
+  ## @param use_magick Use ImageMagick command line tool to create the image thumbnails.
+  ## use_magick = FALSE,
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -76,6 +87,13 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
     report_rmd <- system.file("report/uas_report.Rmd", package="uasimg")
   }
   if (!file.exists(report_rmd)) stop("Cant find the report template")
+
+  ## Validate value(s) of kml
+  if (is.null(attachments)) attachments <- character(0)
+  if (length(attachments) > 0) {
+    if (FALSE %in% (attachments %in% c("ctr_kml", "mcp_kml"))) stop("Unknown value(s) for `attachments`")
+  }
+
 
   ## Set the size of the PNG map
   make_png <- FALSE
@@ -111,12 +129,19 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       output_dir_use <- file.path(img_dir, "map")
       if (!file.exists(output_dir_use) && create_dir) {
         if (!quiet) message(green("Creating", output_dir_use))
-        dir.create(output_dir_use)
+        dir.create(output_dir_use, recursive = TRUE)
       }
     } else {
       output_dir_use <- output_dir
     }
     if (!file.exists(output_dir_use)) stop("Could not find report output directory")
+
+    ## Get a filename base (to use for the HTML report, PNG, and KML files)
+    if (is.na(x[[img_dir]]$metadata$name_short %>% null2na())) {
+      fnbase <- x[[img_dir]]$id
+    } else {
+      fnbase <- x[[img_dir]]$metadata$name_short
+    }
 
     ##################################################################
     ## Make the PNG map
@@ -124,7 +149,8 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
       ## Construct the map.png filename
       if (is.null(output_file)) {
-        map_fn <- paste0(basename(img_dir), "_map.png")
+        map_fn <- paste0(fnbase, "_map.png")
+
       } else {
         map_fn <- paste0(file_path_sans_ext(basename(output_file)), ".png")
       }
@@ -140,9 +166,6 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         } else {
           col_use <- col
         }
-
-        # First put the colors as a column in the data frame (which ggmap requires)
-        # x[[img_dir]]$pts$col <- col_use
 
         # Define the extent and center point of the flight area
         pts_ext <- x[[img_dir]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
@@ -162,7 +185,9 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
           dy <- diff(pts_ext[lat_idx]) * png_exp
           pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
           m <- ggmap::get_stamenmap(bbox=pts_ext, zoom=zoom_lev, maptype="terrain")
+
         } else {
+          ## Grab a Google Maps Static image
           if (!is.null(google_api)) {
             ggmap::register_google(key=google_api)
           }
@@ -178,16 +203,18 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         if (!is.null(m)) {
 
           # Create the ggmap object and save to a variable
-          pts_ggmap <- ggmap::ggmap(m) + geom_point(
-            data=x[[img_dir]]$pts %>% sf::st_drop_geometry(),
-            aes(gps_long, gps_lat), colour = col_use,
-            show.legend=F, size=3) +
+          pts_ggmap <- ggmap::ggmap(m) +
+            geom_point(data = x[[img_dir]]$pts %>% sf::st_drop_geometry(),
+                       aes(gps_long, gps_lat),
+                       colour = col_use,
+                       show.legend = FALSE,
+                       size = 3) +
             theme_void()
 
           ## Open the PNG driver
-          png(filename = file.path(output_dir_use, map_fn), width=png_dim[1], height=png_dim[2])
+          png(filename = file.path(output_dir_use, map_fn), width = png_dim[1], height = png_dim[2])
 
-          ## Print the map
+          ## Print the map to the PNG drive
           print(pts_ggmap)
 
           ## Close the PNG driver
@@ -219,59 +246,28 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         }
       }
 
-      if (thumbnails) {  ## if thumbnails is still true
+      if (thumbnails) {
 
-        ## Get the image filenames
-        all_img_fn <- x[[img_dir]]$pts$img_fn
+        ## Call uas_thumbnails()
+        tb_fn_lst <- uas_thumbnails_make(x, img_dir = img_dir, output_dir = tb_dir_use,
+                                         tb_width = 400)
 
-        ## In order to make the image thumbnails have unique filenames (so they can be combined
-        ## in one directory on a server), we compute a suffix based on the filesize
-        all_img_base36 <- sapply(as.integer(file.size(all_img_fn)), int2base36)
+        # , use_magick = use_magick
 
-        ## Compute the file names of the thumbnail images
-        tb_fn <- tolower(file.path(tb_dir_use,
-                               paste0(file_path_sans_ext(basename(all_img_fn)),
-                               "_tb-", all_img_base36, ".jpg")))
-
-        ## this was taken out because the thumbnails will *always* be jpg (even if the originals are tif):
-        ## file_ext(all_img_fn)
-
-        ## Save the name of the thumbnail in the attribute table for the points
-        x[[img_dir]]$pts$tb_fn <- basename(tb_fn)
-
-        ## If *any* thumbnails are needed, go into a loop
-        if (FALSE %in% file.exists(tb_fn)) {
-
-          if (!quiet) message(yellow("Generating thumbnails for", basename(img_dir)))
-
-          # Setup progress bar
-          pb <- txtProgressBar(min = 0, max = length(all_img_fn), style = 3)
-
-          for (j in 1:length(all_img_fn)) {
-            # Update the progress bar
-            setTxtProgressBar(pb, j)
-
-            if (!file.exists(tb_fn[j])) {
-              image_read(all_img_fn[j]) %>%
-                image_scale("600") %>%
-                image_write(path = tb_fn[j], format = "jpeg", quality = 75)
-            }
-
-          }
-          close(pb)
-
-        }
+        ## Save the base name of the thumbnail in the attribute table for the points, so it can be
+        ## used in the leaflet map
+        x[[img_dir]]$pts$tb_fn <- basename(tb_fn_lst[[img_dir]])
 
       }
 
     }  ## if thumbnails = TRUE
 
-    ## If thumbnails is still FALSE, fill the column with NA
+    ## If thumbnails is (still) FALSE, fill the column with NA
     if (!thumbnails) x[[img_dir]]$pts$tb_fn <- NA
 
     ## Get the HTML report output filename
     if (is.null(output_file)) {
-      output_file_use <- paste0(basename(img_dir), "_report.html")
+      output_file_use <- paste0(fnbase, "_report.html")
     } else {
       output_file_use <- output_file
     }
@@ -312,30 +308,44 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         col_use <- col
       }
 
-      if (kml_mcp) {
-        kml_mcp_fn <- paste0(basename(img_dir), "_mcp.kml")
+      ## Generate a KML file with the MCP
+      if ("mcp_kml" %in% attachments) {
+        kml_mcp_fn <- paste0(fnbase, "_mcp.kml")
         if (!file.exists(file.path(output_dir_use, kml_mcp_fn))) {
-          st_write(x[[img_dir]]$mcp, dsn = file.path(output_dir_use, kml_mcp_fn), quiet = TRUE)
+          uas_exp_kml(x, mcp = TRUE, output_dir = output_dir_use, img_dir = img_dir, out_fnbase = fnbase)
         }
       } else {
         kml_mcp_fn <- NA
       }
 
+      ## Generate a KML file with the centers
+      if ("ctr_kml" %in% attachments) {
+        kml_ctr_fn <- paste0(fnbase, "_ctr.kml")
+        if (!file.exists(file.path(output_dir_use, kml_ctr_fn))) {
+          uas_exp_kml(x, ctr = TRUE, output_dir = output_dir_use, img_dir = img_dir, out_fnbase = fnbase)
+        }
+      } else {
+        kml_ctr_fn <- NA
+      }
+
       ## Render the HTML file
-      report_fn <- rmarkdown::render(input = report_rmd_use,
-                                     output_dir = output_dir_use, output_file = output_file_use,
-                                     output_options = output_options,
-                                     params = c(x[[img_dir]], list(col = col_use, img_dir = img_dir,
-                                                                 group_img = group_img,
-                                                                 show_local_dir = show_local_dir,
-                                                                 map_fn = map_fn,
-                                                                 thumbnails = thumbnails,
-                                                                 show_gps_coord = show_gps_coord,
-                                                                 kml_mcp_fn = kml_mcp_fn
-                                                                 )
+      report_fn <- render(input = report_rmd_use,
+                          output_dir = output_dir_use, output_file = output_file_use,
+                          output_options = output_options,
+                          params = c(x[[img_dir]], list(col = col_use, img_dir = img_dir,
+                                                        group_img = group_img,
+                                                        show_local_dir = show_local_dir,
+                                                        map_fn = map_fn,
+                                                        thumbnails = thumbnails,
+                                                        show_gps_coord = show_gps_coord,
+                                                        kml_mcp_fn = kml_mcp_fn,
+                                                        kml_ctr_fn = kml_ctr_fn,
+                                                        report_title = report_title
+                                                        )
                                               )
                                      )
 
+      ## Add the filename to report_fn_vec which will eventually be returned
       report_fn_vec <- c(report_fn_vec, report_fn)
 
       ## If not self-contained, delete the temporary copy of the Rmd file
@@ -369,6 +379,6 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
   }
 
   ## Return the filename(s) of the HTML file(s) (invisibly)
-  return(invisible(report_fn_vec))
+  invisible(report_fn_vec)
 }
 

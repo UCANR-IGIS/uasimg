@@ -16,7 +16,7 @@
 #' @describeIn uas_setflds Set default fields for image collection metadata.
 #'
 #' @param flds Character vector of metadata fields
-#' @param reset Use original values
+#' @param reset Use a default set of metadata fields
 #' @param quiet Suppress messages
 #' @importFrom crayon yellow
 #' @export
@@ -90,5 +90,5 @@ uas_getflds <- function() {
 #' @export
 
 uas_flds_oem <- function() {
-  c("proj", "loc", "collection_name", "description", "contact", "pilot", "data_url", "tags")
+  c("name_short", "name_long", "description", "proj", "loc", "pilot", "contact", "data_url", "tags", "notes")
 }

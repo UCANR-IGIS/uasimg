@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a blank metadata text file — uas_metadata_make • uasimg</title>
+<title>Manage supplemental metadata files — uas_metadata_make • uasimg</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create a blank metadata text file — uas_metadata_make" />
-<meta property="og:description" content="Create a blank metadata text file" />
+<meta property="og:title" content="Manage supplemental metadata files — uas_metadata_make" />
+<meta property="og:description" content="Create and edit supplemental metadata files" />
 
 
 
@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -99,6 +99,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -124,22 +136,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a blank metadata text file</h1>
+    <h1>Manage supplemental metadata files</h1>
     <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_metadata_make.R'><code>R/uas_metadata_make.R</code></a></small>
     <div class="hidden name"><code>uas_metadata_make.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a blank metadata text file</p>
+    <p>Create and edit supplemental metadata files</p>
     </div>
 
     <pre class="usage"><span class='fu'>uas_metadata_make</span>(
-  <span class='kw'>dirs</span>,
-  file = <span class='st'>"metadata.txt"</span>,
-  suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>""</span>, <span class='st'>"dir"</span>)[<span class='fl'>1</span>],
-  flds = <span class='fu'><a href='uas_setflds.html'>uas_getflds</a></span>(),
+  <span class='kw'>x</span>,
+  md_file = <span class='st'>"metadata.txt"</span>,
+  md_suffix = <span class='kw'>NULL</span>,
+  make_new = <span class='fl'>FALSE</span>,
   overwrite = <span class='fl'>FALSE</span>,
-  open = <span class='fl'>FALSE</span>,
+  open = <span class='fl'>TRUE</span>,
+  md_flds = <span class='fu'><a href='uas_setflds.html'>uas_getflds</a></span>(),
+  md_template = <span class='kw'>NULL</span>,
+  read_uasinfo = <span class='fl'>FALSE</span>,
   quiet = <span class='fl'>FALSE</span>
 )</pre>
 
@@ -147,28 +162,40 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dirs</th>
-      <td><p>A character vector of directories or a uas_info object</p></td>
+      <th>x</th>
+      <td><p>A character vector of directories, or a uas_info object</p></td>
     </tr>
     <tr>
-      <th>file</th>
+      <th>md_file</th>
       <td><p>Name of the file to create</p></td>
     </tr>
     <tr>
-      <th>suffix</th>
+      <th>md_suffix</th>
       <td><p>A suffix to append to the file names</p></td>
     </tr>
     <tr>
-      <th>flds</th>
-      <td><p>A character vector of field names</p></td>
+      <th>make_new</th>
+      <td><p>Create new metadata file(s), Logical</p></td>
     </tr>
     <tr>
       <th>overwrite</th>
-      <td><p>Overwrite existing metadata files, logical</p></td>
+      <td><p>Overwrite existing metadata files, Logical</p></td>
     </tr>
     <tr>
       <th>open</th>
       <td><p>Open the file for editing</p></td>
+    </tr>
+    <tr>
+      <th>md_flds</th>
+      <td><p>A character vector of field names</p></td>
+    </tr>
+    <tr>
+      <th>md_template</th>
+      <td><p>A template metadata file</p></td>
+    </tr>
+    <tr>
+      <th>read_uasinfo</th>
+      <td><p>Read and populate metadata fields from x (assuming x is a uas_info object)</p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -181,16 +208,15 @@
     <p>A character vector of the external metadata text file(s) created.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This creates blank external metadata text file(s). One file will be placed in each
-directory in <code>dirs</code> (which can be either a character vector or a
-<code><a href='uas_info.html'>uas_info</a></code> object. The files will be named based on the value of <code>file</code>
-which will be repeated if needed, with an option to append a suffix (which can make it
-easier to edit them in a text editor). If <code>suffix = 'dir'</code>, the base name of the
-directory will be appended. Suffix can also be a literal string. Both <code>file</code>
-and <code>suffix</code> should be of length 1 or equal to the number of <code>dirs</code>.</p>
+    <p>This creates, and/or opens for editing, supplemental metadata text file(s) in image folders.</p>
+<p>If <code>make_new = TRUE</code>, metadata files will be created in each directory of <code>x</code>. <code>x</code>
+can be either a character vector or a <code><a href='uas_info.html'>uas_info</a></code> object. The files will be named based on the value of <code>md_file</code>,
+with an option to append a suffix <code>md_suffix</code>. Both <code>md_file</code>
+and <code>md_suffix</code> should be of length 1 or equal to the number of <code>x</code>.</p>
+<p>If <code>open = TRUE</code>, the text files will be opened. To open all metadata text files,</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='uas_setflds.html'>uas_setflds</a></code></p></div>
+    <div class='dont-index'><p><code><a href='uas_setflds.html'>uas_getflds</a></code>, <code><a href='uas_setflds.html'>uas_setflds</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

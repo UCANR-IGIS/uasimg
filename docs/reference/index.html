@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -98,6 +98,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -182,7 +194,13 @@
         <td>
           <p><code><a href="uas_toc.html">uas_toc()</a></code> </p>
         </td>
-        <td><p>Generate a table of contents for image collection reports</p></td>
+        <td><p>Generate a Table of Contents of flight summaries</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="uas_thumbnails_make.html">uas_thumbnails_make()</a></code> </p>
+        </td>
+        <td><p>Create image thumbnails</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -230,9 +248,9 @@
       <tr>
         
         <td>
-          <p><code><a href="uas_exp_shp.html">uas_exp_shp()</a></code> </p>
+          <p><code><a href="uas_exp_kml.html">uas_exp_kml()</a></code> <code><a href="uas_exp_kml.html">uas_exp_shp()</a></code> </p>
         </td>
-        <td><p>Export location info from a UAS image collection to Shapefile</p></td>
+        <td><p>Export flight area and camera locations for GIS</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -262,8 +280,8 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-supplemental-metadata" class="hasAnchor"><a href="#section-supplemental-metadata" class="anchor"></a>Supplemental Metadata</h2>
-          <p class="section-desc"><p>Supplemental metadata utilities</p></p>
+          <h2 id="section-metadata" class="hasAnchor"><a href="#section-metadata" class="anchor"></a>Metadata</h2>
+          <p class="section-desc"><p>Managing metadata</p></p>
         </th>
       </tr>
       
@@ -276,7 +294,7 @@
         <td>
           <p><code><a href="uas_metadata_make.html">uas_metadata_make()</a></code> </p>
         </td>
-        <td><p>Create a blank metadata text file</p></td>
+        <td><p>Manage supplemental metadata files</p></td>
       </tr><tr>
         
         <td>
@@ -336,9 +354,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="int2base36.html">int2base36()</a></code> </p>
+          <p><code><a href="null2na.html">null2na()</a></code> </p>
         </td>
-        <td><p>Converts an integer to a base36 string</p></td>
+        <td><p>Convert NULL values to NA</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -355,27 +373,9 @@
       <tr>
         
         <td>
-          <p><code><a href="cm2in.html">cm2in()</a></code> </p>
+          <p><code><a href="m2ft.html">m2ft()</a></code> <code><a href="m2ft.html">ft2m()</a></code> <code><a href="m2ft.html">cm2in()</a></code> <code><a href="m2ft.html">msq2acres()</a></code> </p>
         </td>
-        <td><p>Centimeters to inches</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ft2m.html">ft2m()</a></code> </p>
-        </td>
-        <td><p>Feet to meters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="m2ft.html">m2ft()</a></code> </p>
-        </td>
-        <td><p>Meters to feet</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="msq2acres.html">msq2acres()</a></code> </p>
-        </td>
-        <td><p>Meters squared to acres</p></td>
+        <td><p>Unit conversion functions</p></td>
       </tr>
     </tbody>
     </table>

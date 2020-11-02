@@ -1,0 +1,272 @@
+---
+title: "Cataloging Drone Images with uasimg: A Workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cataloging Drone Images with uasimg: A Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(uasimg)
+```
+
+
+This article presents a workflow for using `uasimg` to create a **catalog of drone images** from multiple flights that are part of a bigger mapping project / campaign. Although the workflow is presented a sequence of steps, in practice your workflow will probably *not* be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.
+
+\
+
+```{r echo = FALSE}
+library(DiagrammeR)
+grViz("digraph flowchart {
+      node [fontname = Helvetica, shape = rectangle]
+      tab1 [label = '@@1']
+      tab2 [label = '@@2']
+      tab3 [label = '@@3']
+      tab4 [label = '@@4']
+      tab5 [label = '@@5']
+      tab6 [label = '@@6']
+      tab7 [label = '@@7']
+      tab8 [label = '@@8']
+      tab9 [label = '@@9']
+      tab10 [label = '@@10']
+      tab11 [label = '@@11']
+
+      # edge definitions with the node IDs
+      tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7 -> tab8 -> tab9 -> tab10 -> tab11;
+      }
+
+      [1]: 'Copy images to a hard drive'
+      [2]: 'Extract flight info for each folder with uas_info()'
+      [3]: 'Create metadata text files for each folder uas_metadata_make()'
+      [4]: 'Edit and save metadata text files in a text editor'
+      [5]: 'Delete or move oddball images into subdirectories (as needed)'
+      [6]: 'Move images between folders if they are part of the same mission block (if needed)'
+      [7]: 'Re-run uas_info() to update the location info and metadata'
+      [8]: 'Move images into a structured directory tree'
+      [9]: 'Export flight geometries to shp / kml files with uas_exp_kml() and uas_exp_shp() (as needed)'
+      [10]: 'Create individual flight summaries with uas_report()'
+      [11]: 'Create a Table of Content page for related flight summaries with uas_toc() (optional)'
+      ",
+      width = 600, height = 720)
+```
+
+\
+
+Currently, executing this workflow in `uasimg` requires **writing R commands** (i.e., in a script). This requires a knowledge of R, and a general understanding of what the functions do (explained below). In a future release, `uasimg` will have a GUI (wizard) that walks users through data management steps.
+
+
+
+\
+
+# 1. Copy image files from the drone to a hard drive  
+
+*Notes*
+
+- The first step is getting the images off the drone and onto your hard drive. 
+
+- Usually this involves a memory card reader for your laptop, and Windows Explorer.  
+
+- Internal drives are recommended as they tend to be faster and more reliable than external drives (but either can work).  
+
+- Make sure the directory names will help you remember what images are in there. For example, you might name your directories using the pattern: date + flight number (e.g., *2020-10-19 Flight 03*). 
+
+*Tips:*
+
+- You can save yourself some time by creating the directories before you go out into the field.  
+
+- If you have enough blank SD cards for all your flights, then you can just leave the images on the SD card as a temporary backup until you get back to the office. Label each card and put it somewhere safe. If you need it to use it again, reformat the SD card. Windows Explorer generally works fine for this, unless your memory card is >32GB and your drone camera only reads FAT32 (see [*Best Practices Working with Memory Cards*](http://igis.ucanr.edu/Tech_Notes/Memory_Cards/) for details).  
+
+\
+
+# 2. Extract flight info for the directory of images
+
+Sample code:
+
+```{r eval = FALSE}
+my_img_dirs <- c("c:/uas/hopland-veg-survey/flight01/DCIM",
+                 "c:/uas/hopland-veg-survey/flight02/DCIM",
+                 "c:/uas/hopland-veg-survey/flight03/DCIM")
+
+my_imgs <- uas_info(my_img_dirs)
+```
+
+Notes
+
+- No internet connection is required for this step.  
+
+- This can be done in the field if you want to verify image locations, or back at the office.  
+
+- Always save the results of `uas_info()` to a variable.  
+
+- `uas_info()` can index multiple directories at once. Simply pass a character vector of directory names.  
+
+- The first time `uas_info()` is run on a directory, it may take a little while to extract the EXIF data from all the images.  Subsequent calls should go much faster, because the EXIF data are cached.  
+
+- The object returned by `uas_info()` contains image locations, the flight area (minimum convex polygon around all the images), basic metadata, and potentially footprints.  
+
+\
+
+# 3. Create flight metadata files
+
+Sample code:
+
+```{r eval = FALSE}
+## First, view the field names that will be inserted into the new metadata text files.
+## (if you need to change these, see `uas_setfld()`)
+
+uas_getflds()
+
+## Create the metadata text files and open them in the default text editor
+
+uas_metadata_make(my_imgs, make_new = TRUE, open = TRUE)
+```
+
+*Notes*
+
+- *'metadata'* in this context refers to info that isn't saved in the images. For example the name of the pilot, the project code, whether there issues during the flight, etc.  
+
+- The recommended way to enter and save metadata in `uasimg` is to create little text files in each directory. This function gets you started, but then you have to manually type in the info using a text editor.  
+
+- `uas_metadata_make(my_imgs)` will create a 'blank' metadata text file in each folder in `my_imgs` (where `my_imgs` was created by `uas_info()`).    
+
+*Tips:*
+
+- The text files created by `metadata_make()` can be based on a template where some fields are pre-populated (see help page for details).  
+
+- Pass `open=TRUE` to have the new text files open in your default text editor. Ideally you have a text editor that allows you to open multiple text files at once. You can then edit all the metadata text files and save them. You can use RStudio as text editor also.  
+
+\
+
+# 4. Move oddball images into their own folders (if needed)
+
+'Oddball' images in this context are those images you aren't going stitch in your photogrammetry software. This include photos of calibration targets, images from aborted flights, test photos, drone selfies, etc. The idea is these should be separated (or deleted) so you don't have to mess with them during stitching process. You can move images with Windows Explorer. 
+
+*Notes*
+
+- Put images you want to keep (like calibration photos) into subfolders so they stay with the originals.
+
+- In the future, `uasimg` may have a function / GUI to help identify and move oddball images  
+
+- If your flight management software includes a post-processing step (e.g., eMotion), remember to post-process images you've moved (or do the post-processing before you move any images).  
+
+\
+
+# 5. Split and/or combine images from different folders (if needed)  
+
+*Notes*
+
+- Sometimes you need to divide up the images from a single folder into different folders. For example, the folder may contain images from multiple flights. Or you might want to split up the RGB (jpg) files and the mulitspectral (tif) files into separate folders (because you normally stitch these separately).  
+
+- Other times, you many have several folders of images that were all part of the same flight (because most cameras have a limit of 999 images per folder). In this case, you have to merge them together. But take note, combining files from different directories may require changing file names first to prevent duplicates.  
+
+- Currently, you have to split and/or merge folders manually (i.e., with Windows Explorer). Functions are coming to `uasimg` that will facilitate splitting and merging image folders.
+
+\
+
+# 6. (Re)run uas_info() to refresh the metadata 
+
+After you've created metadata text files, and moved oddball images out of directories, you need to pull out the location info again
+
+Sample code (same as step 2):
+
+
+```{r eval = FALSE}
+my_img_dirs <- c("c:/uas/hopland-veg-survey/flight01/DCIM",
+                 "c:/uas/hopland-veg-survey/flight02/DCIM",
+                 "c:/uas/hopland-veg-survey/flight03/DCIM")
+
+my_imgs <- uas_info(my_img_dirs)
+```
+
+*Notes*
+
+- `uas_info()` 'sucks up' the metadata it finds in the metadata text files. So every time you edit and save the metadata text files in your text editor, you should rerun `uas_info()`.  
+
+- `uas_info()` should go quickly after the initial extraction of EXIF data from the images. But if you add or move images out of a folder, the cache is invalidated and it will extract the EXIF data all over again. Don't be alarmed.  
+
+- to see what information is saved in a flight info object, type the name of the object at the console and hit enter.
+
+\
+
+# 7. Move images into a structured directory tree (optional)
+
+Now that the metadata is more or less finalized, you can move the images into their 'final' tree structure.  
+
+Sample code: *coming soon*
+
+*Notes*
+
+- In a future release, `uas_move()` will i) create a directory tree structure based on a user template with placeholders that will be filled in with actual metadata, and ii) move (or copy) images from their current location into the 'final' directory tree.  
+
+\
+
+# 8. Export Flight Geometries to GIS Files (Optional)
+
+If desired, you can export the geometries of individual flights as KML and/or Shapefiles.  
+
+Sample code: 
+
+```{r eval = FALSE}
+uas_exp_kml(my_imgs, ctr = TRUE, mcp = TRUE)
+
+uas_exp_shp(my_imgs, ctr = TRUE, mcp = TRUE)
+```
+
+*Notes*
+
+- Features you can export include the image centroids, a minimum convex polygon around all the images (used to approximate the flight area), and estimated footprints.   
+
+- Be default, KML and Shapefiles will be saved to the 'map' subdirectory of the image folder. If this subdirectory doesn't already exist, it will be created. You can specify a different output directory with the `output_dir` argument.  
+
+- To combine the features from multiple flights into a single KML / Shapefile, use the `combine_feats` argument. This could be useful, for example, to import into your flight planning software to see where you've already flown. See help for details. 
+
+- `uas_report()` and `uas_toc` also have arguments to export flight geometries and link them to the flight summary HTML pages. 
+
+- You can import the MCP KML when planning missions, to see where you've already flown. Flight area (i.e., MCP) KML files have been tested for compatibility with eMotion, Pix4Dcapture (Android), Drone Deploy (Android), and DJI Pilot. 
+
+\
+
+# 9. Create Individual Flight Summaries
+
+Sample code:
+
+```{r eval = FALSE}
+flight_summaries_html <- uas_report(my_imgs)
+```
+
+*Notes*
+
+- This step involves creating standalone HTML pages that summarize images in a single folder. These can be thought of as the individual 'pages' of a data catalog.  
+
+- If you want image thumbnails in the pop-up windows, set `thumbnails = TRUE`. Be advised that creating thumbnails can take a while.  
+
+- `uas_report()` has several other arguments you can use to tweak the appearance of the flight summary. These include a custom title (`report_title`), whether or not to link flight geometry files (`attachments`), whether or not to download a background image (`png_map`), etc. See help for details.
+
+\
+
+# 10. Create a Table of Contents for all the Flight Summaries
+
+If you have several flights in the same general area, the final step is to create a master Table of Contents (TOC) for a series of flight summaries. The TOC is a standalone HTML file with links to individual flight summaries.  
+
+Sample code:
+
+```{r eval = FALSE}
+toc_rgb_fn <- uas_toc(flight_summaries_html, 
+                      output_dir = "c:/drone_data/catalogs/pt_pinole",
+                      gather_dir = ".", fltmap_show = TRUE, open_toc = FALSE)
+```
+
+*Notes*
+
+- Use `fltmap_show = TRUE` to insert a little interactive map of all the flight areas at the top of the TOC.  
+
+- `fltmap_base` can be used to display additional KML files in the summary map. For example this could be overall boundary for the campaign.  
+
+- `gather_dir` tells R to **copy** all files for the catalog into a subdirectoy of `output_dir`. This includes the individual flight summary pages and all their dependent files - KML files, and thumbnails. Your entire data catalog is then in a single folder, which you can FTP to a web server, zip and share with colleagues, etc.
+

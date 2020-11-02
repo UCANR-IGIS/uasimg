@@ -14,8 +14,12 @@
 #' @param update_cache Whether to update the cache
 #' @param quiet Don't show messages
 #'
-#' @details
-#' This will read the EXIF header data from a directory of image files, and put out the centroids and image footprints on the ground. Mapping  image locations requires that the images have geostamps. In addition, mapping the image footprints requires that the camera parameters are known, and the flight elevation about ground level is either saved in the EXIF info, or provided in the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data in the EXIF info.
+#' @details This will read the EXIF header data from a directory of image files, and put out
+#' the centroids and image footprints on the ground. Mapping  image locations requires that the images have
+#' geostamps. In addition, mapping the image footprints requires that the camera parameters are known,
+#' and the flight elevation about ground level is either saved in the EXIF info, or provided in
+#' the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data
+#' in the EXIF info.
 #'
 #' Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
 #' many popular drone cameras. If your drone camera is not in the database, you can create your own
@@ -27,18 +31,29 @@
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
 #' \code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
-#' images (e.g., location name, pilot). It can be a regular expression for a metadata filename
-#' (in YAML format, see below) that should be in the same folder as the images. Or it can be a named list containing
-#' metadata fields. For supported field names, see \code{\link{uas_getflds}}.
+#' images (e.g., location name, pilot). \code{metadata} can also be a named list containing
+#' metadata fields / values. For supported field names, see \code{\link{uas_setflds}}.
 #'
-#' \code{metadata} cam also be a pattern for a filename (see \code{\link{list.files}}). If multiple files match the
-#' pattern, they will all be read. Metadata files should be plain text in YAML format. Each line should contain a
-#' key:value pair (with no quotes or delimiters). Lines starting with a hash or forward slash will be interpreted
-#' as comments and ignored. For example:
+#' \code{metadata} can also be a filename regular expression (pattern) for a metadata text file
+#' (for details on how to write a pattern expression, see \code{\link{list.files}}). This is the recommended
+#' way to enter metadata, because the little text files move with the images.
 #'
-#' \code{collection_name: Hopland Research and Extension Center, Watershed II
+#' If multiple files match the pattern expression, they will all be read. This allows you for example to have a file called
+#' \emph{metadata_org.txt} with organizational info (such as a contact person), and another called \emph{metadata.txt} with info
+#' about that specific flight (e.g., the pilot or wind conditions).
+
+#' Metadata text files should be plain text in YAML format (the easiest way to create new metadata text files
+#' is using \code{\link{uas_metadata_make}}.) Each line should contain a key:value pair (with no quotes or delimiters).
+#' Lines starting with a hash or forward slash will be ignored. Example:
+#'
+#' \code{name_short: hrec_wtrshd2_flt03
+#' name_long: Hopland Research and Extension Center, Watershed II Flight 3
 #' data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
-#' description: These data were collected as part of a pre-restoration monitoring program}
+#' pilot: Andy Lyons
+#' description: These data were collected as part of a restoration monitoring program.
+#' notes: We had to pause the mission about half way through as an bird was getting close, hence there is a time
+#' of about 30 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
+#' }
 #'
 #' \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
 #' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
@@ -51,7 +66,7 @@
 #' image centroids (as a sf data frame), footprints, total area, minimum convex polygon,
 #' total directory size, the data flown, and external metadata.
 #'
-#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp_shp}}
+#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}
 #'
 #' @import dplyr
 #' @import sf
@@ -64,9 +79,9 @@
 #' @importFrom crayon yellow green red magenta bold
 #' @export
 
-uas_info <- function(img_dirs, alt_agl=NULL,
-                     fp=TRUE, fwd_overlap=fp, cameras=NULL, metadata = "metadata.*\\.txt",
-                     exiftool=NULL, exif_csv=NULL, cache=NULL, update_cache=FALSE, quiet=FALSE) {
+uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
+                     cameras = NULL, metadata = "metadata.*\\.txt",
+                     exiftool = NULL, exif_csv = NULL, cache = TRUE, update_cache = FALSE, quiet = FALSE) {
 
   ## See if all directory(s) exist
   for (img_dir in img_dirs) {
@@ -188,6 +203,8 @@ uas_info <- function(img_dirs, alt_agl=NULL,
       if (is.na(first_fn)) stop(paste0("Couldn't find any jpg or tif files in ", img_dir))
 
       csv_first_fn <- tempfile(pattern="~map_uas_", fileext = ".csv")
+      #if (!file.exists(csv_first_fn)) stop("Couldn't create a temp file. Restart R and try again.")
+
       system2("exiftool", args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
               stdout=csv_first_fn, stderr=FALSE)
 
@@ -205,7 +222,9 @@ uas_info <- function(img_dirs, alt_agl=NULL,
       sensors_df <- uas_readcameras(cameras_fn)
 
       ## Search for this sensor
-      sensor_this_df <- filter(sensors_df, model==camera_model & filetype==camera_filetype) %>% as.data.frame()
+      sensor_this_df <- sensors_df %>%
+        filter(model == camera_model & filetype == camera_filetype) %>%
+        as.data.frame()
       if (nrow(sensor_this_df)==0) stop(paste(camera_make, camera_model, camera_filetype, "not found in the database of known sensors. To get it added, contact the package author via email, or create an issue on GitHub. "))
 
       ## Get the composite camera name from the sensor database
@@ -220,8 +239,10 @@ uas_info <- function(img_dirs, alt_agl=NULL,
       camera_has_agl <- (tolower(camera_agl_tag) != "none")
 
       if (is.null(alt_agl) && !camera_has_agl) {
-        warning("The altitude above ground was not saved in the images, and no value for alt_agl was passed. Skipping gsd and footprints.")
         agl_avail <- FALSE
+        if (fp || fwd_overlap) {
+          warning("Can not estimate footprints - above ground altitude was not saved in the images, and no value for alt_agl was passed.")
+        }
         # stop("alt_agl argument required (relative altitude not saved in image files)")
       } else {
         agl_avail <- TRUE
@@ -461,13 +482,24 @@ uas_info <- function(img_dirs, alt_agl=NULL,
 
     }
 
+    ## Create an id string
+    dt_str <- gsub(" ", "_", gsub(":", "-", sort(imgs_ctr_utm_sf$date_time)[1]))
+    type_count <- imgs_ctr_utm_sf %>%
+      st_drop_geometry() %>%
+      group_by(filetype) %>%
+      count() %>%
+      mutate(type_count = paste0(n, filetype, "s")) %>%
+      pull(type_count) %>%
+      paste(collapse = "_")
+    id_str <- paste0(dt_str, "_", type_count)
+
     ## Cache results (if not already cached)
     if (save_to_cache) {
       if (update_cache || !cache_loaded) {
         ## Store the image folder name in case the cache data is used on its own
         img_folder <- img_dir
         save(img_folder, imgs_ctr_utm_sf, fp_utm_sf, area_m2, mcp_sf, total_size_mb,
-             flight_date_str, camera_name, file = file.path(cache_dir_use, cache_fn))
+             flight_date_str, camera_name, id_str, file = file.path(cache_dir_use, cache_fn))
         if (!quiet) message(yellow(" - Cache saved"))
       }
     }
@@ -476,10 +508,11 @@ uas_info <- function(img_dirs, alt_agl=NULL,
     ## Get the extra metadata either by an argument or finding an metadata.txt file
 
     if (is.null(metadata)) {
-      ## Create a blank metadata list
+      ## Create a blank metadata list using the default fields
       flds_md <- uas_getflds()
       metadata_use <- as.list(rep(as.character(NA), length(flds_md)))
       names(metadata_use) <- flds_md
+      if (!quiet) message(yellow(paste0(" - Metadata fields set to NA: ", paste(flds_md, collapse = ", "))))
 
     } else if (is.list(metadata)) {
       metadata_use<- metadata
@@ -544,6 +577,33 @@ uas_info <- function(img_dirs, alt_agl=NULL,
       names(metadata_use) <- flds_md
     }
 
+    ## Create a default name_short *if* it is NA (if NULL, do nothing)
+    if (!is.null(metadata_use$name_short)) {
+      if (is.na(metadata_use$name_short)) {
+        metadata_use$name_short <- id_str
+      }
+    }
+
+    # need_short_name <- FALSE
+    # if (is.null(metadata_use$name_short)) {
+    #   need_short_name <- TRUE
+    # } else {
+    #   if (is.na(metadata_use$name_short)) {
+    #     need_short_name <- TRUE
+    #   }
+    # }
+    #
+    # if (need_short_name) {
+    #
+    # }
+
+    ## If there's a value for collection_name (a field which is now deprecated but still exists in some
+    ## older metadata.txt files), rename it name_long
+    if (is.null(metadata_use$name_long) && !is.null(metadata_use$collection_name)) {
+      names(metadata_use)[names(metadata_use) == "collection_name"] <- "name_short"
+      warning(yellow("Metadata field `collection_name` has been deprecated. Moving forward please use `name_long`."))
+    }
+
     ## Add to the result list
     res[[img_dir]] <- list(pts = imgs_ctr_utm_sf,
                            fp = fp_utm_sf,
@@ -552,6 +612,7 @@ uas_info <- function(img_dirs, alt_agl=NULL,
                            size_mb = total_size_mb,
                            date_flown = flight_date_str,
                            camera_name = camera_name,
+                           id = id_str,
                            metadata = metadata_use)
   }
 

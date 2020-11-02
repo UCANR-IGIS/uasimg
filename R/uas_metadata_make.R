@@ -1,27 +1,31 @@
-#' Create a blank metadata text file
+#' Manage supplemental metadata files
 #'
-#' Create a blank metadata text file
+#' Create and edit supplemental metadata files
 #'
-#' @param dirs A character vector of directories or a uas_info object
-#' @param file Name of the file to create
-#' @param suffix A suffix to append to the file names
-#' @param flds A character vector of field names
-#' @param overwrite Overwrite existing metadata files, logical
+#' @param x A character vector of directories, or a uas_info object
+#' @param md_file Name of the file to create
+#' @param md_suffix A suffix to append to the file names
+#' @param md_template A template metadata file
+#' @param md_flds A character vector of field names
+#' @param make_new Create new metadata file(s), Logical
+#' @param read_uasinfo Read and populate metadata fields from x (assuming x is a uas_info object)
+#' @param overwrite Overwrite existing metadata files, Logical
 #' @param open Open the file for editing
 #' @param quiet Suppress messages
 #'
 #' @details
-#' This creates blank external metadata text file(s). One file will be placed in each
-#' directory in \code{dirs} (which can be either a character vector or a
-#' \code{\link{uas_info}} object. The files will be named based on the value of \code{file}
-#' which will be repeated if needed, with an option to append a suffix (which can make it
-#' easier to edit them in a text editor). If \code{suffix = 'dir'}, the base name of the
-#' directory will be appended. Suffix can also be a literal string. Both \code{file}
-#' and \code{suffix} should be of length 1 or equal to the number of \code{dirs}.
+#' This creates, and/or opens for editing, supplemental metadata text file(s) in image folders.
+#'
+#' If \code{make_new = TRUE}, metadata files will be created in each directory of \code{x}. \code{x}
+#' can be either a character vector or a \code{\link{uas_info}} object. The files will be named based on the value of \code{md_file},
+#' with an option to append a suffix \code{md_suffix}. Both \code{md_file}
+#' and \code{md_suffix} should be of length 1 or equal to the number of \code{x}.
+#'
+#' If \code{open = TRUE}, the text files will be opened. To open all metadata text files,
 #'
 #' @return A character vector of the external metadata text file(s) created.
 #'
-#' @seealso \code{\link{uas_setflds}}
+#' @seealso \code{\link{uas_getflds}}, \code{\link{uas_setflds}}
 #'
 #' @importFrom crayon red green bold yellow
 #' @importFrom tools file_ext file_path_sans_ext
@@ -30,71 +34,207 @@
 #' @export
 
 # still to come - support a template with pre-populated values (maybe as a variable?)
+#
+# If \code{suffix = 'dir'}, the base name of the directory will be appended. Suffix
+# can also be a literal string.
 
-uas_metadata_make <- function(dirs, file = "metadata.txt", suffix = c("", "dir")[1],
-                              flds = uas_getflds(),
-                              overwrite = FALSE, open = FALSE, quiet = FALSE) {
+uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
+                              make_new = FALSE, overwrite = FALSE, open = TRUE,
+                              md_flds = uas_getflds(), md_template = NULL,
+                              read_uasinfo = FALSE,
+                              quiet = FALSE) {
 
-  if (inherits(dirs, "uas_info")) {
-    dirs_use <- names(dirs)
-  } else if (is.character(dirs)) {
-    dirs_use <- dirs
+  ## Get the directories
+  if (inherits(x, "uas_info")) {
+    dirs_use <- names(x)
+
+  } else if (is.character(x)) {
+    dirs_use <- x
+
   } else {
-    stop("dirs should be a uas_info object or a character vector of directory paths.")
+    stop("x should be a uas_info object or a character vector of directory paths.")
+
   }
 
-  ## Repeat 'file' if needed
-  if (length(file) != length(dirs_use)) {
-    if (length(file) != 1) stop("file must be length 1 or match the length of dirs")
-    files_use <- rep(file[1], length(dirs_use))
-  } else {
-    files_use <- file
+  ## Verify at least one action was requested
+  if (!make_new && !open) stop("`make_new` and `open` are both FALSE. Nothing to do.")
+
+  if (!is.null(md_template)) {
+    if (!file.exists(md_template)) stop(paste0("File not found: ", md_template))
   }
 
-  ## Repeat 'suffix' if needed
-  if (length(suffix) != length(dirs_use)) {
-    if (length(suffix) != 1) stop("suffix must be length 1 or match the length of dirs")
-    suffix_use <- rep(suffix[1], length(dirs_use))
+  ## Repeat 'md_file' if needed
+  if (length(md_file) != length(dirs_use)) {
+    if (length(md_file) != 1) stop("md_file must be length 1 or match the length of x")
+    md_files_use <- rep(md_file[1], length(dirs_use))
   } else {
-    suffix_use <- suffix
+    md_files_use <- md_file
+  }
+
+  ## Repeat 'md_suffix' if needed
+  if (is.null(md_suffix)) {
+    md_suffix_use <- rep("", length(dirs_use))
+
+  } else if (length(md_suffix) != length(dirs_use)) {
+    if (length(md_suffix) != 1) stop("md_suffix must be length 1 or match the length of x")
+    md_suffix_use <- rep(md_suffix[1], length(dirs_use))
+
+  } else {
+    md_suffix_use <- md_suffix
+  }
+
+  ## Generate individualized suffixes (NOT YET SUPPORTED)
+  # if (md_suffix_use[i] == "dir") {
+  #   ## Idea here is to generate a suffix based on name of the image folder (no longer think this is a good idea)
+  #   message(red("suffix = 'dir' is not supported yet"))
+
+  ## Generate complete file names
+  md_fnames <- file.path(dirs_use,
+                         paste0(file_path_sans_ext(md_files_use),
+                                md_suffix_use,
+                                ".",
+                                file_ext(md_files_use)))
+
+  ## Generate a metadata list with the fields in md_flds
+  if (is.null(md_flds)) {
+    flds_lst <- list()
+
+  } else if (identical(md_flds, NA) || identical(md_flds, "") )  {
+    flds_lst <- list()
+
+  } else if (is.list(md_flds)) {
+    flds_lst <- md_flds
+
+  } else if (is.character(md_flds)) {
+    flds_lst <- as.list(rep(NA, length(md_flds)))
+    names(flds_lst) <- md_flds
+
+  } else {
+    stop("Unknown value for md_flds")
+
+  }
+
+
+  md_template_comments <- character(0)
+
+  ## Read md_template and update the values in flds_lst
+  if (!is.null(md_template)) {
+    fcon <- file(md_template, open = "r")
+    while ( TRUE ) {
+      one_line <- readLines(fcon, n = 1, warn = FALSE)
+      if ( length(one_line) == 0 ) break
+
+      ## Determine if this line is comment
+      first_char <- trimws(substr(one_line, 1, 1))
+      if (first_char == "#" || first_char == "/") {
+        md_template_comments <- c(md_template_comments, one_line)
+
+      } else {
+
+        ## Look for a colon
+        colon_pos <- regexpr(":", one_line)
+        if (colon_pos > 0) {
+
+          ## Get the key and value
+          ln_key <- trimws(substring(one_line, 1, colon_pos - 1)[1])
+          ln_val <- gsub("\"", "'", trimws(substring(one_line, colon_pos + 1)[1]))
+
+          ## Update the value of this key in flds_lst
+          flds_lst[[ln_key]] <- ln_val
+        }
+
+      }
+
+    }  ## while TRUE
+    close(fcon)
+
+  }    ## if not is.null(md_template)
+
+  ## Generate the contents of the metadata file
+  ## WILL DO THIS WITHIN THE LOOP
+  ## flds_yaml <- paste(sapply(1:length(flds_lst), function(i) paste0(names(flds_lst)[i], ": ", flds_lst[[i]]) ), collapse = "\n\n")
+
+  if (length(md_template_comments) == 0) {
+    md_comments_all <- ""
+  } else {
+    md_comments_all <- paste0(paste(md_template_comments, collapse = "\n"), "\n\n")
   }
 
   for (i in 1:length(dirs_use)) {
 
-    md_fname <- files_use[i]
+    # md_fname <- md_files_use[i]
+    #
+    # ## Generate a filename suffix
+    # if (md_suffix_use[i] == "dir") {
+    #   ## Idea here is to generate a suffix based on name of the image folder (no longer think this is a good idea)
+    #   message(red("suffix = 'dir' is not supported yet"))
+    #
+    # } else if (md_suffix_use[i] != "") {
+    #   ## Assume that suffix is a literal string
+    #   md_fname <- paste0(file_path_sans_ext(md_fname),
+    #                      md_suffix_use[i], ".", file_ext(md_fname))
+    # }
+    #
+    # ## Compute the full filename
+    # md_fn <- file.path(dirs_use[i], md_fname)
 
-    if (suffix == "dir") {
-      ##browser()
-      message(red("suffix = 'dir' is not supported yet"))
+    md_fn <- md_fnames[i]
 
-    } else if (suffix_use[i] != "") {
-      ## Assume that suffix is a literal string
-      md_fname <- paste0(file_path_sans_ext(md_fname),
-                         suffix_use[i], ".", file_ext(md_fname))
+    ## Make the file if called for
+    if (make_new) {
+      if (file.exists(md_fn) && !overwrite) {
+        if (!quiet) message(yellow(paste0(md_fn, " already exists. Skipping.")))
+
+      } else {
+
+
+        descript_line <- paste0("## FLIGHT METADATA FOR:\n## ", md_fn, "\n\n")
+
+        ## Make a copy of the generic list
+        flst <- flds_lst
+
+        ## If x is a uas_info object, Update any values in x[[ ]]$metadata (especially name_short)
+        if (inherits(x, "uas_info")) {
+          for (fldname in names(flst)) {
+            if (fldname %in% names(x[[i]]$metadata)) {
+              if (read_uasinfo || fldname == "name_short") {
+                flst[[fldname]] <- x[[i]]$metadata[[fldname]]
+              }
+            }
+          }
+        }
+
+        flds_yaml <- paste(sapply(1:length(flst), function(j) paste0(names(flst)[j], ": ", flst[[j]]) ), collapse = "\n\n")
+
+        ## Write the file
+        cat(c(descript_line, md_comments_all, flds_yaml), file = md_fn, sep="")
+
+        if (!quiet) message(green(paste0(" - created ", md_fn)))
+
+      }
+
+    } else {
+      if (!file.exists(md_fn)) {
+        if (!quiet) message(red(paste0(" - Can not open ", md_fn, " because it doesn't exist. Try again with `make_new = TRUE`")))
+      }
     }
 
-    md_fn <- file.path(dirs_use[i], md_fname)
-
-    make_file <- TRUE
-    if (file.exists(md_fn) && !overwrite) {
-      make_file <- FALSE
-      message(red(paste0(basename(md_fn), " exists & overwrite = FALSE. Skipping.")))
-    }
-
-    if (make_file) {
-      ## Generate the contents of the YAML file
-      descript_line <- paste0("## ", md_fn, "\n\n")
-      flds_yaml <- paste(flds, ": \n", sep="")
-
-      ## Create and open the file
-      cat(c(descript_line, flds_yaml), file = md_fn, sep="")
-      if (open) file.edit(md_fn)
-
-      if (!quiet) message(green(paste0(" - created ", md_fn)))
+    if (open && file.exists(md_fn)) {
+      ## Open the metadata.txt file if needed
+      if (Sys.info()["sysname"] == "Windows") {
+        ## Use the default Windows text editor
+        shell.exec(md_fn)
+      } else {
+        ## Use whichever text editor is defined by getOption("editor")
+        file.edit(md_fn)
+      }
     }
 
 
   }
 
+  #browser()
+  md_fnames
+  #file.edit(md_fnames)
 
 }

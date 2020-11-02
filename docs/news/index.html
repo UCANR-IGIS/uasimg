@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -98,6 +98,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -127,6 +139,29 @@
       <small>Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="uasimg-150-2020-11-01" class="section level1">
+<h1 class="page-header" data-toc-text="1.5.0">
+<a href="#uasimg-150-2020-11-01" class="anchor"></a>uasimg 1.5.0 (2020-11-01)</h1>
+<ul>
+<li>
+<code><a href="../reference/uas_report.html">uas_report()</a></code> and <code>uas_report.Rmd</code>: arguments <code>report_title</code> and <code>kml_ctr</code> added; trapped an error if metadata exists but without an image collection name; thumbnails disabled for grouped images (until a better visualization is implemented); additional <span id="..."> tags added to facilitate web scraping</span>
+</li>
+<li>
+<code><a href="../reference/uas_info.html">uas_info()</a></code>: deafult value of <code>fp</code> changed to <code>FALSE</code>; default value of <code>cache</code> changed to <code>TRUE</code>; a flight id value saved in return value (used primarily to name files if metadata$name_short is missing)</li>
+<li>
+<code><a href="../reference/uas_setflds.html">uas_flds_oem()</a></code>: <code>name_short</code> and <code>notes</code> added to default fields; <code>collection_name</code> removed</li>
+<li>
+<code><a href="../reference/uas_toc.html">uas_toc()</a></code> and <code>uas_toc.Rmd</code>: check that html files exist added; all code migrated from XML to xml2</li>
+<li>
+<code>uas_exp()</code> renamed (back to) <code><a href="../reference/uas_exp_kml.html">uas_exp_shp()</a></code>;</li>
+<li>
+<code><a href="../reference/uas_exp_kml.html">uas_exp_kml()</a></code> created</li>
+<li>
+<code><a href="../reference/uas_thumbnails_make.html">uas_thumbnails_make()</a></code> created</li>
+<li>
+<em>xml2</em>, <em>tibble</em> and <em>imager</em> added to Imports (required packages); <em>XML</em> and <em>magick</em> package removed</li>
+</ul>
+</div>
     <div id="uasimg-140-2020-10-01" class="section level1">
 <h1 class="page-header" data-toc-text="1.4.0">
 <a href="#uasimg-140-2020-10-01" class="anchor"></a>uasimg 1.4.0 (2020-10-01)</h1>
@@ -139,7 +174,7 @@
 <code>uas_report.R</code> updated - argument <code>local_dir</code> renamed <code>show_local_dir</code>; <code>gps_coord</code> renamed <code>show_gps_coord</code>
 </li>
 <li>
-<code>uas_exp()</code> renamed <code><a href="../reference/uas_exp_shp.html">uas_exp_shp()</a></code>
+<code>uas_exp()</code> renamed <code><a href="../reference/uas_exp_kml.html">uas_exp_shp()</a></code>
 </li>
 </ul>
 </div>

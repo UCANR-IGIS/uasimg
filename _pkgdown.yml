@@ -16,55 +16,57 @@ reference:
   - title: Base functions
     desc: Base functions that support everything else
     contents:
-      - '`uas_info`'
-      - '`print.uas_info`'
+      - uas_info
+      - print.uas_info
   - title: Data Catalogs
     desc: Functions to create data catalogs
     contents:
-      - '`uas_report`'
-      - '`uas_toc`'
+      - uas_report
+      - uas_toc
+      - uas_thumbnails_make
   - title: Subsetting and Grouping
     desc: Managing and manipulating groups of images
     contents:
-      - '`uas_grp_flt`'
-      - '`print.uas_grp`'
-      - '`uas_move`'
+      - uas_grp_flt
+      - print.uas_grp
+      - uas_move
   - title: Exporting
     desc: Exporting image locations and other geometries
     contents:
-      - '`uas_exp_shp`'
+      - uas_exp_kml
+      - uas_exp_shp
   - title: Single Image Analyses
     desc: Single image analyses
     contents:
-      - '`uas_worldfile`'
-      - '`uas_cropctr`'
-  - title: Supplemental Metadata
-    desc: Supplemental metadata utilities
+      - uas_worldfile
+      - uas_cropctr
+  - title: Metadata
+    desc: Managing metadata
     contents:
-      - '`uas_metadata_make`'
-      - '`uas_getflds`'
-      - '`uas_setflds`'
-      - '`uas_flds_oem`'
+      - uas_metadata_make
+      - uas_getflds
+      - uas_setflds
+      - uas_flds_oem
   - title: Package Settings
     desc: Manage package settings
     contents:
-      - '`uas_getcache`'
-      - '`uas_setcache`'
-      - '`uas_cameras`'
-      - '`uas_readcameras`'
+      - uas_getcache
+      - uas_setcache
+      - uas_cameras
+      - uas_readcameras
   - title: Other Utility Functions
     desc: Other utility functions
     contents:
-      - '`findonpath`'
-      - '`geo2utm`'
-      - '`int2base36`'
+      - findonpath
+      - geo2utm
+      - null2na
   - title: Unit Conversion Functions
     desc: Unit conversion functions
     contents:
-      - '`cm2in`'
-      - '`ft2m`'
-      - '`m2ft`'
-      - '`msq2acres`'
+      - cm2in
+      - ft2m
+      - m2ft
+      - msq2acres
 navbar:
   type: inverse
   structure:

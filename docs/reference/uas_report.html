@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -99,6 +99,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -140,7 +152,8 @@
   thumbnails = <span class='fl'>FALSE</span>,
   show_gps_coord = <span class='fl'>FALSE</span>,
   show_local_dir = <span class='fl'>TRUE</span>,
-  kml_mcp = <span class='fl'>TRUE</span>,
+  report_title = <span class='st'>"Flight Summary"</span>,
+  attachments = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mcp_kml"</span>, <span class='st'>"ctr_kml"</span>)[<span class='fl'>0</span>],
   output_dir = <span class='kw'>NULL</span>,
   create_dir = <span class='fl'>TRUE</span>,
   output_file = <span class='kw'>NULL</span>,
@@ -183,8 +196,12 @@
       <td><p>Show the local image directory, TF</p></td>
     </tr>
     <tr>
-      <th>kml_mcp</th>
-      <td><p>Export the MCP as a KML</p></td>
+      <th>report_title</th>
+      <td><p>Title to appear at the top of the summary</p></td>
+    </tr>
+    <tr>
+      <th>attachments</th>
+      <td><p>Supplementary files to create and link to the flight summary, see Details.</p></td>
     </tr>
     <tr>
       <th>output_dir</th>
@@ -228,7 +245,7 @@
     </tr>
     <tr>
       <th>report_rmd</th>
-      <td><p>Rmd template used to generate the HTML file. See details.</p></td>
+      <td><p>Rmd template used to generate the HTML file. See Details.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -238,7 +255,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The filename of the HTML report generated</p>
+    <p>The HTML file name(s) of the flight summaries generated</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This will generate HTML report(s) of the images in the UAS metadata object based.</p>
@@ -259,11 +276,15 @@ removed, try increasing it. By default, the background image will be a satellite
 Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
 pass with <code>google_api</code> (for
 details see <a href='https://developers.google.com/maps/documentation/maps-static/'>https://developers.google.com/maps/documentation/maps-static/</a>. Alternately you
-can save your API key with ggmap::register_google(), after which it will be read automatically.
+can save your API key with <code><a href='https://rdrr.io/pkg/ggmap/man/register_google.html'>ggmap::register_google()</a></code>, after which it will be read automatically.
 If a Google API key is not found, a terrain map from Stamen will be substituted.</p>
+<p><code>attachment</code> specifies which supplementary files to create and link to the flight summary. Choices are
+<code>ctr_kml</code> and <code>mcp_kml</code> for KML versions of the camera locations and MCP (minimum convex
+polygon around all images). These KML files will be created in the same output directory as the flight
+summary.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='uas_info.html'>uas_info</a></p></div>
+    <div class='dont-index'><p><code><a href='uas_info.html'>uas_info</a></code>, <code><a href='uas_exp_kml.html'>uas_exp_kml</a></code>,</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -7,13 +7,13 @@
 uas_info(
   img_dirs,
   alt_agl = NULL,
-  fp = TRUE,
+  fp = FALSE,
   fwd_overlap = fp,
   cameras = NULL,
   metadata = "metadata.*\\\\.txt",
   exiftool = NULL,
   exif_csv = NULL,
-  cache = NULL,
+  cache = TRUE,
   update_cache = FALSE,
   quiet = FALSE
 )
@@ -50,7 +50,12 @@ total directory size, the data flown, and external metadata.
 Extracts info from geotagged images taken from a drone
 }
 \details{
-This will read the EXIF header data from a directory of image files, and put out the centroids and image footprints on the ground. Mapping  image locations requires that the images have geostamps. In addition, mapping the image footprints requires that the camera parameters are known, and the flight elevation about ground level is either saved in the EXIF info, or provided in the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data in the EXIF info.
+This will read the EXIF header data from a directory of image files, and put out
+the centroids and image footprints on the ground. Mapping  image locations requires that the images have
+geostamps. In addition, mapping the image footprints requires that the camera parameters are known,
+and the flight elevation about ground level is either saved in the EXIF info, or provided in
+the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data
+in the EXIF info.
 
 Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
 many popular drone cameras. If your drone camera is not in the database, you can create your own
@@ -62,18 +67,28 @@ from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
 \code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
-images (e.g., location name, pilot). It can be a regular expression for a metadata filename
-(in YAML format, see below) that should be in the same folder as the images. Or it can be a named list containing
-metadata fields. For supported field names, see \code{\link{uas_getflds}}.
+images (e.g., location name, pilot). \code{metadata} can also be a named list containing
+metadata fields / values. For supported field names, see \code{\link{uas_setflds}}.
 
-\code{metadata} cam also be a pattern for a filename (see \code{\link{list.files}}). If multiple files match the
-pattern, they will all be read. Metadata files should be plain text in YAML format. Each line should contain a
-key:value pair (with no quotes or delimiters). Lines starting with a hash or forward slash will be interpreted
-as comments and ignored. For example:
+\code{metadata} can also be a filename regular expression (pattern) for a metadata text file
+(for details on how to write a pattern expression, see \code{\link{list.files}}). This is the recommended
+way to enter metadata, because the little text files move with the images.
 
-\code{collection_name: Hopland Research and Extension Center, Watershed II
+If multiple files match the pattern expression, they will all be read. This allows you for example to have a file called
+\emph{metadata_org.txt} with organizational info (such as a contact person), and another called \emph{metadata.txt} with info
+about that specific flight (e.g., the pilot or wind conditions).
+Metadata text files should be plain text in YAML format (the easiest way to create new metadata text files
+is using \code{\link{uas_metadata_make}}.) Each line should contain a key:value pair (with no quotes or delimiters).
+Lines starting with a hash or forward slash will be ignored. Example:
+
+\code{name_short: hrec_wtrshd2_flt03
+name_long: Hopland Research and Extension Center, Watershed II Flight 3
 data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
-description: These data were collected as part of a pre-restoration monitoring program}
+pilot: Andy Lyons
+description: These data were collected as part of a restoration monitoring program.
+notes: We had to pause the mission about half way through as an bird was getting close, hence there is a time
+of about 30 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
+}
 
 \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
 If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
@@ -83,5 +98,5 @@ the next time the function is run. \code{update_cache} is a logical value
 which forces an update of cached data when TRUE.
 }
 \seealso{
-\code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_exp_shp}}
+\code{\link{uas_getcache}}, \code{\link{uas_report}}
 }

@@ -1,3 +1,14 @@
+# uasimg 1.5.0 (2020-11-01)
+
+* `uas_report()` and `uas_report.Rmd`: arguments `report_title` and `kml_ctr` added; trapped an error if metadata exists but without an image collection name; thumbnails disabled for grouped images (until a better visualization is implemented); additional <span id="..."> tags added to facilitate web scraping
+* `uas_info()`: deafult value of `fp` changed to `FALSE`; default value of `cache` changed to `TRUE`; a flight id value saved in return value (used primarily to name files if metadata$name_short is missing)
+* `uas_flds_oem()`: `name_short` and `notes` added to default fields; `collection_name` removed
+* `uas_toc()` and `uas_toc.Rmd`: check that html files exist added; all code migrated from XML to xml2
+* `uas_exp()` renamed (back to) `uas_exp_shp()`;
+* `uas_exp_kml()` created
+* `uas_thumbnails_make()` created
+* *xml2*, *tibble* and *imager* added to Imports (required packages); *XML* and *magick* package removed
+
 # uasimg 1.4.0 (2020-10-01)
 
 * `uas_toc()` and `uas_toc.Rmd` updated - new `summary_map` argument displays an interactive mission footprint map

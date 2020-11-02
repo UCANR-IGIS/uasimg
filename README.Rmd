@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+For more details and examples, see https://ucanr-igis.github.io/uasimg/ 
+
 # Drone Image Utilities
 
 `uasimg` helps manage images taken from an unmanned aerial vehicle (drone) that have been collected with the intent to stitch into 2D amd 3D products. The package does **not** stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and create world files so individual images can be viewed in GIS software.

@@ -5,11 +5,14 @@ output:
     self_contained: no
     smart: no
 params:
-  toc_title: "UAS Image Collections"
+  toc_title: "UAS Flight Summaries"
   toc_desc: !r NULL
   html_reports: !r NA
   output_dir: !r NA
-  summary_map: !r NA
+  output_fn: !r NA
+  fltmap_show: !r NA
+  fltmap_kml: !r NA
+  bg_lst: !r NA
 ---
 
 ```{css echo=FALSE}
@@ -39,8 +42,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(htmltools)
 library(leaflet)
 library(base64enc)
-library(XML); 
-library(knitr); 
+library(xml2) 
+library(knitr)
 library(base64enc)
 
 ## Updated to return "" if target and base are identical
@@ -89,52 +92,80 @@ i_lst <- list()
 mcp_all_sf <- NULL
 
 ## Define some constants
-span_ids <- c("collection_name", "description", "contact", "pilot", "num_img", "size_mb", "camera_name")
+span_ids <- c("name_use", "description", "contact", "pilot", "num_img", "size_mb", "camera_name")
 meta_tags <- c("map_fn", "date_flown", "area_m2")
 
 for (i in 1:length(params$html_reports)) {
   i_lst[[i]] <- list()
   i_lst[[i]]$html_full <- params$html_reports[i]
   
-  ## Parse the HTML page
-  html_tree <- htmlTreeParse(readLines(i_lst[[i]]$html_full), useInternalNodes = TRUE)
-  
-  ## Extract the metadata
+  ## Injest the HTML page
+  #  html_tree <- XML::htmlTreeParse(readLines(i_lst[[i]]$html_full), useInternalNodes = TRUE)
+  html_root <- read_html(i_lst[[i]]$html_full)
+
+  ## Initialize a list to hold the metadata
   i_lst[[i]]$imgcol <- list()
     
   ## Grab content encoded in spans
   for (j in 1:length(span_ids)) {
-    id_find_xp <- paste0("//span[@id='", span_ids[j], "']//text()")
-    i_lst[[i]]$imgcol[[span_ids[j]]] <- paste(trimws(xpathSApply(html_tree, id_find_xp, xmlValue)), collapse=" ")
+    span_txt <- html_root %>%
+      xml_find_first(paste0("//span[@id='", span_ids[j], "']")) %>%
+      xml_text() %>%
+      trimws()
+    if (!is.na(span_txt)) {
+      i_lst[[i]]$imgcol[[span_ids[j]]] <- span_txt
+    }
+
+
   }
     
   ## Grab content encoded in meta tags
   for (j in 1:length(meta_tags)) {
-    metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
-    i_lst[[i]]$imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
+    metatag_content <- html_root %>%
+      xml_find_first(paste0("//meta[@name='", meta_tags[j], "']")) %>%
+      xml_attr("content") %>%
+      trimws()
+    if (!is.na(metatag_content)) {
+      i_lst[[i]]$imgcol[[meta_tags[j]]] <- metatag_content
+    }
   }
-  
+
+  ## OLD CODE FROM XML PACAKGE
+  # for (j in 1:length(meta_tags)) {
+  #   metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
+  #   i_lst[[i]]$imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
+  # }
+
   ## Extract the mcp_b64 character
-  mcp_b64_content <- html_tree[paste0("//meta[@name='mcp_b64']/@content")]
-  mcp_b64_txt <- trimws(as.character(unlist(mcp_b64_content)))
+  mcp_b64_txt <- html_root %>%
+      xml_find_first(paste0("//meta[@name='mcp_b64']")) %>%
+      xml_attr("content") %>%
+      trimws()
+  
+  # mcp_b64_content <- html_tree[paste0("//meta[@name='mcp_b64']/@content")]
+  # mcp_b64_txt <- trimws(as.character(unlist(mcp_b64_content)))
   
   ## Convert the mcp_b64 character back to sf
-  mcp_raw <- base64decode(mcp_b64_txt)
-  mcp_sf <- unserialize(mcp_raw)
+  # mcp_raw <- base64decode(mcp_b64_txt)
+  # mcp_sf <- unserialize(mcp_raw)
+  if (!is.na(mcp_b64_txt)) {
+    mcp_sf <- base64decode(mcp_b64_txt) %>% unserialize()
+    mcp_all_sf <- rbind(mcp_all_sf, mcp_sf)
+  }
 
-  mcp_all_sf <- rbind(mcp_all_sf, mcp_sf)
-  
 }
-
-j_lst <<- i_lst
 ```
 
 
 ```{r mcp_map, echo = FALSE, results = 'asis'}
 
-if (params$summary_map) {
+if ((params$fltmap_show || params$fltmap_kml) && nrow(mcp_all_sf) > 0) {
   print(htmltools::h3("Flight Areas"))
+}  
 
+
+if (params$fltmap_show && nrow(mcp_all_sf) > 0) {
+  
   ## Add tiles properties
   tiles_esri_url <- "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
   
@@ -146,36 +177,117 @@ if (params$summary_map) {
   #                  "#652926", "#7FDCC0", "#C84248", "#8569D5", "#5E738F", "#D1A33D",
   #                  "#8A7C64", "#599861"), size = nrow(mcp_all_sf), replace = TRUE)
 
-  cols_base <- rainbow(nrow(mcp_all_sf), end=5/6)[order(runif(nrow(mcp_all_sf)))]
+  ## cols_base <- rainbow(nrow(mcp_all_sf), end=5/6)[order(runif(nrow(mcp_all_sf)))]
+  
+  ## Create colors from green to orange (excluding yellow, which we'll save for supplemental boundary files)
+  cols_base <- hsv(h = seq(from = 72 / 360, 
+                         to = 1 + (24 / 360), 
+                         length.out = nrow(mcp_all_sf)) %% 1,
+                   s = 0.8)[order(runif(nrow(mcp_all_sf)))]
+
   
   # mcp_lbl <- basename(params$html_reports)
-  html_fns <- basename(sapply(1:length(j_lst), function(i) j_lst[[i]]$html_full))
+  html_fns <- basename(sapply(1:length(i_lst), function(i) i_lst[[i]]$html_full))
   
   mcp_popup <- paste0("<a href='#", html_fns, "'>",   
-                      sapply(1:length(j_lst), function(i) j_lst[[i]]$imgcol$collection_name),
+                      sapply(1:length(i_lst), function(i) i_lst[[i]]$imgcol$name_use),
                       "</a>")
-                      
-  mcp_leaf <- leaflet(mcp_all_sf %>% st_transform(4326), width="650px", height="450px",
+                  
+  mcp_leaf <- leaflet(mcp_all_sf %>% st_transform(4326), width="750px", height="450px",
                options = leafletOptions(maxZoom = 23)) %>% 
     addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) %>%
     addTiles(group="Open Street Map") %>% 
     addLayersControl(baseGroups = c("Satellite", "Open Street Map"), 
-                     options = layersControlOptions(collapsed = FALSE)) %>%
+                     options = layersControlOptions(collapsed = FALSE))
+  
+  ## Add background layers
+  for (j in 1:length(params$bg_lst)) {
+    mcp_leaf <- mcp_leaf %>% 
+      addPolylines(data = params$bg_lst[[j]]$kml_sf %>% st_geometry() %>% st_zm(), 
+                   color = params$bg_lst[[j]]$color, 
+                   weight = params$bg_lst[[j]]$weight,
+                   opacity = 0.9)
+  }
+  
+  mcp_leaf <- mcp_leaf %>% 
     addPolygons(fillColor = cols_base, fillOpacity = 0.25, 
                 color = cols_base, weight = 3, opacity = 0.5,
                 popup = mcp_popup,
                 highlightOptions = highlightOptions(weight = 5, fillOpacity = 0.3))
-                
-                # label = mcp_lbl, 
-                # labelOptions = labelOptions(noHide = T, textOnly = FALSE,
-                #                             textsize = "12px",
-                #                             direction = "top",
-                #                             opacity = 0.5,
-                #                             interactive = FALSE)) 
 
   mcp_leaf
   
 }
+
+if (params$fltmap_kml && nrow(mcp_all_sf) > 0) {
+  
+  kml_fn <- "flight_areas.kml"
+  
+  ## Create a new XML document with a 'document' node
+  library(xml2)
+  nd_document <- xml_new_root("kml",
+                              xmlns = "http://www.opengis.net/kml/2.2",
+                              "xmlns:gx" = "http://www.google.com/kml/ext/2.2",
+                              "xmlns:kml" = "http://www.opengis.net/kml/2.2",
+                              "xmlns:atom" = "http://www.w3.org/2005/Atom") %>%
+    xml_add_child("Document") %>%
+    xml_add_child("name", "flight_areas") %>%
+    xml_parent()
+
+  ## Add a style to the document node
+  nd_style_hc <- nd_document %>% xml_add_child("Style", id = "hollow-cyan")
+
+  ## Add PolyStyle
+  nd_style_hc %>%
+    xml_add_child("PolyStyle") %>%
+    xml_add_child("fill", "0")
+
+  ## Add Line Style
+  nd_style_hc %>%
+    xml_add_child("LineStyle") %>%
+    xml_add_child("color", "ffffffaa") %>%
+    xml_add_sibling("width", "2")
+
+  for (j in 1:nrow(mcp_all_sf)) {
+
+    ## Create a new placemark node
+    nd_placemark <- nd_document %>% xml_add_child("Placemark")
+
+    ## Add a few base properties
+    nd_placemark %>%
+      xml_add_child("styleUrl", "#hollow-cyan") %>%
+      xml_add_sibling("name", file_path_sans_ext(basename (params$html_reports[j])))
+
+    ## Don't clamp to ground - LINE DISAPPEARS UNDER TREES
+    ## xml_add_sibling("altitudeMode", "clampToGround") %>%
+
+    ## Create the string of coordinates
+    coords_chr <- mcp_all_sf %>%
+      slice(j) %>%
+      st_transform(4326) %>%
+      st_coordinates() %>%
+      as_tibble() %>%
+      mutate(coords = paste(X, Y, "0", sep = ",")) %>%
+      pull(coords) %>%
+      paste(collapse = " ")
+
+    ## Create the placemark child nodes
+    nd_placemark %>%
+      xml_add_child("Polygon") %>%
+      xml_add_child("outerBoundaryIs") %>%
+      xml_add_child("LinearRing") %>%
+      xml_add_child("coordinates", coords_chr)
+
+  }  ## for j in 1:nrow(mcp_all_sf)
+
+  ## Write to disk
+  write_xml(nd_document %>% xml_root(), file = file.path(params$output_dir, kml_fn))
+  
+  ## Put the link in the HTML file
+  print(htmltools::HTML("<p>Download: <a href=\"", kml_fn, "\">Flight area(s) (KML)</a></p>"))
+
+}
+
 
 ```
 
@@ -193,13 +305,17 @@ for (i in 1:length(i_lst)) {
 
     if (i_lst[[i]]$imgcol$map_fn != "") {
       img_fn <- paste0(html_dir_rel, i_lst[[i]]$imgcol$map_fn )
-      print(HTML(paste0("<div style='float:right;' id='", html_fn, "'><a href='", html_dir_rel, html_fn,
+      print(HTML(paste0("<div style='float:right;'><a href='", html_dir_rel, html_fn,
                        "'", href_target, "><img src='", html_dir_rel, i_lst[[i]]$imgcol$map_fn,
                      "' style='width:220px; padding:20px;'/></a></div>")))
     }
     
-    print(HTML(paste0("<h3><a href='", html_dir_rel, html_fn, "'", href_target, ">", 
-                      i_lst[[i]]$imgcol$collection_name, "</a></h3>")))
+    #browser()
+    ## Select between collection_name and name_long
+    #xx <- i_lst[[i]]$imgcol$collection_name
+    
+    print(HTML(paste0("<h3 id='", html_fn, "'><a href='", html_dir_rel, html_fn, "'", href_target, ">", 
+                      i_lst[[i]]$imgcol$name_use, "</a></h3>")))
 
     if (i_lst[[i]]$imgcol$description != "") {
       print(HTML(paste0("<p><em>", i_lst[[i]]$imgcol$description, "</em></p>")))

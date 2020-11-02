@@ -1,158 +1,224 @@
-#' Export location info from a UAS image collection to Shapefile
-#'
-#' Export geometry(s) of a UAS image collection to Shapefile
-#'
-#' @param x A list of class 'uas_info'
-#' @param ctr Export the image centroids as a Shapefile, T/F or a filename
-#' @param fp Export the image footprints as a Shapefile, T/F or a filename
-#' @param mcp Export the minimum convex polygon of the image footprints as a Shapefile, T/F or a filename
-#' @param shp_dir The directory where the Shapefiles should be saved. If NULL, they will be saved in a 'map' sub-directory of the image folder
-#' @param create_dir Create the output directory if it doesn't exist, T/F
-#' @param overwrite Overwrite existing files, T/F
-#' @param quiet Supress messages and printing of the pandoc command line, T/F
-#'
-#' @details
-#'
-#' \code{ctr}, \code{fp}, and \code{mcp} can be logical (TRUE/FALSE) or a filename
-#' (minus the shp extension). If logical values are passed, a Shapefile name will
-#' be constructed based on the name of parent folder. You can specify which directory
-#' the Shapefiles will be exported to using the \code{shp_dir} argument. The default
-#' is to save them in a sub-directory of the images directory called 'map'.
-#'
-#' @return A vector of Shapefile filenames
-#'
-#' @seealso \link{uas_info}
-#'
-#' @importFrom crayon green
+#' @describeIn uas_exp_kml Export flight info to Shapefile
+#' @importFrom crayon green yellow red
 #' @importFrom sf st_write
+#' @importFrom dplyr mutate
 #' @export
 
-uas_exp_shp <- function(x, ctr=FALSE, fp=FALSE, mcp=FALSE, shp_dir=NULL, create_dir=TRUE,
-                       overwrite=FALSE, quiet=FALSE) {
+uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
+                    combine_feats = FALSE, combine_fn = NULL,
+                    output_dir = NULL, out_fnbase = NULL, create_dir = TRUE, overwrite = FALSE, quiet = FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
-    ctrYN <- !identical(ctr, FALSE)
-    fpYN <- !identical(fp, FALSE)
-    mcpYN <- !identical(mcp, FALSE)
-
-    if (!ctrYN && !fpYN && !mcpYN) {
-      stop("Nothing to do! Please set ctr, fp, or mcp to TRUE or a filename.")
+    if (!ctr && !fp && !mcp) {
+      stop("Nothing to do! At least one of `ctr`, `fp`, or `mcp` must be TRUE.")
     }
 
-    files_saved <- NULL
+    if (combine_feats) {
 
-    for (img_dir in names(x)) {
+      if (is.null(output_dir) || is.null(combine_fn)) {
+        stop("To combine features into a single Shapefile or KML, you must pass `output_dir` and combine_fn`")
 
-      if (identical(x[[img_dir]]$pts, NA)) {
-        warning(paste0("Centroids not found for ", img_dir, ". Skipping Shapefile export."))
-        next
+      } else {
+        if (!quiet) message(green(" - combined features will be saved to:", path.expand(output_dir)))
+        if (grepl("\\.", combine_fn)) warning("`combine_fn` should be the base of an output file name with no extension")
+
+        ## Create NULL objects to hold 'combined' layers
+
+        if (fp) fp_combined_sf <- NULL
+        if (mcp) mcp_combined_sf <- NULL
+
+        if (ctr) {
+          ctr_combined_sf <- NULL
+          ctr_combined_lst <- list() ## save placemarks
+          icon_base <- "https://ucanr-igis.github.io/uasimg/kml_icons/"
+          icon_png <- c("blu-circle-lv.png", "ylw-circle-lv.png", "red-circle-lv.png",
+                        "magenta-rev-circle-lv.png", "red-rev-circle-lv.png", "grn-circle-lv.png", "blue-rev-circle-lv.png", "organe-circle-lv.png",
+                        "purple-circle-lv.png", "tan-circle-lv.png", "bluegrn-circle-lv.png", "wht-circle-lv.png")
+        }
+
+
       }
+    }
+
+    ## Verify that that value(s) in img_dir (if any) are valid
+    if (is.null(img_dir)) {
+      img_dir_use <- names(x)
+    } else {
+      if (FALSE %in% (img_dir %in% names(x))) stop("Unknown value(s) in img_dir")
+      img_dir_use <- img_dir
+    }
+
+    files_saved <- NULL  ## gets returned at the end
+
+    for (img_dir in img_dir_use) {
 
       ## Get the output dir
-      if (is.null(shp_dir)) {
-        shp_dir_use <- file.path(img_dir, "map")
-        if (!file.exists(shp_dir_use) && create_dir) {
-          message("Creating ", shp_dir_use)
-          dir.create(shp_dir_use)
+      if (is.null(output_dir)) {
+        output_dir_use <- file.path(img_dir, "map")
+        if (!file.exists(output_dir_use) && create_dir) {
+          message("Creating ", output_dir_use)
+          dir.create(output_dir_use, recursive = TRUE)
         }
       } else {
-        shp_dir_use <- shp_dir
+        output_dir_use <- output_dir
       }
-      if (!file.exists(shp_dir_use)) stop(paste0("Can't find ", shp_dir_use))
+      if (!file.exists(output_dir_use)) stop(paste0("Can't find ", output_dir_use))
+      if (!quiet && !combine_feats) message(green(" - saving files to", path.expand(output_dir_use)))
 
-      ## Present an info message
-      if (!quiet) message(green("Saving Shapefiles to ", path.expand(shp_dir_use)))
+      ## Define the base file name
+      if (is.null(out_fnbase)) {
+
+        if (!is.na(x[[img_dir]]$metadata$name_short %>% null2na())) {
+          fnbase <- x[[img_dir]]$metadata$name_short
+        } else {
+          fnbase <- x[[img_dir]]$id
+        }
+      } else {
+        fnbase <- out_fnbase
+      }
 
       ## Export centroids
-      if (ctrYN) {
+      if (ctr) {
 
-        ## Get the Shapefile name
-        if (is.character(ctr)) {
-          ctr_shp_fn <- ctr
-          if (toupper(substr(ctr_shp_fn,nchar(ctr_shp_fn)-3,nchar(ctr_shp_fn)))==".SHP") {
-            ctr_shp_fn <- substr(ctr_shp_fn, 0, nchar(ctr_shp_fn) - 4)
+        if (combine_feats) {
+
+          ctr_combined_sf <-
+            rbind(ctr_combined_sf,
+                  x[[img_dir]]$pts %>%
+                    select(file_name, date_time, gps_lat, gps_long, gps_alt, yaw, make, model) %>%
+                    mutate(flight = fnbase))
+
+        } else {
+          ## Not combined features
+          ctr_fn <- paste0(fnbase, "_ctr")
+
+          ## Compute the complete path and see if it already exists
+          ctr_shp_pathfn <- file.path(path.expand(output_dir_use), paste0(ctr_fn, ".shp"))
+
+          ## Export to Shapefile
+          if (file.exists(ctr_shp_pathfn) && !overwrite) {
+            if (!quiet) message(yellow(paste0(" - ", ctr_fn, ".shp", " already exists. Skipping.")))
+
+          } else {
+            st_write(x[[img_dir]]$pts %>%
+                       select(file_name, date_time, gps_lat, gps_long, gps_alt, yaw, make, model),
+                     dsn = ctr_shp_pathfn, delete_dsn = file.exists(ctr_shp_pathfn), quiet = quiet)
+            if (!quiet) message(green(paste0(" - ", ctr_fn, ".shp saved")))
+            files_saved <- c(files_saved, ctr_shp_pathfn)
           }
-        } else {
-          ctr_shp_fn <- paste0(basename(img_dir), "_pts")
-        }
 
-        ## Compute the complete path and see if it already exists
-        ctr_shp_pathfn <- file.path(path.expand(shp_dir_use), paste0(ctr_shp_fn, ".shp"))
-        ctr_exists_yn <- file.exists(ctr_shp_pathfn)
-
-        ## Export to Shapefile
-        if (ctr_exists_yn && !overwrite) {
-          warning(paste0(ctr_shp_fn, ".shp", " already exists. Skipping."))
-        } else {
-          st_write(x[[img_dir]]$pts, dsn = ctr_shp_pathfn, delete_dsn = ctr_exists_yn, quiet = quiet)
-          if (!quiet) message(green(ctr_shp_fn, ".shp saved", sep = ""))
-          files_saved <- c(files_saved, ctr_shp_pathfn)
         }
 
       }
 
       ## Export footprints
-      if (fpYN) {
+      if (fp) {
 
-        ## Get the Shapefile name
-        if (is.character(fp)) {
-          fp_shp_fn <- fp
-          if (toupper(substr(fp_shp_fn,nchar(fp_shp_fn)-3,nchar(fp_shp_fn)))==".SHP") {
-            fp_shp_fn <- substr(fp_shp_fn, 0, nchar(fp_shp_fn) - 4)
-          }
+        if (combine_feats) {
+          fp_combined_sf <- rbind(fp_combined_sf, x[[img_dir]]$fp)
+
         } else {
-          fp_shp_fn <- paste0(basename(img_dir), "_fp")
-        }
+          fp_fn <- paste0(fnbase, "_fp")
 
-        ## Compute the complete path and see if it already exists
-        fp_shp_pathfn <- file.path(path.expand(shp_dir_use), paste0(fp_shp_fn, ".shp"))
-        fp_exists_yn <- file.exists(fp_shp_pathfn)
+          ## Compute the complete path and see if it already exists
+          fp_shp_pathfn <- file.path(path.expand(output_dir_use), paste0(fp_fn, ".shp"))
 
-        ## Export to Shapefile
-        if (fp_exists_yn && !overwrite) {
-          warning(paste0(fp_shp_fn, ".shp", " already exists. Skipping."))
-        } else {
-          if (identical(x[[img_dir]]$fp, NA)) {
-            warning("Footprints not found. Skipping.")
+          ## Export to Shapefile
+          if (file.exists(fp_shp_pathfn) && !overwrite) {
+
+            if (!quiet) message(yellow(paste0(" - ", fp_fn, ".shp", " already exists. Skipping.")))
+
           } else {
-            st_write(x[[img_dir]]$fp, dsn = fp_shp_pathfn, delete_dsn = fp_exists_yn, quiet = quiet)
-            if (!quiet) message(green(fp_shp_fn, ".shp saved", sep=""))
-            files_saved <- c(files_saved, fp_shp_pathfn)
+            if (identical(x[[img_dir]]$fp, NA)) {
+              if (!quiet) message(yellow("Footprints not found. Skipping."))
+
+            } else {
+              st_write(x[[img_dir]]$fp, dsn = fp_shp_pathfn,
+                       delete_dsn = file.exists(fp_shp_pathfn), quiet = quiet)
+              if (!quiet) message(green(fp_fn, ".shp saved", sep=""))
+              files_saved <- c(files_saved, fp_shp_pathfn)
+            }
           }
+
         }
+
       }
 
       ## Export MCP
-      if (mcpYN) {
+      if (mcp) {
 
-        ## Get the Shapefile name
-        if (is.character(mcp)) {
-          mcp_shp_fn <- mcp
-          if (toupper(substr(mcp_shp_fn,nchar(mcp_shp_fn)-3,nchar(mcp_shp_fn)))==".SHP") {
-            mcp_shp_fn <- substr(mcp_shp_fn, 0, nchar(mcp_shp_fn) - 4)
-          }
+        if (combine_feats) {
+          mcp_combined_sf <- rbind(mcp_combined_sf, x[[img_dir]]$mcp)
+
         } else {
-          mcp_shp_fn <- paste0(basename(img_dir), "_mcp")
+          mcp_fn <- paste0(fnbase, "_mcp")
+
+
+          ## Compute the complete path and see if it already exists
+          mcp_shp_pathfn <- file.path(path.expand(output_dir_use), paste0(mcp_fn, ".shp"))
+
+          ## Export to Shapefile
+          if (file.exists(mcp_shp_pathfn) && !overwrite) {
+            if (!quiet) message(yellow(paste0(" - ", mcp_fn, ".shp", " already exists. Skipping.")))
+            files_saved <- c(files_saved, mcp_shp_pathfn)
+
+          } else {
+            st_write(x[[img_dir]]$mcp, dsn = mcp_shp_pathfn, delete_dsn = file.exists(mcp_shp_pathfn), quiet = quiet)
+            if (!quiet) message(green(paste0(" - ", mcp_fn, ".shp saved")))
+            files_saved <- c(files_saved, mcp_shp_pathfn)
+          }
+
         }
 
-        ## Compute the complete path and see if it already exists
-        mcp_shp_pathfn <- file.path(path.expand(shp_dir_use), paste0(mcp_shp_fn, ".shp"))
-        mcp_exists_yn <- file.exists(mcp_shp_pathfn)
+      }
 
+    }   # for img_dir in img_dir_use. DONE WITH LOOP
+
+    if (combine_feats) {
+
+      if (ctr) {
+
+        ## Compute the complete path and see if it already exists
+        ctr_shp_pathfn <- file.path(path.expand(output_dir_use), paste0(combine_fn, "_ctr.shp"))
 
         ## Export to Shapefile
-        if (mcp_exists_yn && !overwrite) {
-          warning(paste0(mcp_shp_fn, ".shp", " already exists. Skipping."))
+        if (file.exists(ctr_shp_pathfn) && !overwrite) {
+          if (!quiet) message(yellow(paste0(" - ", combine_fn, "_ctr.shp already exists. Skipping.")))
+          files_saved <- c(files_saved, ctr_shp_pathfn)
+
         } else {
-          st_write(x[[img_dir]]$mcp, dsn = mcp_shp_pathfn, delete_dsn = mcp_exists_yn, quiet = quiet)
-          if (!quiet) message(green(mcp_shp_fn, ".shp saved", sep=""))
+          st_write(ctr_combined_sf, dsn = ctr_shp_pathfn, delete_dsn = file.exists(ctr_shp_pathfn), quiet = quiet)
+          if (!quiet) message(green(paste0(" - ", combine_fn, "_ctr.shp saved")))
+          files_saved <- c(files_saved, ctr_shp_pathfn)
+        }
+
+      }
+
+      if (fp) {
+        message(red("Exporting combined footprints is not yet supported."))
+      }
+
+      if (mcp) {
+
+        ## Compute the complete path and see if it already exists
+        mcp_shp_pathfn <- file.path(path.expand(output_dir_use), paste0(combine_fn, "_mcp.shp"))
+
+        ## Export to Shapefile
+        if (file.exists(mcp_shp_pathfn) && !overwrite) {
+          if (!quiet) message(yellow(paste0(" - ", combine_fn, "_mcp.shp already exists. Skipping.")))
+          files_saved <- c(files_saved, mcp_shp_pathfn)
+
+        } else {
+          st_write(mcp_combined_sf, dsn = mcp_shp_pathfn, delete_dsn = file.exists(mcp_shp_pathfn), quiet = quiet)
+          if (!quiet) message(green(paste0(" - ", combine_fn, "_mcp.shp saved")))
           files_saved <- c(files_saved, mcp_shp_pathfn)
         }
 
       }
+
     }
 
-    message("Done")
+    if (!quiet) message(green("Done"))
     invisible(files_saved)
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generate a table of contents for image collection reports — uas_toc • uasimg</title>
+<title>Generate a Table of Contents of flight summaries — uas_toc • uasimg</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Generate a table of contents for image collection reports — uas_toc" />
-<meta property="og:description" content="Generate a table of contents for image collection reports" />
+<meta property="og:title" content="Generate a Table of Contents of flight summaries — uas_toc" />
+<meta property="og:description" content="Generate a Table of Contents of flight summaries" />
 
 
 
@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -99,6 +99,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -124,26 +136,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generate a table of contents for image collection reports</h1>
+    <h1>Generate a Table of Contents of flight summaries</h1>
     <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_toc.R'><code>R/uas_toc.R</code></a></small>
     <div class="hidden name"><code>uas_toc.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generate a table of contents for image collection reports</p>
+    <p>Generate a Table of Contents of flight summaries</p>
     </div>
 
     <pre class="usage"><span class='fu'>uas_toc</span>(
   <span class='kw'>html_reports</span>,
   output_dir = <span class='st'>"."</span>,
   output_fn = <span class='st'>"index.html"</span>,
-  gather = <span class='kw'>NULL</span>,
-  toc_title = <span class='st'>"UAS Image Collections"</span>,
+  gather_dir = <span class='kw'>NULL</span>,
+  toc_title = <span class='st'>"UAS Flight Summaries"</span>,
   toc_desc = <span class='kw'>NULL</span>,
-  summary_map = <span class='fl'>TRUE</span>,
+  fltmap_show = <span class='fl'>TRUE</span>,
+  fltmap_kml = <span class='fl'>FALSE</span>,
+  fltmap_base = <span class='kw'>NULL</span>,
   header_html = <span class='kw'>NULL</span>,
   footer_html = <span class='kw'>NULL</span>,
-  overwrite = <span class='fl'>FALSE</span>,
+  overwrite_toc = <span class='fl'>FALSE</span>,
+  overwrite_gather = <span class='fl'>FALSE</span>,
   open_toc = <span class='fl'>FALSE</span>,
   quiet = <span class='fl'>FALSE</span>
 )</pre>
@@ -153,7 +168,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>html_reports</th>
-      <td><p>File names with path of HTML Image Collection summaries</p></td>
+      <td><p>HTML file names of flight summaries</p></td>
     </tr>
     <tr>
       <th>output_dir</th>
@@ -164,20 +179,28 @@
       <td><p>Output file name</p></td>
     </tr>
     <tr>
-      <th>gather</th>
+      <th>gather_dir</th>
       <td><p>Subdirectory of output_dir where HTML files will be copied</p></td>
     </tr>
     <tr>
       <th>toc_title</th>
-      <td><p>Title to use for the Table of Contents</p></td>
+      <td><p>Title to show at the top of the Table of Contents</p></td>
     </tr>
     <tr>
       <th>toc_desc</th>
       <td><p>A short description to appear under the title</p></td>
     </tr>
     <tr>
-      <th>summary_map</th>
-      <td><p>Show a map of all the flight areas, logical</p></td>
+      <th>fltmap_show</th>
+      <td><p>Show a map of all flight areas, logical</p></td>
+    </tr>
+    <tr>
+      <th>fltmap_kml</th>
+      <td><p>Create a KML of all flight areas, logical</p></td>
+    </tr>
+    <tr>
+      <th>fltmap_base</th>
+      <td><p>A list object containing of background KML files and their symbology for the flight map, see Details.</p></td>
     </tr>
     <tr>
       <th>header_html</th>
@@ -188,8 +211,12 @@
       <td><p>HTML file name to use as a page footer</p></td>
     </tr>
     <tr>
-      <th>overwrite</th>
+      <th>overwrite_toc</th>
       <td><p>Overwrite existing file, logical</p></td>
+    </tr>
+    <tr>
+      <th>overwrite_gather</th>
+      <td><p>Subdirectory of output_dir where HTML files will be copied</p></td>
     </tr>
     <tr>
       <th>open_toc</th>
@@ -203,20 +230,28 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function generates a HTML master table of contents for a set
-of HTML UAS Image Collection reports created by <code><a href='uas_report.html'>uas_report</a></code>.</p>
+    <p>This function generates a master Table of Contents HTML page for a set
+of individual flight summaries created by <code><a href='uas_report.html'>uas_report</a></code>.</p>
 <p><code>htmls_reports</code> should be a vector of HTML filenames, including the full path. Reports will
 be appear in the Table of Contents in the same order. To link to the reports, R will attempt
 to create relative paths from the <code>output_dir</code> to the locations
 of the <code>htmls_reports</code>. At a minimum, this requires <code>output_dir</code> and
 <code>htmls_reports</code> to be on the same volume. Preferably <code>output_dir</code> will be a parent
 directory of <code>htmls_reports</code>. If your HTML reports are scattered across many directories,
-consider using <code>gather</code> which will put them all in one place.</p>
-<p><code>gather</code> specifies an optional <em>sub-directory</em> of <code>output_dir</code> (not absolute) where
-the HTML files in <code>htmls_reports</code> (and any associated PNG and thumbnail files) will be copied.
-Links in the TOC will then point to the copies of the HTML files in <code>gather</code>.
-If the <code>gather</code> sub-directory does not already exist, R will attempt to create it. To gather
-HTML files in <code>output_dir</code> (i.e., not a sub-directory), set <code>gather = '.'</code></p>
+consider using <code>gather_dir</code> which will put them all in one place.</p>
+<p><code>gather_dir</code> specifies an optional <em>sub-directory</em> of <code>output_dir</code> where
+the HTML files in <code>htmls_reports</code> (and any associated files such as thumbnails) will be copied.
+<code>gather_dir</code> should be relative to <code>output_dir</code> (not an absolute path). To copy HTML files
+in <code>output_dir</code> itself (i.e., not a sub-directory), set <code>gather_dir = '.'</code>
+Links in the TOC will then point to the copies of the HTML files in <code>gather_dir</code>.
+If <code>gather_dir</code> does not already exist, R will attempt to create it. To link to the
+HTML files where they currently are (i.e., not make copies), let <code>gather_dir = NULL</code> (the default).</p>
+<p>If <code>fltmap_show = TRUE</code>, the Table of Contents will include an interactive map showing the flight
+areas of all the flight summaries on the page. <code>fltmap_base</code> is an optional list
+of lists you can use to include additional base layers. Currently only polygon and polyline KML files are
+supported as additional base layers. Each list element should be a named list with three
+elements: <em>kml_fn</em> (a KML file name), <em>color</em> (a named color or hex code for the outline),
+and <em>weight</em> (outline thickness in pixels).</p>
 <p><code>header_html</code> and <code>footer_html</code> allow you to specify a page header and footer, i.e., to
 add branding elements to the TOC.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

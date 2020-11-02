@@ -15,7 +15,7 @@ uas_flds_oem()
 \arguments{
 \item{flds}{Character vector of metadata fields}
 
-\item{reset}{Use original values}
+\item{reset}{Use a default set of metadata fields}
 
 \item{quiet}{Suppress messages}
 }

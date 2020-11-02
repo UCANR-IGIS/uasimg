@@ -2,30 +2,39 @@
 % Please edit documentation in R/uas_metadata_make.R
 \name{uas_metadata_make}
 \alias{uas_metadata_make}
-\title{Create a blank metadata text file}
+\title{Manage supplemental metadata files}
 \usage{
 uas_metadata_make(
-  dirs,
-  file = "metadata.txt",
-  suffix = c("", "dir")[1],
-  flds = uas_getflds(),
+  x,
+  md_file = "metadata.txt",
+  md_suffix = NULL,
+  make_new = FALSE,
   overwrite = FALSE,
-  open = FALSE,
+  open = TRUE,
+  md_flds = uas_getflds(),
+  md_template = NULL,
+  read_uasinfo = FALSE,
   quiet = FALSE
 )
 }
 \arguments{
-\item{dirs}{A character vector of directories or a uas_info object}
+\item{x}{A character vector of directories, or a uas_info object}
 
-\item{file}{Name of the file to create}
+\item{md_file}{Name of the file to create}
 
-\item{suffix}{A suffix to append to the file names}
+\item{md_suffix}{A suffix to append to the file names}
 
-\item{flds}{A character vector of field names}
+\item{make_new}{Create new metadata file(s), Logical}
 
-\item{overwrite}{Overwrite existing metadata files, logical}
+\item{overwrite}{Overwrite existing metadata files, Logical}
 
 \item{open}{Open the file for editing}
+
+\item{md_flds}{A character vector of field names}
+
+\item{md_template}{A template metadata file}
+
+\item{read_uasinfo}{Read and populate metadata fields from x (assuming x is a uas_info object)}
 
 \item{quiet}{Suppress messages}
 }
@@ -33,17 +42,18 @@ uas_metadata_make(
 A character vector of the external metadata text file(s) created.
 }
 \description{
-Create a blank metadata text file
+Create and edit supplemental metadata files
 }
 \details{
-This creates blank external metadata text file(s). One file will be placed in each
-directory in \code{dirs} (which can be either a character vector or a
-\code{\link{uas_info}} object. The files will be named based on the value of \code{file}
-which will be repeated if needed, with an option to append a suffix (which can make it
-easier to edit them in a text editor). If \code{suffix = 'dir'}, the base name of the
-directory will be appended. Suffix can also be a literal string. Both \code{file}
-and \code{suffix} should be of length 1 or equal to the number of \code{dirs}.
+This creates, and/or opens for editing, supplemental metadata text file(s) in image folders.
+
+If \code{make_new = TRUE}, metadata files will be created in each directory of \code{x}. \code{x}
+can be either a character vector or a \code{\link{uas_info}} object. The files will be named based on the value of \code{md_file},
+with an option to append a suffix \code{md_suffix}. Both \code{md_file}
+and \code{md_suffix} should be of length 1 or equal to the number of \code{x}.
+
+If \code{open = TRUE}, the text files will be opened. To open all metadata text files,
 }
 \seealso{
-\code{\link{uas_setflds}}
+\code{\link{uas_getflds}}, \code{\link{uas_setflds}}
 }

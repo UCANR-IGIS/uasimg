@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Meters to feet — m2ft • uasimg</title>
+<title>Unit conversion functions — m2ft • uasimg</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Meters to feet — m2ft" />
-<meta property="og:description" content="Converts meters to feet" />
+<meta property="og:title" content="Unit conversion functions — m2ft" />
+<meta property="og:description" content="Unit conversion functions" />
 
 
 
@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -99,6 +99,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -124,29 +136,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Meters to feet</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/m2ft.R'><code>R/m2ft.R</code></a></small>
+    <h1>Unit conversion functions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/unit_conversions.R'><code>R/unit_conversions.R</code></a></small>
     <div class="hidden name"><code>m2ft.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Converts meters to feet</p>
+    <p>Unit conversion functions</p>
     </div>
 
-    <pre class="usage"><span class='fu'>m2ft</span>(<span class='kw'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>m2ft</span>(<span class='kw'>x</span>)
+
+<span class='fu'>ft2m</span>(<span class='kw'>x</span>)
+
+<span class='fu'>cm2in</span>(<span class='kw'>x</span>)
+
+<span class='fu'>msq2acres</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A value in feet to convert to meters</p></td>
+      <td><p>A numeric vector to convert</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The value in feet</p>
+    <p>A vector of converted values</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>These unit conversion functions are vectorized.</p>
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    
+<ul>
+<li><p><code>ft2m</code>: Feet to meters</p></li>
+<li><p><code>cm2in</code>: Centimeters to inches</p></li>
+<li><p><code>msq2acres</code>: Meters squared to acres</p></li>
+</ul>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

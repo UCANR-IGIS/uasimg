@@ -11,7 +11,8 @@ uas_report(
   thumbnails = FALSE,
   show_gps_coord = FALSE,
   show_local_dir = TRUE,
-  kml_mcp = TRUE,
+  report_title = "Flight Summary",
+  attachments = c("mcp_kml", "ctr_kml")[0],
   output_dir = NULL,
   create_dir = TRUE,
   output_file = NULL,
@@ -39,7 +40,9 @@ uas_report(
 
 \item{show_local_dir}{Show the local image directory, TF}
 
-\item{kml_mcp}{Export the MCP as a KML}
+\item{report_title}{Title to appear at the top of the summary}
+
+\item{attachments}{Supplementary files to create and link to the flight summary, see Details.}
 
 \item{output_dir}{If NULL, then will be placed in a 'map' sub-directory of the images}
 
@@ -61,12 +64,12 @@ uas_report(
 
 \item{google_api}{API key for Google Static Maps, see Details.}
 
-\item{report_rmd}{Rmd template used to generate the HTML file. See details.}
+\item{report_rmd}{Rmd template used to generate the HTML file. See Details.}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }
 \value{
-The filename of the HTML report generated
+The HTML file name(s) of the flight summaries generated
 }
 \description{
 Creates image collection summaries for individual flights (folders)
@@ -95,9 +98,14 @@ removed, try increasing it. By default, the background image will be a satellite
 Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
 pass with \code{google_api} (for
 details see \url{https://developers.google.com/maps/documentation/maps-static/}. Alternately you
-can save your API key with ggmap::register_google(), after which it will be read automatically.
+can save your API key with \code{ggmap::register_google()}, after which it will be read automatically.
 If a Google API key is not found, a terrain map from Stamen will be substituted.
+
+\code{attachment} specifies which supplementary files to create and link to the flight summary. Choices are
+\code{ctr_kml} and \code{mcp_kml} for KML versions of the camera locations and MCP (minimum convex
+polygon around all images). These KML files will be created in the same output directory as the flight
+summary.
 }
 \seealso{
-\link{uas_info}
+\code{\link{uas_info}}, \code{\link{uas_exp_kml}},
 }
