@@ -1,0 +1,4774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+    <name>hrec_wtrshd2_2017_flt2_ctr</name>
+    <Style id="rc">
+      <BalloonStyle>
+        <text>&lt;b&gt;$[name]&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;$[description]</text>
+      </BalloonStyle>
+      <LabelStyle>
+        <scale>0.0</scale>
+      </LabelStyle>
+      <IconStyle>
+        <scale>0.5</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/red-circle-lv.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Folder>
+      <name>hrec_wtrshd2_2017_flt2_ctr</name>
+      <LookAt>
+        <longitude>-123.081662958333</longitude>
+        <latitude>38.9931633333334</latitude>
+        <altitude>0</altitude>
+        <tilt>0</tilt>
+        <range>2000</range>
+      </LookAt>
+      <Placemark>
+        <name>DJI_0001.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084527916667,38.9906231111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0002.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084374277778,38.9907396944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0003.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084217777778,38.9908595277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0004.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084063416667,38.9909801666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0005.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083908666667,38.9911001111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0006.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083753,38.9912206666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0007.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083597,38.9913409722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0008.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083441638889,38.9914611111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0009.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083286416667,38.9915818888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0010.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083053305556,38.9917637222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0011.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082975694444,38.9918239444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0012.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082819805556,38.9919438333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0013.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082666138889,38.9920640277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0014.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082512222222,38.99218325,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0015.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082357805556,38.9923031944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0016.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082203194444,38.9924236388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0017.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082049138889,38.99254275,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0018.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081819222222,38.9927218333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0019.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081666472222,38.9928413611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0020.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081511861111,38.9929603611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0021.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08135775,38.9930804722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0022.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081204833333,38.9932003611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0023.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081048861111,38.9933203055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0024.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080895083333,38.9934398055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0025.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08074275,38.9935578611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0026.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080591611111,38.9936760555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0027.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080440388889,38.9937944444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0028.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080289222222,38.9939118333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0029.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080138944444,38.9940289722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0030.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079987833333,38.994146,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0031.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079836361111,38.9942637222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0032.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0796845,38.9943812777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0033.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079532944444,38.9944998611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0034.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079379611111,38.9946181666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0035.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079227388889,38.9947365555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0036.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079074583333,38.9948552222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0037.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07892325,38.9949726666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0038.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078772361111,38.9950899166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0039.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078622027778,38.9952065555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0040.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078471555556,38.9953238888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0041.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078321138889,38.9954409166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0042.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078170083333,38.9955578611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0043.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078044027778,38.99565875,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0044.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078022722222,38.9956823611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0045.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078025416667,38.9956641111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0046.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077952055556,38.9956014166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0047.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077818972222,38.9954994166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0048.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:17:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07772825,38.9954407777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0049.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077730055556,38.9954454444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0050.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077780861111,38.9954270833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0051.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077887333333,38.9953479722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0052.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078040888889,38.9952268888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0053.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078196333333,38.9951023333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0054.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078347861111,38.9949838611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0055.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078501833333,38.9948644722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0056.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078656444444,38.9947441111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0057.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078810888889,38.9946236388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0058.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078966305556,38.9945031666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0059.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07912125,38.9943825277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0060.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079276472222,38.9942615833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0061.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079431638889,38.9941418333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0062.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079585861111,38.9940240277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0063.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079737583333,38.9939061944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0064.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079887083333,38.9937890833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0065.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080036777778,38.9936719444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0066.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080188222222,38.9935545555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0067.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080337083333,38.99343725,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0068.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080487666667,38.9933190833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0069.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080638305556,38.9932026666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0070.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080789222222,38.9930849722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0071.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080940305556,38.9929671944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0072.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081093138889,38.9928494722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0073.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08124575,38.99273075,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0074.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081395805556,38.9926149444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0075.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081544361111,38.9924997777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0076.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081692527778,38.9923843333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0077.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081840888889,38.9922687222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0078.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:18:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081989638889,38.9921527777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0079.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082139555556,38.99203575,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0080.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082290777778,38.9919179722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0081.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082441694444,38.9918006388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0082.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082593055556,38.9916834444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0083.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082743305556,38.9915661944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0084.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082894027778,38.9914490277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0085.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083044555556,38.9913325833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0086.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083194027778,38.9912161388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0087.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083343305556,38.9911003611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0088.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083491972222,38.9909848611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0089.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08364125,38.9908688333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0090.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083790416667,38.9907531111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0091.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083940555556,38.9906364444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0092.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084090833333,38.9905191944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0093.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084241305556,38.9904021666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0094.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084391333333,38.9902858611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0095.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084540972222,38.9901698888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0096.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084690388889,38.9900538333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0097.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084779111111,38.9899778055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0098.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084770305556,38.9899761944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0099.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084745666667,38.9899715833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0100.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084654777778,38.9898937777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0101.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084519833333,38.9897896111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0102.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084473805556,38.9897626388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0103.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084479333333,38.9897779444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0104.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084429416667,38.9898219444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0105.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084295694444,38.9899225277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0106.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084134833333,38.99004825,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0107.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083978333333,38.9901710833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0108.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:19:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083825222222,38.9902880555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0109.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083669916667,38.9904081111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0110.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083513916667,38.9905281666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0111.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083358833333,38.9906482777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0112.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083203444444,38.9907682777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0113.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083048027778,38.9908890277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0114.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082893027778,38.9910095,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0115.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0827375,38.9911301111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0116.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082582138889,38.9912508055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0117.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082427722222,38.9913706944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0118.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082273416667,38.9914908611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0119.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082118944444,38.9916112777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0120.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081964,38.9917309722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0121.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08181025,38.9918498333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0122.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081658972222,38.9919679166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0123.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081507277778,38.9920857222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0124.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08135625,38.9922038888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0125.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081205722222,38.9923208333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0126.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081054444444,38.99243775,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0127.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080903055556,38.9925551388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0128.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080752055556,38.9926732777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0129.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080600222222,38.9927919166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0130.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080448833333,38.9929094166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0131.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080298055556,38.9930259166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0132.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080149138889,38.9931420833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0133.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080002111111,38.9932566666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0134.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07985525,38.9933706388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0135.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079709194444,38.9934836666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0136.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079563722222,38.9935966666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0137.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079416388889,38.9937106388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0138.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:20:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079194777778,38.9938827222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0139.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079120527778,38.9939406111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0140.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078972083333,38.9940563888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0141.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078749972222,38.9942295,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0142.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078600472222,38.9943457777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0143.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078451083333,38.9944618611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0144.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078301805556,38.9945779444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0145.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078152694444,38.9946935833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0146.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078004138889,38.9948089722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0147.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077856527778,38.9949238333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0148.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077708277778,38.9950389444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0149.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07756,38.9951545833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0150.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077462583333,38.9952355555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0151.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077465472222,38.9952416944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0152.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077446916667,38.9952087777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0153.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077352833333,38.9951351666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0154.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077214805556,38.9950337777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0155.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077162166667,38.9950030833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0156.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077178472222,38.9950068611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0157.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077247111111,38.9949663055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0158.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077374527778,38.99487075,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0159.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077529055556,38.9947464444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0160.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07767975,38.9946267777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0161.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077833277778,38.9945065555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0162.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077987888889,38.9943861111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0163.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078142416667,38.9942667222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0164.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078296888889,38.9941455277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0165.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078452111111,38.9940250833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0166.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078608055556,38.9939048055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0167.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078763361111,38.9937841111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0168.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:21:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078918138889,38.9936636388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0169.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079071138889,38.9935442222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0170.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079222638889,38.9934260833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0171.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079373138889,38.9933088333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0172.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079523361111,38.9931927777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0173.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079673194444,38.9930766388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0174.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07982325,38.9929591111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0175.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079972138889,38.992843,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0176.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080120222222,38.9927279166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0177.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08026975,38.9926123333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0178.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080419555556,38.9924963888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0179.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080569194444,38.99238,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0180.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080716666667,38.9922646388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0181.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080863583333,38.9921501666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0182.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081009805556,38.9920369722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0183.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081155944444,38.9919236111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0184.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081302305556,38.9918096944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0185.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081448722222,38.9916954722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0186.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081595138889,38.9915811388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0187.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081741166667,38.9914675555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0188.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081888138889,38.9913537777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0189.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082035444444,38.9912391944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0190.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082183805556,38.9911234166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0191.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082332111111,38.9910084166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0192.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082478888889,38.9908950555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0193.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082624944444,38.9907810555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0194.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082771555556,38.9906672777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0195.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082919333333,38.9905523611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0196.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08306675,38.9904375,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0197.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083214972222,38.99032275,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0198.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:22:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083362527778,38.9902074166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0199.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0835105,38.9900930833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0200.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083657916667,38.9899784444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0201.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083805083333,38.9898635277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0202.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083953388889,38.989748,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0203.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084102666667,38.9896320277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0204.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084207222222,38.9895448055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0205.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084204861111,38.9895359722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0206.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084184305556,38.9895385833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0207.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084104166667,38.9894665,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0208.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083966583333,38.9893585,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0209.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083907777778,38.9893233611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0210.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083913,38.9893390833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0211.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083874305556,38.9893750555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0212.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083746694444,38.9894695277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0213.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083587111111,38.9895966666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0214.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083431,38.9897188611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0215.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083274444444,38.9898379722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0216.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083118916667,38.9899574166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0217.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082963361111,38.9900774166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0218.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082807805556,38.9901979166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0219.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082653388889,38.9903181944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0220.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082498611111,38.9904385277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0221.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082343166667,38.9905590833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0222.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082187277778,38.9906791111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0223.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082033416667,38.9907984166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0224.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081880111111,38.9909177222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0225.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081727972222,38.9910361388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0226.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081577638889,38.9911532777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0227.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081427416667,38.9912701111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0228.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:23:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081277361111,38.9913871388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0229.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081126222222,38.9915041111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0230.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080973916667,38.9916221944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0231.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080823666667,38.9917391666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0232.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080673416667,38.9918555277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0233.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080524333333,38.9919723333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0234.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080374444444,38.9920889166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0235.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08022475,38.99220525,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0236.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080074666667,38.9923216666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0237.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079924777778,38.9924380833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0238.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079775055556,38.99255425,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0239.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079625833333,38.9926701666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0240.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079476888889,38.99278625,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0241.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079327916667,38.9929018055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0242.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0791795,38.9930166944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0243.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079029722222,38.9931324444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0244.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078879611111,38.9932491111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0245.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078731,38.99336575,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0246.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078582,38.9934819166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0247.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078432555556,38.9935981111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0248.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078282055556,38.9937135,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0249.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078132916667,38.9938295833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0250.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077912277778,38.9940018888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0251.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077838833333,38.9940588611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0252.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077619555556,38.9942303888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0253.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077546583333,38.9942873055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0254.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077399805556,38.9944011111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0255.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077251222222,38.9945162222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0256.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077103083333,38.9946308888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0257.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:24:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07696025,38.9947440833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0258.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.076895805556,38.99480275,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0259.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0769075,38.9947955555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0260.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07680975,38.9947100555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0261.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.076673666667,38.99460975,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0262.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.076598222222,38.9945621944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0263.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.076607388889,38.9945696111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0264.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07666575,38.9945407777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0265.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.076781111111,38.9944546944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0266.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.076933083333,38.9943336388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0267.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077084972222,38.9942111388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0268.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077239777778,38.9940901666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0269.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077394444444,38.99396975,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0270.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077549055556,38.9938498055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0271.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077704888889,38.9937291666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0272.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.077859666667,38.9936083888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0273.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078014222222,38.9934878055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0274.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078169194444,38.99336675,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0275.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:25:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078324055556,38.9932473055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0682.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086727694444,38.9915304444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0683.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086687555556,38.9915690277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0684.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086566194444,38.9916620833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0685.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086406888889,38.9917909722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0686.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086267361111,38.9919020833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0687.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086118361111,38.9920155555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0688.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085962388889,38.9921369166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0689.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:05:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085807416667,38.9922587222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0690.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085652388889,38.9923783333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0691.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085497583333,38.9924982222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0692.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085342055556,38.9926191944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0693.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085186166667,38.9927402777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0694.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085030972222,38.9928614444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0695.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084875777778,38.9929824166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0696.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084719944444,38.99310275,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0697.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084564416667,38.9932239722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0698.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0844085,38.9933452222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0699.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084252611111,38.9934661111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0700.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084096638889,38.9935871666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0701.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083941583333,38.9937083055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0702.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083785166667,38.99382925,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0703.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08363,38.9939498333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0704.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083474305556,38.9940710555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0705.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083318527778,38.9941920277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0706.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083162694444,38.9943134722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0707.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083006916667,38.9944344444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0708.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082851277778,38.9945555277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0709.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082694611111,38.9946771388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0710.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082538805556,38.9947980833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0711.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082383083333,38.9949193333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0712.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082227,38.9950403055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0713.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082071888889,38.9951606666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0714.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081916194444,38.99528125,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0715.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08175925,38.9954026944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0716.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081603527778,38.9955246111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0717.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081447861111,38.9956452222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0718.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081292055556,38.9957665,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0719.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:06:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081136111111,38.99588725,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0720.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080980611111,38.9960078055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0721.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080824555556,38.99613,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0722.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080669694444,38.9962502222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0723.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080514861111,38.9963710833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0724.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080358555556,38.9964924444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0725.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080203222222,38.9966132777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0726.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080046777778,38.9967351944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0727.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079890722222,38.9968562222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0728.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079748305556,38.9969676666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0729.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079707694444,38.9970033055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0730.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07971775,38.9969920555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0731.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079661527778,38.9969356111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0732.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079534555556,38.9968378055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0733.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079424333333,38.9967582777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0734.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079418722222,38.9967535277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0735.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07946275,38.9967449166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0736.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079563861111,38.9966747777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0737.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079718694444,38.9965545833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0738.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079870388889,38.9964348055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0739.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080012805556,38.9963233055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0740.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080168888889,38.9962023333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0741.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08032375,38.99608175,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0742.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080478361111,38.9959611666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0743.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080633444444,38.9958408888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0744.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080789194444,38.9957205,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0745.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080944,38.9956001111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0746.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081099027778,38.9954793333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0747.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081254666667,38.9953587777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0748.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:07:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081411,38.9952369722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0749.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081566944444,38.9951162222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0750.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081722472222,38.9949951944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0751.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08187775,38.9948739166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0752.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082033611111,38.9947531111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0753.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082188666667,38.9946321111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0754.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082344027778,38.9945115277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0755.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082578666667,38.994329,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0756.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082733527778,38.9942073055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0757.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082811,38.9941466388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0758.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083044611111,38.9939655277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0759.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083122833333,38.9939053611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0760.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083278972222,38.9937851111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0761.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083434888889,38.9936624722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0762.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083590694444,38.9935405833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0763.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083745694444,38.99341975,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0764.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083901694444,38.993299,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0765.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084057138889,38.9931778055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0766.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084213666667,38.9930568611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0767.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084369527778,38.9929352222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0768.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084525111111,38.9928146388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0769.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084680583333,38.9926936666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0770.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084836138889,38.9925729166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0771.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084992305556,38.992451,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0772.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085148722222,38.9923302222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0773.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085382916667,38.9921493611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0774.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08546075,38.9920886111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0775.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085693222222,38.9919073333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0776.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085771138889,38.9918466666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0777.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086004833333,38.9916639722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0778.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:08:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086160972222,38.9915429722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0779.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086317666667,38.9914223055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0780.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086453972222,38.9913155,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0781.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086483361111,38.9912903055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0782.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086463083333,38.9912960555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0783.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086393388889,38.9912503888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0784.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0862615,38.9911461944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0785.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08617325,38.9910741111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0786.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086167972222,38.9910748611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0787.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086155194444,38.9911101111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0788.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.086054638889,38.9911916666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0789.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085894055556,38.9913150833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0790.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085735444444,38.9914378611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0791.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085595611111,38.9915454166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0792.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085443222222,38.9916635277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0793.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085287,38.9917833888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0794.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085131388889,38.9919039166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0795.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084976888889,38.99202575,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0796.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084822305556,38.9921463055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0797.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084668194444,38.9922666388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0798.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084511388889,38.9923864722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0799.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084355916667,38.9925073333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0800.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08420025,38.9926282777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0801.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084044333333,38.9927486944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0802.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083888055556,38.9928699444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0803.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083733416667,38.9929912222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0804.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083577805556,38.9931120555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0805.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0834225,38.9932330833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0806.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08326675,38.9933540833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0807.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083110666667,38.9934749722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0808.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:09:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082955027778,38.9935957777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0809.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082799333333,38.9937168333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0810.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082643833333,38.9938385833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0811.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082487361111,38.9939593611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0812.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082331944444,38.9940799722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0813.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08217575,38.9942021944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0814.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082019583333,38.9943238888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0815.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081864416667,38.9944448611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0816.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081708916667,38.9945650277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0817.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08155325,38.9946855,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0818.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081397722222,38.99480725,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0819.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081242083333,38.9949286388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0820.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081086,38.9950493055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0821.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080930416667,38.9951700833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0822.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080774444444,38.9952915277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0823.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080617194444,38.9954136944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0824.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080461333333,38.9955351111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0825.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080305111111,38.9956559444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0826.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080150361111,38.9957763888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0827.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079993861111,38.9958971111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0828.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079838805556,38.9960179722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0829.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079683805556,38.9961394444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0830.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079528583333,38.9962603888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0831.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079372694444,38.9963813333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0832.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079219583333,38.9965007222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0833.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:48</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.07914375,38.99656075,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0834.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079154583333,38.9965563055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0835.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079124694444,38.9965181111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0836.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079019611111,38.9964366666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0837.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078886305556,38.9963371111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0838.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:10:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078856138889,38.9963165555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0839.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:00</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078878277778,38.9963166944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0840.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:02</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078957277778,38.9962680555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0841.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079095638889,38.9961629166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0842.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079255333333,38.9960371666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0843.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079399194444,38.9959238055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0844.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079549083333,38.9958059444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0845.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079704055556,38.9956851944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0846.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079859,38.9955651944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0847.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:16</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080013361111,38.9954446666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0848.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080170361111,38.9953242222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0849.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:20</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080325166667,38.9952036666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0850.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080480555556,38.9950830555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0851.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:24</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080635166667,38.9949617222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0852.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:26</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080790694444,38.9948415,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0853.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:28</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080946305556,38.9947205277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0854.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:30</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081101583333,38.9945997222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0855.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:32</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081256861111,38.9944786944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0856.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:34</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081412583333,38.9943576111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0857.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:36</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081567944444,38.9942355277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0858.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:38</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081723944444,38.9941144166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0859.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:40</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081879805556,38.9939936944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0860.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:42</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082035555556,38.9938725277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0861.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:44</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082190222222,38.9937519444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0862.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:46</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082347,38.9936310277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0863.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082503138889,38.9935106111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0864.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:50</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082658611111,38.9933895,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0865.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:52</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082814805556,38.9932684444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0866.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:54</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082971361111,38.9931463888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0867.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:56</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083125888889,38.9930255,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0868.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:11:58</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08328125,38.9929034722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0869.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083437944444,38.9927821944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0870.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083593861111,38.9926606666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0871.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:04</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083750055556,38.9925393333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0872.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:06</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083905333333,38.9924177777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0873.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:08</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084060583333,38.9922973055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0874.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:10</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084216305556,38.9921765,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0875.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:12</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084371527778,38.9920555833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0876.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084605416667,38.9918736388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0877.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084683861111,38.9918132777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0878.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:18</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084839611111,38.9916925,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0879.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084995638889,38.9915716388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0880.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085151638889,38.99145125,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0881.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085307638889,38.9913299166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0882.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085463472222,38.9912078333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0883.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085618777778,38.9910866111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0884.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085773666667,38.9909658333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0885.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085895777778,38.9908677222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0886.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085909972222,38.9908511388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0887.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0858895,38.990858,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0888.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085755527778,38.9907522777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0889.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085683,38.9906946388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0890.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085600555556,38.99063475,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0891.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085593472222,38.9906450277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0892.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085538777778,38.9907144722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0893.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085474472222,38.9907631666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0894.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08523325,38.9909516666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0895.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085083027778,38.9910681388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0896.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084931333333,38.9911841944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0897.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084774222222,38.9913046111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0898.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:12:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084618666667,38.9914258611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0899.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084464666667,38.9915466944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0900.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084309166667,38.9916665277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0901.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084154444444,38.9917859444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0902.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083999555556,38.9919066111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0903.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083844027778,38.9920276944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0904.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083688833333,38.9921482777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0905.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083533138889,38.9922695833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0906.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08337725,38.9923903333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0907.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083221611111,38.9925112777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0908.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083064777778,38.9926323611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0909.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082908583333,38.9927535277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0910.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082753,38.9928748888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0911.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082597472222,38.99299525,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0912.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082441944444,38.9931170555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0913.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082286166667,38.9932380277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0914.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082130722222,38.9933589166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0915.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081974305556,38.9934800555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0916.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081819472222,38.9936006666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0917.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081664333333,38.9937215833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0918.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081508916667,38.9938425,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0919.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081353333333,38.9939635,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0920.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081198833333,38.9940835277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0921.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081043388889,38.9942046944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0922.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080887611111,38.9943255277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0923.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080731027778,38.9944469444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0924.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080575305556,38.9945682777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0925.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080418361111,38.9946884722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0926.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080262083333,38.9948087222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0927.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080106388889,38.9949301111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0928.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:13:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079951166667,38.9950520277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0929.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079795194444,38.9951735555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0930.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079639305556,38.9952946666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0931.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079484805556,38.9954164722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0932.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079328722222,38.9955358888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0933.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079172527778,38.9956573333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0934.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079017083333,38.9957787222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0935.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078861611111,38.9958996666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0936.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078706194444,38.9960208055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0937.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078590527778,38.9961132777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0938.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078588611111,38.9961237777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0939.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078581055556,38.9960972222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0940.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078497583333,38.9960274444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0941.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078359055556,38.9959217222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0942.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078287916667,38.9958777777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0943.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078297805556,38.9958835277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0944.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078362111111,38.9958538888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0945.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078481972222,38.9957641944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0946.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078638388889,38.9956396111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0947.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.078793361111,38.9955161944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0948.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0789455,38.99539725,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0949.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079099277778,38.9952773888889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0950.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079254277778,38.9951575277778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0951.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079409888889,38.9950377777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0952.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079565444444,38.99491725,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0953.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079720305556,38.9947971944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0954.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.079875722222,38.9946748611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0955.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08003075,38.9945538333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0956.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080185305556,38.9944344444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0957.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.0803395,38.9943144722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0958.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:14:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080493027778,38.9941946944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0959.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080648,38.9940735555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0960.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080803527778,38.9939536944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0961.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.080956416667,38.9938350833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0962.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081108194444,38.9937167777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0963.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081260277778,38.99359775,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0964.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081412472222,38.9934790555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0965.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:13</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081565555556,38.9933599444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0966.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.08171975,38.9932401944444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0967.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.081874277778,38.9931199166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0968.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082027222222,38.9930003611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0969.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:21</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082179888889,38.9928817777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0970.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:23</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082333055556,38.9927628611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0971.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:25</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082486222222,38.9926436388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0972.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:27</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082640027778,38.9925243055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0973.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:29</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082793916667,38.9924048611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0974.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:31</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.082947361111,38.9922855833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0975.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:33</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083102166667,38.9921658611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0976.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:35</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083256861111,38.9920459722222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0977.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:37</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083411305556,38.9919258333333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0978.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:39</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083565361111,38.9918055833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0979.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:41</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083720444444,38.9916853055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0980.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:43</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.083874972222,38.9915645555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0981.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:45</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084029666667,38.9914444166667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0982.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:47</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084184166667,38.9913246111111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0983.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:49</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084338,38.9912046666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0984.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:51</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084491972222,38.9910854444444,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0985.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:53</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084645416667,38.99096575,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0986.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:55</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084799277778,38.9908461388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0987.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:57</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084953444444,38.9907270555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0988.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:15:59</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085107166667,38.9906077222222,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0989.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:01</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085260222222,38.9904888611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0990.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:03</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085345305556,38.9904155555556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0991.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:05</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085335583333,38.9904161388889,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0992.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:07</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085305972222,38.9904071666667,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0993.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:09</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085209666667,38.9903263611111,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0994.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:11</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085075555556,38.99022275,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0995.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:14</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085033805556,38.9902052777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0996.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:15</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.085042027778,38.9902172777778,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0997.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:17</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084980138889,38.9902715833333,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0998.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:19</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084839166667,38.9903793055556,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>DJI_0999.JPG</name>
+        <description><b>Date</b>: 2017-08-18<br/><b>Time</b>: 12:16:22</description>
+        <styleUrl>#rc</styleUrl>
+        <Point>
+          <coordinates>-123.084676972222,38.99050675,0</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

@@ -188,7 +188,10 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
       } else {
 
 
-        descript_line <- paste0("## FLIGHT METADATA FOR:\n## ", md_fn, "\n\n")
+        descript_line <- paste0("## FLIGHT METADATA FOR:\n## ", md_fn, "\n##\n",
+                                "## Tips: \n\n",
+                                "##   - name_short is used to generate default file names. Keep it short and avoid special characters.",
+                                "##   - comments and blank lines are ignored \n\n")
 
         ## Make a copy of the generic list
         flst <- flds_lst

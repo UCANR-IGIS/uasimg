@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -92,10 +92,11 @@
   <div class="contents col-md-9">
 
 
+<p>For more details and examples, see <a href="https://ucanr-igis.github.io/uasimg/" class="uri">https://ucanr-igis.github.io/uasimg/</a></p>
 <div id="drone-image-utilities" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#drone-image-utilities" class="anchor"></a>Drone Image Utilities</h1></div>
-<p><code>uasimg</code> helps manage images taken from an unmanned aerial vehicle (drone) that have been collected with the intent to stitch into high resolution orthomosaics and other data products. The package does <strong>not</strong> stitch images, but helps you create catalogs of your images, visualize their locations, export image centroids and estimated footprints as GIS files, and create world files so individual images can be viewed in GIS software.</p>
+<p><code>uasimg</code> helps manage images taken from an unmanned aerial vehicle (drone) that have been collected with the intent to stitch into 2D amd 3D products. The package does <strong>not</strong> stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and create world files so individual images can be viewed in GIS software.</p>
 <div id="applications" class="section level2">
 <h2 class="hasAnchor">
 <a href="#applications" class="anchor"></a>Applications</h2>
@@ -103,7 +104,7 @@
 <ol>
 <li><p>Doing a quick check in the field of photos after a flight, assessing their locations and estimated image overlap. This can help a pilot determine if a flight was successful, or needs to be redone.</p></li>
 <li><p>Subsetting images for further processing with a photogrammetry (stitching) program like Pix4D or Agisoft. Omitting images with an extreme amount of overlap can reduce processing time and improve results.</p></li>
-<li><p>Creating Flight Summary HTML pages, as the backbone of an image catalog.</p></li>
+<li><p>Creating individual Flight Summary pages in HTML, as the backbone of an image catalog.</p></li>
 <li><p>Creating world files for individual drone images, using the image EXIF data to model the ground footprint and rotation, so they can imported in GIS software and appear in their approximate location.</p></li>
 </ol>
 <p><strong>Note</strong>: image locations and footprints are based on the metadata saved in the image files (e.g., relative altitude above the launch point, camera compass direction). Thus they should taken as <em>estimates only</em>.</p>
@@ -114,31 +115,44 @@
 <p><code>uasimg</code> is not on CRAN (yet), but you can install it from GitHub.</p>
 <p><em>Note</em>: Windows users need <em>RTools</em> to build packages from source files (which is basically what you do when you install from GitHub). RTools is not a R package, rather its a set of utilities that you install separately. You can download and install RTools from <a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a>. Alternately, you can install RTools from within R by running:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co">## You can use the the following two commands to install RTools </span>
+<span class="co">## (as an alternative to downloading and running the setup file yourself)</span>
+
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'installr'</span>)
 <span class="kw">installr</span>::<span class="fu">install.Rtools</span>()
 </pre></div>
 <p>After RTools is installed, you can install <code>uasimg</code> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">## install.packages("remotes") </span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span> (<span class="kw"><a href="https://remotes.r-lib.org">remotes</a></span>)
+
+<span class="co">## If the line above causes a 'package not found' error, then you need to install the</span>
+<span class="co">## remotes package (or devtools). You can run the command below (uncomment first) to install it, </span>
+<span class="co">## or use the 'Packages' tab in RStudio.</span>
+<span class="co">## install.packages("remotes") </span>
+
 <span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"ucanr-igis/uasimg"</span>)
 </pre></div>
 <div id="dependent-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dependent-packages" class="anchor"></a>Dependent Packages</h3>
-<p><code>uasimg</code> requires several dependent packages, including <em>sf</em>, <em>dplyr</em>, <em>tidyr</em>, <em>leaflet</em>, <em>htmltools</em> and others (see the DESCRIPTION file for a complete list). If you get an error message about missing dependent packages, install the dependent packages separately (i.e., from the ‘Packages’ pane in RStudio) then run <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("ucanr-igis/uasimg", dependencies=FALSE)</a></code>.</p>
+<p><code>uasimg</code> requires several dependent packages, including <em>sf</em>, <em>dplyr</em>, <em>tidyr</em>, <em>leaflet</em>, <em>htmltools</em> and others (see the <a href="https://github.com/UCANR-IGIS/uasimg/blob/master/DESCRIPTION">DESCRIPTION</a> file for a complete list). Normally missing packages are installed at the same time, but if you get an error message about a missing package(s), install the dependent packages separately (i.e., from the ‘Packages’ pane in RStudio) then run <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("ucanr-igis/uasimg", dependencies=FALSE)</a></code>.</p>
 </div>
 <div id="exiftool" class="section level3">
 <h3 class="hasAnchor">
 <a href="#exiftool" class="anchor"></a>exiftool</h3>
 <p>To read the EXIF data from the image files, <code>uasimg</code> requires an external command line tool called ‘exiftool’. exiftool can be installed in four steps:</p>
 <ol>
-<li>download the file for your OS from: <a href="http://www.sno.phy.queensu.ca/~phil/exiftool/" class="uri">http://www.sno.phy.queensu.ca/~phil/exiftool/</a>
-</li>
-<li>uncompress / unzip</li>
-<li>rename the executable file from <em>exiftool(-k).exe</em> to <em>exiftool.exe</em><br><strong>Note</strong>: if you have file extensions hidden in Windows Explorer, you won’t see <em>.exe</em> in the filename. In that case, just rename ‘<em>exiftool(-k)</em>’ to ‘<em>exiftool</em>’.</li>
-<li>move the executable file to a directory on the path (e.g., c:\windows). Note: putting it in c:\windows\system32 does <em>not</em> seem to work.</li>
+<li><p>download the <strong>Windows Executable</strong> or <strong>MacOS Package</strong> from: <a href="http://www.sno.phy.queensu.ca/~phil/exiftool/" class="uri">http://www.sno.phy.queensu.ca/~phil/exiftool/</a></p></li>
+<li><p>uncompress / unzip</p></li>
+<li><p>Windows:</p></li>
 </ol>
+<!-- end list --><ul>
+<li>
+<p>rename the executable file from <em>exiftool(-k).exe</em> to <em>exiftool.exe</em></p>
+<p><strong>Note</strong>: if you have <a href="https://support.winzip.com/hc/en-us/articles/115011457948-How-to-configure-Windows-to-show-file-extensions-and-hidden-files">file extensions hidden</a> in Windows Explorer, you won’t see <em>.exe</em> in the filename. In that case, just rename ‘<em>exiftool(-k)</em>’ to ‘<em>exiftool</em>’.</p>
+</li>
+<li><p>move the executable file to a directory on the path (e.g., c:\windows). Note: putting it in c:\windows\system32 does <em>not</em> seem to work.</p></li>
+</ul>
 </div>
 </div>
 <div id="supported-cameras" class="section level2">
@@ -149,13 +163,13 @@
 <div id="data-requirements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-requirements" class="anchor"></a>Data Requirements</h2>
-<p>Most functions in <code>uasimg</code> use location data saved in the EXIF data (header) of image files themselves. This assumes the camera saves the location in the images using a GPS coordinate from the drone or the camera itself. To compute footprints, the package also needs to know the height at which images were taken. Some drones (including many DJI drones) record the relative flight altitude (above the launch point) in the image file. Flight height can also be entered manually as an argument.</p>
-<p>Requirements for <code>uasimg</code> include:</p>
+<p>Virtually all of the functions in <code>uasimg</code> use location data saved in the EXIF data (header) of image files themselves. This assumes the camera saves the location in the images using a GPS coordinate from the drone or the camera itself. To compute footprints, the package also needs to know the above-ground height at which images were taken. Some drones (including many DJI drones) record the relative flight altitude (above the launch point) in the image file, but others don’t (notably many multispectral cameras). Flight height can also be entered manually as an argument when you run <code><a href="reference/uas_info.html">uas_info()</a></code>.</p>
+<p>Requirements for <code>uasimg</code> therefore include:</p>
 <ul>
-<li>images must have been taken by a camera that saved the GPS coordinates<br>
+<li>images must have GPS coordinates saved in them<br>
 </li>
-<li>image files should be grouped in directories folders (typically each directory containing the images from one flight)</li>
-<li>the camera model must be one of the ones known by the <code>uasimg</code> package (see below)</li>
+<li>image files should be grouped in folders (typically one flight per folder)</li>
+<li>the camera must be one of the ones known by the <code>uasimg</code> package (see below)</li>
 </ul>
 <p>Additional requirements to generate estimated footprints:</p>
 <ul>
@@ -168,25 +182,29 @@
 <div id="usage-overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#usage-overview" class="anchor"></a>Usage Overview</h1>
-<p>You always start with <code><a href="reference/uas_info.html">uas_info()</a></code>, feeding it or more directories of drone images. This function extracts the image metadata, computes footprints, reads supplemental metadata, etc.</p>
-<p>The object returned by <code><a href="reference/uas_info.html">uas_info()</a></code> is not very useful by itself. The results are generally saved to a variable then fed into other functions that do useful things:</p>
+<p>You always start with <code><a href="reference/uas_info.html">uas_info()</a></code>, feeding it or more folders of drone images. This function extracts image information, computes footprints, reads supplemental flight metadata, etc.</p>
+<p>The object returned by <code><a href="reference/uas_info.html">uas_info()</a></code> is not very useful by itself. The results are generally saved to a variable then fed into other functions that do useful things, such as:</p>
 <ul>
-<li><p><code><a href="reference/uas_report.html">uas_report()</a></code> creates ‘Flight Summaries’ as standalone HTML pages, with options to create image thumbnails. SAMPLE HERE</p></li>
-<li><p><code><a href="reference/uas_toc.html">uas_toc()</a></code> creates a Table of Contents page for several Flight Summaries, with options to copy all the catalog files to a single folder so the catalog is in one place.</p></li>
-<li><p><code><a href="reference/uas_exp_kml.html">uas_exp_shp()</a></code> exports the centroids and footprints of individual images as Shapefiles, as well as the overall flight arrea.</p></li>
-<li><p><code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code> creates small external files that allow images to be imported into GIS software and appear in their approximate footprint.</p></li>
+<li><p><code><a href="reference/uas_report.html">uas_report()</a></code> creates ‘Flight Summaries’ as standalone HTML pages, with options to create image thumbnails (<a href="https://ucanr-igis.github.io/uasimg/samples/hrec/hrec_wtrshd2_2017_flt1_report.html">sample</a>).</p></li>
+<li><p><code><a href="reference/uas_toc.html">uas_toc()</a></code> creates a Table of Contents page for several Flight Summaries, with options to copy all the catalog files to a single folder so the catalog is in one place (<a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html">sample</a>).</p></li>
+<li><p><code><a href="reference/uas_exp_kml.html">uas_exp_shp()</a></code> and <code><a href="reference/uas_exp_kml.html">uas_exp_kml()</a></code> exports flight geometries (image centroids, image footprints, and/or flight area) as Shapefiles or KML files. KML files can be imported into most flight planning software to refly the same area and/or plan a flight for an adjacent area.</p></li>
+<li><p><code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code> creates small external XML files that allow images to be imported into GIS software and appear in their approximate footprint.</p></li>
 </ul>
-<p>For more info, see the <code>uasimg</code> Vignette(s) XXXXXXXXXXXXXXXXX and function help pages.</p>
+<p>For more info, see the <a href="https://ucanr-igis.github.io/uasimg/articles/uasimg.html">Managing Drone Images with <code>uasimg</code></a> Vignette and function help pages.</p>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>The general usage is to first create a metadata object for one or more directories of images using the <em>uas_info()</em> function, saving the result to a variable.</p>
+<p>The general usage is to first create a flight info object for one or more directories of images using the <em>uas_info()</em> function. Save the result to a variable:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ucanr-igis/uasimg">uasimg</a></span>)
-<span class="kw">hast_ft1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/uas_info.html">uas_info</a></span>(<span class="st">"c:/Drone_Projects/Hastings/Flt01_1443_1446_250ft"</span>)
+<span class="kw">hast_ft1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/uas_info.html">uas_info</a></span>(<span class="st">"c:/Drone_Projects/Hastingsx/Flt01_1443_1446_250ft"</span>)
 </pre></div>
-<p>Once an image collection metadata object has been created, you can generate outputs.</p>
+<p>If you want to record additional metadata about the flight as a whole, you can create a metadata.txt file in the image folder with <code><a href="reference/uas_metadata_make.html">uas_metadata_make()</a></code>. Edit the metadata.txt file in Notepad (or another text editor), save it, then run <code><a href="reference/uas_info.html">uas_info()</a></code> again.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="reference/uas_metadata_make.html">uas_metadata_make</a></span>(<span class="kw">hast_ft1_info</span>, open = <span class="fl">TRUE</span>)
+</pre></div>
+<p>Once a flight info object has been created, you can start to generate outputs.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co">## Generate a flight summary</span>
 <span class="fu"><a href="reference/uas_report.html">uas_report</a></span>(<span class="kw">hast_ft1_info</span>)
 
@@ -197,12 +215,21 @@
 <span class="fu"><a href="reference/uas_worldfile.html">uas_worldfile</a></span>(<span class="kw">hast_ft1_info</span>)
 </pre></div>
 </div>
+</div>
+<div id="utilities-for-analysis-of-single-images" class="section level1">
+<h1 class="hasAnchor">
+<a href="#utilities-for-analysis-of-single-images" class="anchor"></a>Utilities for Analysis of Single Images</h1>
+<p>The following utilities can help visualize and analyze individual images. These functions are based on the modeled image footprints, which as described above require the camera to record the relative altitude above ground.</p>
 <div id="world-files" class="section level2">
 <h2 class="hasAnchor">
 <a href="#world-files" class="anchor"></a>World Files</h2>
-<p><strong>MOVE TO A VIGNETTE</strong></p>
-<p>Drone images typically save the coordinates of the camera, but do not include the width, length, or compass angle. A “world file” is a small external file that contains these additional parameters, so that when you import an individual image into a GIS program like ArcGIS or QGIS, the image will appear in its approximate footprint on the ground.</p>
-<p>You can create world files, readable by ArcGIS and QGIS, with <code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code>. <code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code> can create three types of world files, including <code>aux.xml</code>, <code>jpw</code> and <code>tfw</code>, and <code>prj</code> files. <code>aux.xml</code> is the most recognized format and the default. See the function help page for details.</p>
+<p>Drone images typically save the coordinates of the camera, but do not include the width, length, or compass angle. A “world file” is a small external text file for each images that contains these additional parameters, so that when you import an individual image into a GIS program like ArcGIS or QGIS, the image will appear in its approximate footprint on the ground.</p>
+<p>You can create world files, readable by ArcGIS and QGIS, with <code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code>. <code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code> can create three types of world files, including <code>aux.xml</code>, <code>jpw</code> and <code>tfw</code>, and <code>prj</code> files. <code>aux.xml</code> is the most recognized format and hence the default. See the <code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code> help page for details.</p>
+</div>
+<div id="cropping-out-the-cneter-of-images" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cropping-out-the-cneter-of-images" class="anchor"></a>Cropping out the Cneter of Images</h2>
+<p>Sometimes images will simply not stitch, forcing you to do your analysis and visualization with individual images. <code><a href="reference/uas_cropctr.html">uas_cropctr()</a></code> crops out the center part of each image (which normally has the least amount of distortion, at least if the image was taken at nadir). The function will also produce a world file for the cropped center, so they can be visualized together in a GIS software as a kind of crude mosaic. <code><a href="reference/uas_cropctr.html">uas_cropctr()</a></code> provides arguments to specify how tall and wide to make the crop, which you can set to the average forward distance between images and the average side distance between flight lines. The resulting mosaic will not be orthorectified, but may be good enough for visualization and/or object detection particularly if the area is flat.</p>
 </div>
 </div>
 <div id="bugs-questions-and-feature-requests" class="section level1">

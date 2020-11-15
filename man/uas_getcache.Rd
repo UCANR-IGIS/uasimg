@@ -3,11 +3,14 @@
 \name{uas_getcache}
 \alias{uas_getcache}
 \alias{uas_setcache}
+\alias{uas_clearcache}
 \title{Manage cache directory}
 \usage{
 uas_getcache(default = TRUE, quiet = FALSE)
 
 uas_setcache(dir = "~/.R/uasimg", write = FALSE, quiet = FALSE)
+
+uas_clearcache(quiet = FALSE)
 }
 \arguments{
 \item{default}{Use a default cache directory if no other has been set}
@@ -23,23 +26,28 @@ View and set the directory where extracted EXIF data are cached
 }
 \details{
 Extracting exif data from a large number of images can take awhile. To avoid having
-to do this more than once, the results can be saved or cached to a directory of your choice.
-The next time you call \code{\link{uas_info}}, R will first look to see if EXIF data for that
-image collection has already been generated, and if so use it instead of running
-exiftool again.
+to do this more than once for the same folder of images, the results can be saved (or cached) to
+a local directory of your choice. When \code{cache = TRUE} in  \code{\link{uas_info}}, R will
+first look to see if EXIF data has already been extracted for the image folder, and if
+so use it instead of running exiftool.
 
-Cached results are saved as native R objects. File names encode the name of the
-image directory as well as the total number of images and file size. Hence if images are
-removed or added from a directory, any cached results will be nullified and exiftool will
-run again. The cached data does not include supplemental metadata, such as the
-collection name or data URI.
+Cached results are saved as native R objects. Cache files store the EXIF data for a folder of
+images, however if images are removed or added from a directory, any cached results will
+be nullified and exiftool will run again. Cached EXIF data does not include supplemental flight metadata that you provide
+with metadata text files (see \code{\link{uas_metadata_make}}, such as the pilot's name or
+location name.
 
-If \code{default = TRUE}, a default directory for the cache (\emph{~/.R/uasimg}) will be used
-if another one has not already been set.
+\code{uas_getcache()} retrieves the current cache directory, and \code{uas_setcache()} sets it.
+The default location is (\emph{~/.R/uasimg}). When \code{uas_setcache()} is run with
+\code{write = TRUE}, the setting will be persistent across R sessions (generally recommended).
+\code{uas_clearcache()} will delete cached EXIF data, which is sometimes called for after
+a package update.
 }
 \section{Functions}{
 \itemize{
 \item \code{uas_setcache}: Set cache directory
+
+\item \code{uas_clearcache}: Clear cache directory
 }}
 
 \seealso{

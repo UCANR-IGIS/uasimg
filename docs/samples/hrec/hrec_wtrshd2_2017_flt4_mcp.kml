@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+    <name>hrec_wtrshd2_2017_flt4_mcp</name>
+    <Style id="hollow-cyan">
+      <PolyStyle>
+        <fill>0</fill>
+      </PolyStyle>
+      <LineStyle>
+        <color>ccffff55</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Placemark>
+      <styleUrl>#hollow-cyan</styleUrl>
+      <name>hrec_wtrshd2_2017_flt4_mcp</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>-123.086649625758,38.9907653100426,0 -123.08719638999,38.9904329995212,0 -123.087531383457,38.9902438410376,0 -123.08799044562,38.9905680761806,0 -123.088924898519,38.9912447989355,0 -123.089668617214,38.9918903910041,0 -123.090025998357,38.9924166819305,0 -123.089248557256,38.9930309845116,0 -123.081733389458,38.9984478625593,0 -123.080552813134,38.997731122316,0 -123.080258975387,38.9975308792738,0 -123.079983203362,38.9973283301302,0 -123.079430864479,38.9967199577571,0 -123.079147804552,38.9962393444384,0 -123.079209027655,38.9961927718855,0 -123.086649625758,38.9907653100426,0</coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

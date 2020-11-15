@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -147,7 +147,9 @@
 
     <pre class="usage"><span class='fu'>uas_getcache</span>(default = <span class='fl'>TRUE</span>, quiet = <span class='fl'>FALSE</span>)
 
-<span class='fu'>uas_setcache</span>(dir = <span class='st'>"~/.R/uasimg"</span>, write = <span class='fl'>FALSE</span>, quiet = <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>uas_setcache</span>(dir = <span class='st'>"~/.R/uasimg"</span>, write = <span class='fl'>FALSE</span>, quiet = <span class='fl'>FALSE</span>)
+
+<span class='fu'>uas_clearcache</span>(quiet = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,22 +175,26 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Extracting exif data from a large number of images can take awhile. To avoid having
-to do this more than once, the results can be saved or cached to a directory of your choice.
-The next time you call <code><a href='uas_info.html'>uas_info</a></code>, R will first look to see if EXIF data for that
-image collection has already been generated, and if so use it instead of running
-exiftool again.</p>
-<p>Cached results are saved as native R objects. File names encode the name of the
-image directory as well as the total number of images and file size. Hence if images are
-removed or added from a directory, any cached results will be nullified and exiftool will
-run again. The cached data does not include supplemental metadata, such as the
-collection name or data URI.</p>
-<p>If <code>default = TRUE</code>, a default directory for the cache (<em>~/.R/uasimg</em>) will be used
-if another one has not already been set.</p>
+to do this more than once for the same folder of images, the results can be saved (or cached) to
+a local directory of your choice. When <code>cache = TRUE</code> in  <code><a href='uas_info.html'>uas_info</a></code>, R will
+first look to see if EXIF data has already been extracted for the image folder, and if
+so use it instead of running exiftool.</p>
+<p>Cached results are saved as native R objects. Cache files store the EXIF data for a folder of
+images, however if images are removed or added from a directory, any cached results will
+be nullified and exiftool will run again. Cached EXIF data does not include supplemental flight metadata that you provide
+with metadata text files (see <code><a href='uas_metadata_make.html'>uas_metadata_make</a></code>, such as the pilot's name or
+location name.</p>
+<p><code>uas_getcache()</code> retrieves the current cache directory, and <code>uas_setcache()</code> sets it.
+The default location is (<em>~/.R/uasimg</em>). When <code>uas_setcache()</code> is run with
+<code>write = TRUE</code>, the setting will be persistent across R sessions (generally recommended).
+<code>uas_clearcache()</code> will delete cached EXIF data, which is sometimes called for after
+a package update.</p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
 <ul>
 <li><p><code>uas_setcache</code>: Set cache directory</p></li>
+<li><p><code>uas_clearcache</code>: Clear cache directory</p></li>
 </ul>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

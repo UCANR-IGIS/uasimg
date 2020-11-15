@@ -1,5 +1,5 @@
 ---
-title: "Cataloging Drone Images with uasimg: A Workflow"
+title: "Cataloging Drone Images with uasimg: A Workflow" 
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Cataloging Drone Images with uasimg: A Workflow}
@@ -59,8 +59,6 @@ grViz("digraph flowchart {
 \
 
 Currently, executing this workflow in `uasimg` requires **writing R commands** (i.e., in a script). This requires a knowledge of R, and a general understanding of what the functions do (explained below). In a future release, `uasimg` will have a GUI (wizard) that walks users through data management steps.
-
-
 
 \
 
@@ -206,7 +204,7 @@ Sample code: *coming soon*
 
 \
 
-# 8. Export Flight Geometries to GIS Files (Optional)
+# 8. Export flight geometries to GIS files (Optional)
 
 If desired, you can export the geometries of individual flights as KML and/or Shapefiles.  
 

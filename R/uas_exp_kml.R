@@ -288,32 +288,18 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             files_saved <- c(files_saved, ctr_kml_pathfn)
 
           }
-
-
-
         }
 
       }
 
-
-
       ## Export footprints
       if (fp) {
-
         if (combine_feats) {
           fp_combined_sf <- rbind(fp_combined_sf, x[[img_dir]]$fp)
-
         } else {
           fp_fn <- paste0(fnbase, "_fp")
-
-          if ("kml" %in% format) {
-            warning("Sorry, exporting footprints to KML is not yet supported")
-          }
-
+          warning("Sorry, exporting footprints to KML is not yet supported")
         }
-
-
-
       }
 
       ## Export MCP

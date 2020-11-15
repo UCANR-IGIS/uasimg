@@ -1,3 +1,11 @@
+# uasimg 1.5.1 (2020-11-14)
+
+* `uas_metadata_make()`: additional comments inserted when creating a brand new new metadata file 
+* `uas_getflds()`: exported
+* `uas_thumbnails_make()`: increased the number of bytes read to create a unique filename from 500 to 2000
+* `uas_info()`: updated to always rename yaw field even when fp = FALSE
+* `uas_clearcache()` added
+
 # uasimg 1.5.0 (2020-11-01)
 
 * `uas_report()` and `uas_report.Rmd`: arguments `report_title` and `kml_ctr` added; trapped an error if metadata exists but without an image collection name; thumbnails disabled for grouped images (until a better visualization is implemented); additional <span id="..."> tags added to facilitate web scraping

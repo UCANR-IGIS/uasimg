@@ -239,7 +239,7 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
   output_options <- list(self_contained = FALSE, lib_dir = file.path(output_dir,"libs"),
                          includes = includes_lst)
 
-  ## Render the TOC markdown file
+  # Render the TOC markdown file
   toc_fn <- render(input = toc_rmd, output_dir = output_dir, output_file = output_fn,
                    output_options = output_options,
                    params=list(output_dir = output_dir,

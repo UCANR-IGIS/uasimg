@@ -233,6 +233,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
       ## Get the tag for yaw for this camera
       camera_tag_yaw <- sensor_this_df[1, "tag_yaw"]
+      short_names[[tolower(camera_tag_yaw)]] <- "yaw"
 
       ## See if this camera stores elevation above ground level
       camera_agl_tag <- sensor_this_df[1, "tag_elev_agl"]
@@ -356,8 +357,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
           nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
 
         } else {
-          short_names[[tolower(camera_tag_yaw)]] <- "yaw"
-
           if (!quiet) message(yellow(" - Creating footprints..."), appendLF = FALSE)
           corners_sign_mat <- matrix(data=c(-1,1,1,1,1,-1,-1,-1,-1,1), byrow=TRUE, ncol=2, nrow=5)
 
@@ -584,18 +583,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       }
     }
 
-    # need_short_name <- FALSE
-    # if (is.null(metadata_use$name_short)) {
-    #   need_short_name <- TRUE
-    # } else {
-    #   if (is.na(metadata_use$name_short)) {
-    #     need_short_name <- TRUE
-    #   }
-    # }
-    #
-    # if (need_short_name) {
-    #
-    # }
+
 
     ## If there's a value for collection_name (a field which is now deprecated but still exists in some
     ## older metadata.txt files), rename it name_long

@@ -54,6 +54,7 @@ uas_setflds <- function(flds=NULL, reset=FALSE, quiet=FALSE) {
 }
 
 #' @describeIn uas_setflds Get default supplemental metadata field names.
+#' @export
 
 uas_getflds <- function() {
 

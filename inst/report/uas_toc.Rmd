@@ -130,24 +130,13 @@ for (i in 1:length(params$html_reports)) {
     }
   }
 
-  ## OLD CODE FROM XML PACAKGE
-  # for (j in 1:length(meta_tags)) {
-  #   metacontent <- html_tree[paste0("//meta[@name='", meta_tags[j], "']/@content")]
-  #   i_lst[[i]]$imgcol[[meta_tags[j]]] <- trimws(as.character(unlist(metacontent)))
-  # }
-
   ## Extract the mcp_b64 character
   mcp_b64_txt <- html_root %>%
       xml_find_first(paste0("//meta[@name='mcp_b64']")) %>%
       xml_attr("content") %>%
       trimws()
-  
-  # mcp_b64_content <- html_tree[paste0("//meta[@name='mcp_b64']/@content")]
-  # mcp_b64_txt <- trimws(as.character(unlist(mcp_b64_content)))
-  
+
   ## Convert the mcp_b64 character back to sf
-  # mcp_raw <- base64decode(mcp_b64_txt)
-  # mcp_sf <- unserialize(mcp_raw)
   if (!is.na(mcp_b64_txt)) {
     mcp_sf <- base64decode(mcp_b64_txt) %>% unserialize()
     mcp_all_sf <- rbind(mcp_all_sf, mcp_sf)
@@ -201,12 +190,14 @@ if (params$fltmap_show && nrow(mcp_all_sf) > 0) {
                      options = layersControlOptions(collapsed = FALSE))
   
   ## Add background layers
-  for (j in 1:length(params$bg_lst)) {
-    mcp_leaf <- mcp_leaf %>% 
-      addPolylines(data = params$bg_lst[[j]]$kml_sf %>% st_geometry() %>% st_zm(), 
-                   color = params$bg_lst[[j]]$color, 
-                   weight = params$bg_lst[[j]]$weight,
-                   opacity = 0.9)
+  if (length(params$bg_lst) > 0) {
+    for (j in 1:length(params$bg_lst)) {
+      mcp_leaf <- mcp_leaf %>% 
+        addPolylines(data = params$bg_lst[[j]]$kml_sf %>% st_geometry() %>% st_zm(), 
+                     color = params$bg_lst[[j]]$color, 
+                     weight = params$bg_lst[[j]]$weight,
+                     opacity = 0.9)
+    }
   }
   
   mcp_leaf <- mcp_leaf %>% 
@@ -219,6 +210,7 @@ if (params$fltmap_show && nrow(mcp_all_sf) > 0) {
   
 }
 
+## Create a link to the all flight areas KML
 if (params$fltmap_kml && nrow(mcp_all_sf) > 0) {
   
   kml_fn <- "flight_areas.kml"
@@ -309,11 +301,7 @@ for (i in 1:length(i_lst)) {
                        "'", href_target, "><img src='", html_dir_rel, i_lst[[i]]$imgcol$map_fn,
                      "' style='width:220px; padding:20px;'/></a></div>")))
     }
-    
-    #browser()
-    ## Select between collection_name and name_long
-    #xx <- i_lst[[i]]$imgcol$collection_name
-    
+
     print(HTML(paste0("<h3 id='", html_fn, "'><a href='", html_dir_rel, html_fn, "'", href_target, ">", 
                       i_lst[[i]]$imgcol$name_use, "</a></h3>")))
 

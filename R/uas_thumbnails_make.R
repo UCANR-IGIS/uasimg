@@ -109,7 +109,7 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
         if (!quiet) message(yellow(" - computing unique file names..."), appendLF = FALSE)
 
         all_img_suffixes <- as.character(sapply(all_img_fn, function(x)
-            readBin(x, "raw", n = 500) %>%  digest(algo = "crc32")))
+            readBin(x, "raw", n = 2000) %>%  digest(algo = "crc32")))
 
         if (anyDuplicated(all_img_suffixes) != 0) {
             ## Process entire file contents

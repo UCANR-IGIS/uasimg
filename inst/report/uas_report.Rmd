@@ -134,11 +134,11 @@ if (params$show_local_dir) cat("<tr><td>__Local dir__:</td><td>", gsub("\\\\","/
 
 if (!is.na(params$metadata$data_url %>% null2na())) cat("<tr><td>__Data URL__:</td><td>",  params$metadata$data_url, "</td></tr>", sep = "")
 
-cat("<tr><td>__Num images__:</td><td><span id='num_img'>", nrow(params$pts), "</span></td></tr>", sep = "")
+cat("<tr><td>__Num&nbsp;images__:</td><td><span id='num_img'>", nrow(params$pts), "</span></td></tr>", sep = "")
 
 cat("<tr><td>__Camera__:</td><td><span id='camera_name'>", params$camera_name, "</span></td></tr>", sep = "")
 
-cat("<tr><td>__Total file size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>", sep = "")
+cat("<tr><td>__Total&nbsp;file&nbsp;size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>", sep = "")
 
 cat("<tr><td>__Area__:</td><td><span id='area_acres'>", round(msq2acres(params$area_m2),2), " acres</span></td></tr>", sep = "")
 
@@ -146,7 +146,7 @@ cat("<tr><td>__Start__:</td><td><span id='dt_start'>", dt_range[1], "</span></td
 
 cat("<tr><td>__End__:</td><td><span id='dt_end'>", dt_range[2], "</span></td></tr>", sep = "")
 
-cat("<tr><td>__Image size__:</td><td><span id='img_dim'>", img_pixels, "</span></td></tr>", sep = "")
+cat("<tr><td>__Image&nbsp;dimensions__:</td><td><span id='img_dim'>", img_pixels, "</span></td></tr>", sep = "")
 
 if (!is.na(params$metadata$notes %>% null2na())) cat("<tr><td>__Notes__:</td><td><span id='notes'>",  params$metadata$notes, "</span></td></tr>", sep = "")
 
