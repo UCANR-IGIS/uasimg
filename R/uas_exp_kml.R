@@ -94,8 +94,8 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       if (is.null(output_dir)) {
         output_dir_use <- file.path(img_dir, "map")
         if (!file.exists(output_dir_use) && create_dir) {
-          message("Creating ", output_dir_use)
-          dir.create(output_dir_use, recursive = TRUE)
+          if (!quiet) message("Creating ", output_dir_use)
+          if (!dir.create(output_dir_use, recursive = TRUE)) stop(paste0("Unable to create ", output_dir_use))
         }
       } else {
         output_dir_use <- output_dir

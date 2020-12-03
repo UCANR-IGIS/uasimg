@@ -129,7 +129,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       output_dir_use <- file.path(img_dir, "map")
       if (!file.exists(output_dir_use) && create_dir) {
         if (!quiet) message(green("Creating", output_dir_use))
-        dir.create(output_dir_use, recursive = TRUE)
+        if (!dir.create(output_dir_use, recursive = TRUE)) stop(paste0("Unable to create ", output_dir_use))
       }
     } else {
       output_dir_use <- output_dir

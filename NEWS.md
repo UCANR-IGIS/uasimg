@@ -2,6 +2,7 @@
 
 * `uas_getoemflds()`: added 'uav' to the list of default flight metadata fields
 * updated camera database:  (added senseFly Aeria X and DJI M100 X3Z)
+* `uas_report()`, `uas_exp_kml()`, and `uas_exp_shp()`: added checks after dir.create()
 
 # uasimg 1.5.1 (2020-11-14)
 
@@ -9,7 +10,7 @@
 * `uas_getflds()`: exported
 * `uas_thumbnails_make()`: increased the number of bytes read to create a unique filename from 500 to 2000
 * `uas_info()`: updated to always rename yaw field even when fp = FALSE
-* `uas_clearcache()` added
+* `uas_clearcache()`: created
 
 # uasimg 1.5.0 (2020-11-01)
 
