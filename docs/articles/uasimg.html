@@ -162,7 +162,8 @@ data_url: </code></pre>
 <span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span>()
 </pre></div>
 <pre><code>##  [1] "name_short"  "name_long"   "description" "proj"        "loc"        
-##  [6] "pilot"       "contact"     "data_url"    "tags"        "notes"</code></pre>
+##  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       
+## [11] "notes"</code></pre>
 <p>You can manually create <em>metadata.txt</em> files using Notepad or any text editor. Just be sure to save it in the same folder as the images. Alternately <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> can be used to create ‘blank’ <em>metadata.txt</em> files several directories at once:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="kw">my_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"D:/uas/HREC/Watershed1/Data/2017-01-16_X5/Flight01_1514_1526_400ft"</span>,
