@@ -1,6 +1,7 @@
 make,model,filetype,camera_name,sensor_width,sensor_height,sensor_type,shutter_type,img_width_def,img_height_def,focal_length_def,tag_yaw,tag_elev_agl,source,notes
 DJI,FC550,JPEG,DJI ZenMuse X5,17.3,13.125,CMOS,rolling,4608,3456,15.4755,CameraYaw,RelativeAltitude,https://www.dji.com/zenmuse-x5/info,
 DJI,FC350,JPEG,DJI ZenMuse X3,6.3175,4.73813,CMOS,rolling,4000,3000,3.61,CameraYaw,RelativeAltitude,https://www.dji.com/zenmuse-x3/info,
+DJI,M100_X3Z,JPEG,DJI M100 X3Z,0,0,CMOS,unknown,4000,3000,4.1,CameraYaw,RelativeAltitude,"sample image (cant find any documentation on this camera, might be a zoom model)",
 DJI,FC300C,JPEG,DJI Phantom 3S,6.31748,4.73811,CMOS,rolling,4000,3000,3.61,CameraYaw,RelativeAltitude,https://www.dji.com/phantom-3-standard/camera,1/2.3 sensor
 Parrot,Sequoia,JPEG,Parrot Sequoia RGB,6.17472,4.63104,CMOS,rolling,4608,3456,4.88,Yaw,none,http://firmware.ardupilot.org/Tools/MissionPlanner/beta/upgrade/camerasBuiltin.xml,
 Parrot,Sequoia,TIFF,Parrot Sequoia MS,4.8,3.6,CMOS,global,1280,960,3.98,Yaw,none,http://firmware.ardupilot.org/Tools/MissionPlanner/beta/upgrade/camerasBuiltin.xml,
@@ -13,6 +14,7 @@ DJI,FC330,JPEG,DJI Phantom 4,6.31748,4.73811,CMOS,unknown,4000,3000,3.61,CameraY
 DJI,FC220,JPEG,DJI Mavic Pro,6.32692,4.74519,CMOS,unknown,4000,3000,4.861305,CameraYaw,RelativeAltitude,Pix4D Camera Database v19,1/2.3 CMOS
 Hasselblad,L1D-20c,JPEG,DJI Mavic 2 Pro,12.825,8.55,CMOS,unknown,5472,3648,10.478508,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19,1 inch CMOS
 DJI,FC300X,JPEG,DJI Phantom 3 Pro,6.31748,4.73811,CMOS,rolling,4000,3000,3.61,CameraYaw,RelativeAltitude,Pix4D Camera Database v19,1/2.3 sensor
-senseFly,S.O.D.A.,JPEG,senseFly S.O.D.A.,13.1328,8.7552,CMOS,global,5472,3648,10.633008,Yaw,none,Pix4D Camera Database v19: S.O.D.A._10.6_5472x3648,
 DJI,FC6540,JPEG,DJI ZenMuse X7,23.55769344,13.21987584,CMOS,lens_dependent_electrical_mechanical_leaf,6016,3376,35,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19: FC6540_DJIDL35mmF2.8LSASPH_35.0_6016x3376,shutter discussion see https://commercialdronepilots.com/threads/zenmuse-x7-for-mapping-modeling.2595/
-DJI,PC3251,JPEG,DJI ZenMuse H20,1,1,CMOS,global,10,10,1,GimbalYawDegree,RelativeAltitude,sample files and users guide ,"there are 3 very different sensors on this rig, but the model tag in the EXIF data is PC3251. Don’t know how to model GSD or footprint because theres no way to tell from the EXIF data which sensor it is from. Could not find CCD specs anywhere. Not in Pix4D camera database, suggesting they have the same issues"
+DJI,PC3251,JPEG,DJI ZenMuse H20,0,0,CMOS,global,0,0,0,GimbalYawDegree,RelativeAltitude,sample files and users guide ,"there are 3 very different sensors on this rig, but the model tag in the EXIF data is PC3251. Don’t know how to model GSD or footprint because theres no way to tell from the EXIF data which sensor it is from. Could not find CCD specs anywhere. Not in Pix4D camera database, suggesting they have the same issues"
+senseFly,S.O.D.A.,JPEG,senseFly S.O.D.A.,13.1328,8.7552,CMOS,global,5472,3648,10.633008,Yaw,none,Pix4D Camera Database v19: S.O.D.A._10.6_5472x3648,
+senseFly,senseFly Aeria X,JPEG,senseFly Aeria X,23.4558,15.6372,CMOS,global,6000,4000,18.967024,Yaw,none,Pix4D Camera Database v19: senseFlyAeriaX_18.5_6000x4000; https://www.sensefly.com/camera/sensefly-aeria-x-photogrammetry-camera/,

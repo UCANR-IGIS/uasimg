@@ -1,3 +1,8 @@
+# uasimg 1.5.2 (2020-12-02)
+
+* `uas_getoemflds()`: added 'uav' to the list of default flight metadata fields
+* updated camera database:  (added senseFly Aeria X and DJI M100 X3Z)
+
 # uasimg 1.5.1 (2020-11-14)
 
 * `uas_metadata_make()`: additional comments inserted when creating a brand new new metadata file 

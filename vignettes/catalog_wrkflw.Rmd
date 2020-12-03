@@ -17,7 +17,7 @@ library(uasimg)
 ```
 
 
-This article presents a workflow for using `uasimg` to create a **catalog of drone images** from multiple flights that are part of a bigger mapping project / campaign. Although the workflow is presented a sequence of steps, in practice your workflow will probably *not* be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.
+This article presents a workflow for using `uasimg` to create a **catalog of drone images** from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is [here](https://ucanr-igis.github.io/uasimg/samples/hrec/index.html){target="_blank" rel="noopener"}. Although the workflow is presented a sequence of steps, in practice your workflow will probably *not* be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.
 
 \
 
@@ -135,13 +135,15 @@ uas_metadata_make(my_imgs, make_new = TRUE, open = TRUE)
 
 *Tips:*
 
-- The text files created by `metadata_make()` can be based on a template where some fields are pre-populated (see help page for details).  
+- The text files created by `uas_metadata_make()` can be based on a template where some fields are pre-populated (see help page for details).  
 
 - Pass `open=TRUE` to have the new text files open in your default text editor. Ideally you have a text editor that allows you to open multiple text files at once. You can then edit all the metadata text files and save them. You can use RStudio as text editor also.  
 
 \
 
-# 4. Move oddball images into their own folders (if needed)
+# 4. Move oddball images into their own folders*
+
+\* = if needed
 
 'Oddball' images in this context are those images you aren't going stitch in your photogrammetry software. This include photos of calibration targets, images from aborted flights, test photos, drone selfies, etc. The idea is these should be separated (or deleted) so you don't have to mess with them during stitching process. You can move images with Windows Explorer. 
 
@@ -155,7 +157,9 @@ uas_metadata_make(my_imgs, make_new = TRUE, open = TRUE)
 
 \
 
-# 5. Split and/or combine images from different folders (if needed)  
+# 5. Split and/or combine images from different folders* 
+
+\* = if needed
 
 *Notes*
 
@@ -184,7 +188,7 @@ my_imgs <- uas_info(my_img_dirs)
 
 *Notes*
 
-- `uas_info()` 'sucks up' the metadata it finds in the metadata text files. So every time you edit and save the metadata text files in your text editor, you should rerun `uas_info()`.  
+- `uas_info()` 'sucks up' the flight metadata it finds in metadata text files. So every time you edit and save the metadata text files in your text editor, you should rerun `uas_info()`.  
 
 - `uas_info()` should go quickly after the initial extraction of EXIF data from the images. But if you add or move images out of a folder, the cache is invalidated and it will extract the EXIF data all over again. Don't be alarmed.  
 
@@ -192,7 +196,9 @@ my_imgs <- uas_info(my_img_dirs)
 
 \
 
-# 7. Move images into a structured directory tree (optional)
+# 7. Move images into a structured directory tree**
+
+** = optional
 
 Now that the metadata is more or less finalized, you can move the images into their 'final' tree structure.  
 
@@ -204,7 +210,9 @@ Sample code: *coming soon*
 
 \
 
-# 8. Export flight geometries to GIS files (Optional)
+# 8. Export flight geometries to GIS files**
+
+** = optional
 
 If desired, you can export the geometries of individual flights as KML and/or Shapefiles.  
 
@@ -230,7 +238,7 @@ uas_exp_shp(my_imgs, ctr = TRUE, mcp = TRUE)
 
 \
 
-# 9. Create Individual Flight Summaries
+# 9. Create individual flight summaries
 
 Sample code:
 
@@ -248,7 +256,7 @@ flight_summaries_html <- uas_report(my_imgs)
 
 \
 
-# 10. Create a Table of Contents for all the Flight Summaries
+# 10. Create a Table of Contents for all the flight summaries
 
 If you have several flights in the same general area, the final step is to create a master Table of Contents (TOC) for a series of flight summaries. The TOC is a standalone HTML file with links to individual flight summaries.  
 

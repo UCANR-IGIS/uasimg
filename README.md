@@ -180,7 +180,7 @@ that do useful things, such as:
     footprint.
 
 For more info, see the [Managing Drone Images with
-`uasimg`](https://ucanr-igis.github.io/uasimg/articles/uasimg.html)
+uasimg](https://ucanr-igis.github.io/uasimg/articles/uasimg.html)
 Vignette and function help pages.
 
 ## Example
@@ -217,7 +217,7 @@ uas_exp_shp(hast_ft1_info)
 uas_worldfile(hast_ft1_info)
 ```
 
-# Utilities for Analysis of Single Images
+# Utilities for Single Image Analysis
 
 The following utilities can help visualize and analyze individual
 images. These functions are based on the modeled image footprints, which

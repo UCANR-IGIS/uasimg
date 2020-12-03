@@ -351,8 +351,9 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         imgs_ctr_utm_sf <- imgs_ctr_ll_sf %>% st_transform(utm_epsg)
 
         ## Compute footprints
-        if (!fp || !agl_avail || tolower(camera_tag_yaw) == "none") {
+        if (!fp || !agl_avail || tolower(camera_tag_yaw) == "none" || sum(exif_df$sensor_width) == 0) {
           fp_utm_sf <- NA
+          if (!quiet && sum(exif_df$sensor_width) == 0) message(yellow(" - Sensor size not available for this camera"))
           if (!quiet) message(yellow(" - Skipping footprints"))
           nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
 
@@ -405,7 +406,8 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
               nodes_all_mat <- rbind(nodes_all_mat, fp_nodes_mat[1:4,])
 
             }
-          }
+
+          }  ## for (i in 1:nrow(imgs_ctr_utm_sf)) {
 
           ## Create a sf data frame for the footprints, using the attributes from the centroids
           fp_utm_sf <- st_sf(imgs_ctr_utm_sf %>% st_drop_geometry(),

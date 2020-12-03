@@ -24,11 +24,10 @@
 uas_setflds <- function(flds=NULL, reset=FALSE, quiet=FALSE) {
 
   ## If no fields were passed, use the default
-  if (is.null(flds)) {
+  if (is.null(flds) || reset) {
     flds <- uas_flds_oem()
   }
 
-  ## Get the cache directory
   cache_dir <- uas_getcache(quiet = TRUE)
 
   ## If cache_dir is NA (never set), try to create it
@@ -91,5 +90,5 @@ uas_getflds <- function() {
 #' @export
 
 uas_flds_oem <- function() {
-  c("name_short", "name_long", "description", "proj", "loc", "pilot", "contact", "data_url", "tags", "notes")
+  c("name_short", "name_long", "description", "proj", "loc", "pilot", "contact", "uav", "data_url", "tags", "notes")
 }

@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -88,7 +88,8 @@
 
       
 
-      </header><script src="catalog_wrkflw_files/header-attrs-2.3/header-attrs.js"></script><script src="catalog_wrkflw_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="catalog_wrkflw_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="catalog_wrkflw_files/viz-1.8.2/viz.js"></script><link href="catalog_wrkflw_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+      </header><script src="catalog_wrkflw_files/header-attrs-2.5/header-attrs.js"></script><script src="catalog_wrkflw_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="catalog_wrkflw_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="catalog_wrkflw_files/anchor-sections-1.0/anchor-sections.js"></script><script src="catalog_wrkflw_files/htmlwidgets-1.5.2/htmlwidgets.js"></script><script src="catalog_wrkflw_files/viz-1.8.2/viz.js"></script><link href="catalog_wrkflw_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
 <script src="catalog_wrkflw_files/grViz-binding-1.0.6.1/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -102,10 +103,10 @@
 
     
     
-<p>This article presents a workflow for using <code>uasimg</code> to create a <strong>catalog of drone images</strong> from multiple flights that are part of a bigger mapping project / campaign. Although the workflow is presented a sequence of steps, in practice your workflow will probably <em>not</em> be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.</p>
+<p>This article presents a workflow for using <code>uasimg</code> to create a <strong>catalog of drone images</strong> from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is <a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html" target="_blank" rel="noopener">here</a>. Although the workflow is presented a sequence of steps, in practice your workflow will probably <em>not</em> be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.</p>
 <p><br></p>
-<div id="htmlwidget-c649303e7576791794b5" style="width:600px;height:720px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c649303e7576791794b5">{"x":{"diagram":"digraph flowchart {\n      node [fontname = Helvetica, shape = rectangle]\n      tab1 [label = \"Copy images to a hard drive\"]\n      tab2 [label = \"Extract flight info for each folder with uas_info()\"]\n      tab3 [label = \"Create metadata text files for each folder uas_metadata_make()\"]\n      tab4 [label = \"Edit and save metadata text files in a text editor\"]\n      tab5 [label = \"Delete or move oddball images into subdirectories (as needed)\"]\n      tab6 [label = \"Move images between folders if they are part of the same mission block (if needed)\"]\n      tab7 [label = \"Re-run uas_info() to update the location info and metadata\"]\n      tab8 [label = \"Move images into a structured directory tree\"]\n      tab9 [label = \"Export flight geometries to shp / kml files with uas_exp_kml() and uas_exp_shp() (as needed)\"]\n      tab10 [label = \"Create individual flight summaries with uas_report()\"]\n      tab11 [label = \"Create a Table of Content page for related flight summaries with uas_toc() (optional)\"]\n\n      # edge definitions with the node IDs\n      tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7 -> tab8 -> tab9 -> tab10 -> tab11;\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><br></p>
+<div id="htmlwidget-d14f72c49ed10993ca26" style="width:600px;height:720px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d14f72c49ed10993ca26">{"x":{"diagram":"digraph flowchart {\n      node [fontname = Helvetica, shape = rectangle]\n      tab1 [label = \"Copy images to a hard drive\"]\n      tab2 [label = \"Extract flight info for each folder with uas_info()\"]\n      tab3 [label = \"Create metadata text files for each folder uas_metadata_make()\"]\n      tab4 [label = \"Edit and save metadata text files in a text editor\"]\n      tab5 [label = \"Delete or move oddball images into subdirectories (as needed)\"]\n      tab6 [label = \"Move images between folders if they are part of the same mission block (if needed)\"]\n      tab7 [label = \"Re-run uas_info() to update the location info and metadata\"]\n      tab8 [label = \"Move images into a structured directory tree\"]\n      tab9 [label = \"Export flight geometries to shp / kml files with uas_exp_kml() and uas_exp_shp() (as needed)\"]\n      tab10 [label = \"Create individual flight summaries with uas_report()\"]\n      tab11 [label = \"Create a Table of Content page for related flight summaries with uas_toc() (optional)\"]\n\n      # edge definitions with the node IDs\n      tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7 -> tab8 -> tab9 -> tab10 -> tab11;\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><br></p>
 <p>Currently, executing this workflow in <code>uasimg</code> requires <strong>writing R commands</strong> (i.e., in a script). This requires a knowledge of R, and a general understanding of what the functions do (explained below). In a future release, <code>uasimg</code> will have a GUI (wizard) that walks users through data management steps.</p>
 <p><br></p>
 <div id="copy-image-files-from-the-drone-to-a-hard-drive" class="section level1">
@@ -169,14 +170,15 @@
 </ul>
 <p><em>Tips:</em></p>
 <ul>
-<li><p>The text files created by <code>metadata_make()</code> can be based on a template where some fields are pre-populated (see help page for details).</p></li>
+<li><p>The text files created by <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> can be based on a template where some fields are pre-populated (see help page for details).</p></li>
 <li><p>Pass <code>open=TRUE</code> to have the new text files open in your default text editor. Ideally you have a text editor that allows you to open multiple text files at once. You can then edit all the metadata text files and save them. You can use RStudio as text editor also.</p></li>
 </ul>
 <p><br></p>
 </div>
-<div id="move-oddball-images-into-their-own-folders-if-needed" class="section level1">
+<div id="move-oddball-images-into-their-own-folders" class="section level1">
 <h1 class="hasAnchor">
-<a href="#move-oddball-images-into-their-own-folders-if-needed" class="anchor"></a>4. Move oddball images into their own folders (if needed)</h1>
+<a href="#move-oddball-images-into-their-own-folders" class="anchor"></a>4. Move oddball images into their own folders*</h1>
+<p>* = if needed</p>
 <p>‘Oddball’ images in this context are those images you aren’t going stitch in your photogrammetry software. This include photos of calibration targets, images from aborted flights, test photos, drone selfies, etc. The idea is these should be separated (or deleted) so you don’t have to mess with them during stitching process. You can move images with Windows Explorer.</p>
 <p><em>Notes</em></p>
 <ul>
@@ -186,9 +188,10 @@
 </ul>
 <p><br></p>
 </div>
-<div id="split-andor-combine-images-from-different-folders-if-needed" class="section level1">
+<div id="split-andor-combine-images-from-different-folders" class="section level1">
 <h1 class="hasAnchor">
-<a href="#split-andor-combine-images-from-different-folders-if-needed" class="anchor"></a>5. Split and/or combine images from different folders (if needed)</h1>
+<a href="#split-andor-combine-images-from-different-folders" class="anchor"></a>5. Split and/or combine images from different folders*</h1>
+<p>* = if needed</p>
 <p><em>Notes</em></p>
 <ul>
 <li><p>Sometimes you need to divide up the images from a single folder into different folders. For example, the folder may contain images from multiple flights. Or you might want to split up the RGB (jpg) files and the mulitspectral (tif) files into separate folders (because you normally stitch these separately).</p></li>
@@ -211,15 +214,16 @@
 </pre></div>
 <p><em>Notes</em></p>
 <ul>
-<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> ‘sucks up’ the metadata it finds in the metadata text files. So every time you edit and save the metadata text files in your text editor, you should rerun <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p></li>
+<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> ‘sucks up’ the flight metadata it finds in metadata text files. So every time you edit and save the metadata text files in your text editor, you should rerun <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p></li>
 <li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> should go quickly after the initial extraction of EXIF data from the images. But if you add or move images out of a folder, the cache is invalidated and it will extract the EXIF data all over again. Don’t be alarmed.</p></li>
 <li><p>to see what information is saved in a flight info object, type the name of the object at the console and hit enter.</p></li>
 </ul>
 <p><br></p>
 </div>
-<div id="move-images-into-a-structured-directory-tree-optional" class="section level1">
+<div id="move-images-into-a-structured-directory-tree" class="section level1">
 <h1 class="hasAnchor">
-<a href="#move-images-into-a-structured-directory-tree-optional" class="anchor"></a>7. Move images into a structured directory tree (optional)</h1>
+<a href="#move-images-into-a-structured-directory-tree" class="anchor"></a>7. Move images into a structured directory tree**</h1>
+<p>** = optional</p>
 <p>Now that the metadata is more or less finalized, you can move the images into their ‘final’ tree structure.</p>
 <p>Sample code: <em>coming soon</em></p>
 <p><em>Notes</em></p>
@@ -228,9 +232,10 @@
 </ul>
 <p><br></p>
 </div>
-<div id="export-flight-geometries-to-gis-files-optional" class="section level1">
+<div id="export-flight-geometries-to-gis-files" class="section level1">
 <h1 class="hasAnchor">
-<a href="#export-flight-geometries-to-gis-files-optional" class="anchor"></a>8. Export Flight Geometries to GIS Files (Optional)</h1>
+<a href="#export-flight-geometries-to-gis-files" class="anchor"></a>8. Export flight geometries to GIS files**</h1>
+<p>** = optional</p>
 <p>If desired, you can export the geometries of individual flights as KML and/or Shapefiles.</p>
 <p>Sample code:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
@@ -250,7 +255,7 @@
 </div>
 <div id="create-individual-flight-summaries" class="section level1">
 <h1 class="hasAnchor">
-<a href="#create-individual-flight-summaries" class="anchor"></a>9. Create Individual Flight Summaries</h1>
+<a href="#create-individual-flight-summaries" class="anchor"></a>9. Create individual flight summaries</h1>
 <p>Sample code:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="kw">flight_summaries_html</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_report.html">uas_report</a></span>(<span class="kw">my_imgs</span>)
@@ -265,7 +270,7 @@
 </div>
 <div id="create-a-table-of-contents-for-all-the-flight-summaries" class="section level1">
 <h1 class="hasAnchor">
-<a href="#create-a-table-of-contents-for-all-the-flight-summaries" class="anchor"></a>10. Create a Table of Contents for all the Flight Summaries</h1>
+<a href="#create-a-table-of-contents-for-all-the-flight-summaries" class="anchor"></a>10. Create a Table of Contents for all the flight summaries</h1>
 <p>If you have several flights in the same general area, the final step is to create a master Table of Contents (TOC) for a series of flight summaries. The TOC is a standalone HTML file with links to individual flight summaries.</p>
 <p>Sample code:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
