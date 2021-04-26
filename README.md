@@ -34,8 +34,8 @@ tasks:
 3.  Creating individual Flight Summary pages in HTML, as the backbone of
     an image catalog.
 
-4.  Converting images from one format to another (e.g.,DNG (RAW) to
-    JPG), while preserving all the image metadata.
+4.  Converting images from one format to another (e.g., DNG to JPG),
+    while preserving all the image metadata.
 
 5.  Creating world files for individual drone images, using the image
     EXIF data to model the ground footprint and rotation, so they can

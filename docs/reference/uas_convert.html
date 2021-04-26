@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Convert file format — uas_convert" />
-<meta property="og:description" content="Create image file formats while preserving EXIF data" />
+<meta property="og:description" content="Convert image file formats while preserving EXIF data" />
 
 
 
@@ -142,7 +142,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Create image file formats while preserving EXIF data</p>
+    <p>Convert image file formats while preserving EXIF data</p>
     </div>
 
     <pre class="usage"><span class='fu'>uas_convert</span>(
@@ -161,15 +161,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A list of class 'uas_info', or a list of filenames (with path)</p></td>
+      <td><p>A vector of filenames (with path), or an object of class 'uas_info'</p></td>
     </tr>
     <tr>
       <th>dir_out</th>
-      <td><p>The output directory</p></td>
+      <td><p>The output directory(s)</p></td>
     </tr>
     <tr>
       <th>idx</th>
-      <td><p>Row numbers of the images</p></td>
+      <td><p>Row numbers of the images (optional)</p></td>
     </tr>
     <tr>
       <th>format_out</th>
@@ -177,7 +177,7 @@
     </tr>
     <tr>
       <th>quality</th>
-      <td><p>The quality level for jpg compression (0..100), larger number have better image quality</p></td>
+      <td><p>The quality level for jpg compression (0..100), larger numbers produce better image quality</p></td>
     </tr>
     <tr>
       <th>copy_exif</th>
@@ -189,7 +189,7 @@
     </tr>
     <tr>
       <th>quiet</th>
-      <td><p>Suppress messages</p></td>
+      <td><p>Suppress messages, logical</p></td>
     </tr>
     </table>
 
@@ -198,8 +198,8 @@
     <p>This function converts image formats. Images are converted using the `magick` package
 (which calls ImageMagick libraries), while EXIF data is copied using exiftool. Supported output formats include JPG and TIFF.</p>
 <p><code>x</code> can be a vector of image file names (including the path), or a image metadata object (created by <code><a href='uas_info.html'>uas_info</a></code>). If <code>idx</code>
-is passed, it will be used as the index (row numbers) of images to convert.</p>
-<p><code>dir_out</code> is the name of the directory where converted images will be output. If left NULL, images will be placed in the same
+(row numbers) is passed, it will be used to select images to convert.</p>
+<p><code>dir_out</code> is the name of the directory where converted images will be output. If NULL, images will be placed in the same
 directory as the input images. If <code>x </code>is a uas_info() object, <code>dir_out</code> can be a vector of directories equal in length to the number of folders
 indexed in <code>x</code>.</p>
 

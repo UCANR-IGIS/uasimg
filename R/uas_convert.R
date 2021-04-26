@@ -1,23 +1,23 @@
 #' Convert file format
 #'
-#' Create image file formats while preserving EXIF data
+#' Convert image file formats while preserving EXIF data
 #'
-#' @param x A list of class 'uas_info', or a list of filenames (with path)
-#' @param dir_out The output directory
-#' @param idx Row numbers of the images
+#' @param x A vector of filenames (with path), or an object of class 'uas_info'
+#' @param dir_out The output directory(s)
+#' @param idx Row numbers of the images (optional)
 #' @param format_out The output format
-#' @param quality The quality level for jpg compression (0..100), larger number have better image quality
+#' @param quality The quality level for jpg compression (0..100), larger numbers produce better image quality
 #' @param copy_exif Whether to copy the original EXIF info to the new file, logical
 #' @param overwrite Overwrite existing files, logical
-#' @param quiet Suppress messages
+#' @param quiet Suppress messages, logical
 #'
 #' @details This function converts image formats. Images are converted using the `magick` package
 #' (which calls ImageMagick libraries), while EXIF data is copied using exiftool. Supported output formats include JPG and TIFF.
 #'
 #' \code{x} can be a vector of image file names (including the path), or a image metadata object (created by \code{\link{uas_info}}). If \code{idx}
-#' is passed, it will be used as the index (row numbers) of images to convert.
+#' (row numbers) is passed, it will be used to select images to convert.
 #'
-#' \code{dir_out} is the name of the directory where converted images will be output. If left NULL, images will be placed in the same
+#' \code{dir_out} is the name of the directory where converted images will be output. If NULL, images will be placed in the same
 #' directory as the input images. If \code{x }is a uas_info() object, \code{dir_out} can be a vector of directories equal in length to the number of folders
 #' indexed in \code{x}.
 #'

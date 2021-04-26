@@ -16,33 +16,33 @@ uas_convert(
 )
 }
 \arguments{
-\item{x}{A list of class 'uas_info', or a list of filenames (with path)}
+\item{x}{A vector of filenames (with path), or an object of class 'uas_info'}
 
-\item{dir_out}{The output directory}
+\item{dir_out}{The output directory(s)}
 
-\item{idx}{Row numbers of the images}
+\item{idx}{Row numbers of the images (optional)}
 
 \item{format_out}{The output format}
 
-\item{quality}{The quality level for jpg compression (0..100), larger number have better image quality}
+\item{quality}{The quality level for jpg compression (0..100), larger numbers produce better image quality}
 
 \item{copy_exif}{Whether to copy the original EXIF info to the new file, logical}
 
 \item{overwrite}{Overwrite existing files, logical}
 
-\item{quiet}{Suppress messages}
+\item{quiet}{Suppress messages, logical}
 }
 \description{
-Create image file formats while preserving EXIF data
+Convert image file formats while preserving EXIF data
 }
 \details{
 This function converts image formats. Images are converted using the `magick` package
 (which calls ImageMagick libraries), while EXIF data is copied using exiftool. Supported output formats include JPG and TIFF.
 
 \code{x} can be a vector of image file names (including the path), or a image metadata object (created by \code{\link{uas_info}}). If \code{idx}
-is passed, it will be used as the index (row numbers) of images to convert.
+(row numbers) is passed, it will be used to select images to convert.
 
-\code{dir_out} is the name of the directory where converted images will be output. If left NULL, images will be placed in the same
+\code{dir_out} is the name of the directory where converted images will be output. If NULL, images will be placed in the same
 directory as the input images. If \code{x }is a uas_info() object, \code{dir_out} can be a vector of directories equal in length to the number of folders
 indexed in \code{x}.
 }
