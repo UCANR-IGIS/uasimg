@@ -7,9 +7,6 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-For more details and examples, see
-<https://ucanr-igis.github.io/uasimg/>
-
 # Drone Image Utilities
 
 `uasimg` helps manage images taken from an unmanned aerial vehicle
@@ -37,7 +34,10 @@ tasks:
 3.  Creating individual Flight Summary pages in HTML, as the backbone of
     an image catalog.
 
-4.  Creating world files for individual drone images, using the image
+4.  Converting images from one format to another (e.g.,DNG (RAW) to
+    JPG), while preserving all the image metadata.
+
+5.  Creating world files for individual drone images, using the image
     EXIF data to model the ground footprint and rotation, so they can
     imported in GIS software and appear in their approximate location.
 
@@ -57,9 +57,6 @@ separately. You can download and install RTools from
 install RTools from within R by running:
 
 ``` r
-## You can use the the following two commands to install RTools 
-## (as an alternative to downloading and running the setup file yourself)
-
 install.packages('installr')
 installr::install.Rtools()
 ```
@@ -67,13 +64,7 @@ installr::install.Rtools()
 After RTools is installed, you can install `uasimg` with:
 
 ``` r
-library (remotes)
-
-## If the line above causes a 'package not found' error, then you need to install the
-## remotes package (or devtools). You can run the command below (uncomment first) to install it, 
-## or use the 'Packages' tab in RStudio.
-## install.packages("remotes") 
-
+install.packages('remotes')
 remotes::install_github("ucanr-igis/uasimg")
 ```
 
@@ -91,28 +82,27 @@ package(s), install the dependent packages separately (i.e., from the
 ### exiftool
 
 To read the EXIF data from the image files, `uasimg` requires an
-external command line tool called ‘exiftool’. exiftool can be installed
-in four steps:
+external command line tool called ‘exiftool’.
 
-1.  download the **Windows Executable** or **MacOS Package** from:
-    <http://www.sno.phy.queensu.ca/~phil/exiftool/>
+**UPDATE: As of version 1.6.0, you no longer need to manually install
+the exiftool command line utility. Rather you can install by running:**
 
-2.  uncompress / unzip
+``` r
+exiftoolr::install_exiftool()
+```
 
-3.  Windows:
+To verify it worked:
 
-<!-- end list -->
+``` r
+exiftoolr::exif_version()
+#> Using ExifTool version 12.00
+#> [1] "12.00"
+```
 
-  - rename the executable file from *exiftool(-k).exe* to *exiftool.exe*
-    
-    **Note**: if you have [file extensions
-    hidden](https://support.winzip.com/hc/en-us/articles/115011457948-How-to-configure-Windows-to-show-file-extensions-and-hidden-files)
-    in Windows Explorer, you won’t see *.exe* in the filename. In that
-    case, just rename ‘*exiftool(-k)*’ to ‘*exiftool*’.
-
-  - move the executable file to a directory on the path (e.g.,
-    c:\\windows). Note: putting it in c:\\windows\\system32 does *not*
-    seem to work.
+Alternately, you can install exiftool manually by downloading it from
+<http://www.sno.phy.queensu.ca/~phil/exiftool/>. Be sure to unzip it to
+a folder on the path (e.g, c:\\windows) and rename the executable file
+from *exiftool(-k).exe* to *exiftool.exe*.
 
 ## Supported Cameras
 
@@ -152,9 +142,9 @@ Additional requirements to generate estimated footprints:
 
 # Usage Overview
 
-You always start with `uas_info()`, feeding it or more folders of drone
-images. This function extracts image information, computes footprints,
-reads supplemental flight metadata, etc.
+You always start with `uas_info()`, feeding it one or more folders of
+drone images. This function extracts image information, computes
+footprints, and reads supplemental flight metadata.
 
 The object returned by `uas_info()` is not very useful by itself. The
 results are generally saved to a variable then fed into other functions
@@ -163,10 +153,10 @@ that do useful things, such as:
   - `uas_report()` creates ‘Flight Summaries’ as standalone HTML pages,
     with options to create image thumbnails
     ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/hrec_wtrshd2_2017_flt1_report.html)).
-
-  - `uas_toc()` creates a Table of Contents page for several Flight
-    Summaries, with options to copy all the catalog files to a single
-    folder so the catalog is in one place
+    Flight summaries also be grouped using `uas_toc()`, which generates
+    a Table of Contents page for several Flight Summaries, with options
+    to copy all the catalog files to a single folder so the catalog is
+    in one place
     ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/index.html)).
 
   - `uas_exp_shp()` and `uas_exp_kml()` exports flight geometries (image
@@ -178,6 +168,8 @@ that do useful things, such as:
   - `uas_worldfile()` creates small external XML files that allow images
     to be imported into GIS software and appear in their approximate
     footprint.
+
+  - `uas_convert()` converts image files from one format to another.
 
 For more info, see the [Managing Drone Images with
 uasimg](https://ucanr-igis.github.io/uasimg/articles/uasimg.html)
@@ -228,10 +220,9 @@ above ground.
 
 Drone images typically save the coordinates of the camera, but do not
 include the width, length, or compass angle. A “world file” is a small
-external text file for each images that contains these additional
-parameters, so that when you import an individual image into a GIS
-program like ArcGIS or QGIS, the image will appear in its approximate
-footprint on the ground.
+external text file (also known as a *sidecar* file) that contains these
+additional parameters. These files allow GIS programs like ArcGIS Pro or
+QGIS to display the image in its approximate footprint on the ground.
 
 You can create world files, readable by ArcGIS and QGIS, with
 `uas_worldfile()`. `uas_worldfile()` can create three types of world
@@ -239,19 +230,19 @@ files, including `aux.xml`, `jpw` and `tfw`, and `prj` files. `aux.xml`
 is the most recognized format and hence the default. See the
 `uas_worldfile()` help page for details.
 
-## Cropping out the Cneter of Images
+## Cropping out the Center of Images
 
 Sometimes images will simply not stitch, forcing you to do your analysis
 and visualization with individual images. `uas_cropctr()` crops out the
 center part of each image (which normally has the least amount of
-distortion, at least if the image was taken at nadir). The function will
-also produce a world file for the cropped center, so they can be
-visualized together in a GIS software as a kind of crude mosaic.
-`uas_cropctr()` provides arguments to specify how tall and wide to make
-the crop, which you can set to the average forward distance between
-images and the average side distance between flight lines. The resulting
-mosaic will not be orthorectified, but may be good enough for
-visualization and/or object detection particularly if the area is flat.
+distortion if the image was taken at nadir). The function will also
+produce a world file for the cropped center, so they can be visualized
+together in a GIS software as a kind of crude mosaic. `uas_cropctr()`
+provides arguments to specify how tall and wide to make the crop, which
+you can set to the average forward distance between images and the
+average side distance between flight lines. The resulting mosaic will
+not be orthorectified, but may be good enough for visualization and/or
+object detection particularly if the area is flat.
 
 # Bugs, Questions, and Feature Requests
 

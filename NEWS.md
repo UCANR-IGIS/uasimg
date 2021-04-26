@@ -1,3 +1,9 @@
+# uasimg 1.6.0 (2021-04-24)
+
+* `uas_convert()`: this new function converts images between file formats (e.g., DNG to JPG), while preserving EXIF data  
+* `magick` and `exiftoolr` added as dependent packages (as imports)
+* `uas_info()`: added argument for `exiftoolr_use`
+
 # uasimg 1.5.2 (2020-12-02)
 
 * `uas_getoemflds()`: added 'uav' to the list of default flight metadata fields

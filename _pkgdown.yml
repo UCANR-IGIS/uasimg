@@ -58,6 +58,7 @@ reference:
   - title: Other Utility Functions
     desc: Other utility functions
     contents:
+      - uas_convert
       - findonpath
       - geo2utm
       - null2na

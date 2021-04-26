@@ -11,6 +11,7 @@ uas_info(
   fwd_overlap = fp,
   cameras = NULL,
   metadata = "metadata.*\\\\.txt",
+  use_exiftoolr = TRUE,
   exiftool = NULL,
   exif_csv = NULL,
   cache = TRUE,
@@ -31,7 +32,9 @@ uas_info(
 
 \item{metadata}{A filename pattern for a metadata file, or a metadata list object (see Details)}
 
-\item{exiftool}{The path to the exiftool command line tool (omit if on the OS path)}
+\item{use_exiftoolr}{Whether to use the exiftoolr package, logical}
+
+\item{exiftool}{The path to the exiftool command line tool (omit if on the OS path). Ignored if use_exiftoolr = TRUE.}
 
 \item{exif_csv}{The file name of a new csv file where the exif data will be saved (omit to make a temp one)}
 

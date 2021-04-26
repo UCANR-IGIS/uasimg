@@ -8,7 +8,8 @@
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
 #' @param metadata A filename pattern for a metadata file, or a metadata list object (see Details)
-#' @param exiftool The path to the exiftool command line tool (omit if on the OS path)
+#' @param use_exiftoolr Whether to use the exiftoolr package, logical
+#' @param exiftool The path to the exiftool command line tool (omit if on the OS path). Ignored if use_exiftoolr = TRUE.
 #' @param exif_csv The file name of a new csv file where the exif data will be saved (omit to make a temp one)
 #' @param cache Logical or a directory where EXIF data should be cached (see Details)
 #' @param update_cache Whether to update the cache
@@ -77,11 +78,12 @@
 #' @importFrom utils read.csv
 #' @importFrom sf st_as_sf st_coordinates st_polygon st_drop_geometry st_sf st_sfc
 #' @importFrom crayon yellow green red magenta bold
+#' @importFrom exiftoolr configure_exiftoolr
 #' @export
 
 uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
                      cameras = NULL, metadata = "metadata.*\\.txt",
-                     exiftool = NULL, exif_csv = NULL, cache = TRUE, update_cache = FALSE, quiet = FALSE) {
+                     use_exiftoolr = TRUE, exiftool = NULL, exif_csv = NULL, cache = TRUE, update_cache = FALSE, quiet = FALSE) {
 
   ## See if all directory(s) exist
   for (img_dir in img_dirs) {
@@ -120,17 +122,21 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
   short_names[["fwd_overlap"]] <- "fwd_ovrlap"
 
   ## See if exiftool is installed
-  if (is.null(exiftool)) {
-    if (.Platform$OS.type == "windows") {
-      exiftool <- "exiftool.exe"
-    } else {
-      exiftool <- "exiftool"
+  if (use_exiftoolr) {
+    exiftool <- exiftoolr::configure_exiftoolr(quiet = TRUE)
+  } else {
+    if (is.null(exiftool)) {
+      if (.Platform$OS.type == "windows") {
+        exiftool <- "exiftool.exe"
+      } else {
+        exiftool <- "exiftool"
+      }
     }
-  }
-  exiftool.exec <- findonpath(exiftool, status = FALSE)
-  if (is.null(exiftool.exec)) {
-    message(red("Cant find exiftool. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows). Download it from http://www.sno.phy.queensu.ca/~phil/exiftool/, then rename Rename 'exiftool(-k).exe' to 'exiftool.exe'."))
-    return(invisible(NULL))
+    exiftool.exec <- findonpath(exiftool, status = FALSE)
+    if (is.null(exiftool.exec)) {
+      message(red("Cant find exiftool. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows). Download it from http://www.sno.phy.queensu.ca/~phil/exiftool/, then rename Rename 'exiftool(-k).exe' to 'exiftool.exe'."))
+      return(invisible(NULL))
+    }
   }
 
   res <- list()
@@ -172,7 +178,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         ## Construct the cache file name based on the image dir and total size
         ## Keep only image files for the purposes of computing the total file size
         dir_files <- list.files(img_dir, all.files = FALSE, full.names = TRUE)
-        dir_files <- dir_files[grepl(".jpg$|.jpeg$|.tif$|.tiff$|.raw$", dir_files, ignore.case=TRUE)]
+        dir_files <- dir_files[grepl(".jpg$|.jpeg$|.tif$|.tiff$|.raw$|.dng$", dir_files, ignore.case=TRUE)]
         #dir_files <- dir_files[!grepl(".txt$|.bak$", dir_files)]
 
         dir_size <- as.character(sum(file.size(dir_files)))
@@ -195,11 +201,11 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
     if (!cache_loaded) {
 
-      ### Run EXIF tool on the first image to get the camera moodel
+      ### Run EXIF tool on the first image to get the camera model
       ### (We assume all image files in the directory are from the same sensor, will not check)
       if (!quiet) message(yellow(" - Looking for image files"))
 
-      first_fn <- list.files(path=img_dir, full.names=TRUE, pattern="jpg$|JPG$|jpeg$|JPEG$|tif$|TIF$")[1]
+      first_fn <- list.files(path=img_dir, full.names=TRUE, pattern="jpg$|JPG$|jpeg$|JPEG$|tif$|TIF$|dng$|DNG$")[1]
       if (is.na(first_fn)) stop(paste0("Couldn't find any jpg or tif files in ", img_dir))
 
       csv_first_fn <- tempfile(pattern="~map_uas_", fileext = ".csv")

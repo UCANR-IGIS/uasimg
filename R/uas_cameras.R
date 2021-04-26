@@ -28,7 +28,7 @@ uas_cameras <- function(names_only = TRUE) {
   cameras_tbl <- uas_readcameras(cameras_fn)
 
   if (names_only) {
-    cameras_tbl$camera_name
+    sort(paste0(cameras_tbl$camera_name, " (", cameras_tbl$filetype, ")"))
   } else {
     cameras_tbl
   }

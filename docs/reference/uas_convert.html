@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pipe operator — %&gt;% • uasimg</title>
+<title>Convert file format — uas_convert • uasimg</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Pipe operator — %&gt;%" />
-<meta property="og:description" content="See magrittr::%&amp;gt;% for details." />
+<meta property="og:title" content="Convert file format — uas_convert" />
+<meta property="og:description" content="Create image file formats while preserving EXIF data" />
 
 
 
@@ -136,19 +136,87 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Pipe operator</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/utils-pipe.R'><code>R/utils-pipe.R</code></a></small>
-    <div class="hidden name"><code>pipe.Rd</code></div>
+    <h1>Convert file format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_convert.R'><code>R/uas_convert.R</code></a></small>
+    <div class="hidden name"><code>uas_convert.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>See <code>magrittr::%&gt;%</code> for details.</p>
+    <p>Create image file formats while preserving EXIF data</p>
     </div>
 
-    <pre class="usage"><span class='kw'>lhs</span> <span class='op'>%&gt;%</span> <span class='kw'>rhs</span></pre>
+    <pre class="usage"><span class='fu'>uas_convert</span>(
+  <span class='kw'>x</span>,
+  dir_out = <span class='kw'>NULL</span>,
+  idx = <span class='kw'>NULL</span>,
+  format_out = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"jpg"</span>, <span class='st'>"tif"</span>)[<span class='fl'>1</span>],
+  quality = <span class='fl'>90</span>,
+  copy_exif = <span class='fl'>TRUE</span>,
+  overwrite = <span class='fl'>FALSE</span>,
+  quiet = <span class='fl'>FALSE</span>
+)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A list of class 'uas_info', or a list of filenames (with path)</p></td>
+    </tr>
+    <tr>
+      <th>dir_out</th>
+      <td><p>The output directory</p></td>
+    </tr>
+    <tr>
+      <th>idx</th>
+      <td><p>Row numbers of the images</p></td>
+    </tr>
+    <tr>
+      <th>format_out</th>
+      <td><p>The output format</p></td>
+    </tr>
+    <tr>
+      <th>quality</th>
+      <td><p>The quality level for jpg compression (0..100), larger number have better image quality</p></td>
+    </tr>
+    <tr>
+      <th>copy_exif</th>
+      <td><p>Whether to copy the original EXIF info to the new file, logical</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>Overwrite existing files, logical</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Suppress messages</p></td>
+    </tr>
+    </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>This function converts image formats. Images are converted using the `magick` package
+(which calls ImageMagick libraries), while EXIF data is copied using exiftool. Supported output formats include JPG and TIFF.</p>
+<p><code>x</code> can be a vector of image file names (including the path), or a image metadata object (created by <code><a href='uas_info.html'>uas_info</a></code>). If <code>idx</code>
+is passed, it will be used as the index (row numbers) of images to convert.</p>
+<p><code>dir_out</code> is the name of the directory where converted images will be output. If left NULL, images will be placed in the same
+directory as the input images. If <code>x </code>is a uas_info() object, <code>dir_out</code> can be a vector of directories equal in length to the number of folders
+indexed in <code>x</code>.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>## Make a list of DNG files to convert</span>
+<span class='kw'>files_dng</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span>(<span class='st'>"D:/uas/mavic_pro/raw"</span>,
+                        pattern = <span class='st'>".DNG$"</span>,
+                        full.names = <span class='fl'>TRUE</span>,
+                        ignore.case = <span class='fl'>TRUE</span>)
+
+<span class='fu'>uas_convert</span>(<span class='kw'>files_dng</span>,
+            dir_out = <span class='st'>"D:/uas/mavic_pro/jpg"</span>,
+            format_out = <span class='st'>"jpg"</span>)
+}
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
