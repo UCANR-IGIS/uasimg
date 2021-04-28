@@ -189,9 +189,10 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
 
         descript_line <- paste0("## FLIGHT METADATA FOR:\n## ", md_fn, "\n##\n",
-                                "## Tips: \n\n",
-                                "##   - name_short is used to generate default file names. Keep it short and avoid special characters.",
-                                "##   - comments and blank lines are ignored \n\n")
+                                "## Tips: \n",
+                                "## `name_short` is used to generate default file names. Keep it short and avoid special characters.\n",
+                                "## `name_long` will be used as a title for the HTML summary page\n",
+                                "## Blank lines and comments (start with #) are ignored \n\n")
 
         ## Make a copy of the generic list
         flst <- flds_lst
@@ -226,6 +227,10 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
       ## Open the metadata.txt file if needed
       if (Sys.info()["sysname"] == "Windows") {
         ## Use the default Windows text editor
+
+        ## Thhe following is an ad-hoc fix in order to open Notpad on a Windows machine with a network path
+        if (substr(md_fn, 1, 2) == "//") md_fn <- paste0("file:", md_fn)
+
         shell.exec(md_fn)
       } else {
         ## Use whichever text editor is defined by getOption("editor")
@@ -236,8 +241,6 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
   }
 
-  #browser()
   md_fnames
-  #file.edit(md_fnames)
 
 }

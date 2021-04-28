@@ -1,3 +1,7 @@
+# uasimg 1.6.1 (2021-04-26)
+
+* `uas_metadata_make()`: appended `file:` to metadata files on network paths to get it to open in notepad; added more comments in template
+
 # uasimg 1.6.0 (2021-04-24)
 
 * `uas_convert()`: this new function converts images between file formats (e.g., DNG to JPG), while preserving EXIF data  

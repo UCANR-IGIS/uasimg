@@ -43,8 +43,11 @@ This function converts image formats. Images are converted using the `magick` pa
 (row numbers) is passed, it will be used to select images to convert.
 
 \code{dir_out} is the name of the directory where converted images will be output. If NULL, images will be placed in the same
-directory as the input images. If \code{x }is a uas_info() object, \code{dir_out} can be a vector of directories equal in length to the number of folders
-indexed in \code{x}.
+directory as the input images. If \code{x }is an object of class `uas_info`, \code{dir_out} can be a vector of directories equal in length to the number of folders
+indexed in \code{x} (in which case the converted images will be placed in the corresponding output directory).
+
+\code{quality} sets the compression ratio for jpg images. To preserve a high level of fidelity and improve the odds of successful stitching, it
+ is recommended you set \code{quality} to 90 or higher. If \code{format_out = "tif"}, the output files will be saved as uncompressed tif files.
 }
 \examples{
 \dontrun{
