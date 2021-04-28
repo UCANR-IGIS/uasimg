@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -155,6 +155,7 @@
   md_flds = <span class='fu'><a href='uas_setflds.html'>uas_getflds</a></span>(),
   md_template = <span class='kw'>NULL</span>,
   read_uasinfo = <span class='fl'>FALSE</span>,
+  use_system_editor = <span class='fl'>FALSE</span>,
   quiet = <span class='fl'>FALSE</span>
 )</pre>
 
@@ -196,6 +197,10 @@
     <tr>
       <th>read_uasinfo</th>
       <td><p>Read and populate metadata fields from x (assuming x is a uas_info object)</p></td>
+    </tr>
+    <tr>
+      <th>use_system_editor</th>
+      <td><p>Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical</p></td>
     </tr>
     <tr>
       <th>quiet</th>

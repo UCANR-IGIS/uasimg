@@ -11,6 +11,7 @@
 #' @param read_uasinfo Read and populate metadata fields from x (assuming x is a uas_info object)
 #' @param overwrite Overwrite existing metadata files, Logical
 #' @param open Open the file for editing
+#' @param use_system_editor Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical
 #' @param quiet Suppress messages
 #'
 #' @details
@@ -42,6 +43,7 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
                               make_new = FALSE, overwrite = FALSE, open = TRUE,
                               md_flds = uas_getflds(), md_template = NULL,
                               read_uasinfo = FALSE,
+                              use_system_editor = FALSE,
                               quiet = FALSE) {
 
   ## Get the directories
@@ -225,19 +227,21 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
     if (open && file.exists(md_fn)) {
       ## Open the metadata.txt file if needed
-      if (Sys.info()["sysname"] == "Windows") {
-        ## Use the default Windows text editor
+      ## if (Sys.info()["sysname"] == "Windows") {
 
-        ## Thhe following is an ad-hoc fix in order to open Notpad on a Windows machine with a network path
-        if (substr(md_fn, 1, 2) == "//") md_fn <- paste0("file:", md_fn)
+      if (use_system_editor) {
+        ## Use the default text editor
 
-        shell.exec(md_fn)
+        ## The following is an ad-hoc fix in order to open Notpad on a Windows machine with a network path.
+        ## no longer needed
+        ## if (substr(md_fn, 1, 2) == "//") md_fn <- paste0("file:", md_fn)
+
+        shell.exec(normalizePath(md_fn))
       } else {
         ## Use whichever text editor is defined by getOption("editor")
-        file.edit(md_fn)
+        file.edit(normalizePath(md_fn))
       }
     }
-
 
   }
 

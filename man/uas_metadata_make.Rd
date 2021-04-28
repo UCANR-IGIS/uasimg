@@ -14,6 +14,7 @@ uas_metadata_make(
   md_flds = uas_getflds(),
   md_template = NULL,
   read_uasinfo = FALSE,
+  use_system_editor = FALSE,
   quiet = FALSE
 )
 }
@@ -35,6 +36,8 @@ uas_metadata_make(
 \item{md_template}{A template metadata file}
 
 \item{read_uasinfo}{Read and populate metadata fields from x (assuming x is a uas_info object)}
+
+\item{use_system_editor}{Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical}
 
 \item{quiet}{Suppress messages}
 }

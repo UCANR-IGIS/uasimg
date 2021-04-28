@@ -1,3 +1,7 @@
+# uasimg 1.6.2 (2021-04-28)
+
+* `uas_metadata_make()`: added `use_system_editor` argument
+
 # uasimg 1.6.1 (2021-04-26)
 
 * `uas_metadata_make()`: appended `file:` to metadata files on network paths to get it to open in notepad; added more comments in template
