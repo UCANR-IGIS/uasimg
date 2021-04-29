@@ -24,6 +24,8 @@ uas_report(
   overwrite_png = FALSE,
   google_api = NULL,
   report_rmd = NULL,
+  header_html = NULL,
+  footer_html = NULL,
   quiet = FALSE
 )
 }
@@ -65,6 +67,10 @@ uas_report(
 \item{google_api}{API key for Google Static Maps, see Details.}
 
 \item{report_rmd}{Rmd template used to generate the HTML file. See Details.}
+
+\item{header_html}{A HTML file for the header}
+
+\item{footer_html}{A HTML file for the footer}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }

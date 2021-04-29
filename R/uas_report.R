@@ -21,6 +21,8 @@
 #' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
 #' @param google_api API key for Google Static Maps, see Details.
 #' @param report_rmd Rmd template used to generate the HTML file. See Details.
+#' @param header_html A HTML file for the header
+#' @param footer_html A HTML file for the footer
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -73,7 +75,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
                        output_dir = NULL, create_dir = TRUE, output_file = NULL, overwrite_html = FALSE,
                        open_report = FALSE, self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
                        overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
-                       quiet = FALSE) {
+                       header_html = NULL, footer_html = NULL, quiet = FALSE) {
 
   ## THE MAGICK.EXE option has been disabled pending testing.
   ## When asked to process a folder of >1000 images, it quit after ~700 (consistently)
@@ -298,6 +300,31 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
           ## Create a list of output options that specify not self contained
           output_options <- list(self_contained=FALSE, lib_dir="libs")
         }
+      }
+
+      ## Create a list of includes if header or footer are passed
+      if (!is.null(footer_html) || !is.null(header_html)) {
+        includes_lst <- list()
+
+        if (!is.null(header_html)) {
+          if (file.exists(header_html)) {
+            includes_lst[["before_body"]] <- header_html
+          } else {
+            stop(paste0("File not found: ", header_html))
+          }
+        }
+
+        if (!is.null(footer_html)) {
+          if (file.exists(footer_html)) {
+            includes_lst[["after_body"]] <- footer_html
+          } else {
+            stop(paste0("File not found: ", footer_html))
+          }
+        }
+
+        #output_options <- c(output_options, includes = includes_lst)
+        output_options$includes = includes_lst
+
       }
 
       ## Compute colors for the pts and fp

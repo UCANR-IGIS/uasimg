@@ -1,6 +1,7 @@
 # uasimg 1.6.2 (2021-04-28)
 
 * `uas_metadata_make()`: added `use_system_editor` argument
+* `uas_report()`: added `header_html` and `footer_html` arguments
 
 # uasimg 1.6.1 (2021-04-26)
 

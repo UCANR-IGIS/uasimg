@@ -379,8 +379,9 @@ if (!identical(params$fp, NA)) {
 }
 ```
 
-<hr/>
-<p style="color:#556B2F; font-style:italic;"><span style="display:inline-block; float:right;">`r format(Sys.time(), '%d %B, %Y')`</span>Created with <a href="https://github.com/ucanr-igis/uasimg" target="_blank" rel="noopener">Drone Image Utils</a> for R</p>
+
+<p style="color:#556B2F; font-style:italic; font-size:90%; text-align:right;">Created with:<br/><a href="https://ucanr-igis.github.io/uasimg/" target="_blank" rel="noopener">Drone Image Utilities for R</a></p>
+
 <p>&nbsp;</p>
 
 
