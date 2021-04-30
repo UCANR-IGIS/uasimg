@@ -124,7 +124,6 @@ uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
                           stderr = TRUE,
                           stdout = TRUE,
                           wait = TRUE)
-      browser()
 
       files_gen <- c(files_gen, imgout_pathfn)
 

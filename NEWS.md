@@ -1,3 +1,7 @@
+# uasimg 1.6.3 (2021-04-30)
+
+* `uas_cropctr()`: removed a leftover debugging statement
+
 # uasimg 1.6.2 (2021-04-28)
 
 * `uas_metadata_make()`: added `use_system_editor` argument
