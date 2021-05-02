@@ -94,14 +94,14 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       if (is.null(output_dir)) {
         output_dir_use <- file.path(img_dir, "map")
         if (!file.exists(output_dir_use) && create_dir) {
-          if (!quiet) message("Creating ", output_dir_use)
+          if (!quiet) message(yellow(" - Creating ", output_dir_use))
           if (!dir.create(output_dir_use, recursive = TRUE)) stop(paste0("Unable to create ", output_dir_use))
         }
       } else {
         output_dir_use <- output_dir
       }
       if (!file.exists(output_dir_use)) stop(paste0("Can't find ", output_dir_use))
-      if (!quiet && !combine_feats) message(green(" - saving files to", path.expand(output_dir_use)))
+      if (!quiet && !combine_feats) message(yellow(" - saving files to", path.expand(output_dir_use)))
 
       ## Define the base file name
       if (is.null(out_fnbase)) {
@@ -284,7 +284,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
 
             write_xml(nd_document %>% xml_root(), file = ctr_kml_pathfn)
 
-            if (!quiet) message(green(paste0(" - ", ctr_fn, ".kml", " saved")))
+            if (!quiet) message(yellow(paste0(" - ", ctr_fn, ".kml", " saved")))
             files_saved <- c(files_saved, ctr_kml_pathfn)
 
           }
@@ -375,7 +375,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
 
             write_xml(nd_document %>% xml_root(), file = mcp_kml_pathfn)
 
-            if (!quiet) message(green(paste0(" - ", mcp_fn, ".kml", " saved")))
+            if (!quiet) message(yellow(paste0(" - ", mcp_fn, ".kml", " saved")))
             files_saved <- c(files_saved, mcp_kml_pathfn)
           }
 
@@ -446,7 +446,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
           ## Save to disk
           write_xml(nd_document %>% xml_root(), file = ctr_kml_pathfn)
 
-          if (!quiet) message(green(paste0(" - ", combine_fn, "_ctr.kml saved")))
+          if (!quiet) message(yellow(paste0(" - ", combine_fn, "_ctr.kml saved")))
           files_saved <- c(files_saved, ctr_kml_pathfn)
 
         }
@@ -529,7 +529,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
           ## Write to disk
           write_xml(nd_document %>% xml_root(), file = mcp_kml_pathfn)
 
-          if (!quiet) message(green(paste0(" - ", combine_fn, "_mcp.kml saved")))
+          if (!quiet) message(yellow(paste0(" - ", combine_fn, "_mcp.kml saved")))
           files_saved <- c(files_saved, mcp_kml_pathfn)
         }
 

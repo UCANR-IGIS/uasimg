@@ -35,11 +35,12 @@ reference:
     contents:
       - uas_exp_kml
       - uas_exp_shp
-  - title: Single Image Analyses
-    desc: Single image analyses
+  - title: Single Images
+    desc: Individual image utilities
     contents:
       - uas_worldfile
       - uas_cropctr
+      - uas_convert
   - title: Metadata
     desc: Managing metadata
     contents:
@@ -58,7 +59,7 @@ reference:
   - title: Other Utility Functions
     desc: Other utility functions
     contents:
-      - uas_convert
+      - uas_dirs_find
       - findonpath
       - geo2utm
       - null2na

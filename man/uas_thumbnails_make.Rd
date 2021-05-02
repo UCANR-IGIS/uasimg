@@ -11,6 +11,7 @@ uas_thumbnails_make(
   tb_width = 400,
   overwrite = FALSE,
   use_magick = FALSE,
+  stats = FALSE,
   quiet = FALSE
 )
 }

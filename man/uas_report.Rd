@@ -26,6 +26,7 @@ uas_report(
   report_rmd = NULL,
   header_html = NULL,
   footer_html = NULL,
+  use_tmpdir = FALSE,
   quiet = FALSE
 )
 }
@@ -71,6 +72,8 @@ uas_report(
 \item{header_html}{A HTML file for the header}
 
 \item{footer_html}{A HTML file for the footer}
+
+\item{use_tmpdir}{Use the temp dir for processing}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 }

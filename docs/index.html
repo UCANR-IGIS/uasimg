@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.4</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@
 <div id="drone-image-utilities" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#drone-image-utilities" class="anchor"></a>Drone Image Utilities</h1></div>
-<p><code>uasimg</code> helps manage images taken from an unmanned aerial vehicle (drone) that have been collected with the intent to stitch into 2D amd 3D products. The package does <strong>not</strong> stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and create world files so individual images can be viewed in GIS software.</p>
+<p><code>uasimg</code> helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does <strong>not</strong> stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, convert formats, and create world files for individual images can be viewed in GIS software.</p>
 <div id="applications" class="section level2">
 <h2 class="hasAnchor">
 <a href="#applications" class="anchor"></a>Applications</h2>
@@ -103,11 +103,11 @@
 <ol>
 <li><p>Doing a quick check in the field of photos after a flight, assessing their locations and estimated image overlap. This can help a pilot determine if a flight was successful, or needs to be redone.</p></li>
 <li><p>Subsetting images for further processing with a photogrammetry (stitching) program like Pix4D or Agisoft. Omitting images with an extreme amount of overlap can reduce processing time and improve results.</p></li>
-<li><p>Creating individual Flight Summary pages in HTML, as the backbone of an image catalog.</p></li>
-<li><p>Converting images from one format to another (e.g., DNG to JPG), while preserving all the image metadata.</p></li>
+<li><p>Creating individual Flight Summary pages in HTML, as the backbone of an image catalog, and higher level ‘Table of Contents’ pages for groups of related flights (e.g., from the same site).</p></li>
+<li><p>Converting images from one format to another (e.g., DNG to JPG), while preserving all the image metadata needed for photogrammetry.</p></li>
 <li><p>Creating world files for individual drone images, using the image EXIF data to model the ground footprint and rotation, so they can imported in GIS software and appear in their approximate location.</p></li>
 </ol>
-<p><strong>Note</strong>: image locations and footprints are based on the metadata saved in the image files (e.g., relative altitude above the launch point, camera compass direction). Thus they should taken as <em>estimates only</em>.</p>
+<p><strong>Note</strong>: image locations and footprints are based on the metadata saved in the image files (e.g., relative altitude above the launch point, camera compass direction), and are <em>estimates only</em>.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -116,7 +116,7 @@
 <p><em>Note</em>: Windows users need <em>RTools</em> to build packages from source files (which is basically what you do when you install from GitHub). RTools is not a R package, rather its a set of utilities that you install separately. You can download and install RTools from <a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a>. Alternately, you can install RTools from within R by running:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'installr'</span>)
-<span class="kw">installr</span>::<span class="fu">install.Rtools</span>()
+<span class="kw">installr</span>::<span class="fu"><a href="https://rdrr.io/pkg/installr/man/install.Rtools.html">install.Rtools</a></span>()
 </pre></div>
 <p>After RTools is installed, you can install <code>uasimg</code> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">

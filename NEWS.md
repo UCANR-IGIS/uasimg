@@ -1,3 +1,9 @@
+# uasimg 1.6.4 (2021-05-01)
+
+* `uas_dirs_find()`: new function to find all sub-directories with images
+* `uas_thumbnails_make()`: added `stats` argument to display the amount of time taken per thumbnail
+* `uas_report()`: added use_tmpdir argument to render the flight summary report in temp folder (can prevent Pandoc errors when images are on a network drive)
+
 # uasimg 1.6.3 (2021-04-30)
 
 * `uas_cropctr()`: removed a leftover debugging statement

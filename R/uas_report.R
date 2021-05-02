@@ -23,6 +23,7 @@
 #' @param report_rmd Rmd template used to generate the HTML file. See Details.
 #' @param header_html A HTML file for the header
 #' @param footer_html A HTML file for the footer
+#' @param use_tmpdir Use the temp dir for processing
 #' @param quiet TRUE to supress printing of the pandoc command line
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
@@ -75,7 +76,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
                        output_dir = NULL, create_dir = TRUE, output_file = NULL, overwrite_html = FALSE,
                        open_report = FALSE, self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
                        overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
-                       header_html = NULL, footer_html = NULL, quiet = FALSE) {
+                       header_html = NULL, footer_html = NULL, use_tmpdir = FALSE, quiet = FALSE) {
 
   ## THE MAGICK.EXE option has been disabled pending testing.
   ## When asked to process a folder of >1000 images, it quit after ~700 (consistently)
@@ -96,6 +97,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
     if (FALSE %in% (attachments %in% c("ctr_kml", "mcp_kml"))) stop("Unknown value(s) for `attachments`")
   }
 
+  if (use_tmpdir) temp_dir <- tempdir()
 
   ## Set the size of the PNG map
   make_png <- FALSE
@@ -275,6 +277,15 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
     }
 
     if (overwrite_html || !file.exists(file.path(output_dir_use, output_file_use))) {
+      ## WE NEED TO GENERATE A HTML FILE
+
+      ## Determine where we will render the HTML file
+      if (use_tmpdir) {
+        render_dir <- temp_dir
+        #cat("clear out the temp dir: ", render_dir, "\n"); browser()
+      } else {
+        render_dir <- output_dir_use
+      }
 
       ## In order to create HTML output which is *not* self-contained, we must
       ## manually copy the css file to the output dir. We must also
@@ -290,8 +301,9 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         ## Copy the Rmd file to the output_dir (temporarily)
         ## If output_dir is specfied, only need to do this on the first pass
         if (is.null(output_dir) || i == 1) {
-          file.copy(from=report_rmd, to=output_dir_use, overwrite = FALSE)
-          report_rmd_use <- file.path(output_dir_use, basename(report_rmd))
+
+          file.copy(from=report_rmd, to=render_dir, overwrite = FALSE)
+          report_rmd_use <- file.path(render_dir, basename(report_rmd))
 
           ## Copy the CSS file to the output_dir (permanently)
           report_css <- system.file("report/uas_report.css", package="uasimg")
@@ -308,7 +320,12 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
         if (!is.null(header_html)) {
           if (file.exists(header_html)) {
-            includes_lst[["before_body"]] <- header_html
+            if (use_tmpdir) {
+              file.copy(from = header_html, to = temp_dir, overwrite = TRUE)
+              includes_lst[["before_body"]] <- file.path(temp_dir, basename(header_html))
+            } else {
+              includes_lst[["before_body"]] <- header_html
+            }
           } else {
             stop(paste0("File not found: ", header_html))
           }
@@ -316,7 +333,12 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
         if (!is.null(footer_html)) {
           if (file.exists(footer_html)) {
-            includes_lst[["after_body"]] <- footer_html
+            if (use_tmpdir) {
+              file.copy(from = footer_html, to = temp_dir, overwrite = TRUE)
+              includes_lst[["after_body"]] <- file.path(temp_dir, basename(footer_html))
+            } else {
+              includes_lst[["after_body"]] <- footer_html
+            }
           } else {
             stop(paste0("File not found: ", footer_html))
           }
@@ -357,7 +379,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
       ## Render the HTML file
       report_fn <- render(input = report_rmd_use,
-                          output_dir = output_dir_use, output_file = output_file_use,
+                          output_dir = render_dir, output_file = output_file_use,
                           output_options = output_options,
                           params = c(x[[img_dir]], list(col = col_use, img_dir = img_dir,
                                                         group_img = group_img,
@@ -372,16 +394,48 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
                                               )
                                      )
 
-      ## Add the filename to report_fn_vec which will eventually be returned
-      report_fn_vec <- c(report_fn_vec, report_fn)
+
+      if (use_tmpdir) {
+
+        ## Copy the HTML file from temp space to output_dir, then delete
+        if (!quiet) message(yellow(" - Copying", output_file_use, "to output directory"))
+        file.copy(from = report_fn, to = output_dir_use, overwrite = TRUE)
+        unlink(report_fn)
+
+        if (!self_contained) {
+          ## Copy the libs directory to output_dir_use
+          libs_dir <- file.path(render_dir, "libs")
+          if (file.exists(libs_dir)) {
+            file.copy(from = libs_dir, to = output_dir_use, overwrite = FALSE, recursive = TRUE)
+            unlink(libs_dir, recursive=TRUE)
+          }
+
+          ## Copy the *_files  directory (if it exists)
+          files_dir_pathfn <- file.path(render_dir,
+                                        paste0(file_path_sans_ext(output_file_use), "_files"))
+          if (file.exists(files_dir_pathfn)) {
+            file.copy(from = files_dir_pathfn, to = output_dir_use, overwrite = FALSE, recursive = TRUE)
+            unlink(files_dir_pathfn, recursive=TRUE)
+          }
+
+          ## The css file, kml attachments, and png file should already be in output_dir_use
+
+        }
+
+        report_fn_vec <- c(report_fn_vec, file.path(output_dir_use, basename(report_fn)))
+
+      } else {
+        ## Add the filename to report_fn_vec which will eventually be returned
+        report_fn_vec <- c(report_fn_vec, report_fn)
+      }
 
       ## If not self-contained, delete the temporary copy of the Rmd file
       if (!self_contained) {
         if (is.null(output_dir) || i == length(x)) {
           file.remove(report_rmd_use)
         }
-      }
 
+      }
 
     } else {
       message(yellow(output_file_use, "already exists. Skipping."))

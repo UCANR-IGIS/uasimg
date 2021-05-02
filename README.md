@@ -9,13 +9,13 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 # Drone Image Utilities
 
-`uasimg` helps manage images taken from an unmanned aerial vehicle
-(drone) that have been collected with the intent to stitch into 2D amd
-3D products. The package does **not** stitch images, but helps you
-create catalogs of your image data, examine their locations and
-properties, export image centroids and estimated footprints as GIS
-files, and create world files so individual images can be viewed in GIS
-software.
+`uasimg` helps manage images taken from an unoccupied aerial vehicle
+(UAV, or drone) that have been collected with the intent to stitch them
+into 2D and 3D products with photogrammetry software. The package does
+**not** stitch images, but helps you create catalogs of your image data,
+examine their locations and properties, export image centroids and
+estimated footprints as GIS files, convert formats, and create world
+files for individual images can be viewed in GIS software.
 
 ## Applications
 
@@ -32,10 +32,11 @@ tasks:
     results.
 
 3.  Creating individual Flight Summary pages in HTML, as the backbone of
-    an image catalog.
+    an image catalog, and higher level ‘Table of Contents’ pages for
+    groups of related flights (e.g., from the same site).
 
 4.  Converting images from one format to another (e.g., DNG to JPG),
-    while preserving all the image metadata.
+    while preserving all the image metadata needed for photogrammetry.
 
 5.  Creating world files for individual drone images, using the image
     EXIF data to model the ground footprint and rotation, so they can
@@ -43,7 +44,7 @@ tasks:
 
 **Note**: image locations and footprints are based on the metadata saved
 in the image files (e.g., relative altitude above the launch point,
-camera compass direction). Thus they should taken as *estimates only*.
+camera compass direction), and are *estimates only*.
 
 ## Installation
 

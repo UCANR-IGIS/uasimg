@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manage supplemental metadata files — uas_metadata_make • uasimg</title>
+<title>Search directories for images — uas_dirs_find • uasimg</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Manage supplemental metadata files — uas_metadata_make" />
-<meta property="og:description" content="Create and edit supplemental metadata files" />
+<meta property="og:title" content="Search directories for images — uas_dirs_find" />
+<meta property="og:description" content="Find sub-directories which contain images" />
 
 
 
@@ -136,92 +136,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Manage supplemental metadata files</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_metadata_make.R'><code>R/uas_metadata_make.R</code></a></small>
-    <div class="hidden name"><code>uas_metadata_make.Rd</code></div>
+    <h1>Search directories for images</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_dirs_find.R'><code>R/uas_dirs_find.R</code></a></small>
+    <div class="hidden name"><code>uas_dirs_find.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create and edit supplemental metadata files</p>
+    <p>Find sub-directories which contain images</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uas_metadata_make</span>(
-  <span class='kw'>x</span>,
-  md_file = <span class='st'>"metadata.txt"</span>,
-  md_suffix = <span class='kw'>NULL</span>,
-  make_new = <span class='fl'>FALSE</span>,
-  overwrite = <span class='fl'>FALSE</span>,
-  open = <span class='fl'>TRUE</span>,
-  md_flds = <span class='fu'><a href='uas_setflds.html'>uas_getflds</a></span>(),
-  md_template = <span class='kw'>NULL</span>,
-  read_uasinfo = <span class='fl'>FALSE</span>,
-  use_system_editor = <span class='fl'>FALSE</span>,
-  quiet = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>uas_dirs_find</span>(<span class='kw'>x</span>, ext = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"jpg"</span>, <span class='st'>"tif"</span>), min_images = <span class='fl'>3</span>, exclude_tb = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A character vector of directories, or a uas_info object</p></td>
+      <td><p>The base directory</p></td>
     </tr>
     <tr>
-      <th>md_file</th>
-      <td><p>Name of the file to create</p></td>
+      <th>ext</th>
+      <td><p>A character vector of the file extensions to search for (excluding the '.')</p></td>
     </tr>
     <tr>
-      <th>md_suffix</th>
-      <td><p>A suffix to append to the file names</p></td>
+      <th>min_images</th>
+      <td><p>The minimum number of image files a directory must contain to be included in the results</p></td>
     </tr>
     <tr>
-      <th>make_new</th>
-      <td><p>Create new metadata file(s), Logical</p></td>
-    </tr>
-    <tr>
-      <th>overwrite</th>
-      <td><p>Overwrite existing metadata files, Logical</p></td>
-    </tr>
-    <tr>
-      <th>open</th>
-      <td><p>Open the file for editing</p></td>
-    </tr>
-    <tr>
-      <th>md_flds</th>
-      <td><p>A character vector of field names</p></td>
-    </tr>
-    <tr>
-      <th>md_template</th>
-      <td><p>A template metadata file</p></td>
-    </tr>
-    <tr>
-      <th>read_uasinfo</th>
-      <td><p>Read and populate metadata fields from x (assuming x is a uas_info object)</p></td>
-    </tr>
-    <tr>
-      <th>use_system_editor</th>
-      <td><p>Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical</p></td>
-    </tr>
-    <tr>
-      <th>quiet</th>
-      <td><p>Suppress messages</p></td>
+      <th>exclude_tb</th>
+      <td><p>Exclude folders called 'tb' (thumbnails)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character vector of the external metadata text file(s) created.</p>
+    <p>A tibble with 3 columns: <code>path</code>, <code>ext</code>, and <code>num_files</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This creates, and/or opens for editing, supplemental metadata text file(s) in image folders.</p>
-<p>If <code>make_new = TRUE</code>, metadata files will be created in each directory of <code>x</code>. <code>x</code>
-can be either a character vector or a <code><a href='uas_info.html'>uas_info</a></code> object. The files will be named based on the value of <code>md_file</code>,
-with an option to append a suffix <code>md_suffix</code>. Both <code>md_file</code>
-and <code>md_suffix</code> should be of length 1 or equal to the number of <code>x</code>.</p>
-<p>If <code>open = TRUE</code>, the text files will be opened. To open all metadata text files,</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='uas_setflds.html'>uas_getflds</a></code>, <code><a href='uas_setflds.html'>uas_setflds</a></code></p></div>
+    <p>This function recurses through sub-directories of `x` and returns those that contain image files.
+This can be used to help identify folders that need to be cataloged.</p>
+<p>Only directories that have at least <code>min_images</code> image files will be returned.
+If <code>exclude_tb = TRUE</code>, directories named `tb` (which is where <code><a href='uas_thumbnails_make.html'>uas_thumbnails_make</a></code> saves thumbnail
+images) are excluded. Hidden directories and directories that start with `.` are excluded.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

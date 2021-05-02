@@ -8,6 +8,7 @@
 #' @param tb_width Thumbnail width
 #' @param overwrite Overwrite existing files
 #' @param use_magick Use the ImageMagick command line tool
+#' @param stats Report the amount of time it takes to create each thumbnail, logical
 #' @param quiet Suppress messages
 #'
 #' @details
@@ -39,7 +40,8 @@
 #' @export
 
 uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width = 400,
-                                overwrite = FALSE, use_magick = FALSE, quiet = FALSE) {
+                                overwrite = FALSE, use_magick = FALSE, stats = FALSE,
+                                quiet = FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -72,6 +74,11 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
     }
 
     res <- list()
+
+    if (stats) {
+        start_time <- Sys.time()
+        num_tb_created <- 0
+    }
 
     for (idir in dirs_use) {
 
@@ -210,18 +217,20 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
                     if (!file.exists(tb_fn[j]) || overwrite) {
 
                         if (halve_b4_reseize) {
-                            imager::load.image(all_img_fn[j]) %>%
-                                imager::resize_halfXY() %>%
-                                imager::resize(size_x = tb_width, size_y = height_new, interpolation = 3) %>%
-                                imager::save.image(file = tb_fn[j])
+                            load.image(all_img_fn[j]) %>%
+                                resize_halfXY() %>%
+                                resize(size_x = tb_width, size_y = height_new, interpolation = 3) %>%
+                                save.image(file = tb_fn[j])
                                 ## Doing 100 thumbnails: 305.55 sec elapsed
 
                         } else {
-                            imager::load.image(all_img_fn[j]) %>%
-                                imager::resize(size_x = tb_width, size_y = height_new, interpolation = 3) %>%
-                                imager::save.image(file = tb_fn[j])
+                            load.image(all_img_fn[j]) %>%
+                                resize(size_x = tb_width, size_y = height_new, interpolation = 3) %>%
+                                save.image(file = tb_fn[j])
                                 ## Doing 100 RGB thumbnails: 361.75 sec elapsed
                         }
+
+                        if (stats) num_tb_created <- num_tb_created + 1
 
                     }
                 }
@@ -233,6 +242,15 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
         } else {
             if (!quiet) message(yellow(" - thumbnails already exist"))
         }
+    }
+
+    if (stats) {
+      time_taken = as.numeric(difftime(Sys.time(), start_time, units="secs"))
+      message(yellow(paste0(" - Thumbnails created: ", num_tb_created)))
+      if (num_tb_created > 0) {
+          message(yellow(paste0(" - Avg time to create each image: ", round(time_taken / num_tb_created, 1), " seconds")))
+      }
+
     }
 
     if (!quiet) message(green(" - Done."))
