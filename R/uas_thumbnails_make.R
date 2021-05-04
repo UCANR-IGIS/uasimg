@@ -7,7 +7,7 @@
 #' @param output_dir Output directory
 #' @param tb_width Thumbnail width
 #' @param overwrite Overwrite existing files
-#' @param use_magick Use the magick package
+#' @param use_magick Use functions from the magick package
 #' @param stats Report the amount of time it takes to create each thumbnail, logical
 #' @param quiet Suppress messages
 #'
@@ -20,6 +20,10 @@
 #' Thumbnail files will be given an 8-character suffix that looks random but is actually generated from the image contents.
 #' This is to prevent clashes when thumnbail files from different flights are 'gathered' into a single folder attached to
 #' a Table of Contents folder (see \code{\link{uas_toc}}).
+#'
+#' If \code{use_magick = TRUE}, it will use resizing functions from the magick package. This is slower than the equivalent
+#' functions from the \code{imager} package (the default), but may be necessary if you are processing TIFs and don't have
+#' the ImageMagick app installed on your computer (which \code{imager} requires to read TIFs).
 #'
 #' @return A named list (one element for each directory processed) of thumbnail files created in the output directory
 #'
@@ -101,9 +105,11 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
         all_img_fn <- x[[idir]]$pts$img_fn
 
         ## Warn the user if ImageMagick is not installed and there are TIFs in this list
+        magick_force_use <- FALSE
         if (!use_magick) {
           if ((TRUE %in% grepl(".TIF$", all_img_fn, ignore.case = TRUE)) && !imager:::has.magick()) {
-              stop("To create thumbnails from TIFs, either set use_magick = TRUE or install ImageMagick")
+              warning("Going to use the magick package to resize TIF files. To use the (faster) imager package with TIFs, please install the ImageMagick app.")
+            magick_force_use <- TRUE
           }
         }
 
@@ -151,7 +157,7 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
                 message(yellow(paste0(" - generating thumbnails for ", flight_name)))
             }
 
-            if (use_magick) {
+            if (use_magick || magick_force_use) {
 
                 # Setup progress bar
                 if (!quiet) pb <- txtProgressBar(min = 0, max = length(all_img_fn), style = 3)
@@ -169,7 +175,11 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
               }
               if (!quiet) close(pb)
 
-              # ## Run the magick command line tool
+              ## Run the magick command line tool
+              ## I NO LONGER USE THIS BECAUSE IT FAILS TO WORK IF YOU GIVE IT MORE THAN ~700 IMAGES.
+              ## NEED TO READ MORE ABOUT CONVERT.EXE, MAYBE THERE'S AN UPPER LIMIT ON WHAT IT
+              ## CAN HANDLE
+
               # input_file_ext <- file_ext(all_img_fn[1])
               # cmd_args <-paste0("convert \"",
               #                   idir, "/*.", input_file_ext, "\" -set filename:fn_sans_ext \"%t\" -thumbnail ",
@@ -191,18 +201,14 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
                 ## Need to specify imager:: for save.image (same function exists in base R)
 
                 ## Compute height
-
-                #browser()
-                ## determine if it would help to first use 1/2
-                #resize_halfXY(im)
-                #imresize(im,1/4) #Quarter size
-
                 first_img_dim <- dim(load.image(all_img_fn[1]))
                 height_new <- round(tb_width * first_img_dim[2] / first_img_dim[1], 0)
                 scale_factor <- floor(first_img_dim[1] / tb_width)
 
                 ## Reducing resolution in half before using resize seems to slightly improve performance for large RGB images
                 halve_b4_reseize <- (scale_factor > 3)
+
+                ## PERFORMANCE EXPERIMENTS
 
                 #imresize(im,1/4) #Quarter size
                 # rm(first_img)
@@ -247,8 +253,7 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
                             load.image(all_img_fn[j]) %>%
                                 resize_halfXY() %>%
                                 resize(size_x = tb_width, size_y = height_new, interpolation = 3) %>%
-                                save.image(file = tb_fn[j])
-                                ## Doing 100 thumbnails: 305.55 sec elapsed
+                                imager::save.image(file = tb_fn[j])
 
                         } else {
                             load.image(all_img_fn[j]) %>%

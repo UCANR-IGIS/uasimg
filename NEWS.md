@@ -1,6 +1,11 @@
+# uasimg 1.6.7 (2021-05-04)
+
+* `uas_thumbnails_make()`: modified to automatically switch to the magick functions (with a warning) if thumbnails from TIFs are being created and imager:::has.magick() is FALSE.
+
+
 # uasimg 1.6.6 (2021-05-03)
 
-* `uas_metadata_make()`: enabled `use_magick` argument
+* `uas_thumbnails_make()`: enabled `use_magick` argument
 
 # uasimg 1.6.5 (2021-05-02)
 

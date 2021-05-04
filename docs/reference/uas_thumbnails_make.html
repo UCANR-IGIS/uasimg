@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.7</span>
       </span>
     </div>
 
@@ -184,7 +184,7 @@
     </tr>
     <tr>
       <th>use_magick</th>
-      <td><p>Use the magick package</p></td>
+      <td><p>Use functions from the magick package</p></td>
     </tr>
     <tr>
       <th>stats</th>
@@ -208,6 +208,9 @@ The dimensions of the thumbnails is determined by <code>tb_width</code>, from wh
 <p>Thumbnail files will be given an 8-character suffix that looks random but is actually generated from the image contents.
 This is to prevent clashes when thumnbail files from different flights are 'gathered' into a single folder attached to
 a Table of Contents folder (see <code><a href='uas_toc.html'>uas_toc</a></code>).</p>
+<p>If <code>use_magick = TRUE</code>, it will use resizing functions from the magick package. This is slower than the equivalent
+functions from the `imager` package (the default), but may be necessary if you are processing TIFs and don't have
+the ImageMagick app installed on your computer (which `imager` requires to read TIFs).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='uas_report.html'>uas_report</a></p></div>
