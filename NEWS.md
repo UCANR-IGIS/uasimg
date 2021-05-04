@@ -1,3 +1,7 @@
+# uasimg 1.6.6 (2021-05-03)
+
+* `uas_metadata_make()`: enabled `use_magick` argument
+
 # uasimg 1.6.5 (2021-05-02)
 
 * `uas_report()`: added checks for directory existence and access

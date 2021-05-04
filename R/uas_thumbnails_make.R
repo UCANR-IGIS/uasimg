@@ -7,7 +7,7 @@
 #' @param output_dir Output directory
 #' @param tb_width Thumbnail width
 #' @param overwrite Overwrite existing files
-#' @param use_magick Use the ImageMagick command line tool
+#' @param use_magick Use the magick package
 #' @param stats Report the amount of time it takes to create each thumbnail, logical
 #' @param quiet Suppress messages
 #'
@@ -21,13 +21,6 @@
 #' This is to prevent clashes when thumnbail files from different flights are 'gathered' into a single folder attached to
 #' a Table of Contents folder (see \code{\link{uas_toc}}).
 #'
-#' If \code{use_magick = TRUE}, the function will create the thumbnail images using the ImageMagick command
-#' line tool (\emph{magick.exe}). This is a slightly faster way to generate thumbnails, which may help when you're
-#' creating thumbnails for 1000s of images. However you don't get the benefit of a progress bar. This option requires you to have \href{https://imagemagick.org/}{ImageMagick} installed.
-#' When installing the software, be sure to check the box that says 'Add application directory to your system path'.
-#' Note you'll have to restart RStudio after you install ImageMagick. You can test whether the command line tool is
-#' available to R by running \code{findonpath("magick.exe")} (MacOS users should omit the .exe extension).
-#'
 #' @return A named list (one element for each directory processed) of thumbnail files created in the output directory
 #'
 #' @seealso \link{uas_report}
@@ -36,8 +29,17 @@
 #' @importFrom digest digest
 #' @importFrom crayon yellow green red bold
 #' @importFrom imager load.image resize save.image resize_halfXY
+#' @importFrom magick image_write image_scale image_read
 #' @importFrom tools file_ext file_path_sans_ext
 #' @export
+
+# REMOVED:
+# If \code{use_magick = TRUE}, the function will create the thumbnail images using the ImageMagick command
+# line tool (\emph{magick.exe}). This is a slightly faster way to generate thumbnails, which may help when you're
+# creating thumbnails for 1000s of images. However you don't get the benefit of a progress bar. This option requires you to have \href{https://imagemagick.org/}{ImageMagick} installed.
+# When installing the software, be sure to check the box that says 'Add application directory to your system path'.
+# Note you'll have to restart RStudio after you install ImageMagick. You can test whether the command line tool is
+# available to R by running \code{findonpath("magick.exe")} (MacOS users should omit the .exe extension).
 
 uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width = 400,
                                 overwrite = FALSE, use_magick = FALSE, stats = FALSE,
@@ -45,8 +47,10 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
-    if (use_magick) stop("use_magick has been suspended because testing shows that the command line maxes out at ~700 images. Need to do more tests before making it an option")
-
+    # if (use_magick) stop("use_magick has been suspended because testing shows that the command line maxes out at ~700 images. Need to do more tests before making it an option")
+    # 5/3/21. use_magick is back in, however I don't use the CLI. Instead I use the magick package. This has
+    # proven to be a lot slower than imager, however on systems that don't have ImageMagick installed (and perhaps
+    # can't install it due to permissions) magick is the only option to rescale TIFs (which imager can't read)
 
     if (is.null(img_dir)) {
         dirs_use <- names(x)
@@ -60,18 +64,18 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
         if (!file.exists(output_dir)) stop(paste0("Output directory '", output_dir, "' does not exist"))
     }
 
-    if (use_magick) {
-        if (.Platform$OS.type == "windows") {
-            magick_exe <- "magick.exe"
-        } else {
-            magick_exe <- "magick"
-        }
-
-        magick_fn <- findonpath(magick_exe, status = FALSE)
-        if (is.null(magick_fn)) {
-            stop("Cant find the magick command line tool. Please install ImageMagick and make sure its on the path. See help for details.")
-        }
-    }
+    # if (use_magick) {
+    #     if (.Platform$OS.type == "windows") {
+    #         magick_exe <- "magick.exe"
+    #     } else {
+    #         magick_exe <- "magick"
+    #     }
+    #
+    #     magick_fn <- findonpath(magick_exe, status = FALSE)
+    #     if (is.null(magick_fn)) {
+    #         stop("Cant find the magick command line tool. Please install ImageMagick and make sure its on the path. See help for details.")
+    #     }
+    # }
 
     res <- list()
 
@@ -96,6 +100,13 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
         ## Get the image filenames
         all_img_fn <- x[[idir]]$pts$img_fn
 
+        ## Warn the user if ImageMagick is not installed and there are TIFs in this list
+        if (!use_magick) {
+          if ((TRUE %in% grepl(".TIF$", all_img_fn, ignore.case = TRUE)) && !imager:::has.magick()) {
+              stop("To create thumbnails from TIFs, either set use_magick = TRUE or install ImageMagick")
+          }
+        }
+
         ## Compute the flight name for messages
         if (is.na(null2na(x[[idir]]$metadata$name_short))) {
             flight_name <- x[[idir]]$id
@@ -111,7 +122,7 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
         ## Unfortunately we can't just use file size which is identical for RAW TIFFs
         ## all_img_base36 <- sapply(as.integer(file.size(all_img_fn)), int2base36)
 
-        ## Instead, we generate a cryptographic hash based on the first 500 bytes of the file contents
+        ## Instead, we generate a cryptographic hash based on the first 2000 bytes of the file contents
 
         if (!quiet) message(yellow(" - computing unique file names..."), appendLF = FALSE)
 
@@ -142,21 +153,37 @@ uas_thumbnails_make <- function(x, img_dir = NULL, output_dir = NULL, tb_width =
 
             if (use_magick) {
 
-                ## Run the magick command line tool
-                input_file_ext <- file_ext(all_img_fn[1])
-                cmd_args <-paste0("convert \"",
-                                  idir, "/*.", input_file_ext, "\" -set filename:fn_sans_ext \"%t\" -thumbnail ",
-                                  tb_width, " -quality 75% \"",
-                                  output_dir_use, "/%[filename:fn_sans_ext]_tb.jpg\"")
+                # Setup progress bar
+                if (!quiet) pb <- txtProgressBar(min = 0, max = length(all_img_fn), style = 3)
 
-                ## RUn the command
-                system2(magick_exe, args = cmd_args, stderr = FALSE)
+                ## Loop through the images
+                for (j in 1:length(all_img_fn)) {
+                    # Update the progress bar
+                    if (!quiet) setTxtProgressBar(pb, j)
 
-                ## Rename the files created, adding the suffixes
-                tb_nosuffix_fn <- file.path(output_dir_use, paste0(file_path_sans_ext(basename(all_img_fn)), "_tb.jpg"))
-                for (j in 1:length(tb_nosuffix_fn)) {
-                    file.rename(tb_nosuffix_fn[j], tb_fn[j])
-                }
+                    if (!file.exists(tb_fn[j]) || overwrite) {
+                        image_write(image_scale(image_read(all_img_fn[j], strip = TRUE), as.character(tb_width)), path = tb_fn[j], format = "jpeg", quality = 75)
+                        gc()
+                        if (stats) num_tb_created <- num_tb_created + 1
+                    }
+              }
+              if (!quiet) close(pb)
+
+              # ## Run the magick command line tool
+              # input_file_ext <- file_ext(all_img_fn[1])
+              # cmd_args <-paste0("convert \"",
+              #                   idir, "/*.", input_file_ext, "\" -set filename:fn_sans_ext \"%t\" -thumbnail ",
+              #                   tb_width, " -quality 75% \"",
+              #                   output_dir_use, "/%[filename:fn_sans_ext]_tb.jpg\"")
+              #
+              # ## RUn the command
+              # system2(magick_exe, args = cmd_args, stderr = FALSE)
+              #
+              # ## Rename the files created, adding the suffixes
+              # tb_nosuffix_fn <- file.path(output_dir_use, paste0(file_path_sans_ext(basename(all_img_fn)), "_tb.jpg"))
+              # for (j in 1:length(tb_nosuffix_fn)) {
+              #     file.rename(tb_nosuffix_fn[j], tb_fn[j])
+              # }
 
             } else {
 

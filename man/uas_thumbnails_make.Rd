@@ -26,7 +26,7 @@ uas_thumbnails_make(
 
 \item{overwrite}{Overwrite existing files}
 
-\item{use_magick}{Use the ImageMagick command line tool}
+\item{use_magick}{Use the magick package}
 
 \item{stats}{Report the amount of time it takes to create each thumbnail, logical}
 
@@ -47,13 +47,6 @@ The dimensions of the thumbnails is determined by \code{tb_width}, from which th
 Thumbnail files will be given an 8-character suffix that looks random but is actually generated from the image contents.
 This is to prevent clashes when thumnbail files from different flights are 'gathered' into a single folder attached to
 a Table of Contents folder (see \code{\link{uas_toc}}).
-
-If \code{use_magick = TRUE}, the function will create the thumbnail images using the ImageMagick command
-line tool (\emph{magick.exe}). This is a slightly faster way to generate thumbnails, which may help when you're
-creating thumbnails for 1000s of images. However you don't get the benefit of a progress bar. This option requires you to have \href{https://imagemagick.org/}{ImageMagick} installed.
-When installing the software, be sure to check the box that says 'Add application directory to your system path'.
-Note you'll have to restart RStudio after you install ImageMagick. You can test whether the command line tool is
-available to R by running \code{findonpath("magick.exe")} (MacOS users should omit the .exe extension).
 }
 \seealso{
 \link{uas_report}
