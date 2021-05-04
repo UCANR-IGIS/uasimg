@@ -1,8 +1,14 @@
+# uasimg 1.6.5 (2021-05-02)
+
+* `uas_report()`: added checks for directory existence and access
+* `uas_metadata_make()`: argument `md_template` can now be a URL
+* added Flight Metadata Vignette
+
 # uasimg 1.6.4 (2021-05-01)
 
 * `uas_dirs_find()`: new function to find all sub-directories with images
 * `uas_thumbnails_make()`: added `stats` argument to display the amount of time taken per thumbnail
-* `uas_report()`: added use_tmpdir argument to render the flight summary report in temp folder (can prevent Pandoc errors when images are on a network drive)
+* `uas_report()`: added `use_tmpdir` argument to render the flight summary report in temp folder (can prevent Pandoc errors when images are on a network drive)
 
 # uasimg 1.6.3 (2021-04-30)
 

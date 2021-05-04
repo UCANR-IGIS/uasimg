@@ -91,11 +91,13 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
   }
   if (!file.exists(report_rmd)) stop("Cant find the report template")
 
-  ## Validate value(s) of kml
+  ## Validate value(s) of attachments argument
   if (is.null(attachments)) attachments <- character(0)
   if (length(attachments) > 0) {
     if (FALSE %in% (attachments %in% c("ctr_kml", "mcp_kml"))) stop("Unknown value(s) for `attachments`")
   }
+
+  ## Define a variable for the temp directory if needed
 
   if (use_tmpdir) temp_dir <- tempdir()
 
@@ -128,19 +130,40 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       next
     }
 
+    ## Verify that img_dir exists
+    if (!file.exists(img_dir)) {
+      stop(paste0("Can not find image directory: ", img_dir))
+    }
+
     ## Get the output dir
     if (is.null(output_dir)) {
+
+      ## No output directory is specify --> use 'map' folder in the image folder
+
+      ## Test for write permission.
+      if (file.access(img_dir, mode = 2) != 0) {
+        stop(paste0("Sorry, you don't have write permissions for ", img_dir))
+      }
+
       output_dir_use <- file.path(img_dir, "map")
       if (!file.exists(output_dir_use) && create_dir) {
         if (!quiet) message(green("Creating", output_dir_use))
         if (!dir.create(output_dir_use, recursive = TRUE)) stop(paste0("Unable to create ", output_dir_use))
       }
+
     } else {
+      ## AN output directory was specified
+      if (!file.exists(output_dir)) stop(paste0("Could not find output directory: ", output_dir))
+
+      ## Test for write permission.
+      if (file.access(output_dir, mode = 2) != 0) {
+        stop(paste0("Sorry, you don't have write permissions for ", output_dir))
+      }
+
       output_dir_use <- output_dir
     }
-    if (!file.exists(output_dir_use)) stop("Could not find report output directory")
 
-    ## Get a filename base (to use for the HTML report, PNG, and KML files)
+    ## Construct a base filename (to use for the HTML report, PNG, and KML files)
     if (is.na(x[[img_dir]]$metadata$name_short %>% null2na())) {
       fnbase <- x[[img_dir]]$id
     } else {

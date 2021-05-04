@@ -35,7 +35,7 @@ uas_metadata_make(
 
 \item{md_template}{A template metadata file}
 
-\item{read_uasinfo}{Read and populate metadata fields from x (assuming x is a uas_info object)}
+\item{read_uasinfo}{Incorporate existing flight metadata already saved in x (assuming x is a uas_info object)}
 
 \item{use_system_editor}{Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical}
 
@@ -55,7 +55,8 @@ can be either a character vector or a \code{\link{uas_info}} object. The files w
 with an option to append a suffix \code{md_suffix}. Both \code{md_file}
 and \code{md_suffix} should be of length 1 or equal to the number of \code{x}.
 
-If \code{open = TRUE}, the text files will be opened. To open all metadata text files,
+If \code{open = TRUE}, the text files will be opened. To open existing metadata text files, let \code{open = TRUE}
+and \code{make_new = FALSE}.
 }
 \seealso{
 \code{\link{uas_getflds}}, \code{\link{uas_setflds}}

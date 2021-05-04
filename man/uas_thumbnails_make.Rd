@@ -28,6 +28,8 @@ uas_thumbnails_make(
 
 \item{use_magick}{Use the ImageMagick command line tool}
 
+\item{stats}{Report the amount of time it takes to create each thumbnail, logical}
+
 \item{quiet}{Suppress messages}
 }
 \value{

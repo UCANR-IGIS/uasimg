@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.5</span>
       </span>
     </div>
 
@@ -109,6 +109,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+    </li>
+    <li>
+      <a href="../articles/flight_metadata.html">Flight Metadata</a>
     </li>
   </ul>
 </li>
@@ -196,7 +199,7 @@
     </tr>
     <tr>
       <th>read_uasinfo</th>
-      <td><p>Read and populate metadata fields from x (assuming x is a uas_info object)</p></td>
+      <td><p>Incorporate existing flight metadata already saved in x (assuming x is a uas_info object)</p></td>
     </tr>
     <tr>
       <th>use_system_editor</th>
@@ -218,7 +221,8 @@
 can be either a character vector or a <code><a href='uas_info.html'>uas_info</a></code> object. The files will be named based on the value of <code>md_file</code>,
 with an option to append a suffix <code>md_suffix</code>. Both <code>md_file</code>
 and <code>md_suffix</code> should be of length 1 or equal to the number of <code>x</code>.</p>
-<p>If <code>open = TRUE</code>, the text files will be opened. To open all metadata text files,</p>
+<p>If <code>open = TRUE</code>, the text files will be opened. To open existing metadata text files, let <code>open = TRUE</code>
+and <code>make_new = FALSE</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='uas_setflds.html'>uas_getflds</a></code>, <code><a href='uas_setflds.html'>uas_setflds</a></code></p></div>

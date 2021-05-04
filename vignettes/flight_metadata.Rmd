@@ -1,0 +1,177 @@
+---
+title: "Flight Metadata"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Flight Metadata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+library(uasimg)
+```
+
+```{css echo = FALSE}
+.tbl_compact td, .tbl_compact th {
+  padding: 10px 30px;
+}
+```
+
+This article describes what flight metadata is, why it's useful, and how to create and manage flight metadata in `uasimg`.
+
+# Image Metadata vs. Flight Metadata
+
+*Image metadata* generally refers to the information about individual images. For example, the location, altitude, type of camera, focal length, resolution, etc. Modern cameras do a great job saving this information in the header of JPG / TIF files (also known as EXIF data). Photogrammetry programs rely on image metadata to help stitch the images together.
+
+*Flight metadata* refers to properties images inherit from the flight they were on. These include things like the name of the site, pilot, drone, weather conditions, where the images are actually saved, etc. These bits of information are not essential for photogrammetry, but they are extremely useful for data management. 
+
+Flight metadata can also help you interpret the results of photogrammetry. For example inconsistent color tones or brightness in an orthomosaic could be the result of clouds during the flight, that you wouldn't necessarily know just by looking at the images.
+
+# How does `uasimg` use flight metadata?
+
+`uasimg` uses both image and flight metadata to help you organize, catalog, and share your drone images. 
+
+Image metadata is read from the image files. GPS locations are used to make interactive maps on the flight summary pages. Properties such as the resolution and time stamps are reported on flight summary pages. If the image metadata specifies i) a known camera and ii) the relative above ground altitude, then `uasimg` can also compute estimated image footprints and generate world files.
+
+`uasimg` uses flight metadata^[in the context of uasimg, 'flight' simply refers to any collection of images. In practice we typically process and analyze images by flight, but there are cases where you may want to work with images taken on multiple flights, portions of flights, etc.] primarily for *cataloging* and *sorting*^[sorting images into standardized directory trees is coming soon] images. 
+
+You can create metadata fields for things like the pilot, the aircraft used, weather conditions, etc. There is no 'standard' set of metadata fields for drone flights. You can define whichever flight metadata fields you'd like to record based on your specific requirements. For example, if your goal is to publish your data catalog online so other people can view it and potentially request the data, you'd probably want a more comprehensive set of metadata fields than if the catalog is simply for internal use. 
+
+Some common metadata fields include the site, sub-site, project, sub-project. In addition to documentation, these and other flight metadata fields can be used to create standard directory trees based on a user-defined template, and move images into those trees^[this feature will be implemented in a future update].
+
+For large collections of drone data, flight metadata can also help you manage your catalog production workflow. For example you may want to (re)generate thumbnails for all flights that were part of a specific project, or a specific site. If the project has been saved in the flight metadata, you can easily write loops that operate only on those flights.
+
+# Where do I enter flight metadata?
+
+There are basically two ways to enter flight metadata. You can enter flight metadata in *metadata.txt* text files saved in the same folder as the images, or programmatically when you call `uas_info()`. 
+
+The recommended way to enter flight metadata is with *metadata.txt*^[you don't have to name the files *metadata.txt*. That's just the default. You can name them anything you want, as well as provide a suffix so each one is named differently. See the help page for `uas_metadata_make()` for details.] files. These are regular text files so editing them is easy with any text editor (like Notepad). By saving flight metadata in a file that lives with the images, it will persist and can be read again and again.
+
+Here is an example of an actual metadata text file. The basic format is a field name, followed by a colon, followed by the value (aka YAML). Field names should not contain spaces. You can add comments and blank lines to make it more readable. 
+
+<div style="margin-left:2em; border:1px solid grey;">
+```
+## FLIGHT METADATA FILE FOR:
+## D:/Pix4D/HREC/RiverFire2020/imgs/ebPlus_Flt05_orig/DCIM/EP-01-26841_0085/metadata.txt
+
+name_short: ebPlus_flt05_orig_msp
+
+name_long: eBee Plus Fight 05, raw images
+
+description: These images were collected as part of the River Fire recovery mapping project at HREC (mapping areas burnt in the 2018 River Fire).
+
+proj: riverfire2020
+
+loc: hrec
+
+notes: The eBee Plus did not have RTK/PPK capabilities. Pre-flight camera calibration was done using a calibration target from MicaSense (not Parrot). The flight was conducted using eMotion 3.5 with 75% x 75% overlap (front and side respectively), with a targetted GSD of 11cm (resulting in a flight altitude of ~116m AGL).
+
+pilot: Shane Feirer, IGIS
+
+contact: Andy Lyons, IGIS
+
+data_url: NA
+
+tags: HREC, RiverFire2020
+```
+</div>
+
+\
+
+You don't have to create *metadata.txt* files from scratch! `uas_metadata_make()` is a convenience function that can do all of the following: 
+
+i) create new metadata text files for one or more image folders  
+ii) pre-populate them with fields of your choice  
+iii) pre-populate the fields with defaults values
+iv) open the text file(s) in a text editor to complete the editing
+
+Typically, after you edit and save *metadata.txt* files, you'll want to re-run `uas_info()` so the new metadata is read in R.
+
+The second way to record flight metadata is by passing a named list as the `metadata` argument to `uas_info()`. This code-centric approach might make sense if your flight metadata is saved in a separate database, and you enjoy coding.
+
+# What are the 'standard' flight metadata fields?
+
+There are no industry standards for metadata for drone flights. `uasimg` provide the following 'out-of-the-box' defaults:
+
+```{r}
+uas_flds_oem()
+```
+
+\
+
+*Default Metadata Fields for Drone Flights*
+
+```{r, echo=FALSE, results='asis'}
+#library(kableExtra)
+tbl_vec <- c("name_short", "used primarily as the base for file names, such as the HTML summary page, kml files, shp files, etc.",
+"name_long", "a longer name used as the title on flight summay reports",
+"description", "a 1-2 sentence blurb about the flight",
+"proj", "project name (typically abbreviated). Can be used for filtering and constructing a directory tree.",
+"loc", "location name (typically abbreviated). Can be used for filtering and constructing a directory tree.",
+"pilot", "name of the pilot",
+"contact", "contact person if someone wants to receive more info",
+"uav", "name or model of the drone",
+"data_url", "web address where someone could go to download the data",
+"tags", "any tags that might be helpful for searching",
+"notes", "note about how the flight went, anything else")
+tbl_mat <- matrix(tbl_vec, byrow=TRUE, ncol=2, dimnames=list(1:(length(tbl_vec)/2), c("Field", "Usage")))
+knitr::kable(tbl_mat, format = "html", padding = "60px", table.attr='class="tbl_compact"')
+```
+
+# How do I change the default flight metadata fields?
+
+`uas_info()` will always import whatever it finds in the accompanying *metadata.txt* file. You can however customize the fields that appear in a 'blank' metadata file created by `uas_metadata_make()`:
+
+```{r}
+## View default flight metadata fields
+uas_getflds()
+
+## Set default flight metadata fields
+uas_setflds(c("name_short", "name_long", "proj", "subproj", "site_name", "weather", "aircraft", "client"))
+
+## View default flight metadata fields
+uas_getflds()
+
+```
+
+Tip 1: `name_short` and `name_long` are used in several `uasimg` functions that export files and create flight summaries. Hence it is recommended to always include these fields in your flight metadata.
+
+Tip 2: to set the default metadata fields back to the factory presets, run `uas_setflds()` without any arguments
+
+```{r reset_flds, include = FALSE}
+uas_setflds()
+```
+
+# How do I create metadata files with default values?
+
+You may have a few standard metadata fields for which the values can be safely pre-populated (e.g., name of the organization, name of the pilot, name of the aircraft, etc.). You can tell `uas_metadata_make()` to use these pre-populated values when generating new metadata text files with the `md_template` argument:
+
+```{r eval = FALSE}
+## Define a master metadata template, with some fields pre-populated
+md_template_fn <- "~/master_flight_metadata.txt"
+  
+uas_metadata_make(barn_info, make_new = TRUE, open = TRUE, md_template = md_template_fn)
+```
+
+The 'master' metadata template can even be online. Just make sure the URL returns raw text [[example](https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata)].
+
+```{r eval = FALSE}
+## Define a master metadata template, with some fields pre-populated
+md_template_url <- "https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata"
+  
+uas_metadata_make(barn_info, make_new = TRUE, open = TRUE, md_template = md_template_url)
+```
+
+# Conclusion
+
+Flight metadata is useful for a variety of data management purposes. Entering metadata is rarely enjoyable, but `uasimg` has several ways to customize the metadata fields for your work and facilitate creating metadata text files. Include flight metadata in your workflow and the results will be more useful catalogs and the ability to automate common data management tasks.
+
+
+

@@ -8,7 +8,7 @@
 #' @param md_template A template metadata file
 #' @param md_flds A character vector of field names
 #' @param make_new Create new metadata file(s), Logical
-#' @param read_uasinfo Read and populate metadata fields from x (assuming x is a uas_info object)
+#' @param read_uasinfo Incorporate existing flight metadata already saved in x (assuming x is a uas_info object)
 #' @param overwrite Overwrite existing metadata files, Logical
 #' @param open Open the file for editing
 #' @param use_system_editor Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical
@@ -22,7 +22,8 @@
 #' with an option to append a suffix \code{md_suffix}. Both \code{md_file}
 #' and \code{md_suffix} should be of length 1 or equal to the number of \code{x}.
 #'
-#' If \code{open = TRUE}, the text files will be opened. To open all metadata text files,
+#' If \code{open = TRUE}, the text files will be opened. To open existing metadata text files, let \code{open = TRUE}
+#' and \code{make_new = FALSE}.
 #'
 #' @return A character vector of the external metadata text file(s) created.
 #'
@@ -62,7 +63,9 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
   if (!make_new && !open) stop("`make_new` and `open` are both FALSE. Nothing to do.")
 
   if (!is.null(md_template)) {
-    if (!file.exists(md_template)) stop(paste0("File not found: ", md_template))
+    if (!grepl("^http", md_template, ignore.case = TRUE)) {
+      if (!file.exists(md_template)) stop(paste0("File not found: ", md_template))
+    }
   }
 
   ## Repeat 'md_file' if needed
@@ -115,7 +118,6 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
     stop("Unknown value for md_flds")
 
   }
-
 
   md_template_comments <- character(0)
 

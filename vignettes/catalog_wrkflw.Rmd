@@ -252,7 +252,7 @@ flight_summaries_html <- uas_report(my_imgs)
 
 - If you want image thumbnails in the pop-up windows, set `thumbnails = TRUE`. Be advised that creating thumbnails can take a while.  
 
-- `uas_report()` has several other arguments you can use to tweak the appearance of the flight summary. These include a custom title (`report_title`), whether or not to link flight geometry files (`attachments`), whether or not to download a background image (`png_map`), etc. See help for details.
+- `uas_report()` has several other arguments you can use to tweak the appearance of the flight summary. These include a custom title (`report_title`), whether or not to add links for the image centroids and MCP as KML files (`attachments`), whether or not to download a background image (`png_map`), HTML files to use as a custom header or  footer, etc. See help for details.
 
 \
 

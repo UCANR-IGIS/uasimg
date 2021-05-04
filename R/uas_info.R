@@ -522,12 +522,15 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       if (!quiet) message(yellow(paste0(" - Metadata fields set to NA: ", paste(flds_md, collapse = ", "))))
 
     } else if (is.list(metadata)) {
-      metadata_use<- metadata
+      metadata_use <- metadata
 
     } else if (is.character(metadata)) {
       ## Presume this is a file name pattern
       ## metadata_fn <- file.path(img_dir, "metadata.txt")
-      metadata_fn <- list.files(img_dir, metadata, full.names = TRUE)
+
+      metadata_fn <- list.files(path = img_dir,
+                                pattern = metadata,
+                                full.names = TRUE)
 
       if (length(metadata_fn) == 0) {
         if (!quiet) message(yellow(" - Metadata file not found"))
@@ -590,8 +593,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         metadata_use$name_short <- id_str
       }
     }
-
-
 
     ## If there's a value for collection_name (a field which is now deprecated but still exists in some
     ## older metadata.txt files), rename it name_long
