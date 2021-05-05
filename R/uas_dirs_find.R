@@ -36,7 +36,7 @@ uas_dirs_find <- function(x, ext = c("jpg", "tif"), min_images = 3, exclude_tb =
 
   ## If required, omit files in folders named 'tb'
   if (exclude_tb) {
-    img_all_tbl <- img_all_tbl %>% filter(!grepl("/tb$", path))
+    img_all_tbl <- img_all_tbl %>% filter(!grepl("/tb$|\\\\tb$", path))
   }
 
   if (nrow(img_all_tbl)) {

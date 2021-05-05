@@ -1,3 +1,7 @@
+# uasimg 1.6.9 (2021-05-05)
+
+* `uas_dirs_find()`: fixed a case where images in tb folders were not excluded 
+
 # uasimg 1.6.8 (2021-05-05)
 
 * `uas_dirs_find()`: path column in the tibble is now wrapped in `normalizePath()` (primarily for readability with network paths)
