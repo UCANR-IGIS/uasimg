@@ -180,22 +180,34 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
 
         ## Next, we need to copy the thumbnails folder
         tbsrc_dir <- file.path(dirname(fn), "tb")
-
-
         if (file.exists(tbsrc_dir)) {
-
           ## Get a list of thumbnail files
           tbsrc_fn <- list.files(path = tbsrc_dir, full.names = FALSE)
-
           ## Get the destination folder, create it if needed
           tbdest_dir <- file.path(gather_dir, "tb")
           if (!file.exists(tbdest_dir)) dir.create(tbdest_dir, recursive = TRUE)
-
           ## Copy specifying overwrite_gather
           file.copy(from = file.path(tbsrc_dir, tbsrc_fn),
                     to = tbdest_dir,
                     overwrite = overwrite_gather)
+        }
 
+        ## Copy the xxxx_files directory if found
+        files_dir <- paste0(file_path_sans_ext(fn), "_files")
+        if (file.exists(files_dir)) {
+          file.copy(from = files_dir,
+                    to = gather_dir,
+                    recursive = TRUE,
+                    overwrite = FALSE)
+        }
+
+        ## Finally, copy the libs directory if found
+        libs_dir <- file.path(dirname(fn), "libs")
+        if (file.exists(libs_dir)) {
+          file.copy(from = libs_dir,
+                    to = gather_dir,
+                    recursive = TRUE,
+                    overwrite = FALSE)
         }
 
       } else {

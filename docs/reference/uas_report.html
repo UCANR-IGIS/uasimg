@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.8</span>
       </span>
     </div>
 
@@ -153,7 +153,6 @@
   col = <span class='kw'>NULL</span>,
   group_img = <span class='fl'>TRUE</span>,
   thumbnails = <span class='fl'>FALSE</span>,
-  show_gps_coord = <span class='fl'>FALSE</span>,
   show_local_dir = <span class='fl'>TRUE</span>,
   report_title = <span class='st'>"Flight Summary"</span>,
   attachments = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mcp_kml"</span>, <span class='st'>"ctr_kml"</span>)[<span class='fl'>0</span>],
@@ -171,7 +170,8 @@
   header_html = <span class='kw'>NULL</span>,
   footer_html = <span class='kw'>NULL</span>,
   use_tmpdir = <span class='fl'>FALSE</span>,
-  quiet = <span class='fl'>FALSE</span>
+  quiet = <span class='fl'>FALSE</span>,
+  show_gps_coord = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -192,10 +192,6 @@
     <tr>
       <th>thumbnails</th>
       <td><p>Create thumbails</p></td>
-    </tr>
-    <tr>
-      <th>show_gps_coord</th>
-      <td><p>Show GPS coordinates of images in the pop-up windows, YN</p></td>
     </tr>
     <tr>
       <th>show_local_dir</th>
@@ -268,6 +264,10 @@
     <tr>
       <th>quiet</th>
       <td><p>TRUE to supress printing of the pandoc command line</p></td>
+    </tr>
+    <tr>
+      <th>show_gps_coord</th>
+      <td><p>Show GPS coordinates of images in the pop-up windows, YN (deprecated)</p></td>
     </tr>
     </table>
 

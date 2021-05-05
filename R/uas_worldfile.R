@@ -199,7 +199,6 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
           files_gen <- c(files_gen, prj_fn)
         }
 
-        #browser()
         #wld_params[c(5, 1, 3, 6, 2, 4)]
 
       } # for 1 in 1:nrow

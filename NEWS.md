@@ -1,7 +1,14 @@
+# uasimg 1.6.8 (2021-05-05)
+
+* `uas_dirs_find()`: path column in the tibble is now wrapped in `normalizePath()` (primarily for readability with network paths)
+* `uas_report()`: returned HTML file names are now wrapped in `normalizePath()`; `show_gps_coord` deprecated
+* `uas_toc()`: fixed an error where the libs subfolder was not being gathered
+* `uas_toc.Rmd`: added error trapping code if metadata fields are missing
+* `uas_report.Rmd`: modified the balloon text to show GPS coords
+
 # uasimg 1.6.7 (2021-05-04)
 
-* `uas_thumbnails_make()`: modified to automatically switch to the magick functions (with a warning) if thumbnails from TIFs are being created and imager:::has.magick() is FALSE.
-
+* `uas_thumbnails_make()`: modified to automatically switch to the magick package functions (with a message) if thumbnails from TIFs are being created *and* `imager:::has.magick()` is FALSE.
 
 # uasimg 1.6.6 (2021-05-03)
 

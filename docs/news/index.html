@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.8</span>
       </span>
     </div>
 
@@ -142,6 +142,22 @@
       <small>Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="uasimg-168-2021-05-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.8">
+<a href="#uasimg-168-2021-05-05" class="anchor"></a>uasimg 1.6.8 (2021-05-05)</h1>
+<ul>
+<li>
+<code><a href="../reference/uas_dirs_find.html">uas_dirs_find()</a></code>: path column in the tibble is now wrapped in <code><a href="https://rdrr.io/r/base/normalizePath.html">normalizePath()</a></code> (primarily for readability with network paths)</li>
+<li>
+<code><a href="../reference/uas_report.html">uas_report()</a></code>: returned HTML file names are now wrapped in <code><a href="https://rdrr.io/r/base/normalizePath.html">normalizePath()</a></code>; <code>show_gps_coord</code> deprecated</li>
+<li>
+<code><a href="../reference/uas_toc.html">uas_toc()</a></code>: fixed an error where the libs subfolder was not being gathered</li>
+<li>
+<code>uas_toc.Rmd</code>: added error trapping code if metadata fields are missing</li>
+<li>
+<code>uas_report.Rmd</code>: modified the balloon text to show GPS coords</li>
+</ul>
+</div>
     <div id="uasimg-167-2021-05-04" class="section level1">
 <h1 class="page-header" data-toc-text="1.6.7">
 <a href="#uasimg-167-2021-05-04" class="anchor"></a>uasimg 1.6.7 (2021-05-04)</h1>

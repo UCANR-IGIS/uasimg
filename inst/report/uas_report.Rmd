@@ -23,7 +23,6 @@ params:
   group_img: !r TRUE
   metadata: !r NA
   thumbnails: !r NA
-  show_gps_coord: !r NA
   kml_mcp_fn: !r NA
   kml_ctr_fn: !r NA
 ---
@@ -31,8 +30,9 @@ params:
 ```{js echo = FALSE}
 function set_src(elmnt) {
   elmnt.parentNode.parentNode.lastElementChild.src = "./tb/" + elmnt.getAttribute("data-tbfn");
-  elmnt.parentNode.parentNode.getElementsByClassName("fn")[0].textContent = elmnt.textContent;
-  elmnt.parentNode.parentNode.getElementsByClassName("dt")[0].textContent = elmnt.getAttribute("data-dt");
+  elmnt.parentNode.parentNode.getElementsByClassName("fn3")[0].textContent = elmnt.textContent;
+  elmnt.parentNode.parentNode.getElementsByClassName("dt3")[0].textContent = elmnt.getAttribute("data-dt");
+  elmnt.parentNode.parentNode.getElementsByClassName("gps3")[0].textContent = elmnt.getAttribute("data-gps");
 }
 ```
 
@@ -56,20 +56,43 @@ span.btext {
 table.fn_dt {
   width: 100%;
 }
-td.fn {
-  width: 50%;
-  font-size: 90%;
-  font-style: italic;
-  padding-left: 0;
-  font-weight: bold;
-}
 td.dt {
-  width: 50%;
   font-size: 90%;
   font-style: italic;
   text-align: right;
 }
-
+td.gps {
+  margin-left:0;
+  padding-left:0;
+  font-size: 90%;
+  font-style: italic;
+}
+td.gps3 {
+  margin-left:0;
+  padding:0.3em 0;
+  font-size: 90%;
+  font-style: italic;
+  width:25%;
+  border:none;
+}
+td.fn3 {
+  padding:0.3em 0;
+  width: 50%;
+  font-size:90%;
+  font-style:italic;
+  font-weight:bold;
+  text-align:center;
+  border:none;
+  color:green;
+}
+td.dt3 {
+  padding:0.3em 0;
+  width:25%;
+  font-size: 90%;
+  font-style: italic;
+  text-align: right;
+  border:none;
+}
 img.bln_img {
   border:1px solid dimgray;
 }
@@ -90,7 +113,6 @@ img_pixels <- paste0(params$pts[1, "img_width", drop = TRUE], " x ", params$pts[
 dt_posix <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
 dt_range <- format(range(dt_posix), "%b %d %Y, %I:%M:%S %p")
 ```
-
 
 ```{r data_uris_insert, results="asis", echo=FALSE}
 ## Insert meta tags. These will not be visible but will be harvested by uas_toc()
@@ -176,18 +198,16 @@ m_pts <- m %>% fitBounds(lng_rng[1], lat_rng[1], lng_rng[2], lat_rng[2])
 
 ## Create the popup options
 if (params$thumbnails) {
-  #tb_html <- paste0("<img src='tb/", params$pts$tb_fn, "' style='width:300px;'/>")
   pup_opts <- popupOptions(maxWidth = 450, minWidth = 450,
                            closeOnClick = TRUE, keepInView = TRUE)
 } else {
-  #tb_html <- ""
   pup_opts <- NULL
 }
 
 if (group_img) {
 
   ## Group points to the 5th decimal place (approx 1m on the ground)
-  ## There will be one point for each group. The popup window will show the images
+  ## There will be one point for each group. The popup window will show info for all the images
   ## at that location
   leaf_pts_tbl <- params$pts %>% st_drop_geometry() %>% 
     mutate(gps_long_rnd = round(gps_long, 5), 
@@ -202,38 +222,27 @@ if (group_img) {
                 balloon_html = paste0("<div><p>",
                                       paste("<span onclick='set_src(this)' data-tbfn='", tb_fn,
                                             "' data-dt='",
-                                            format(pts_dt, "%Y-%m-%d %H:%M:%S"), "' class='btext'>",
+                                            format(pts_dt, "%Y-%m-%d %H:%M:%S"), 
+                                            "' data-gps='", gps_long_rnd, ",", gps_lat_rnd, "' class='btext'>",
                                             file_name, "</span>", sep = "", collapse = " "),
                                       "</p>",
-                                      "<table class='fn_dt'><tr><td class='fn'>", first(file_name), "</td><td class='dt'>",
+                                      "<table class='fn_dt'><tr><td class='gps3'>",
+                                      first(gps_long_rnd), ",", first(gps_lat_rnd),
+                                      "</td><td class='fn3'>", first(file_name),
+                                      "</td><td class='dt3'>",
                                       format(first(pts_dt), "%Y-%m-%d %H:%M:%S"), "</td></tr></table>",
                                       "<img src='./tb/",
-                                      first(tb_fn), "' width='440' height='300' class='bln_img'/></div>")) %>%
-    arrange(first_dt)
+                                      first(tb_fn), 
+                                      "' width='440' height='300' class='bln_img'/></div>")) %>%
+      arrange(first_dt)
       
-    #    "%b %d, %Y. %I:%M:%S %p"
-    
   } else {
+    ## Grouping but no thumnbails
     leaf_pts_tbl <- leaf_pts_tbl %>% 
       summarise(count = n(), first_dt = first(pts_dt),
-                balloon_html = paste(file_name, "<br/>", sep = "", collapse = "<br/>")) %>% 
+                balloon_html = paste(file_name, "<br/><em>", format(pts_dt, "%Y-%m-%d, %H:%M:%S"), "</em><br/>", sep = "", collapse = "<br/>")) %>% 
     arrange(first_dt)
   }
-  
-  # %>% 
-  #   summarise(count = n(), first_dt = first(pts_dt),
-  #           balloon_html = paste0("<div><p>",
-  #                                 paste("<span onclick='set_src(this)' data-tbfn='", tb_fn, 
-  #                                       "' data-dt='", 
-  #                                       format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), "' class='btext'>", 
-  #                                       file_name, "</span>", sep = "", collapse = " "), 
-  #                         "</p>",
-  #                         "<table class='fn_dt'><tr><td class='fn'>", first(file_name), "</td><td class='dt'>", 
-  #                         format(first(pts_dt), "%b %d, %Y. %I:%M:%S %p"), "</td></tr></table>", 
-  #                         "<img src='./tb/", 
-  #                         first(tb_fn), "' width='440' height='300' class='bln_img'/></div>"),
-  #           ) %>% 
-  #   arrange(first_dt)
 
   ## Compute colors for the pts and fp 
   if (is.na(params$col)) {
@@ -251,9 +260,6 @@ if (group_img) {
                    popup = ~balloon_html,
                    popupOptions = pup_opts)
 
-  m_pts_base <<- m_pts
-  # leaf_pts_tbl_base <<- leaf_pts_tbl
-  
 } else {
 
   ## NO GROUPING
@@ -262,19 +268,20 @@ if (group_img) {
   pts_dt <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
   
   if (params$thumbnails) {
-    thumbnail_html <- paste0("<br/><img src='tb/", params$pts$tb_fn, "'/>")
+    ## No grouping, thumbnails yes
+    thumbnail_html <- paste0("<img src='tb/", params$pts$tb_fn, "' width='440' height='300' class='bln_img'/>")
+    balloons_html <- paste0("<div><p><b>", params$pts$file_name, "</b></p>",
+                          "<table class='fn_dt'><tr><td class='gps'>", 
+                          paste0(round(params$pt$gps_long, 5), ", ",  round(params$pt$gps_lat, 5)),
+                          "</td><td class='dt'>",
+                          format(pts_dt, "%Y-%m-%d %H:%M:%S"), "</td></tr></table>",
+                          thumbnail_html, "</div>")
   } else {
-    thumbnail_html <- ""  
+    ## No grouping, no thumbnails
+    balloons_html <- paste0("<p>", params$pts$file_name, "<br/>",
+                            "<em>", format(pts_dt, "%Y-%m-%d, %H:%M:%S"), "</em></p>")
   }
   
-  balloons_html <- paste0("<p><b>", params$pts$file_name, "</b>. <em>", 
-                          format(pts_dt, "%b %d, %Y. %I:%M:%S %p"), 
-                          ifelse(params$show_gps_coord,
-                                 paste0("<br/> ", round(params$pt$gps_long, 5), ", ",  round(params$pt$gps_lat, 5)),
-                                 ""),
-                          "</em>", 
-                          thumbnail_html, "</p>")
-
   ## Compute colors  
   if (is.na(params$col)) {
     col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)

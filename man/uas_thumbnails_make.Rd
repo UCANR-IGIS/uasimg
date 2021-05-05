@@ -48,9 +48,9 @@ Thumbnail files will be given an 8-character suffix that looks random but is act
 This is to prevent clashes when thumnbail files from different flights are 'gathered' into a single folder attached to
 a Table of Contents folder (see \code{\link{uas_toc}}).
 
-If \code{use_magick = TRUE}, it will use resizing functions from the magick package. This is slower than the equivalent
-functions from the `imager` package (the default), but may be necessary if you are processing TIFs and don't have
-the ImageMagick app installed on your computer (which `imager` requires to read TIFs).
+If \code{use_magick = TRUE}, it will use resizing functions from the \link[magick]{magick} package. This is slower than the equivalent
+functions from the \code{imager} package (the default), but may be necessary if you are processing TIFs and don't have
+\href{https://imagemagick.org}{ImageMagick} installed on your computer (which \code{imager} requires to read TIFs).
 }
 \seealso{
 \link{uas_report}

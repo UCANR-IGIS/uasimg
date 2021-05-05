@@ -9,7 +9,6 @@ uas_report(
   col = NULL,
   group_img = TRUE,
   thumbnails = FALSE,
-  show_gps_coord = FALSE,
   show_local_dir = TRUE,
   report_title = "Flight Summary",
   attachments = c("mcp_kml", "ctr_kml")[0],
@@ -27,7 +26,8 @@ uas_report(
   header_html = NULL,
   footer_html = NULL,
   use_tmpdir = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  show_gps_coord = NULL
 )
 }
 \arguments{
@@ -38,8 +38,6 @@ uas_report(
 \item{group_img}{Group images within ~1m of each other into 1 point}
 
 \item{thumbnails}{Create thumbails}
-
-\item{show_gps_coord}{Show GPS coordinates of images in the pop-up windows, YN}
 
 \item{show_local_dir}{Show the local image directory, TF}
 
@@ -76,6 +74,8 @@ uas_report(
 \item{use_tmpdir}{Use the temp dir for processing}
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
+
+\item{show_gps_coord}{Show GPS coordinates of images in the pop-up windows, YN (deprecated)}
 }
 \value{
 The HTML file name(s) of the flight summaries generated

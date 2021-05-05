@@ -6,7 +6,6 @@
 #' @param col Color value(s) of the centroids and/or footprints
 #' @param group_img Group images within ~1m of each other into 1 point
 #' @param thumbnails Create thumbails
-#' @param show_gps_coord Show GPS coordinates of images in the pop-up windows, YN
 #' @param show_local_dir Show the local image directory, TF
 #' @param report_title Title to appear at the top of the summary
 #' @param attachments Supplementary files to create and link to the flight summary, see Details.
@@ -25,6 +24,7 @@
 #' @param footer_html A HTML file for the footer
 #' @param use_tmpdir Use the temp dir for processing
 #' @param quiet TRUE to supress printing of the pandoc command line
+#' @param show_gps_coord Show GPS coordinates of images in the pop-up windows, YN (deprecated)
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
 #'
@@ -61,7 +61,7 @@
 #'
 #' @seealso \code{\link{uas_info}}, \code{\link{uas_exp_kml}},
 #'
-#' @importFrom crayon green yellow bold
+#' @importFrom crayon green yellow bold silver
 #' @importFrom grDevices dev.off png rainbow
 #' @importFrom utils browseURL packageVersion
 #' @importFrom tools file_path_sans_ext file_ext
@@ -70,13 +70,13 @@
 #'
 #' @export
 
-uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show_gps_coord = FALSE,
-                       show_local_dir = TRUE, report_title = "Flight Summary",
+uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show_local_dir = TRUE, report_title = "Flight Summary",
                        attachments = c("mcp_kml", "ctr_kml")[0],
                        output_dir = NULL, create_dir = TRUE, output_file = NULL, overwrite_html = FALSE,
                        open_report = FALSE, self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
                        overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
-                       header_html = NULL, footer_html = NULL, use_tmpdir = FALSE, quiet = FALSE) {
+                       header_html = NULL, footer_html = NULL, use_tmpdir = FALSE, quiet = FALSE,
+                       show_gps_coord = NULL) {
 
   ## THE MAGICK.EXE option has been disabled pending testing.
   ## When asked to process a folder of >1000 images, it quit after ~700 (consistently)
@@ -95,6 +95,10 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
   if (is.null(attachments)) attachments <- character(0)
   if (length(attachments) > 0) {
     if (FALSE %in% (attachments %in% c("ctr_kml", "mcp_kml"))) stop("Unknown value(s) for `attachments`")
+  }
+
+  if (!missing("show_gps_coord")) {
+    if (!quiet) message(silver(" - `show_gps_coord` has been deprecated and does nothing. Please remove it from your code."))
   }
 
   ## Define a variable for the temp directory if needed
@@ -305,7 +309,6 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       ## Determine where we will render the HTML file
       if (use_tmpdir) {
         render_dir <- temp_dir
-        #cat("clear out the temp dir: ", render_dir, "\n"); browser()
       } else {
         render_dir <- output_dir_use
       }
@@ -409,7 +412,6 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
                                                         show_local_dir = show_local_dir,
                                                         map_fn = map_fn,
                                                         thumbnails = thumbnails,
-                                                        show_gps_coord = show_gps_coord,
                                                         kml_mcp_fn = kml_mcp_fn,
                                                         kml_ctr_fn = kml_ctr_fn,
                                                         report_title = report_title
@@ -445,11 +447,12 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
         }
 
-        report_fn_vec <- c(report_fn_vec, file.path(output_dir_use, basename(report_fn)))
+        report_fn_vec <- c(report_fn_vec,
+                           normalizePath(file.path(output_dir_use, basename(report_fn))))
 
       } else {
         ## Add the filename to report_fn_vec which will eventually be returned
-        report_fn_vec <- c(report_fn_vec, report_fn)
+        report_fn_vec <- c(report_fn_vec, normalizePath(report_fn))
       }
 
       ## If not self-contained, delete the temporary copy of the Rmd file
@@ -465,7 +468,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
       ## If the HTML file already exists (but wasn't overwritten), return it just the same
       if (file.exists(file.path(output_dir_use, output_file_use))) {
-        report_fn_vec <- c(report_fn_vec, file.path(output_dir_use, output_file_use))
+        report_fn_vec <- c(report_fn_vec, normalizePath(file.path(output_dir_use, output_file_use)))
       }
 
 

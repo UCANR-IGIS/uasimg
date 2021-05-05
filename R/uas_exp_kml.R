@@ -261,7 +261,6 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
                                   "</LookAt>")
 
             ## Parse placemarks_chr into an xml node (fast)
-            # browser()
             # placemarks_chr <- gsub("<", , x)
             nd_fldr_wth_pm <- read_xml(paste0("<Folder><name>",  ctr_fn, "</name>",
                                               look_at_str,

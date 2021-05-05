@@ -30,7 +30,7 @@ uas_dirs_find <- function(x, ext = c("jpg", "tif"), min_images = 3, exclude_tb =
                        full.names = TRUE, recursive = TRUE, ignore.case = TRUE)
 
   ## Parse the file paths putting the results into a data frame
-  img_all_tbl <- data.frame(path = dirname(img_fn),
+  img_all_tbl <- data.frame(path = normalizePath(dirname(img_fn)),
                             fn = basename(img_fn),
                             ext = file_ext(img_fn))
 

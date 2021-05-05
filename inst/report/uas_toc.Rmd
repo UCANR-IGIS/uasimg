@@ -86,6 +86,8 @@ if (!is.null(params$toc_desc)) {
 
 ```{r extract_data, include = FALSE}
 ## Parse data
+
+## i_lst will hold lists, each list representing properties of one of the HTML files
 i_lst <- list()
 
 ## Create a NULL object to store the sf objects
@@ -304,21 +306,27 @@ for (i in 1:length(i_lst)) {
 
     print(HTML(paste0("<h3 id='", html_fn, "'><a href='", html_dir_rel, html_fn, "'", href_target, ">", 
                       i_lst[[i]]$imgcol$name_use, "</a></h3>")))
-
-    if (i_lst[[i]]$imgcol$description != "") {
-      print(HTML(paste0("<p><em>", i_lst[[i]]$imgcol$description, "</em></p>")))
+    
+    if ("description" %in% names(i_lst[[i]]$imgcol)) {
+      if (i_lst[[i]]$imgcol$description != "") {
+        print(HTML(paste0("<p><em>", i_lst[[i]]$imgcol$description, "</em></p>")))
+      }
     }
   
     print(HTML(paste0("<p class='compact'><strong>Date captured:</strong> ",
                       i_lst[[i]]$imgcol$date_flown, "</p>")))
     
-    if (i_lst[[i]]$imgcol$pilot != "") {
-      print(HTML(paste0("<p class='compact'><strong>Pilot:</strong> ", 
-                        i_lst[[i]]$imgcol$pilot, "</p>")))
+    if ("pilot" %in% names(i_lst[[i]]$imgcol)) {
+      if (i_lst[[i]]$imgcol$pilot != "") {
+        print(HTML(paste0("<p class='compact'><strong>Pilot:</strong> ", 
+                          i_lst[[i]]$imgcol$pilot, "</p>")))
+      }
     }
-
-    print(HTML(paste0("<p class='compact'><strong>Camera:</strong> ",
+  
+    if ("camera_name" %in% names(i_lst[[i]]$imgcol)) {
+      print(HTML(paste0("<p class='compact'><strong>Camera:</strong> ",
                       i_lst[[i]]$imgcol$camera_name, "</p>")))
+    }
     
     print(HTML(paste0("<p class='compact'><strong>Num images:</strong> ",
                       i_lst[[i]]$imgcol$num_img, "</p>")))
@@ -329,9 +337,11 @@ for (i in 1:length(i_lst)) {
     print(HTML(paste0("<p class='compact'><strong>Data size:</strong> ",
                       format(as.numeric(i_lst[[i]]$imgcol$size_mb), big.mark = ","), " MB</p>")))
 
-    if (i_lst[[i]]$imgcol$contact != "") {
-      print(HTML(paste0("<p class='compact'><strong>Contact:</strong> ", 
-                        i_lst[[i]]$imgcol$contact, "</p>")))
+    if ("contact" %in% names(i_lst[[i]]$imgcol)) {
+      if (i_lst[[i]]$imgcol$contact != "") {
+        print(HTML(paste0("<p class='compact'><strong>Contact:</strong> ", 
+                          i_lst[[i]]$imgcol$contact, "</p>")))
+      }
     }
 
     print(HTML("<hr style='clear:both;'></hr>"))

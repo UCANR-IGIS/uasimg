@@ -130,7 +130,6 @@ uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "sec
 
     ## Now each image has a flight number. Next we want to identify those that have > min_images
     # cat("Need to check this when i=1, getting a flight with zero idx \n")
-    # browser()
     fltnums_minimages <- as.numeric(which(table(imgdt_incfirst_sorted_fltnum) >= min_images))
 
     ## 'Zero out' the flight number for images that don't belong to a valid flight
@@ -165,7 +164,6 @@ uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "sec
     grps_lst <- list()
     # j <- 1
 
-    #browser()
     ## get the fltnums right
     # fltnums_use
 
