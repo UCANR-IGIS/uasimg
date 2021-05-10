@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
       </span>
     </div>
 
@@ -150,6 +150,17 @@
       <small>Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="uasimg-171-2021-05-10" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.1">
+<a href="#uasimg-171-2021-05-10" class="anchor"></a>uasimg 1.7.1 (2021-05-10)</h1>
+<ul>
+<li>
+<code><a href="../reference/uas_report.html">uas_report()</a></code>: fixed a bug parsing the results of <code><a href="../reference/uas_thumbnails_make.html">uas_thumbnails_make()</a></code>
+</li>
+<li>
+<code>uas_report.Rmd</code>: added default value for parameter nomap</li>
+</ul>
+</div>
     <div id="uasimg-170-2021-05-09" class="section level1">
 <h1 class="page-header" data-toc-text="1.7.0">
 <a href="#uasimg-170-2021-05-09" class="anchor"></a>uasimg 1.7.0 (2021-05-09)</h1>
@@ -168,10 +179,18 @@
 <li>
 <code><a href="../reference/print.uas_info.html">print.uas_info()</a></code> and <code>report.Rmd</code>: updated to report the number of images per camera for multi-sensor flights</li>
 <li>
-<code><a href="../reference/uas_report.html">uas_report()</a></code>: changed default filename suffix to <code>_rpt</code>
-</li>
+<code><a href="../reference/uas_report.html">uas_report()</a></code>: changed default filename suffix to <code>_rpt</code>; updated for multi-folder flights</li>
 <li>
 <code><a href="../reference/uas_move.html">uas_move()</a></code>: overhauled</li>
+<li>
+<code><a href="../reference/uas_worldfile.html">uas_worldfile()</a></code>, <code><a href="../reference/uas_cropctr.html">uas_cropctr()</a></code>: updated for multi-folder flights</li>
+<li>
+<code><a href="../reference/uas_exp_kml.html">uas_exp_shp()</a></code>, <code><a href="../reference/uas_exp_kml.html">uas_exp_kml()</a></code>: updated for multi-folder flights; argument <code>img_dir</code> replaced with <code>flt_idx</code>
+</li>
+<li>
+<code><a href="../reference/uas_thumbnails_make.html">uas_thumbnails_make()</a></code>: argument <code>img_dir</code> replaced with <code>flt_idx</code>
+</li>
+<li>hex logo added</li>
 </ul>
 </div>
     <div id="uasimg-169-2021-05-05" class="section level1">
