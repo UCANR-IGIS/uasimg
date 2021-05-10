@@ -3,7 +3,7 @@
 #' Export geometry(s) from a flight to KML and Shapefile
 #'
 #' @param x A list of class 'uas_info'
-#' @param img_dir Image directories in x to process, character
+#' @param flt_idx Flight indices in x to process, integer
 #' @param ctr Export the image centroids, Logical
 #' @param fp Export the image footprints, Logical
 #' @param mcp Export the minimum convex polygon of the image footprints, logical
@@ -17,7 +17,7 @@
 #'
 #' @details
 #'
-#' \code{img_dir} allows you to specify a subset of image folders in \code{x} to process (use names(x) to see what those are).
+#' \code{flt_idx} allows you to specify a subset of image folders in \code{x} to process (use names(x) to see what those are).
 #'
 #' \code{ctr}, \code{fp}, and \code{mcp} (all TRUE/FALSE) specify which geometry(s) to export.
 
@@ -40,7 +40,7 @@
 #' @importFrom tibble as_tibble
 #' @export
 
-uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
+uas_exp_kml <- function(x, flt_idx = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
                         combine_feats = FALSE, combine_fn = NULL, output_dir = NULL, out_fnbase = NULL,
                         create_dir = TRUE, overwrite = FALSE, quiet = FALSE) {
 
@@ -77,21 +77,27 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       }
     }
 
-    ## Verify that that value(s) in img_dir (if any) are valid
-    if (is.null(img_dir)) {
-      img_dir_use <- names(x)
+    ## Verify that that value(s) in flt_idx (if any) are valid
+    if (is.null(flt_idx)) {
+      flt_idx_use <- 1:length(x)
     } else {
-      if (FALSE %in% (img_dir %in% names(x))) stop("Unknown value(s) in img_dir")
-      img_dir_use <- img_dir
+      if (TRUE %in% (flt_idx > length(x))) stop("Invalid value for flt_idx")
+      flt_idx_use <- flt_idx
     }
 
     fnbase_all <- NULL   ## save these in the loop, used to name features when combine = TRUE
     files_saved <- NULL  ## gets returned at the end
 
-    for (img_dir in img_dir_use) {
+    for (i in flt_idx_use) {
+
+      ## Get the actual image directory(s)
+      img_dir <- unique(dirname(x[[i]]$pts$img_fn))
 
       ## Get the output dir
       if (is.null(output_dir)) {
+
+        if (length(img_dir) > 1) stop("When images for one flight live in multiple directories, you must specify output_dir")
+
         output_dir_use <- file.path(img_dir, "map")
         if (!file.exists(output_dir_use) && create_dir) {
           if (!quiet) message(yellow(" - Creating ", output_dir_use))
@@ -106,10 +112,10 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       ## Define the base file name
       if (is.null(out_fnbase)) {
 
-        if (!is.na(x[[img_dir]]$metadata$name_short %>% null2na())) {
-          fnbase <- x[[img_dir]]$metadata$name_short
+        if (!is.na(x[[i]]$metadata$name_short %>% null2na())) {
+          fnbase <- x[[i]]$metadata$name_short
         } else {
-          fnbase <- x[[img_dir]]$id
+          fnbase <- x[[i]]$id
         }
       } else {
         fnbase <- out_fnbase
@@ -121,12 +127,12 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       if (ctr) {
 
         ## Parse out the image date and time for the balloon text
-        dt_date <- x[[img_dir]]$pts %>%
+        dt_date <- x[[i]]$pts %>%
           pull(date_time) %>%
           gsub(" .*$", "", .) %>%
           gsub(":", "-", .)
 
-        dt_time <- x[[img_dir]]$pts %>%
+        dt_time <- x[[i]]$pts %>%
           pull(date_time) %>%
           gsub("^.* ", "", .)
 
@@ -134,7 +140,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
 
           ## Create a slab of XML text for the placemarks.
           ## First, paste the coordinates together
-          coords_str <- x[[img_dir]]$pts %>%
+          coords_str <- x[[i]]$pts %>%
             st_transform(4326) %>%
             st_coordinates() %>%
             as_tibble() %>%
@@ -143,7 +149,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
 
           ## Wrap the coordinates in tags and collapse
           placemarks_chr <- paste("<Placemark><name>",
-                                  x[[img_dir]]$pts %>% pull(file_name),
+                                  x[[i]]$pts %>% pull(file_name),
                                   "</name><description>",
                                   "<b>Date</b>: ", dt_date, "<br/>",
                                   "<b>Time</b>: ", dt_time,
@@ -216,7 +222,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             ## Create a slab of XML text for the placemarks.
 
             ## First, paste the coordinates together
-            coords_str <- x[[img_dir]]$pts %>%
+            coords_str <- x[[i]]$pts %>%
               st_transform(4326) %>%
               st_coordinates() %>%
               as_tibble() %>%
@@ -224,18 +230,18 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
               pull(coords_str)
 
             # ## Parse out the image date and time for the placeholder description
-            # dt_date <- x[[img_dir]]$pts %>%
+            # dt_date <- x[[i]]$pts %>%
             #   pull(date_time) %>%
             #   gsub(" .*$", "", .) %>%
             #   gsub(":", "-", .)
             #
-            # dt_time <- x[[img_dir]]$pts %>%
+            # dt_time <- x[[i]]$pts %>%
             #   pull(date_time) %>%
             #   gsub("^.* ", "", .)
 
             ## Wrap the coordinates and description in tags and collapse
             placemarks_chr <- paste("<Placemark><name>",
-                                    x[[img_dir]]$pts %>% pull(file_name),
+                                    x[[i]]$pts %>% pull(file_name),
                                     "</name>",
                                     "<description>",
                                     "<b>Date</b>: ", dt_date, "<br/>",
@@ -246,7 +252,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
                                     sep = "", collapse = "\n")
 
             ## Define the look angle
-            flight_ctr_xy <- x[[img_dir]]$pts %>%
+            flight_ctr_xy <- x[[i]]$pts %>%
               st_transform(4326) %>%
               st_bbox() %>%
               matrix(ncol = 2) %>%
@@ -294,7 +300,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       ## Export footprints
       if (fp) {
         if (combine_feats) {
-          fp_combined_sf <- rbind(fp_combined_sf, x[[img_dir]]$fp)
+          fp_combined_sf <- rbind(fp_combined_sf, x[[i]]$fp)
         } else {
           fp_fn <- paste0(fnbase, "_fp")
           warning("Sorry, exporting footprints to KML is not yet supported")
@@ -305,7 +311,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       if (mcp) {
 
         if (combine_feats) {
-          mcp_combined_sf <- rbind(mcp_combined_sf, x[[img_dir]]$mcp)
+          mcp_combined_sf <- rbind(mcp_combined_sf, x[[i]]$mcp)
 
         } else {
           mcp_fn <- paste0(fnbase, "_mcp")
@@ -356,7 +362,7 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             ## xml_add_sibling("altitudeMode", "clampToGround") %>%
 
             ## Create the string of coordinates
-            coords_chr <- x[[img_dir]]$mcp %>%
+            coords_chr <- x[[i]]$mcp %>%
               slice(1) %>%
               st_transform(4326) %>%
               st_coordinates() %>%
@@ -378,15 +384,10 @@ uas_exp_kml <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             files_saved <- c(files_saved, mcp_kml_pathfn)
           }
 
-
-
         }
-
-
-
       }
 
-    }   # for img_dir in img_dir_use. DONE WITH LOOP
+    }   # for i in idx_use. DONE WITH LOOP
 
     if (combine_feats) {
 

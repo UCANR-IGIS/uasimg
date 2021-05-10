@@ -10,7 +10,7 @@ uas_grp_flt(
   interflt_units = c("med_int", "secs")[1],
   init_fltnum = 1,
   min_images = 5,
-  combine_dirs = TRUE,
+  cross_dirs = TRUE,
   options = NULL,
   quiet = FALSE
 )
@@ -26,7 +26,7 @@ uas_grp_flt(
 
 \item{min_images}{Minimum number of images to be considered a flight}
 
-\item{combine_dirs}{Parse the images in directories collectively}
+\item{cross_dirs}{Parse the images in directories collectively}
 
 \item{options}{Options and overrides for creating groups}
 
@@ -36,5 +36,6 @@ uas_grp_flt(
 Parse an image collection into individual flights
 }
 \details{
-
+cross_dirs means images in all directories will be examined when look for flights. This
+would be appropriate if the images from one flight were spread across multiple folders.
 }

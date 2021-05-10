@@ -8,6 +8,13 @@
 
 <title>Changelog • uasimg</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -40,6 +47,7 @@
 
 
 <meta property="og:title" content="Changelog" />
+<meta property="og:image" content="http://ucanr-igis.github.io/uasimg/logo.png" />
 
 
 
@@ -81,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -142,6 +150,30 @@
       <small>Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="uasimg-170-2021-05-09" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.0">
+<a href="#uasimg-170-2021-05-09" class="anchor"></a>uasimg 1.7.0 (2021-05-09)</h1>
+<p>NOTE: AFTER INSTALLING THIS UPDATE YOU SHOULD RUN <code><a href="../reference/uas_getcache.html">uas_clearcache()</a></code></p>
+<ul>
+<li>
+<code><a href="../reference/uas_toc.html">uas_toc()</a></code>: added uas_report.css to the files that get gathered</li>
+<li>
+<code>stringr</code> added to imports (i.e. required)</li>
+<li>cameras.csv and <code><a href="../reference/uas_cameras.html">uas_cameras()</a></code>: added <code>camera_abbrev</code> columns</li>
+<li>
+<code>uas_readcameras</code>: added <code>camera_abbrev</code>
+</li>
+<li>
+<code><a href="../reference/uas_info.html">uas_info()</a></code>: updated to find exiftool executable installed by exiftoolr; <code>camera_name</code> and <code>camera_abbrev</code> added as an attribute fields to accommodate multi-sensor flights</li>
+<li>
+<code><a href="../reference/print.uas_info.html">print.uas_info()</a></code> and <code>report.Rmd</code>: updated to report the number of images per camera for multi-sensor flights</li>
+<li>
+<code><a href="../reference/uas_report.html">uas_report()</a></code>: changed default filename suffix to <code>_rpt</code>
+</li>
+<li>
+<code><a href="../reference/uas_move.html">uas_move()</a></code>: overhauled</li>
+</ul>
+</div>
     <div id="uasimg-169-2021-05-05" class="section level1">
 <h1 class="page-header" data-toc-text="1.6.9">
 <a href="#uasimg-169-2021-05-05" class="anchor"></a>uasimg 1.6.9 (2021-05-05)</h1>

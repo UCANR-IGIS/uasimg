@@ -1,3 +1,19 @@
+# uasimg 1.7.0 (2021-05-09)
+
+NOTE: AFTER INSTALLING THIS UPDATE YOU SHOULD RUN `uas_clearcache()`
+
+* `uas_toc()`: added uas_report.css to the files that get gathered 
+* `stringr` added to imports (i.e. required)
+* cameras.csv and `uas_cameras()`: added `camera_abbrev` columns
+* `uas_readcameras`: added `camera_abbrev` 
+* `uas_info()`: updated to find exiftool executable installed by exiftoolr; `camera_name` and `camera_abbrev` added as an attribute fields to accommodate multi-sensor flights
+* `print.uas_info()` and `report.Rmd`: updated to report the number of images per camera for multi-sensor flights
+* `uas_report()`: changed default filename suffix to `_rpt`; updated for multi-folder flights
+* `uas_move()`: overhauled
+* `uas_worldfile()`, `uas_cropctr()`: updated for multi-folder flights
+* `uas_exp_shp()`, `uas_exp_kml()`: updated for multi-folder flights; argument `img_dir` replaced with `flt_idx`
+* `uas_thumbnails_make()`: argument `img_dir` replaced with `flt_idx`
+
 # uasimg 1.6.9 (2021-05-05)
 
 * `uas_dirs_find()`: fixed a case where images in tb folders were not excluded 

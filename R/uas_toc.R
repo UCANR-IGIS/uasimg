@@ -178,6 +178,14 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           }
         }
 
+        ## Copy uas_report.css if found
+        css_fn <- file.path(dirname(fn), "uas_report.css")
+        if (file.exists(css_fn)) {
+          file.copy(from = css_fn,
+                    to = gather_dir,
+                    overwrite = overwrite_gather)
+        }
+
         ## Next, we need to copy the thumbnails folder
         tbsrc_dir <- file.path(dirname(fn), "tb")
         if (file.exists(tbsrc_dir)) {
@@ -186,7 +194,6 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           ## Get the destination folder, create it if needed
           tbdest_dir <- file.path(gather_dir, "tb")
           if (!file.exists(tbdest_dir)) dir.create(tbdest_dir, recursive = TRUE)
-          ## Copy specifying overwrite_gather
           file.copy(from = file.path(tbsrc_dir, tbsrc_fn),
                     to = tbdest_dir,
                     overwrite = overwrite_gather)
@@ -198,7 +205,7 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           file.copy(from = files_dir,
                     to = gather_dir,
                     recursive = TRUE,
-                    overwrite = FALSE)
+                    overwrite = overwrite_gather)
         }
 
         ## Finally, copy the libs directory if found
@@ -207,7 +214,7 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
           file.copy(from = libs_dir,
                     to = gather_dir,
                     recursive = TRUE,
-                    overwrite = FALSE)
+                    overwrite = overwrite_gather)
         }
 
       } else {

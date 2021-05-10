@@ -55,6 +55,8 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
   if (inherits(x, "uas_info")) {
 
     if (is.null(dir_out)) {
+      ## TODO: THIS NEEDS TO BE UPDATED, WHAT HAPPENS IF THE UAS_INFO OBJECT HAS FLIGHTS THAT
+      ## SPAN MULTIPLE DIRECTORIES.
       dir_out_use <- names(x)
 
     } else {
@@ -75,11 +77,10 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
 
     in_files_lst <- list()
 
-    for (iinfo_idx in 1:length(x)) {
-      idx_use <- 1:nrow(x[[iinfo_idx]]$pts)
+    for (i in 1:length(x)) {
+      idx_use <- 1:nrow(x[[i]]$pts)
       if (!is.null(idx)) idx_use <- base::intersect(idx_use, idx)
-      #in_files <- c(in_files, x[[iinfo_idx]]$pts$img_fn[idx_use])
-      in_files_lst[[iinfo_idx]] <- x[[iinfo_idx]]$pts$img_fn[idx_use]
+      in_files_lst[[i]] <- x[[i]]$pts$img_fn[idx_use]
     }
 
   } else {
@@ -111,7 +112,6 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
 
   for (k in 1:length(in_files_lst)) {
 
-    #for (i in 1:length(in_files)) {
     for (in_fn in in_files_lst[[k]]) {
 
       # Update the progress bar
@@ -119,9 +119,6 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
         files_processed <- files_processed + 1
         setTxtProgressBar(pb, files_processed)
       }
-
-      # Get this input file name
-      # in_fn <- in_files[i]
 
       if (!file.exists(in_fn)) {
         warning(paste0(in_fn, " not found"))

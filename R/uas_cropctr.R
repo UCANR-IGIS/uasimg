@@ -34,7 +34,7 @@
 #' @seealso \code{\link{uas_worldfile}}
 #'
 #' @importFrom crayon green yellow
-#' @importFrom tools file_path_sans_ext
+#' @importFrom tools file_path_sans_ext file_ext
 #' @export
 
 uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
@@ -55,7 +55,6 @@ uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
-
   ## Verify that gdal_translate can be found
   if (Sys.which("gdal_translate") == "") {
     stop("Can not find gdal_translate. Please make sure this executable is installed and on the system path.")
@@ -63,17 +62,19 @@ uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
 
   files_gen <- NULL
 
-  for (img_dir in names(x)) {
+  #for (img_dir in names(x)) {
+  for (i in 1:length(x)) {
 
     ## Define the output directory for this folder of images
-    ## (right now they're all the same, but later will swap out {{img_fn}}
+    ## (right now they're all the same, but later will support using a token basedir({{img_fn}})
     dir_out_use <- dir_out
 
     ## Check if dir_out exists (later, option to create the directory)
     if (!file.exists(dir_out_use)) stop("dir_out does not exist. Please create it and try again.")
 
-    if (identical(x[[img_dir]]$pts, NA)) {
-      warning(paste0("Centroids not found for ", img_dir, ". Can not crop."))
+    if (identical(x[[i]]$pts, NA)) {
+      ## This should never happen
+      warning(paste0("Centroids not found for flight ", i, ". Can not crop."))
       next
     }
 
@@ -81,17 +82,17 @@ uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
     if (!quiet) message(green("Saving cropped images in ", path.expand(dir_out_use)))
 
     ## Get the number of images
-    num_imgs <- nrow(x[[img_dir]]$pts)
+    num_imgs <- nrow(x[[i]]$pts)
 
     ## Create the progress bar
     if (!quiet) pb <- txtProgressBar(min = 0, max = num_imgs, style = 3)
 
-    for (i in 1:num_imgs) {
-      if (!quiet) setTxtProgressBar(pb, i)
+    for (j in 1:num_imgs) {
+      if (!quiet) setTxtProgressBar(pb, j)
 
-      imgin_pathfn <- x[[img_dir]]$pts[i, "img_fn", drop = TRUE]
+      imgin_pathfn <- x[[i]]$pts[j, "img_fn", drop = TRUE]
 
-      imgin_fn <- x[[img_dir]]$pts[i, "file_name", drop = TRUE]
+      imgin_fn <- x[[i]]$pts[j, "file_name", drop = TRUE]
       imgin_ext <- file_ext(imgin_fn)
       imgin_base_no_ext <- file_path_sans_ext(imgin_fn)
 
@@ -100,15 +101,15 @@ uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
                                         out_suffix, ".", imgin_ext))
 
       ## Get the gsd (in cm)
-      gsd_cm <- x[[img_dir]]$pts[i, "gsd", drop = TRUE]
+      gsd_cm <- x[[i]]$pts[j, "gsd", drop = TRUE]
 
       ## Compute the height & width of the crop box (in rows & columns)
       crop_h_pix <- ceiling(crp_h * 100 / gsd_cm)
       crop_w_pix <- ceiling(crp_w * 100 / gsd_cm)
 
       ## Get the number of rows and columns in the image
-      img_height_px <- x[[img_dir]]$pts[i, "img_height", drop = TRUE]
-      img_width_px <- x[[img_dir]]$pts[i, "img_width", drop = TRUE]
+      img_height_px <- x[[i]]$pts[j, "img_height", drop = TRUE]
+      img_width_px <- x[[i]]$pts[j, "img_width", drop = TRUE]
 
       ## Compute the starting coordinates for the crop
       xoff <- ceiling((img_width_px / 2) - (crop_w_pix / 2))
@@ -130,12 +131,9 @@ uas_cropctr <- function(x, crp_h = 10, crp_w = 10,
     }
     if (!quiet) close(pb)
 
-
-
   }
 
   if (!quiet) message("Done")
-
   invisible(files_gen)
 
 }

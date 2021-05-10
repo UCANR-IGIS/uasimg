@@ -8,6 +8,13 @@
 
 <title>Export flight area and camera locations for GIS — uas_exp_kml • uasimg</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -41,6 +48,7 @@
 
 <meta property="og:title" content="Export flight area and camera locations for GIS — uas_exp_kml" />
 <meta property="og:description" content="Export geometry(s) from a flight to KML and Shapefile" />
+<meta property="og:image" content="http://ucanr-igis.github.io/uasimg/logo.png" />
 
 
 
@@ -82,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -150,7 +158,7 @@
 
     <pre class="usage"><span class='fu'>uas_exp_kml</span>(
   <span class='kw'>x</span>,
-  img_dir = <span class='kw'>NULL</span>,
+  flt_idx = <span class='kw'>NULL</span>,
   ctr = <span class='fl'>FALSE</span>,
   fp = <span class='fl'>FALSE</span>,
   mcp = <span class='fl'>FALSE</span>,
@@ -165,7 +173,7 @@
 
 <span class='fu'>uas_exp_shp</span>(
   <span class='kw'>x</span>,
-  img_dir = <span class='kw'>NULL</span>,
+  flt_idx = <span class='kw'>NULL</span>,
   ctr = <span class='fl'>FALSE</span>,
   fp = <span class='fl'>FALSE</span>,
   mcp = <span class='fl'>FALSE</span>,
@@ -186,8 +194,8 @@
       <td><p>A list of class 'uas_info'</p></td>
     </tr>
     <tr>
-      <th>img_dir</th>
-      <td><p>Image directories in x to process, character</p></td>
+      <th>flt_idx</th>
+      <td><p>Flight indices in x to process, integer</p></td>
     </tr>
     <tr>
       <th>ctr</th>
@@ -236,7 +244,7 @@
     <p>A vector of filenames</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>img_dir</code> allows you to specify a subset of image folders in <code>x</code> to process (use names(x) to see what those are).</p>
+    <p><code>flt_idx</code> allows you to specify a subset of image folders in <code>x</code> to process (use names(x) to see what those are).</p>
 <p><code>ctr</code>, <code>fp</code>, and <code>mcp</code> (all TRUE/FALSE) specify which geometry(s) to export.
 Output file names will be generated from the flight metadata saved in the uas_info object. Alternately,
 you can pass the base of a file name using <code>out_fnbase</code>. You can specify the output directory

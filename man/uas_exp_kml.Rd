@@ -7,7 +7,7 @@
 \usage{
 uas_exp_kml(
   x,
-  img_dir = NULL,
+  flt_idx = NULL,
   ctr = FALSE,
   fp = FALSE,
   mcp = FALSE,
@@ -22,7 +22,7 @@ uas_exp_kml(
 
 uas_exp_shp(
   x,
-  img_dir = NULL,
+  flt_idx = NULL,
   ctr = FALSE,
   fp = FALSE,
   mcp = FALSE,
@@ -38,7 +38,7 @@ uas_exp_shp(
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{img_dir}{Image directories in x to process, character}
+\item{flt_idx}{Flight indices in x to process, integer}
 
 \item{ctr}{Export the image centroids, Logical}
 
@@ -67,7 +67,7 @@ A vector of filenames
 Export geometry(s) from a flight to KML and Shapefile
 }
 \details{
-\code{img_dir} allows you to specify a subset of image folders in \code{x} to process (use names(x) to see what those are).
+\code{flt_idx} allows you to specify a subset of image folders in \code{x} to process (use names(x) to see what those are).
 
 \code{ctr}, \code{fp}, and \code{mcp} (all TRUE/FALSE) specify which geometry(s) to export.
 Output file names will be generated from the flight metadata saved in the uas_info object. Alternately,

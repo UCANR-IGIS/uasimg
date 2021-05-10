@@ -19,15 +19,13 @@ print.uas_info <- function(x, metadata = TRUE, ...) {
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
     for (i in 1:length(x)) {
-      # if (!is.na(x[[i]]$metadata$collection_name)) {
-      #   cat(green$bold("\n", x[[i]]$metadata$collection_name), "\n")
-      # }
-      #cat(green$bold("\n", x[[i]]$metadata$name_short), "\n")
-      cat(yellow("name_short:"), green$bold(x[[i]]$metadata$name_short), "\n")
+      cat(yellow("flight:"), names(x)[i], "\n")
       cat(yellow("name_long:"), x[[i]]$metadata$name_long, "\n")
-      cat(yellow("dir:"), names(x)[i], "\n")
-      cat(yellow("images:"), nrow(x[[i]]$pts), "\n")
-      cat(yellow("camera:"), x[[i]]$camera_name, "\n")
+      cat(yellow("name_short:"), green$bold(x[[i]]$metadata$name_short), "\n")
+
+      cameras_lst <- as.list(table(x[[i]]$pts$camera_name))
+      cat(yellow("camera:"), paste(names(cameras_lst), collapse = ", "), "\n")
+      cat(yellow("images:"), paste(unlist(cameras_lst), collapse = ", "), "\n")
       cat(yellow("area:"), round(msq2acres(x[[i]]$area_m2), 2), "acres\n")
       cat(yellow("size:"), format(x[[i]]$size_mb, big.mark = ","), "MB\n")
       cat(yellow("date flown:"), x[[i]]$date_flown, "\n")

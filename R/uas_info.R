@@ -27,8 +27,9 @@
 #' \emph{cameras.csv} file (see \code{\link{uas_cameras}} for details) and pass the file name as the
 #' \code{cameras} argument. Or contact the package maintainer to add your camera to the database.
 #'
-#' This function uses a free command line tool called EXIFtool to read the EXIF data, which can be downloaded
-#' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
+#' This function uses a free command line tool called EXIFtool to read the EXIF data. If you haven't already,
+#' you can install this by running \code{\link[exiftoolr]{install_exiftool}}. Alternately you can download exiftool
+#' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}. After you download it, rename the executable file,
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
 #' \code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
@@ -121,10 +122,18 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
   short_names[["foot_h"]] <- "fp_height"
   short_names[["fwd_overlap"]] <- "fwd_ovrlap"
 
-  ## See if exiftool is installed
+  ## Nomap will (eventually) be a vector of images that should be excluded
+  ## from the flight summary map, mcp computation, area computation, etc.
+  ## This is for things like calibration images
+  nomap <- NA
+
+  ## Look for the exiftool executable
   if (use_exiftoolr) {
-    exiftool <- exiftoolr::configure_exiftoolr(quiet = TRUE)
+    ## Note: system2() doesn't require you to quote an executable (only arguments with spaces)
+    exiftool_exec <- configure_exiftoolr(quiet = TRUE)
+
   } else {
+    ## Not using exiftoolr. Look on the path for the correct filename.
     if (is.null(exiftool)) {
       if (.Platform$OS.type == "windows") {
         exiftool <- "exiftool.exe"
@@ -132,10 +141,12 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         exiftool <- "exiftool"
       }
     }
-    exiftool.exec <- findonpath(exiftool, status = FALSE)
-    if (is.null(exiftool.exec)) {
+    exiftool_exec <- findonpath(exiftool, status = FALSE)
+    if (is.null(exiftool_exec)) {
       message(red("Cant find exiftool. Please make sure this file is downloaded and saved either in the working directory or a directory on the PATH environment variable (e.g., c:/windows). Download it from http://www.sno.phy.queensu.ca/~phil/exiftool/, then rename Rename 'exiftool(-k).exe' to 'exiftool.exe'."))
       return(invisible(NULL))
+    } else {
+      exiftool_exec <- exiftool_exec
     }
   }
 
@@ -163,7 +174,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
 
       } else {
-        ## String was passed, we presume this is a directory
+        ## String was passed for cache, we presume this is a directory
         if (file.exists(cache)) {
           cache_dir_use <- cache
           save_to_cache <- TRUE
@@ -188,10 +199,16 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         ## If we're not doing auto-update, look for a file and load it if found
         if (!update_cache) {
           ## Look for a cache file
-          if (file.exists(file.path(cache_dir_use, cache_fn))) {
-            load(file.path(cache_dir_use, cache_fn))
-            cache_loaded <- TRUE
-            if (!quiet) message(yellow(" - Using cached data"))
+          cache_pathfn <- file.path(cache_dir_use, cache_fn)
+          if (file.exists(cache_pathfn)) {
+            ## Make sure its newer than the release of version 1.7.0
+            if (file.mtime(cache_pathfn) > ISOdatetime(2021, 5, 9, 0, 0, 0)) {
+              load(cache_pathfn)
+              cache_loaded <- TRUE
+              if (!quiet) message(yellow(" - Using cached data"))
+            } else {
+              if (!quiet) message(yellow(" - Updating cached data"))
+            }
           }
         }
 
@@ -206,13 +223,18 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       if (!quiet) message(yellow(" - Looking for image files"))
 
       first_fn <- list.files(path=img_dir, full.names=TRUE, pattern="jpg$|JPG$|jpeg$|JPEG$|tif$|TIF$|dng$|DNG$")[1]
+
       if (is.na(first_fn)) stop(paste0("Couldn't find any jpg or tif files in ", img_dir))
 
       csv_first_fn <- tempfile(pattern="~map_uas_", fileext = ".csv")
+
       #if (!file.exists(csv_first_fn)) stop("Couldn't create a temp file. Restart R and try again.")
 
-      system2("exiftool", args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
+      system2(exiftool_exec, args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
               stdout=csv_first_fn, stderr=FALSE)
+
+      # system2("exiftool", args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
+      #         stdout=csv_first_fn, stderr=FALSE)
 
       exif_first_df <- read.csv(csv_first_fn, stringsAsFactors = FALSE)
 
@@ -224,7 +246,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       camera_filetype <- exif_first_df[1, "FileType"]
 
       ## Import database of known sensors
-      # sensors_df <- read.csv(cameras_fn, stringsAsFactors = FALSE)
       sensors_df <- uas_readcameras(cameras_fn)
 
       ## Search for this sensor
@@ -272,9 +293,9 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       ## Construct args
       str_args <- paste("-", paste(exif_tags, collapse=" -"), " -n -csv ", shQuote(img_dir), sep="")
 
-      # Run command
+      # Run exiftool command
       if (!quiet) message(yellow(" - Running exiftool (this can take a while)..."), appendLF = FALSE)
-      suppressWarnings(system2("exiftool", args = str_args, stdout = exif_csv_fn, stderr = FALSE))
+      suppressWarnings(system2(exiftool_exec, args = str_args, stdout = exif_csv_fn, stderr = FALSE))
       if (!quiet) message(yellow("Done."))
       if (!file.exists(exif_csv_fn)) {
         stop("exiftool could not create the csv file")
@@ -312,8 +333,15 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       flight_date_str <- format(flight_date_dt, "%Y-%m-%d")
 
       ## Add the sensor dimensions to to exif_df
-      sensor_info_df <- sensors_df %>% select(model, filetype, sensor_width, sensor_height)
+      sensor_info_df <- sensors_df %>%
+        select(model, camera_name, camera_abbrev, filetype, sensor_width, sensor_height)
+
       exif_df <- exif_df %>% left_join(sensor_info_df, by=c("model" = "model", "filetype" = "filetype"))
+
+      ## no longer needed - these columns are now brought in a factors in readcameras()
+      # mutate(make = as.factor(make)
+      #      camera_name = as.factor(camera_name),
+      #      camera_abbrev = as.factor(camera_abbrev)) %>%
 
       ## Add image footprint gsd and dimensions
       ## Based on Pix4D GSD calculator. Assumptions:
@@ -511,7 +539,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       }
     }
 
-    ## Load the additional meta data (which is not cached!)
+    ## Load the additional flight metadata (which is never cached!)
     ## Get the extra metadata either by an argument or finding an metadata.txt file
 
     if (is.null(metadata)) {
@@ -604,11 +632,12 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
     ## Add to the result list
     res[[img_dir]] <- list(pts = imgs_ctr_utm_sf,
                            fp = fp_utm_sf,
+                           nomap = nomap,
                            area_m2 = area_m2,
                            mcp = mcp_sf,
                            size_mb = total_size_mb,
                            date_flown = flight_date_str,
-                           camera_name = camera_name,
+                           # camera_name = camera_name,
                            id = id_str,
                            metadata = metadata_use)
   }

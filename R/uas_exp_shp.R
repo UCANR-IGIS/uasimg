@@ -4,7 +4,7 @@
 #' @importFrom dplyr mutate
 #' @export
 
-uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
+uas_exp_shp <- function(x, flt_idx = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
                     combine_feats = FALSE, combine_fn = NULL,
                     output_dir = NULL, out_fnbase = NULL, create_dir = TRUE, overwrite = FALSE, quiet = FALSE) {
 
@@ -41,20 +41,27 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       }
     }
 
-    ## Verify that that value(s) in img_dir (if any) are valid
-    if (is.null(img_dir)) {
-      img_dir_use <- names(x)
+    ## Verify that that value(s) in flt_idx (if any) are valid
+    if (is.null(flt_idx)) {
+      flt_idx_use <- 1:length(x)
     } else {
-      if (FALSE %in% (img_dir %in% names(x))) stop("Unknown value(s) in img_dir")
-      img_dir_use <- img_dir
+      if (TRUE %in% (flt_idx > length(x))) stop("Invalid value for flt_idx")
+      flt_idx_use <- flt_idx
     }
 
     files_saved <- NULL  ## gets returned at the end
 
-    for (img_dir in img_dir_use) {
+    #for (img_dir in img_dir_use) {
+    for (i in flt_idx_use) {
+
+      ## Get the actual image directory(s)
+      img_dir <- unique(dirname(x[[i]]$pts$img_fn))
 
       ## Get the output dir
       if (is.null(output_dir)) {
+
+        if (length(img_dir) > 1) stop("When images for one flight live in multiple directories, you must specify output_dir")
+
         output_dir_use <- file.path(img_dir, "map")
         if (!file.exists(output_dir_use) && create_dir) {
           if (!quiet) message("Creating ", output_dir_use)
@@ -69,10 +76,10 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       ## Define the base file name
       if (is.null(out_fnbase)) {
 
-        if (!is.na(x[[img_dir]]$metadata$name_short %>% null2na())) {
-          fnbase <- x[[img_dir]]$metadata$name_short
+        if (!is.na(x[[i]]$metadata$name_short %>% null2na())) {
+          fnbase <- x[[i]]$metadata$name_short
         } else {
-          fnbase <- x[[img_dir]]$id
+          fnbase <- x[[i]]$id
         }
       } else {
         fnbase <- out_fnbase
@@ -85,7 +92,7 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
 
           ctr_combined_sf <-
             rbind(ctr_combined_sf,
-                  x[[img_dir]]$pts %>%
+                  x[[i]]$pts %>%
                     select(file_name, date_time, gps_lat, gps_long, gps_alt, yaw, make, model) %>%
                     mutate(flight = fnbase))
 
@@ -101,7 +108,7 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             if (!quiet) message(yellow(paste0(" - ", ctr_fn, ".shp", " already exists. Skipping.")))
 
           } else {
-            st_write(x[[img_dir]]$pts %>%
+            st_write(x[[i]]$pts %>%
                        select(file_name, date_time, gps_lat, gps_long, gps_alt, yaw, make, model),
                      dsn = ctr_shp_pathfn, delete_dsn = file.exists(ctr_shp_pathfn), quiet = quiet)
             if (!quiet) message(green(paste0(" - ", ctr_fn, ".shp saved")))
@@ -116,7 +123,7 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       if (fp) {
 
         if (combine_feats) {
-          fp_combined_sf <- rbind(fp_combined_sf, x[[img_dir]]$fp)
+          fp_combined_sf <- rbind(fp_combined_sf, x[[i]]$fp)
 
         } else {
           fp_fn <- paste0(fnbase, "_fp")
@@ -130,11 +137,11 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             if (!quiet) message(yellow(paste0(" - ", fp_fn, ".shp", " already exists. Skipping.")))
 
           } else {
-            if (identical(x[[img_dir]]$fp, NA)) {
+            if (identical(x[[i]]$fp, NA)) {
               if (!quiet) message(yellow("Footprints not found. Skipping."))
 
             } else {
-              st_write(x[[img_dir]]$fp, dsn = fp_shp_pathfn,
+              st_write(x[[i]]$fp, dsn = fp_shp_pathfn,
                        delete_dsn = file.exists(fp_shp_pathfn), quiet = quiet)
               if (!quiet) message(green(fp_fn, ".shp saved", sep=""))
               files_saved <- c(files_saved, fp_shp_pathfn)
@@ -149,7 +156,7 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
       if (mcp) {
 
         if (combine_feats) {
-          mcp_combined_sf <- rbind(mcp_combined_sf, x[[img_dir]]$mcp)
+          mcp_combined_sf <- rbind(mcp_combined_sf, x[[i]]$mcp)
 
         } else {
           mcp_fn <- paste0(fnbase, "_mcp")
@@ -164,7 +171,7 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
             files_saved <- c(files_saved, mcp_shp_pathfn)
 
           } else {
-            st_write(x[[img_dir]]$mcp, dsn = mcp_shp_pathfn, delete_dsn = file.exists(mcp_shp_pathfn), quiet = quiet)
+            st_write(x[[i]]$mcp, dsn = mcp_shp_pathfn, delete_dsn = file.exists(mcp_shp_pathfn), quiet = quiet)
             if (!quiet) message(green(paste0(" - ", mcp_fn, ".shp saved")))
             files_saved <- c(files_saved, mcp_shp_pathfn)
           }
@@ -173,7 +180,7 @@ uas_exp_shp <- function(x, img_dir = NULL, ctr = FALSE, fp = FALSE, mcp = FALSE,
 
       }
 
-    }   # for img_dir in img_dir_use. DONE WITH LOOP
+    }   # for i in flt_idx_use DONE WITH LOOP
 
     if (combine_feats) {
 

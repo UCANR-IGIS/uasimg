@@ -2,7 +2,7 @@
 % Please edit documentation in R/uas_metadata_make.R
 \name{uas_metadata_make}
 \alias{uas_metadata_make}
-\title{Manage supplemental metadata files}
+\title{Create flight metadata text files}
 \usage{
 uas_metadata_make(
   x,
@@ -45,7 +45,7 @@ uas_metadata_make(
 A character vector of the external metadata text file(s) created.
 }
 \description{
-Create and edit supplemental metadata files
+Create and/or edit flight metadata text files
 }
 \details{
 This creates, and/or opens for editing, supplemental metadata text file(s) in image folders.

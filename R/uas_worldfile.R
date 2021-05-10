@@ -62,7 +62,7 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
     for (iinfo_idx in 1:length(x)) {
 
       if (identical(x[[iinfo_idx]]$pts, NA)) {
-        warning(paste0("Centroids not found for ", img_dir, ". Can not create world file."))
+        warning(paste0("Centroids not found for ", names(x)[iinfo_idx], ". Can not create world file."))
         next
       }
 

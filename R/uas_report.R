@@ -127,22 +127,27 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
   ## Start the loop
   for (i in 1:length(x)) {
-    img_dir <- names(x)[i]
 
-    if (identical(x[[img_dir]]$pts, NA)) {
-      warning(paste0("Centroids not found for ", img_dir, ". Skipping report."))
+    if (identical(x[[i]]$pts, NA)) {
+      warning(paste0("Centroids not found for ", flt_name, ". Skipping report."))
       next
     }
 
+    ## Get the actual image directory(s)
+    img_dir <- unique(dirname(x[[i]]$pts$img_fn))
+
     ## Verify that img_dir exists
-    if (!file.exists(img_dir)) {
+    if (FALSE %in% file.exists(img_dir)) {
       stop(paste0("Can not find image directory: ", img_dir))
     }
 
-    ## Get the output dir
+    ## Get the output dir for the report
     if (is.null(output_dir)) {
 
-      ## No output directory is specify --> use 'map' folder in the image folder
+      ## No output directory is specify
+      if (length(img_dir) > 1) stop("When images for one flight live in multiple directories, you must specify output_dir")
+
+      ## One input directory --> use 'map' folder in the image folder
 
       ## Test for write permission.
       if (file.access(img_dir, mode = 2) != 0) {
@@ -168,10 +173,10 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
     }
 
     ## Construct a base filename (to use for the HTML report, PNG, and KML files)
-    if (is.na(x[[img_dir]]$metadata$name_short %>% null2na())) {
-      fnbase <- x[[img_dir]]$id
+    if (is.na(x[[i]]$metadata$name_short %>% null2na())) {
+      fnbase <- x[[i]]$id
     } else {
-      fnbase <- x[[img_dir]]$metadata$name_short
+      fnbase <- x[[i]]$metadata$name_short
     }
 
     ##################################################################
@@ -193,13 +198,13 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         ## Compute colors for the pts
         ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
         if (is.null(col)) {
-          col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+          col_use <- rainbow(nrow(x[[i]]$pts), end=5/6)
         } else {
           col_use <- col
         }
 
         # Define the extent and center point of the flight area
-        pts_ext <- x[[img_dir]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
+        pts_ext <- x[[i]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
         lon_idx <- c(1, 3)
         lat_idx <- c(2, 4)
         ctr_ll <- c(mean(pts_ext[lon_idx]), mean(pts_ext[lat_idx]))
@@ -235,7 +240,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
           # Create the ggmap object and save to a variable
           pts_ggmap <- ggmap::ggmap(m) +
-            geom_point(data = x[[img_dir]]$pts %>% sf::st_drop_geometry(),
+            geom_point(data = x[[i]]$pts %>% sf::st_drop_geometry(),
                        aes(gps_long, gps_lat),
                        colour = col_use,
                        show.legend = FALSE,
@@ -280,25 +285,25 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       if (thumbnails) {
 
         ## Call uas_thumbnails()
-        tb_fn_lst <- uas_thumbnails_make(x, img_dir = img_dir, output_dir = tb_dir_use,
+        tb_fn_lst <- uas_thumbnails_make(x, flt_idx = i, output_dir = tb_dir_use,
                                          tb_width = 400)
 
         # , use_magick = use_magick
 
         ## Save the base name of the thumbnail in the attribute table for the points, so it can be
         ## used in the leaflet map
-        x[[img_dir]]$pts$tb_fn <- basename(tb_fn_lst[[img_dir]])
+        x[[i]]$pts$tb_fn <- basename(tb_fn_lst[[img_dir]])
 
       }
 
     }  ## if thumbnails = TRUE
 
     ## If thumbnails is (still) FALSE, fill the column with NA
-    if (!thumbnails) x[[img_dir]]$pts$tb_fn <- NA
+    if (!thumbnails) x[[i]]$pts$tb_fn <- NA
 
     ## Get the HTML report output filename
     if (is.null(output_file)) {
-      output_file_use <- paste0(fnbase, "_report.html")
+      output_file_use <- paste0(fnbase, "_rpt.html")
     } else {
       output_file_use <- output_file
     }
@@ -387,7 +392,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       if ("mcp_kml" %in% attachments) {
         kml_mcp_fn <- paste0(fnbase, "_mcp.kml")
         if (!file.exists(file.path(output_dir_use, kml_mcp_fn))) {
-          uas_exp_kml(x, mcp = TRUE, output_dir = output_dir_use, img_dir = img_dir, out_fnbase = fnbase)
+          uas_exp_kml(x, flt_idx = i, mcp = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
         }
       } else {
         kml_mcp_fn <- NA
@@ -397,7 +402,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       if ("ctr_kml" %in% attachments) {
         kml_ctr_fn <- paste0(fnbase, "_ctr.kml")
         if (!file.exists(file.path(output_dir_use, kml_ctr_fn))) {
-          uas_exp_kml(x, ctr = TRUE, output_dir = output_dir_use, img_dir = img_dir, out_fnbase = fnbase)
+          uas_exp_kml(x, flt_idx = i, ctr = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
         }
       } else {
         kml_ctr_fn <- NA
@@ -407,18 +412,18 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       report_fn <- render(input = report_rmd_use,
                           output_dir = render_dir, output_file = output_file_use,
                           output_options = output_options,
-                          params = c(x[[img_dir]], list(col = col_use, img_dir = img_dir,
-                                                        group_img = group_img,
-                                                        show_local_dir = show_local_dir,
-                                                        map_fn = map_fn,
-                                                        thumbnails = thumbnails,
-                                                        kml_mcp_fn = kml_mcp_fn,
-                                                        kml_ctr_fn = kml_ctr_fn,
-                                                        report_title = report_title
-                                                        )
+                          params = c(x[[i]], list(col = col_use,
+                                                  img_dir = img_dir,
+                                                  group_img = group_img,
+                                                  show_local_dir = show_local_dir,
+                                                  map_fn = map_fn,
+                                                  thumbnails = thumbnails,
+                                                  kml_mcp_fn = kml_mcp_fn,
+                                                  kml_ctr_fn = kml_ctr_fn,
+                                                  report_title = report_title
+                                                  )
                                               )
                                      )
-
 
       if (use_tmpdir) {
 

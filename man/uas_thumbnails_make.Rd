@@ -6,7 +6,7 @@
 \usage{
 uas_thumbnails_make(
   x,
-  img_dir = NULL,
+  flt_idx = NULL,
   output_dir = NULL,
   tb_width = 400,
   overwrite = FALSE,
@@ -18,7 +18,7 @@ uas_thumbnails_make(
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{img_dir}{Image folders in x to process (NULL to process all)}
+\item{flt_idx}{Flight indices in x to process, integer}
 
 \item{output_dir}{Output directory}
 
@@ -39,7 +39,7 @@ A named list (one element for each directory processed) of thumbnail files creat
 Move UAS images into sub-directories by group
 }
 \details{
-This will create thumbnail images for the drone images in \code{x}. \code{img_dir} allows you to specify a subset of folders
+This will create thumbnail images for the drone images in \code{x}. \code{flt_idx} allows you to specify a subset of flights
 in \code{x} to process. The default output folder is a sub-directory of each image
 folder called \emph{map/tb}, which will be created if needed. This location can be overridden with \code{output_dir}.
 The dimensions of the thumbnails is determined by \code{tb_width}, from which the height is set automatically.

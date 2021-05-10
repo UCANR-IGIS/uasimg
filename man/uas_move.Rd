@@ -2,30 +2,60 @@
 % Please edit documentation in R/uas_move.R
 \name{uas_move}
 \alias{uas_move}
-\title{Move UAS images into sub-directories by group}
+\title{Move UAS images into sub-directories}
 \usage{
-uas_move(x, copymove = "move", basedir = NULL, quiet = FALSE)
+uas_move(
+  x,
+  flt_idx = NULL,
+  tree,
+  outdir_root,
+  req_all_fltmdflds = TRUE,
+  create_dirs = "ask",
+  imgs_action = c("copy", "move", "none")[1],
+  imgs_prepend_fn = FALSE,
+  write_metadata = TRUE,
+  preview_only = FALSE,
+  tb_action = imgs_action,
+  map_action = c("copy", "move", "none")[3],
+  quiet = FALSE
+)
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{copymove}{Move or copy}
+\item{flt_idx}{Elements of x to move, integer}
 
-\item{basedir}{Base dir}
+\item{tree}{Directory tree template filename or character vector, see Details}
+
+\item{outdir_root}{Output directory root}
+
+\item{req_all_fltmdflds}{Require all flight metadata fields in the directory tree template to be defined}
+
+\item{create_dirs}{Create the output directory tree}
+
+\item{imgs_action}{The action to take with images}
+
+\item{imgs_prepend_fn}{Whether th prepend image file names with datestamp (to ensure they'll be unique)}
+
+\item{write_metadata}{Write a metadtata.txt file in the output image folder}
+
+\item{preview_only}{Preview the directory tree only}
+
+\item{tb_action}{The action to take with thumbnail images saved in the default location}
+
+\item{map_action}{The action to take with the contents of the map folder}
 
 \item{quiet}{Suppress messages}
 }
 \value{
-A \link{uas_info} object
+A vector of directory locations where images were copied / moved
 }
 \description{
-Move UAS images into sub-directories by group
+Move UAS images into sub-directories
 }
 \details{
-NOT YET SUPPORTED
-
-This will move groups of image files into subdirectories based on the group they fall into.
+req_all_fltmdflds means don't move anything unless all uas_info objects have all tokens in the directory tree
 }
 \seealso{
-\link{uas_info}
+\code{\link{uas_info}}
 }

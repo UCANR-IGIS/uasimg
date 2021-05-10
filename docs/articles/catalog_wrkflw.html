@@ -6,6 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cataloging Drone Images with uasimg: A Workflow • uasimg</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -13,6 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Cataloging Drone Images with uasimg: A Workflow">
 <meta property="og:description" content="uasimg">
+<meta property="og:image" content="http://ucanr-igis.github.io/uasimg/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -37,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -107,8 +114,8 @@
     
 <p>This article presents a workflow for using <code>uasimg</code> to create a <strong>catalog of drone images</strong> from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is <a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html" target="_blank" rel="noopener">here</a>. Although the workflow is presented a sequence of steps, in practice your workflow will probably <em>not</em> be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.</p>
 <p><br></p>
-<div id="htmlwidget-da6323d08bbfc2be3ff3" style="width:600px;height:720px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-da6323d08bbfc2be3ff3">{"x":{"diagram":"digraph flowchart {\n      node [fontname = Helvetica, shape = rectangle]\n      tab1 [label = \"Copy images to a hard drive\"]\n      tab2 [label = \"Extract flight info for each folder with uas_info()\"]\n      tab3 [label = \"Create metadata text files for each folder uas_metadata_make()\"]\n      tab4 [label = \"Edit and save metadata text files in a text editor\"]\n      tab5 [label = \"Delete or move oddball images into subdirectories (as needed)\"]\n      tab6 [label = \"Move images between folders if they are part of the same mission block (if needed)\"]\n      tab7 [label = \"Re-run uas_info() to update the location info and metadata\"]\n      tab8 [label = \"Move images into a structured directory tree\"]\n      tab9 [label = \"Export flight geometries to shp / kml files with uas_exp_kml() and uas_exp_shp() (as needed)\"]\n      tab10 [label = \"Create individual flight summaries with uas_report()\"]\n      tab11 [label = \"Create a Table of Content page for related flight summaries with uas_toc() (optional)\"]\n\n      # edge definitions with the node IDs\n      tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7 -> tab8 -> tab9 -> tab10 -> tab11;\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><br></p>
+<div id="htmlwidget-767173c42f0fb3011ede" style="width:600px;height:720px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-767173c42f0fb3011ede">{"x":{"diagram":"digraph flowchart {\n      node [fontname = Helvetica, shape = rectangle]\n      tab1 [label = \"Copy images to a hard drive\"]\n      tab2 [label = \"Extract flight info for each folder with uas_info()\"]\n      tab3 [label = \"Create metadata text files for each folder uas_metadata_make()\"]\n      tab4 [label = \"Edit and save metadata text files in a text editor\"]\n      tab5 [label = \"Delete or move oddball images into subdirectories (as needed)\"]\n      tab6 [label = \"Move images between folders if they are part of the same mission block (if needed)\"]\n      tab7 [label = \"Re-run uas_info() to update the location info and metadata\"]\n      tab8 [label = \"Move images into a structured directory tree\"]\n      tab9 [label = \"Export flight geometries to shp / kml files with uas_exp_kml() and uas_exp_shp() (as needed)\"]\n      tab10 [label = \"Create individual flight summaries with uas_report()\"]\n      tab11 [label = \"Create a Table of Content page for related flight summaries with uas_toc() (optional)\"]\n\n      # edge definitions with the node IDs\n      tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7 -> tab8 -> tab9 -> tab10 -> tab11;\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><br></p>
 <p>Currently, executing this workflow in <code>uasimg</code> requires <strong>writing R commands</strong> (i.e., in a script). This requires a knowledge of R, and a general understanding of what the functions do (explained below). In a future release, <code>uasimg</code> will have a GUI (wizard) that walks users through data management steps.</p>
 <p><br></p>
 <div id="copy-image-files-from-the-drone-to-a-hard-drive" class="section level1">

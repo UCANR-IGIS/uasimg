@@ -8,6 +8,13 @@
 
 <title>Create image thumbnails — uas_thumbnails_make • uasimg</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -41,6 +48,7 @@
 
 <meta property="og:title" content="Create image thumbnails — uas_thumbnails_make" />
 <meta property="og:description" content="Move UAS images into sub-directories by group" />
+<meta property="og:image" content="http://ucanr-igis.github.io/uasimg/logo.png" />
 
 
 
@@ -82,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.0</span>
       </span>
     </div>
 
@@ -150,7 +158,7 @@
 
     <pre class="usage"><span class='fu'>uas_thumbnails_make</span>(
   <span class='kw'>x</span>,
-  img_dir = <span class='kw'>NULL</span>,
+  flt_idx = <span class='kw'>NULL</span>,
   output_dir = <span class='kw'>NULL</span>,
   tb_width = <span class='fl'>400</span>,
   overwrite = <span class='fl'>FALSE</span>,
@@ -167,8 +175,8 @@
       <td><p>A list of class 'uas_info'</p></td>
     </tr>
     <tr>
-      <th>img_dir</th>
-      <td><p>Image folders in x to process (NULL to process all)</p></td>
+      <th>flt_idx</th>
+      <td><p>Flight indices in x to process, integer</p></td>
     </tr>
     <tr>
       <th>output_dir</th>
@@ -201,7 +209,7 @@
     <p>A named list (one element for each directory processed) of thumbnail files created in the output directory</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This will create thumbnail images for the drone images in <code>x</code>. <code>img_dir</code> allows you to specify a subset of folders
+    <p>This will create thumbnail images for the drone images in <code>x</code>. <code>flt_idx</code> allows you to specify a subset of flights
 in <code>x</code> to process. The default output folder is a sub-directory of each image
 folder called <em>map/tb</em>, which will be created if needed. This location can be overridden with <code>output_dir</code>.
 The dimensions of the thumbnails is determined by <code>tb_width</code>, from which the height is set automatically.</p>

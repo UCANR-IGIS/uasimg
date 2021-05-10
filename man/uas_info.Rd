@@ -65,8 +65,9 @@ many popular drone cameras. If your drone camera is not in the database, you can
 \emph{cameras.csv} file (see \code{\link{uas_cameras}} for details) and pass the file name as the
 \code{cameras} argument. Or contact the package maintainer to add your camera to the database.
 
-This function uses a free command line tool called EXIFtool to read the EXIF data, which can be downloaded
-from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}.  After you download it, rename the executable file,
+This function uses a free command line tool called EXIFtool to read the EXIF data. If you haven't already,
+you can install this by running \code{\link[exiftoolr]{install_exiftool}}. Alternately you can download exiftool
+from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}. After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
 \code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the

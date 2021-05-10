@@ -7,7 +7,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-# Drone Image Utilities
+# Drone Image Utilities <a href='http://ucanr-igis.github.io/uasimg'><img src='man/figures/logo.png' align="right" height="138" style="padding:10px;"/></a>
 
 `uasimg` helps manage images taken from an unoccupied aerial vehicle
 (UAV, or drone) that have been collected with the intent to stitch them
@@ -96,8 +96,8 @@ To verify it worked:
 
 ``` r
 exiftoolr::exif_version()
-#> Using ExifTool version 12.00
-#> [1] "12.00"
+#> Using ExifTool version 12.25
+#> [1] "12.25"
 ```
 
 Alternately, you can install exiftool manually by downloading it from

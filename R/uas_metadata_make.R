@@ -1,6 +1,6 @@
-#' Manage supplemental metadata files
+#' Create flight metadata text files
 #'
-#' Create and edit supplemental metadata files
+#' Create and/or edit flight metadata text files
 #'
 #' @param x A character vector of directories, or a uas_info object
 #' @param md_file Name of the file to create
@@ -49,14 +49,21 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
   ## Get the directories
   if (inherits(x, "uas_info")) {
-    dirs_use <- names(x)
+
+    ## Check to see if any of the flights in this object span multiple directories
+    for (i in 1:length(x)) {
+      if (length(unique(dirname(x[[i]]$pts$img_fn))) > 1) {
+        stop("Sorry, can't create flight metadata text files for flights whose images span multiple directories")
+      }
+    }
+
+    dirs_use <- sapply(x, function(y) unique(dirname(y$pts$img_fn)))
 
   } else if (is.character(x)) {
     dirs_use <- x
 
   } else {
     stop("x should be a uas_info object or a character vector of directory paths.")
-
   }
 
   ## Verify at least one action was requested
@@ -119,6 +126,7 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
   }
 
+  ## Create a variable to store any comment lines found (to preseve them)
   md_template_comments <- character(0)
 
   ## Read md_template and update the values in flds_lst
@@ -158,6 +166,7 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
   ## WILL DO THIS WITHIN THE LOOP
   ## flds_yaml <- paste(sapply(1:length(flds_lst), function(i) paste0(names(flds_lst)[i], ": ", flds_lst[[i]]) ), collapse = "\n\n")
 
+  ## In any comments lines were found, put them together to write to the output file
   if (length(md_template_comments) == 0) {
     md_comments_all <- ""
   } else {
@@ -165,22 +174,6 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
   }
 
   for (i in 1:length(dirs_use)) {
-
-    # md_fname <- md_files_use[i]
-    #
-    # ## Generate a filename suffix
-    # if (md_suffix_use[i] == "dir") {
-    #   ## Idea here is to generate a suffix based on name of the image folder (no longer think this is a good idea)
-    #   message(red("suffix = 'dir' is not supported yet"))
-    #
-    # } else if (md_suffix_use[i] != "") {
-    #   ## Assume that suffix is a literal string
-    #   md_fname <- paste0(file_path_sans_ext(md_fname),
-    #                      md_suffix_use[i], ".", file_ext(md_fname))
-    # }
-    #
-    # ## Compute the full filename
-    # md_fn <- file.path(dirs_use[i], md_fname)
 
     md_fn <- md_fnames[i]
 
@@ -190,7 +183,6 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
         if (!quiet) message(yellow(paste0(md_fn, " already exists. Skipping.")))
 
       } else {
-
 
         descript_line <- paste0("## FLIGHT METADATA FOR:\n## ", md_fn, "\n##\n",
                                 "## Tips: \n",
@@ -229,18 +221,12 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
     if (open && file.exists(md_fn)) {
       ## Open the metadata.txt file if needed
-      ## if (Sys.info()["sysname"] == "Windows") {
 
       if (use_system_editor) {
         ## Use the default text editor
-
-        ## The following is an ad-hoc fix in order to open Notpad on a Windows machine with a network path.
-        ## no longer needed
-        ## if (substr(md_fn, 1, 2) == "//") md_fn <- paste0("file:", md_fn)
-
         shell.exec(normalizePath(md_fn))
       } else {
-        ## Use whichever text editor is defined by getOption("editor")
+        ## Use whichever text editor is defined by RStudio's getOption("editor")
         file.edit(normalizePath(md_fn))
       }
     }

@@ -34,7 +34,6 @@ uas_cameras <- function(names_only = TRUE) {
   }
 }
 
-#'
 #' @describeIn uas_cameras Read cameras csv file
 #' @description Read a cameras.csv file
 #' @param cameras_fn The file name (including path) of a cameras.csv file
@@ -51,6 +50,7 @@ uas_readcameras <- function(cameras_fn) {
               model = col_character(),
               filetype = col_character(),
               camera_name = col_character(),
+              camera_abbrev = col_character(),
               sensor_width = col_double(),
               sensor_height = col_double(),
               img_width_def = col_integer(),

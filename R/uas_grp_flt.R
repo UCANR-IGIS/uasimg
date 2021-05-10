@@ -5,18 +5,23 @@
 #' @param interflt_units Time units between flights, see details "med_int" or "secs"
 #' @param init_fltnum Initial flight number
 #' @param min_images Minimum number of images to be considered a flight
-#' @param combine_dirs Parse the images in directories collectively
+#' @param cross_dirs Parse the images in directories collectively
 #' @param options Options and overrides for creating groups
 #' @param quiet Suppress messages
 #'
 #' @details
+#'
+#' cross_dirs means images in all directories will be examined when look for flights. This
+#' would be appropriate if the images from one flight were spread across multiple folders.
+#'
 #'
 #' @importFrom crayon green yellow
 #' @importFrom stats median
 #' @export
 
 ## STATUS AND TODO:
-##  need to think about options 'contiguous' and 'one'
+##  need to think about options 'one' (tree all images in all folders as one flight)
+## and 'contiguous' (????)
 ##
 ##  need to build in 'options' argument (manual break, gap delete)
 ##  need to create the print.uas_grp() function (can they go in this file?)
@@ -30,7 +35,7 @@
 ##       $interflt_val
 ##       $interflt_units
 ##       $min_images
-##       $combine_dirs
+##       $cross_dirs
 ##       $options
 
 ##    $grps[[   ]] (one element for each group/flight)
@@ -47,7 +52,7 @@
 
 uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "secs")[1],
                         init_fltnum = 1, min_images = 5,
-                        combine_dirs = TRUE,
+                        cross_dirs = TRUE,
                         options = NULL,
                         quiet = FALSE) {
 
@@ -60,7 +65,7 @@ uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "sec
                     interflt_val = interflt_val,
                     interflt_units = interflt_units,
                     min_images = min_images,
-                    combine_dirs = combine_dirs,
+                    cross_dirs = cross_dirs,
                     options = options)
   res$grps <- list()
   class(res) <- c("uas_grp", "list")
@@ -73,7 +78,7 @@ uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "sec
 
   ## Step 2. Create the processing group(s)
   imgdt_grps <- list()
-  if (combine_dirs) {
+  if (cross_dirs) {
     imgdt_grps[[1]] <- 1:nrow(imgdt_df)
   } else {
     for (i in 1:length(x)) {
@@ -162,12 +167,8 @@ uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "sec
 
     ## Next, construct a list of the flights for this processing group
     grps_lst <- list()
-    # j <- 1
 
-    ## get the fltnums right
-    # fltnums_use
-
-    #for (j in 1:length(fltnums_minimages)) {
+    ## Loop thru fltnums_use and build up grps_lst
     for (j in c(fltnums_use, -99)) {
 
       ## Get the rows from imgdt_df for this flight
@@ -189,7 +190,8 @@ uas_grp_flt <- function(x, interflt_val = 10, interflt_units = c("med_int", "sec
         subdirs_thisflt <- as.character(unique(thisflt_df$subdir))
 
         for (sdir in subdirs_thisflt) {
-          grps_lst[[grp_name]]$imgs[[sdir ]] <- thisflt_df[thisflt_df$subdir == sdir, "img_idx", drop = TRUE]
+          grps_lst[[grp_name]]$imgs[[sdir ]] <- thisflt_df[thisflt_df$subdir == sdir,
+                                                           "img_idx", drop = TRUE]
         }
 
       }
