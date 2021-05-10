@@ -24,6 +24,7 @@ params:
   thumbnails: !r NA
   kml_mcp_fn: !r NA
   kml_ctr_fn: !r NA
+  nomap: !r NA
 ---
 
 ```{js echo = FALSE}

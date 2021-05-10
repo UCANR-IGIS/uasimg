@@ -163,7 +163,7 @@ uas_thumbnails_make <- function(x, flt_idx = NULL, output_dir = NULL, tb_width =
                                paste0(file_path_sans_ext(basename(all_img_fn)),
                                       "_tb", all_img_suffixes, ".jpg")))
 
-    ## Save the base name of the thumbnail in the list returned
+    ## Save the base names (minus the path) of the thumbnail files to return
     res[[names(x)[i]]] <- basename(tb_fn)
 
     ## If *any* thumbnail needs to be created, go into a loop

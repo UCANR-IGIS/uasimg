@@ -1,3 +1,8 @@
+# uasimg 1.7.1 (2021-05-10)
+
+* `uas_report()`: fixed a bug parsing the results of `uas_thumbnails_make()`
+* `uas_report.Rmd`: added default value for parameter nomap
+
 # uasimg 1.7.0 (2021-05-09)
 
 NOTE: AFTER INSTALLING THIS UPDATE YOU SHOULD RUN `uas_clearcache()`
@@ -13,6 +18,7 @@ NOTE: AFTER INSTALLING THIS UPDATE YOU SHOULD RUN `uas_clearcache()`
 * `uas_worldfile()`, `uas_cropctr()`: updated for multi-folder flights
 * `uas_exp_shp()`, `uas_exp_kml()`: updated for multi-folder flights; argument `img_dir` replaced with `flt_idx`
 * `uas_thumbnails_make()`: argument `img_dir` replaced with `flt_idx`
+* hex logo added
 
 # uasimg 1.6.9 (2021-05-05)
 

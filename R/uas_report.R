@@ -124,6 +124,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
   }
 
   report_fn_vec <- NULL
+  first_pass_yn <- TRUE
 
   ## Start the loop
   for (i in 1:length(x)) {
@@ -290,9 +291,9 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
         # , use_magick = use_magick
 
-        ## Save the base name of the thumbnail in the attribute table for the points, so it can be
+        ## Save the base name (minus the path) of the thumbnail in the attribute table for the points, so it can be
         ## used in the leaflet map
-        x[[i]]$pts$tb_fn <- basename(tb_fn_lst[[img_dir]])
+        x[[i]]$pts$tb_fn <- basename(tb_fn_lst[[names(x)[i]]])
 
       }
 
@@ -331,14 +332,14 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       } else {
         ## Copy the Rmd file to the output_dir (temporarily)
         ## If output_dir is specfied, only need to do this on the first pass
-        if (is.null(output_dir) || i == 1) {
+        if (is.null(output_dir) || first_pass_yn) {
 
-          file.copy(from=report_rmd, to=render_dir, overwrite = FALSE)
+          file.copy(from=report_rmd, to=render_dir, overwrite = TRUE)
           report_rmd_use <- file.path(render_dir, basename(report_rmd))
 
           ## Copy the CSS file to the output_dir (permanently)
           report_css <- system.file("report/uas_report.css", package="uasimg")
-          file.copy(from=report_css, to=output_dir_use, overwrite = FALSE)
+          file.copy(from=report_css, to=output_dir_use, overwrite = TRUE)
 
           ## Create a list of output options that specify not self contained
           output_options <- list(self_contained=FALSE, lib_dir="libs")
@@ -352,7 +353,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         if (!is.null(header_html)) {
           if (file.exists(header_html)) {
             if (use_tmpdir) {
-              file.copy(from = header_html, to = temp_dir, overwrite = TRUE)
+              file.copy(from = header_html, to = temp_dir, overwrite = ifelse(first_pass_yn, TRUE, FALSE))
               includes_lst[["before_body"]] <- file.path(temp_dir, basename(header_html))
             } else {
               includes_lst[["before_body"]] <- header_html
@@ -365,7 +366,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         if (!is.null(footer_html)) {
           if (file.exists(footer_html)) {
             if (use_tmpdir) {
-              file.copy(from = footer_html, to = temp_dir, overwrite = TRUE)
+              file.copy(from = footer_html, to = temp_dir, overwrite = ifelse(first_pass_yn, TRUE, FALSE))
               includes_lst[["after_body"]] <- file.path(temp_dir, basename(footer_html))
             } else {
               includes_lst[["after_body"]] <- footer_html
@@ -478,6 +479,8 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
 
 
     }
+
+    first_pass_yn <- FALSE
 
   }
 
