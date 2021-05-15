@@ -172,6 +172,9 @@ that do useful things, such as:
 
   - `uas_convert()` converts image files from one format to another.
 
+  - `uas_move()` moves images into a standardized directory tree based
+    on metadata
+
 For more info, see the [Managing Drone Images with
 uasimg](https://ucanr-igis.github.io/uasimg/articles/uasimg.html)
 Vignette and function help pages.
@@ -210,7 +213,7 @@ uas_exp_shp(hast_ft1_info)
 uas_worldfile(hast_ft1_info)
 ```
 
-# Utilities for Single Image Analysis
+# Utilities for Individual Images
 
 The following utilities can help visualize and analyze individual
 images. These functions are based on the modeled image footprints, which

@@ -94,4 +94,9 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/ucanr-igis/uasimg/
+    presentations:
+      text: Presentations
+      menu:
+       - text: "Overview of Drone Image Utilities"
+         href: https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2021-05-13.html
 

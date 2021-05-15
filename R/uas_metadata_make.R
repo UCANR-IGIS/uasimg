@@ -22,8 +22,13 @@
 #' with an option to append a suffix \code{md_suffix}. Both \code{md_file}
 #' and \code{md_suffix} should be of length 1 or equal to the number of \code{x}.
 #'
-#' If \code{open = TRUE}, the text files will be opened. To open existing metadata text files, let \code{open = TRUE}
-#' and \code{make_new = FALSE}.
+#' If \code{open = TRUE}, the text file(s) will be opened. To open existing metadata text files, let \code{open = TRUE}
+#' and \code{make_new = FALSE}. By default, files will be opened with whichever text editor is in use by
+#' R (see \code{file.edit}). To use the system text editor, let \code{use_system_editor = TRUE}.
+#'
+#' To customize the fields that are added to flight metadata files, run \code{\link{uas_setflds}} first. To pre-populate some of the fields, pass
+#' the path to an existing metadata file as the value for \code{md_template}. \code{md_template} can either be a local file or
+#' online (\href{https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata}{example}).
 #'
 #' @return A character vector of the external metadata text file(s) created.
 #'
@@ -126,7 +131,7 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
   }
 
-  ## Create a variable to store any comment lines found (to preseve them)
+  ## Create a variable to store any comment lines found (to preserve them)
   md_template_comments <- character(0)
 
   ## Read md_template and update the values in flds_lst
@@ -162,11 +167,7 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
   }    ## if not is.null(md_template)
 
-  ## Generate the contents of the metadata file
-  ## WILL DO THIS WITHIN THE LOOP
-  ## flds_yaml <- paste(sapply(1:length(flds_lst), function(i) paste0(names(flds_lst)[i], ": ", flds_lst[[i]]) ), collapse = "\n\n")
-
-  ## In any comments lines were found, put them together to write to the output file
+  ## In any comments lines were found, paste them together to write to the output file
   if (length(md_template_comments) == 0) {
     md_comments_all <- ""
   } else {
@@ -184,6 +185,7 @@ uas_metadata_make <- function(x, md_file = "metadata.txt", md_suffix = NULL,
 
       } else {
 
+        ## Create the boilerplate intro:
         descript_line <- paste0("## FLIGHT METADATA FOR:\n## ", md_fn, "\n##\n",
                                 "## Tips: \n",
                                 "## `name_short` is used to generate default file names. Keep it short and avoid special characters.\n",

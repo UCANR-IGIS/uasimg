@@ -8,7 +8,7 @@ uas_move(
   x,
   flt_idx = NULL,
   tree,
-  outdir_root,
+  outdir_base,
   req_all_fltmdflds = TRUE,
   create_dirs = "ask",
   imgs_action = c("copy", "move", "none")[1],
@@ -27,7 +27,7 @@ uas_move(
 
 \item{tree}{Directory tree template filename or character vector, see Details}
 
-\item{outdir_root}{Output directory root}
+\item{outdir_base}{Output directory root}
 
 \item{req_all_fltmdflds}{Require all flight metadata fields in the directory tree template to be defined}
 

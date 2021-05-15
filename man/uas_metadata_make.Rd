@@ -55,8 +55,13 @@ can be either a character vector or a \code{\link{uas_info}} object. The files w
 with an option to append a suffix \code{md_suffix}. Both \code{md_file}
 and \code{md_suffix} should be of length 1 or equal to the number of \code{x}.
 
-If \code{open = TRUE}, the text files will be opened. To open existing metadata text files, let \code{open = TRUE}
-and \code{make_new = FALSE}.
+If \code{open = TRUE}, the text file(s) will be opened. To open existing metadata text files, let \code{open = TRUE}
+and \code{make_new = FALSE}. By default, files will be opened with whichever text editor is in use by
+R (see \code{file.edit}). To use the system text editor, let \code{use_system_editor = TRUE}.
+
+To customize the fields that are added to flight metadata files, run \code{\link{uas_setflds}} first. To pre-populate some of the fields, pass
+the path to an existing metadata file as the value for \code{md_template}. \code{md_template} can either be a local file or
+online (\href{https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata}{example}).
 }
 \seealso{
 \code{\link{uas_getflds}}, \code{\link{uas_setflds}}

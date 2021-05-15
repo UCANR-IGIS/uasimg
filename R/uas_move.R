@@ -5,7 +5,7 @@
 #' @param x A list of class 'uas_info'
 #' @param flt_idx Elements of x to move, integer
 #' @param tree Directory tree template filename or character vector, see Details
-#' @param outdir_root Output directory root
+#' @param outdir_base Output directory root
 #' @param req_all_fltmdflds Require all flight metadata fields in the directory tree template to be defined
 #' @param create_dirs Create the output directory tree
 #' @param imgs_action The action to take with images
@@ -33,7 +33,7 @@
 uas_move <- function(x,
                      flt_idx = NULL,
                      tree,
-                     outdir_root,
+                     outdir_base,
                      req_all_fltmdflds = TRUE,
                      create_dirs = "ask",
                      imgs_action = c("copy", "move", "none")[1],
@@ -56,9 +56,9 @@ uas_move <- function(x,
 
   if (!imgs_action %in% c("copy", "move", "none")) stop("Unknown value for imgs_action")
 
-  ## Chop off any trailing slashes from outdir_root
-  outdir_root_use <-  gsub("\\\\$|/$", "", outdir_root)
-  if (!file.exists(outdir_root)) stop(paste0("Base directory not found: ", outdir_root))
+  ## Chop off any trailing slashes from outdir_base
+  outdir_base_use <-  gsub("\\\\$|/$", "", outdir_base)
+  if (!file.exists(outdir_base)) stop(paste0("Base directory not found: ", outdir_base))
 
   ## Verify that that value(s) in flt_idx (if any) are valid
   if (is.null(flt_idx)) {
@@ -217,7 +217,7 @@ uas_move <- function(x,
     # }
 
     ## Now we're ready to create the directories
-    dirs_needed <- normalizePath(file.path(outdir_root, flt_tree_final), mustWork = FALSE)
+    dirs_needed <- normalizePath(file.path(outdir_base, flt_tree_final), mustWork = FALSE)
     dir_missing <- !file.exists(dirs_needed)
 
     # if (debug) {
@@ -267,7 +267,7 @@ uas_move <- function(x,
         copymove_yn <- (tolower(ans) == "y")
 
         if (copymove_yn) {
-          imgs_go_here <- normalizePath(file.path(outdir_root, flt_tree[1]), mustWork = FALSE)
+          imgs_go_here <- normalizePath(file.path(outdir_base, flt_tree[1]), mustWork = FALSE)
 
           ## Append the 'images go here' path to the pts attribute table
           img_fromto_tbl <- x[[i]]$pts %>%
@@ -287,9 +287,11 @@ uas_move <- function(x,
             img_fromto_tbl <- img_fromto_tbl %>%
               mutate(date_time_dt = as.POSIXct(date_time, format="%Y:%m:%d %H:%M:%S")) %>%
               mutate(file_name = paste0(format(date_time_dt, "%Y%m%d_%H%M%S_"), file_name))
+          } else {
+            ## TODO: check for duplicate file names right here
           }
 
-          ## Keep only required columns
+          ## Keep only columns required for the move operation
           img_fromto_tbl <- img_fromto_tbl %>%
             select(img_fn, file_name, dest_path)
 

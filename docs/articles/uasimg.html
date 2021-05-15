@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.2</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+      <a href="../articles/catalog_wrkflw.html">Cataloging Workflow</a>
     </li>
     <li>
       <a href="../articles/flight_metadata.html">Flight Metadata</a>
@@ -79,6 +79,18 @@
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Presentations
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2021-05-13.html">Overview of Drone Image Utilities</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -104,7 +116,7 @@
       <h1 data-toc-skip>Managing Drone Images with uasimg</h1>
                         <h4 class="author">Andy Lyons, University of California Division of Agriculture and Natural Resources</h4>
             
-            <h4 class="date">2021-05-10</h4>
+            <h4 class="date">2021-05-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ucanr-igis/uasimg/blob/master/vignettes/uasimg.Rmd"><code>vignettes/uasimg.Rmd</code></a></small>
       <div class="hidden name"><code>uasimg.Rmd</code></div>
@@ -153,18 +165,20 @@
 <p><code>uasimg</code> estimates image footprints and GSD (ground sampling distance, aka pixel size) based on the camera type and recorded height above ground level. Many drones record the altitude above the launch point, so if the study area is flat these estimates are reasonable (although the accuracy of the recorded altitude is not as accurate as the xy location). If the drone does not record the relative altitude (i.e., most multispectral cameras), you can pass the AGL altitude as an argument to <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
 <p>In hilly areas, or where the altitude of camera locations was variable, image footprints and GSD will always be over or under-estimated. If the distance from the drone to the ground is larger than the altitude above the launch point (e.g., flying over a valley), the GSD and footprint will be under-estimated (i.e., too small). Conversely when the distance to the ground is smaller than the above launch altitude (e.g., flying over a hill), the estimated GSD and footprint will be over-estimated.</p>
 </div>
-<div id="additional-metadata" class="section level2">
+<div id="flight-metadata" class="section level2">
 <h2 class="hasAnchor">
-<a href="#additional-metadata" class="anchor"></a>Additional Metadata</h2>
-<p>Some image information can be automatically extracted from the image files, including the date, time, location, camera type, focal length, etc. However other metadata fields have to be manually provided. These include the name of the pilot, a short description of the mission goals, download link, contact info, etc. These are referred to as <em>supplemental metadata</em>.</p>
-<p>There are two ways you can enter supplemental metadata - as function arguments or text files. The recommended way is to create a little text file in each image folder. This file will be automatically read assuming the file name starts with ‘metadata’ and ends with a ‘txt’ extension (e.g., <em>metadata_flt01.txt</em>). The file should be formmated as YAML, which looks like:</p>
+<a href="#flight-metadata" class="anchor"></a>Flight Metadata</h2>
+<p>A lot of information can be extracted from the image files, including the date, time, GPS location, camera type, focal length, etc. However other metadata fields pertaining to the flight have to be manually provided. These include things like the name of the pilot, a short description of the mission goals, download link, contact info, etc. These are referred to as <em>flight metadata</em>. Entering flight metadata is completely optional, but many of the more useful functions of uasimg, such as creating useful data catalogs and organizing images into structured directory trees, require flight metadata.</p>
+<p>There are two ways you can enter flight metadata - as function arguments or text files. The recommended way is to create a little text file in each image folder. This file will be automatically read assuming the file name starts with ‘metadata’ and ends with a ‘txt’ extension (e.g., <em>metadata.txt</em>, or <em>metadata-flt01.txt</em>). The file should be formatted as YAML, which looks like:</p>
 <pre><code>name_long: Point Pinole, West Grove, Flight 03
+name_short: ptpinole_wg_flt03
 description: Flight over west grove of Eucalyptus trees, 390ft, 90% overlap, 75 degrees off-nadir
 proj: ptpin
-loc: wg
+loc: ptpinole
+subloc: westgrove
 contact: Andy Lyons
 pilot: Andy Lyons
-data_url: </code></pre>
+data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
 <p>As seen in the example above, each line of the text file should start with a field name (without spaces), followed by a colon, followed by the value (this formatting style is also known as <em>YAML</em>). Blank lines and lines that start with <code>#</code> are ignored.</p>
 <p>Any metadata field can be added to the file as long as it follows these rules. The built-in Flight Summary page recognizes the following metadata fields:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">

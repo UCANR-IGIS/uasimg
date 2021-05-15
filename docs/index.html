@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.2</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/catalog_wrkflw.html">Cataloging Drone Images with uasimg: A Workflow</a>
+      <a href="articles/catalog_wrkflw.html">Cataloging Workflow</a>
     </li>
     <li>
       <a href="articles/flight_metadata.html">Flight Metadata</a>
@@ -79,6 +79,18 @@
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Presentations
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2021-05-13.html">Overview of Drone Image Utilities</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -190,6 +202,7 @@
 <li><p><code><a href="reference/uas_exp_kml.html">uas_exp_shp()</a></code> and <code><a href="reference/uas_exp_kml.html">uas_exp_kml()</a></code> exports flight geometries (image centroids, image footprints, and/or flight area) as Shapefiles or KML files. KML files can be imported into most flight planning software to refly the same area and/or plan a flight for an adjacent area.</p></li>
 <li><p><code><a href="reference/uas_worldfile.html">uas_worldfile()</a></code> creates small external XML files that allow images to be imported into GIS software and appear in their approximate footprint.</p></li>
 <li><p><code><a href="reference/uas_convert.html">uas_convert()</a></code> converts image files from one format to another.</p></li>
+<li><p><code><a href="reference/uas_move.html">uas_move()</a></code> moves images into a standardized directory tree based on metadata</p></li>
 </ul>
 <p>For more info, see the <a href="https://ucanr-igis.github.io/uasimg/articles/uasimg.html">Managing Drone Images with uasimg</a> Vignette and function help pages.</p>
 <div id="example" class="section level2">
@@ -217,9 +230,9 @@
 </pre></div>
 </div>
 </div>
-<div id="utilities-for-single-image-analysis" class="section level1">
+<div id="utilities-for-individual-images" class="section level1">
 <h1 class="hasAnchor">
-<a href="#utilities-for-single-image-analysis" class="anchor"></a>Utilities for Single Image Analysis</h1>
+<a href="#utilities-for-individual-images" class="anchor"></a>Utilities for Individual Images</h1>
 <p>The following utilities can help visualize and analyze individual images. These functions are based on the modeled image footprints, which as described above require the camera to record the relative altitude above ground.</p>
 <div id="world-files" class="section level2">
 <h2 class="hasAnchor">

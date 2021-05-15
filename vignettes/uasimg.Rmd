@@ -63,20 +63,22 @@ flt1_info <- uas_info("D:/Pix4D/PtPinole/imgs/wg/wg_flt01", cache = TRUE)
 
 In hilly areas, or where the altitude of camera locations was variable, image footprints and GSD will always be over or under-estimated. If the distance from the drone to the ground is larger than the altitude above the launch point (e.g., flying over a valley), the GSD and footprint will be under-estimated (i.e., too small). Conversely when the distance to the ground is smaller than the above launch altitude (e.g., flying over a hill), the estimated GSD and footprint will be over-estimated. 
 
-## Additional Metadata
+## Flight Metadata
 
-Some image information can be automatically extracted from the image files, including the date, time, location, camera type, focal length, etc. However other metadata fields have to be manually provided. These include the name of the pilot, a short description of the mission goals, download link, contact info, etc. These are referred to as *supplemental metadata*. 
+A lot of information can be extracted from the image files, including the date, time, GPS location, camera type, focal length, etc. However other metadata fields pertaining to the flight have to be manually provided. These include things like the name of the pilot, a short description of the mission goals, download link, contact info, etc. These are referred to as *flight metadata*. Entering flight metadata is completely optional, but many of the more useful functions of uasimg, such as creating useful data catalogs and organizing images into structured directory trees, require flight metadata.
 
-There are two ways you can enter supplemental metadata - as function arguments or text files. The recommended way is to create a little text file in each image folder. This file will be automatically read assuming the file name starts with 'metadata' and ends with a 'txt' extension (e.g., *metadata_flt01.txt*). The file should be formmated as YAML, which looks like:
+There are two ways you can enter flight metadata - as function arguments or text files. The recommended way is to create a little text file in each image folder. This file will be automatically read assuming the file name starts with 'metadata' and ends with a 'txt' extension (e.g., *metadata.txt*, or *metadata-flt01.txt*). The file should be formatted as YAML, which looks like:
 
 ```
 name_long: Point Pinole, West Grove, Flight 03
+name_short: ptpinole_wg_flt03
 description: Flight over west grove of Eucalyptus trees, 390ft, 90% overlap, 75 degrees off-nadir
 proj: ptpin
-loc: wg
+loc: ptpinole
+subloc: westgrove
 contact: Andy Lyons
 pilot: Andy Lyons
-data_url: 
+data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx
 ```
 
 As seen in the example above, each line of the text file should start with a field name (without spaces), followed by a colon, followed by the value (this formatting style is also known as *YAML*). Blank lines and lines that start with `#` are ignored.

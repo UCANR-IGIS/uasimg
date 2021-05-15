@@ -1,3 +1,9 @@
+# uasimg 1.7.2 (2021-05-14)
+
+* cameras.csv: added Mavic Air 2 (precision dimensions of sensor not available, hence footprints should be taken as estimates only)
+* `uas_move()`: renamed `outdir_root` to `outdir_base`.
+* updates to Readme and vignettes
+
 # uasimg 1.7.1 (2021-05-10)
 
 * `uas_report()`: fixed a bug parsing the results of `uas_thumbnails_make()`
