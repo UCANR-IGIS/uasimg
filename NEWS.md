@@ -1,3 +1,7 @@
+# uasimg 1.7.3 (2021-05-23)
+
+* `uas_report.Rmd`: fixed a bug when `group_img = FALSE`
+
 # uasimg 1.7.2 (2021-05-14)
 
 * cameras.csv: added Mavic Air 2 (precision dimensions of sensor not available, hence footprints should be taken as estimates only)

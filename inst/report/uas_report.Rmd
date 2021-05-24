@@ -152,7 +152,7 @@ if (!is.na(params$metadata$pilot %>% null2na())) cat("<tr><td>__Pilot__:</td><td
 
 if (!is.na(params$metadata$contact %>% null2na())) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$metadata$contact, "</span></td></tr>", sep = "")
 
-if (params$show_local_dir) cat("<tr><td>__Local dir__:</td><td>", gsub("\\\\","/",params$img_dir), "</td></tr>", sep = "")
+if (params$show_local_dir) cat("<tr><td>__Local dir__:</td><td>", gsub("\\\\", "/", params$img_dir), "</td></tr>", sep = "")
 
 if (!is.na(params$metadata$data_url %>% null2na())) cat("<tr><td>__Data URL__:</td><td>",  params$metadata$data_url, "</td></tr>", sep = "")
 
@@ -287,7 +287,7 @@ if (group_img) {
   
   ## Compute colors  
   if (is.na(params$col)) {
-    col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+    col_use <- rainbow(nrow(params$pts), end=5/6)
   } else {
     col_use <- params$col
   }

@@ -384,6 +384,8 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       ## Compute colors for the pts and fp
       if (is.null(col)) {
         # col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+        ## We pass col = NA to render() because colors for the footprints and center
+        ## could be different (e.g., there may be fewer footprints than centers)
         col_use <- NA
       } else {
         col_use <- col
