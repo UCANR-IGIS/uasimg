@@ -63,10 +63,8 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
 
   if (!file.exists(output_dir)) stop("output_dir does not exist")
 
-  ## Get the HTML report output filename
-  output_fn_use <- file.path(output_dir, output_fn)
-
-  if (file.exists(output_fn_use) && !overwrite_toc) stop(paste0(output_fn, " already exists. Use another output_fn, or set overwrite_toc = TRUE. Quitting."))
+  ## See if the HTML report output filename already exists
+  if (file.exists(file.path(output_dir, output_fn)) && !overwrite_toc) stop(paste0(output_fn, " already exists. Use another output_fn, or set overwrite_toc = TRUE. Quitting."))
 
   if (!is.null(footer_html)) {
     if (!file.exists(footer_html)) stop(paste0(footer_html, "not found"))
@@ -255,11 +253,10 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
   }
 
   ## Package up all the output options
-  output_options <- list(self_contained = FALSE, lib_dir = file.path(output_dir,"libs"),
+  output_options <- list(self_contained = FALSE, lib_dir = file.path(normalizePath(output_dir),"libs"),
                          includes = includes_lst)
 
-  # Render the TOC markdown file
-  toc_fn <- render(input = toc_rmd, output_dir = output_dir, output_file = output_fn,
+  toc_fn <- render(input = toc_rmd, output_dir = normalizePath(output_dir), output_file = output_fn,
                    output_options = output_options,
                    params=list(output_dir = output_dir,
                                output_fn = output_fn,

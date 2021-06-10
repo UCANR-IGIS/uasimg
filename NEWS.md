@@ -1,3 +1,7 @@
+# uasimg 1.7.4 (2021-06-10)
+
+* `uas_toc()`: fixed a bug when output_dir = ".", gather_dir = NULL, and input reports are on a different volume
+
 # uasimg 1.7.3 (2021-05-23)
 
 * `uas_report.Rmd`: fixed a bug when `group_img = FALSE`
