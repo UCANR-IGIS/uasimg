@@ -1,3 +1,7 @@
+# uasimg 1.7.5 (2021-07-28)
+
+* added Phantom 4 Pro V2 (FC6310S) to the camera database
+
 # uasimg 1.7.4 (2021-06-10)
 
 * `uas_toc()`: fixed a bug when output_dir = ".", gather_dir = NULL, and input reports are on a different volume
