@@ -1,3 +1,7 @@
+# uasimg 1.7.6 (2021-07-31)
+
+* added MicaSense Altum and MicaSence RedEdge-MX to the camera database
+
 # uasimg 1.7.5 (2021-07-28)
 
 * added Phantom 4 Pro V2 (FC6310S) to the camera database

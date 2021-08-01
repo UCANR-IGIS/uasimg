@@ -17,6 +17,8 @@ GoPro,HERO4 Black,JPEG,Hero4 Black/Silver,hero4,6.2,4.65,CMOS,rolling,4000,3000,
 Hasselblad,L1D-20c,JPEG,DJI Mavic 2 Pro Hasselblad,mav2pro,12.825,8.55,CMOS,unknown,5472,3648,10.478508,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19: L1D-20c_10.3_5472x3648,1 inch CMOS
 Hasselblad,L1D-20c,DNG,DJI Mavic 2 Pro Hasselblad,mav2pro,12.825,8.55,CMOS,global,5472,3648,10.478508,GimbalYawDegree,RelativeAltitude,Pix4D Camera Database v19: L1D-20c_10.3_5472x3648,1 inch CMOS
 MicaSense,RedEdge,TIFF,MicaSense RedEdge,re,4.8,3.6,CMOS,global,1280,960,5.5,none,none,https://support.micasense.com/hc/en-us/articles/225933127-RedEdge-Manual-Overview-and-Table-of-Contents,
+MicaSense,RedEdge-M,TIFF,MicaSense RedEdge-MX,remx,4.8,3.6,CMOS,global,1280,960,5.5,none,none,Pix4D Camera Database v19:RedEdge-M_5.5_1280x960,
+MicaSense,Altum,TIFF,MicaSense Altum,altum,7.1208,5.3268,CMOS,global,2064,1544,7.887356,Yaw,none,Pix4D Camera Database v19: Altum_8.0_2064x1544,"Thermal band is 160x120, different sensor size"
 Parrot,Sequoia,JPEG,Parrot Sequoia RGB,seqrgb,6.17472,4.63104,CMOS,rolling,4608,3456,4.88,Yaw,none,http://firmware.ardupilot.org/Tools/MissionPlanner/beta/upgrade/camerasBuiltin.xml,
 Parrot,Sequoia,TIFF,Parrot Sequoia MS,seqms,4.8,3.6,CMOS,global,1280,960,3.98,Yaw,none,http://firmware.ardupilot.org/Tools/MissionPlanner/beta/upgrade/camerasBuiltin.xml,
 senseFly,S.O.D.A.,JPEG,senseFly S.O.D.A.,soda,13.1328,8.7552,CMOS,global,5472,3648,10.633008,Yaw,none,Pix4D Camera Database v19: S.O.D.A._10.6_5472x3648,
