@@ -9,8 +9,8 @@
 #' @param fltmap_show Show a map of all flight areas, logical
 #' @param fltmap_kml Create a KML of all flight areas, logical
 #' @param fltmap_base A list object containing of background KML files and their symbology for the flight map, see Details.
-#' @param header_html HTML file name to use as a page header
-#' @param footer_html HTML file name to use as a page footer
+#' @param header_html HTML file name or URL to use as a page header
+#' @param footer_html HTML file name or URL to use as a page footer
 #' @param overwrite_toc Overwrite existing file, logical
 #' @param overwrite_gather Subdirectory of output_dir where HTML files will be copied
 #' @param open_toc Open the table of contents in a browser when done, logical
@@ -66,13 +66,13 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
   ## See if the HTML report output filename already exists
   if (file.exists(file.path(output_dir, output_fn)) && !overwrite_toc) stop(paste0(output_fn, " already exists. Use another output_fn, or set overwrite_toc = TRUE. Quitting."))
 
-  if (!is.null(footer_html)) {
-    if (!file.exists(footer_html)) stop(paste0(footer_html, "not found"))
-  }
-
-  if (!is.null(header_html)) {
-    if (!file.exists(header_html)) stop(paste0(header_html, "not found"))
-  }
+  # if (!is.null(footer_html)) {
+  #   if (!file.exists(footer_html)) stop(paste0(footer_html, "not found"))
+  # }
+  #
+  # if (!is.null(header_html)) {
+  #   if (!file.exists(header_html)) stop(paste0(header_html, "not found"))
+  # }
 
   if (FALSE %in% file.exists(html_reports)) {
     stop(paste0("File(s) not found: ", paste(html_reports[!file.exists(html_reports)], collapse = ", ")))
@@ -247,7 +247,36 @@ uas_toc <- function(html_reports, output_dir = ".", output_fn = "index.html",
 
   ## Create a list of includes if header or footer are passed
   if (!is.null(footer_html) || !is.null(header_html)) {
-    includes_lst <- list(before_body = header_html, after_body = footer_html)
+
+    if (is.null(header_html)) {
+      header_html_fn <- NULL
+    } else {
+      if (grepl("^http", header_html, ignore.case = TRUE)) {
+        header_html_fn <- tempfile("uas_header_", fileext = ".html")
+        download_successful <- download.file(url = header_html, destfile = header_html_fn)
+        if (download_successful != 0) stop("Could not download the header URL")
+        on.exit(unlink(header_html_fn))
+      } else {
+        if (!file.exists(header_html)) stop(paste0(header_html, "not found"))
+        header_html_fn <- header_html
+      }
+    }
+
+    if (is.null(footer_html)) {
+      footer_html_fn <- NULL
+    } else {
+      if (grepl("^http", footer_html, ignore.case = TRUE)) {
+        footer_html_fn <- tempfile("uas_footer_", fileext = ".html")
+        download_successful <- download.file(url = footer_html, destfile = footer_html_fn)
+        if (download_successful != 0) stop("Could not download the footer URL")
+        on.exit(unlink(footer_html_fn))
+      } else {
+        if (!file.exists(footer_html)) stop(paste0(footer_html, "not found"))
+        footer_html_fn <- footer_html
+      }
+    }
+
+    includes_lst <- list(before_body = header_html_fn, after_body = footer_html_fn)
   } else {
     includes_lst <- NULL
   }

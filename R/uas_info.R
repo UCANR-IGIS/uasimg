@@ -8,6 +8,7 @@
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
 #' @param cameras Location of the cameras.csv file. Is NULL the package csv file will be used.
 #' @param metadata A filename pattern for a metadata file, or a metadata list object (see Details)
+#' @param path2name_fun A function to generate the default short name (see Details)
 #' @param use_exiftoolr Whether to use the exiftoolr package, logical
 #' @param exiftool The path to the exiftool command line tool (omit if on the OS path). Ignored if use_exiftoolr = TRUE.
 #' @param exif_csv The file name of a new csv file where the exif data will be saved (omit to make a temp one)
@@ -53,9 +54,13 @@
 #' data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
 #' pilot: Andy Lyons
 #' description: These data were collected as part of a restoration monitoring program.
-#' notes: We had to pause the mission about half way through as an bird was getting close, hence there is a time
-#' of about 30 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
+#' notes: We had to pause the mission about half way through as a hawk was getting close, hence there is a time lapse
+#' of about 45 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
 #' }
+#'
+#' \code{path2name_fun} can be a function to generate a default short name for the flight. The function should
+#' be written to accept one and only one argument - a directory path. This can be useful if the default
+#' short names should be constructed from pieces of the image directory path. See also \code{\link{uas_path2name_fun}}.
 #'
 #' \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
 #' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
@@ -68,7 +73,7 @@
 #' image centroids (as a sf data frame), footprints, total area, minimum convex polygon,
 #' total directory size, the data flown, and external metadata.
 #'
-#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}
+#' @seealso \code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_path2name_fun}}
 #'
 #' @import dplyr
 #' @import sf
@@ -76,6 +81,7 @@
 #' @importFrom digest digest
 #' @importFrom tidyr replace_na
 #' @importFrom dplyr filter select left_join mutate
+#' @importFrom magrittr extract2 %>%
 #' @importFrom utils read.csv
 #' @importFrom sf st_as_sf st_coordinates st_polygon st_drop_geometry st_sf st_sfc
 #' @importFrom crayon yellow green red magenta bold
@@ -83,8 +89,12 @@
 #' @export
 
 uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
-                     cameras = NULL, metadata = "metadata.*\\.txt",
+                     cameras = NULL, metadata = "metadata.*\\.txt", path2name_fun = NULL,
                      use_exiftoolr = TRUE, exiftool = NULL, exif_csv = NULL, cache = TRUE, update_cache = FALSE, quiet = FALSE) {
+
+
+  ## Define the date for a cache to be considered valid (due to update in the package)
+  cache_valid_date <- ISOdatetime(2021, 5, 9, 0, 0, 0)
 
   ## See if all directory(s) exist
   for (img_dir in img_dirs) {
@@ -114,7 +124,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
   short_names[["imagewidth"]] <- "img_width"
   short_names[["imageheight"]] <- "img_height"
   short_names[["relativealtitude"]] <- "alt_agl"
-  ##short_names[[tolower(camera_tag_yaw)]] <- "yaw"   WILL DO THIS ONE BELOW AFTER WE GET THE CAMERA
   short_names[["sensor_width"]] <- "sens_wdth"
   short_names[["sensor_height"]] <- "sens_hght"
   short_names[["gsd"]] <- "gsd"
@@ -202,7 +211,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
           cache_pathfn <- file.path(cache_dir_use, cache_fn)
           if (file.exists(cache_pathfn)) {
             ## Make sure its newer than the release of version 1.7.0
-            if (file.mtime(cache_pathfn) > ISOdatetime(2021, 5, 9, 0, 0, 0)) {
+            if (file.mtime(cache_pathfn) > cache_valid_date) {
               load(cache_pathfn)
               cache_loaded <- TRUE
               if (!quiet) message(yellow(" - Using cached data"))
@@ -228,13 +237,8 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
       csv_first_fn <- tempfile(pattern="~map_uas_", fileext = ".csv")
 
-      #if (!file.exists(csv_first_fn)) stop("Couldn't create a temp file. Restart R and try again.")
-
       system2(exiftool_exec, args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
               stdout=csv_first_fn, stderr=FALSE)
-
-      # system2("exiftool", args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
-      #         stdout=csv_first_fn, stderr=FALSE)
 
       exif_first_df <- read.csv(csv_first_fn, stringsAsFactors = FALSE)
 
@@ -252,30 +256,67 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       sensor_this_df <- sensors_df %>%
         filter(model == camera_model & filetype == camera_filetype) %>%
         as.data.frame()
-      if (nrow(sensor_this_df)==0) stop(paste(camera_make, camera_model, camera_filetype, "not found in the database of known sensors. To get it added, contact the package author via email, or create an issue on GitHub. "))
 
-      ## Get the composite camera name from the sensor database
-      camera_name <- sensor_this_df[1, "camera_name"]
-      if (!quiet) message(yellow(" - Found", camera_name))
+      if (nrow(sensor_this_df)==0) {
 
-      ## Get the tag for yaw for this camera
-      camera_tag_yaw <- sensor_this_df[1, "tag_yaw"]
-      short_names[[tolower(camera_tag_yaw)]] <- "yaw"
+        ## UNKNOWN SENSOR!!!!
 
-      ## See if this camera stores elevation above ground level
-      camera_agl_tag <- sensor_this_df[1, "tag_elev_agl"]
-      camera_has_agl <- (tolower(camera_agl_tag) != "none")
+        ## right here I need to get **all** the fields, so I can see which one is the date time
+        # system2(exiftool_exec, args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
+        #         stdout=csv_first_fn, stderr=FALSE)
 
-      if (is.null(alt_agl) && !camera_has_agl) {
+
+        if (!quiet) message(yellow(paste0(" - Unknown sensor: ", camera_make, " ", camera_model)))
+        if (!quiet) message(yellow(" - to add this camera to the database, please contact the package author via email, or create an issue on GitHub"))
+        if (!quiet) message(yellow(" - using generic camera settings"))
+
+        camera_name <- "unknown camera"
+        camera_tag_yaw <- "none"
+        camera_tag_dt <- "DateTimeOriginal" ## this could cause an error
+        short_names[["none"]] <- "yaw"
+        camera_agl_tag <- "none"
+        camera_has_agl <- FALSE
         agl_avail <- FALSE
-        if (fp || fwd_overlap) {
-          warning("Can not estimate footprints - above ground altitude was not saved in the images, and no value for alt_agl was passed.")
-        }
-        # stop("alt_agl argument required (relative altitude not saved in image files)")
+
       } else {
-        agl_avail <- TRUE
+
+        ## Get the human-friendly camera name from the sensor database
+        camera_name <- sensor_this_df[1, "camera_name", drop = TRUE]
+
+        ## TODO NOT SURE WHY ITS PUTTING A BLANK LINE AFTER THE FOLLOWING MESSAGE
+        ## I'VE TRIED A LOT OF DIFFERENT THINGS
+        if (!quiet) message(yellow(paste(" - Found", camera_name)))
+
+        ## Get the tag for yaw for this camera
+        camera_tag_yaw <- sensor_this_df[1, "tag_yaw"]
+        short_names[[tolower(camera_tag_yaw)]] <- "yaw"
+
+        ## Get the date_time field(s) for this camera. Usually this will be "DateTimeOriginal" but there are
+        ## some cameras that don't have this EXIF tag, in which case we can use GPSDateStamp|GPSTimeStamp
+        camera_tag_dt <- sensor_this_df[1, "date_time"]  %>% strsplit("\\|") %>% extract2(1)
+
+        ## See if this camera stores elevation above ground level
+        camera_agl_tag <- sensor_this_df[1, "tag_elev_agl"]
+        camera_has_agl <- (tolower(camera_agl_tag) != "none")
+
+        if (is.null(alt_agl) && !camera_has_agl) {
+          agl_avail <- FALSE
+          if (fp || fwd_overlap) {
+            warning_msg <- "Can not estimate footprints - above ground altitude was not saved in the images, and no value for alt_agl was passed."
+            if (quiet) {
+              warning(warning_msg)
+            } else {
+              message(red(" -", warning_msg))
+            }
+          }
+          # stop("alt_agl argument required (relative altitude not saved in image files)")
+        } else {
+          agl_avail <- TRUE
+        }
+
       }
 
+      ######################################
       ## Still to come - incorporate non-nadir GimbalPitchDegree
 
       # Construct exif_csv file name
@@ -285,9 +326,11 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         exif_csv_fn <- exif_csv
       }
 
-      # Identify EXIF tags to extract
-      exif_tags <- c("FileName", "FileType", "FileSize#", "DateTimeOriginal", "GPSLatitude", "GPSLongitude",
-                     "GPSAltitude", "Make", "Model", "FocalLength", "ImageWidth", "ImageHeight", camera_tag_yaw)
+      # Identify EXIF tags to extract. These are generic for all / most cameras
+      exif_tags <- c("FileName", "FileType", "FileSize#", "GPSLatitude", "GPSLongitude",
+                     "GPSAltitude", "Make", "Model", "FocalLength", "ImageWidth", "ImageHeight",
+                     camera_tag_dt, camera_tag_yaw)
+
       if (camera_has_agl) exif_tags <- c(exif_tags, camera_agl_tag)
 
       ## Construct args
@@ -295,6 +338,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
       # Run exiftool command
       if (!quiet) message(yellow(" - Running exiftool (this can take a while)..."), appendLF = FALSE)
+
       suppressWarnings(system2(exiftool_exec, args = str_args, stdout = exif_csv_fn, stderr = FALSE))
       if (!quiet) message(yellow("Done."))
       if (!file.exists(exif_csv_fn)) {
@@ -302,11 +346,12 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       }
 
       # Import EXIF CSV
+
       exif_df <- read.csv(exif_csv_fn, stringsAsFactors=FALSE)
       if (is.null(exif_csv)) file.remove(exif_csv_fn)
       names(exif_df) <- tolower(names(exif_df))
 
-      ## Right here we need to do some checks for tags
+      ## TODO Right here we need to do some checks for tags
 
       ## Filter out images with incomplete EXIF info
       idx_incomplete <- which(is.na(exif_df$gpslatitude) |
@@ -314,7 +359,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
                                 is.na(exif_df$model) |
                                 is.na(exif_df$filetype))
       if (length(idx_incomplete) > 0) exif_df <- exif_df[-idx_incomplete, ]
-
 
       ## Filter out images with 0 elevation
       if (agl_avail) {
@@ -328,15 +372,38 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       total_size_mb <- round(sum(exif_df$filesize) / 1048576)
       if (!quiet) message(yellow(paste0(" - Total file size: ", total_size_mb, " MB")))
 
+      ## If datetimeoriginal doesn't exist, try to create it
+      if (!"datetimeoriginal" %in% names(exif_df)) {
+        exif_df[["datetimeoriginal"]] <- apply(exif_df[, tolower(camera_tag_dt), drop = FALSE], 1, paste, collapse = " ")
+
+        ## see if it worked
+        test_dt <- as.POSIXct(exif_df[1, "datetimeoriginal", drop=TRUE], format = "%Y:%m:%d %H:%M:%S")
+        if (!inherits(test_dt, "POSIXct")) {
+          warning_msg <- "Can't construct the timestamps"
+          if (quiet) {
+            warning(warning_msg)
+          } else {
+            message(red(" -", warning_msg))
+          }
+          exif_df[["datetimeoriginal"]] <- "1970-01-01 12:00:00"
+        }
+      }
+
       ## Get the date flown
       flight_date_dt <- as.Date(exif_df[1, "datetimeoriginal", drop=TRUE], format = "%Y:%m:%d %H:%M:%S")
       flight_date_str <- format(flight_date_dt, "%Y-%m-%d")
 
       ## Add the sensor dimensions to to exif_df
-      sensor_info_df <- sensors_df %>%
-        select(model, camera_name, camera_abbrev, filetype, sensor_width, sensor_height)
+      if (camera_name == "unknown camera") {
+        exif_df <- exif_df %>%
+          mutate(camera_name = camera_name, camera_abbrev = "unknown", sensor_width = 0, sensor_height = 0)
 
-      exif_df <- exif_df %>% left_join(sensor_info_df, by=c("model" = "model", "filetype" = "filetype"))
+      } else {
+        sensor_info_df <- sensors_df %>%
+          select(model, camera_name, camera_abbrev, filetype, sensor_width, sensor_height)
+
+        exif_df <- exif_df %>% left_join(sensor_info_df, by=c("model" = "model", "filetype" = "filetype"))
+      }
 
       ## no longer needed - these columns are now brought in a factors in readcameras()
       # mutate(make = as.factor(make)
@@ -367,8 +434,13 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
       if (!("gpslongitude" %in% names(exif_df) && "gpslatitude" %in% names(exif_df))) {
 
-        warning(paste0("gpslongitude and/or gpslatitude not found in the EXIF data for ",
-                       img_dir, ". Skipping centroids and footprints."))
+        warning_msg <- paste0("gpslongitude and/or gpslatitude not found in the EXIF data for ",
+                            img_dir, ". Skipping centroids and footprints.")
+        if (quiet) {
+          warning(warning_msg)
+        } else {
+          message(red(" -", warning_msg))
+        }
 
         imgs_ctr_utm_sf <- NA
         fp_utm_sf <- NA
@@ -387,7 +459,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         ## Compute footprints
         if (!fp || !agl_avail || tolower(camera_tag_yaw) == "none" || sum(exif_df$sensor_width) == 0) {
           fp_utm_sf <- NA
-          if (!quiet && sum(exif_df$sensor_width) == 0) message(yellow(" - Sensor size not available for this camera"))
+            if (!quiet && sum(exif_df$sensor_width) == 0) message(yellow(" - Sensor size not available for this camera"))
           if (!quiet) message(yellow(" - Skipping footprints"))
           nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
 
@@ -515,18 +587,49 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
 
       }  #if (!("gpslongitude" %in% names(exif_df) && "gpslatitude" %in% names(exif_df)))
 
-    }
+      ## CREATE AN ID STRING (WHICH WILL BE USED AS THE DEFAULT SHORT_NAME ALSO)
+      if (is.null(path2name_fun)) {
 
-    ## Create an id string
-    dt_str <- gsub(" ", "_", gsub(":", "-", sort(imgs_ctr_utm_sf$date_time)[1]))
-    type_count <- imgs_ctr_utm_sf %>%
-      st_drop_geometry() %>%
-      group_by(filetype) %>%
-      count() %>%
-      mutate(type_count = paste0(n, filetype, "s")) %>%
-      pull(type_count) %>%
-      paste(collapse = "_")
-    id_str <- paste0(dt_str, "_", type_count)
+        ## THIS BLOCK WAS CAUSING AN ERROR WHEN imgs_ctr_utm_sf WAS NULL
+        ## BECAUSE gpslongitude WAS NOT FOUND ABOVE
+
+            # if ("date_time" %in% names(imgs_ctr_utm_sf)) {
+            #   dt_str <- paste0(gsub(" ", "_", gsub(":", "-", sort(imgs_ctr_utm_sf$date_time)[1])), "_")
+            # } else {
+            #   dt_str <- ""
+            # }
+
+        if ("datetimeoriginal" %in% names(exif_df)) {
+          dt_str <- paste0(gsub(" ", "_", gsub(":", "-", sort(exif_df$datetimeoriginal)[1])), "_")
+        } else {
+          dt_str <- ""
+        }
+
+        # type_count <- imgs_ctr_utm_sf %>%    ## THIS WAS CAUSING AN ERROR WHEN imgs_ctr_utm_sf WAS NULL
+        #   st_drop_geometry() %>%             ## BECAUSE gpslongitude WAS NOT FOUND ABOVE
+        #   group_by(filetype) %>%
+        #   count() %>%
+        #   mutate(type_count = paste0(n, filetype, "s")) %>%
+        #   pull(type_count) %>%
+        #   paste(collapse = "_")
+
+        type_count <- exif_df %>%
+          group_by(filetype) %>%
+          count() %>%
+          mutate(type_count = paste0(n, filetype, "s")) %>%
+          pull(type_count) %>%
+          paste(collapse = "_")
+
+        id_str <- paste0(dt_str, type_count)
+
+      }  else {
+        ## path2name_fun is NOT NULL (presume it's a function)
+        id_str <- path2name_fun(img_dir)
+
+      }
+
+
+    } # if !cache_loaded
 
     ## Cache results (if not already cached)
     if (save_to_cache) {
@@ -606,7 +709,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         }    ## for (md_fn in metadata_fn)
 
       }
-
 
     } else {
       warning("Unknown object for metadata")

@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
       </span>
     </div>
 
@@ -168,21 +168,21 @@
     <p>Move UAS images into sub-directories</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uas_move</span>(
-  <span class='kw'>x</span>,
-  flt_idx = <span class='kw'>NULL</span>,
-  <span class='kw'>tree</span>,
-  <span class='kw'>outdir_base</span>,
-  req_all_fltmdflds = <span class='fl'>TRUE</span>,
-  create_dirs = <span class='st'>"ask"</span>,
-  imgs_action = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"copy"</span>, <span class='st'>"move"</span>, <span class='st'>"none"</span>)[<span class='fl'>1</span>],
-  imgs_prepend_fn = <span class='fl'>FALSE</span>,
-  write_metadata = <span class='fl'>TRUE</span>,
-  preview_only = <span class='fl'>FALSE</span>,
-  tb_action = <span class='kw'>imgs_action</span>,
-  map_action = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"copy"</span>, <span class='st'>"move"</span>, <span class='st'>"none"</span>)[<span class='fl'>3</span>],
-  quiet = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>uas_move</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  flt_idx <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>tree</span>,
+  <span class='va'>outdir_base</span>,
+  req_all_fltmdflds <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  create_dirs <span class='op'>=</span> <span class='st'>"ask"</span>,
+  imgs_action <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"copy"</span>, <span class='st'>"move"</span>, <span class='st'>"none"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
+  imgs_prepend_fn <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  write_metadata <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  preview_only <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  tb_action <span class='op'>=</span> <span class='va'>imgs_action</span>,
+  map_action <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"copy"</span>, <span class='st'>"move"</span>, <span class='st'>"none"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

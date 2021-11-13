@@ -67,9 +67,9 @@ uas_report(
 
 \item{report_rmd}{Rmd template used to generate the HTML file. See Details.}
 
-\item{header_html}{A HTML file for the header}
+\item{header_html}{A HTML file name or URL to use as the header}
 
-\item{footer_html}{A HTML file for the footer}
+\item{footer_html}{A HTML file name or URL to use as the footer}
 
 \item{use_tmpdir}{Use the temp dir for processing}
 

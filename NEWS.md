@@ -1,3 +1,22 @@
+# uasimg 1.7.9 (2021-11-11)
+
+* `uas_info()`: added argument `path2name_fun`; modified to support new `date_time` column in cameras.csv
+* `uas_path2name_fun()`: new function that returns a function to parse a directory path and concatenate user-specified elements to form a flight name; designed to be passed as the value of the `path2name_fun` argument in
+`uas_info()` to construct default flight names
+* `uas_report()` and `uas_toc()`: arguments `header_html` and `footer_html` can now accept URLs
+* `magrittr` package added to imports (needed to use the results of `uas_path2name_fun()`)
+* `cameras.csv` added `date_time` column (to accommodate the cameras like the Airphen that don't have a DateTimeOrginal EXIF tag)
+* `uas_readcameras()` added `date_time` column to import
+
+# uasimg 1.7.8 (2021-10-25)
+
+* `uas_info()`: fix a bug that occurred when gpslatitude and gpslongitude were not found in EXIF data
+
+# uasimg 1.7.7 (2021-09-15)
+
+* added Airphen to the camera database
+* `uas_info()`: modified such that a generic camera is used if the camera is not detected
+
 # uasimg 1.7.6 (2021-07-31)
 
 * added MicaSense Altum and MicaSence RedEdge-MX to the camera database

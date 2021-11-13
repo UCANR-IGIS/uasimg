@@ -59,6 +59,7 @@ reference:
   - title: Other Utility Functions
     desc: Other utility functions
     contents:
+      - uas_path2name_fun
       - uas_dirs_find
       - findonpath
       - geo2utm

@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
       </span>
     </div>
 
@@ -110,7 +110,7 @@
 
       
 
-      </header><script src="flight_metadata_files/header-attrs-2.7/header-attrs.js"></script><script src="flight_metadata_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="flight_metadata_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Flight Metadata</h1>
@@ -193,12 +193,11 @@ tags: HREC, RiverFire2020</code></pre>
 <h1 class="hasAnchor">
 <a href="#what-are-the-standard-flight-metadata-fields" class="anchor"></a>What are the ‘standard’ flight metadata fields?</h1>
 <p>There are no industry standards for metadata for drone flights. <code>uasimg</code> provide the following ‘out-of-the-box’ defaults:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span>()
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span>
 <span class="co">#&gt;  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span>
-<span class="co">#&gt; [11] "notes"</span>
-</pre></div>
+<span class="co">#&gt; [11] "notes"</span></code></pre></div>
 <p><br></p>
 <p><em>Default Metadata Fields for Drone Flights</em></p>
 <table class="table tbl_compact">
@@ -306,22 +305,21 @@ note about how the flight went, anything else
 <h1 class="hasAnchor">
 <a href="#how-do-i-change-the-default-flight-metadata-fields" class="anchor"></a>How do I change the default flight metadata fields?</h1>
 <p><code><a href="../reference/uas_info.html">uas_info()</a></code> will always import whatever it finds in the accompanying <em>metadata.txt</em> file. You can however customize the fields that appear in a ‘blank’ metadata file created by <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co">## View default flight metadata fields</span>
-<span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span>()
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## View default flight metadata fields</span>
+<span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span>
 <span class="co">#&gt;  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span>
 <span class="co">#&gt; [11] "notes"</span>
 
 <span class="co">## Set default flight metadata fields</span>
-<span class="fu"><a href="../reference/uas_setflds.html">uas_setflds</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"name_short"</span>, <span class="st">"name_long"</span>, <span class="st">"proj"</span>, <span class="st">"subproj"</span>, <span class="st">"site_name"</span>, <span class="st">"weather"</span>, <span class="st">"aircraft"</span>, <span class="st">"client"</span>))
+<span class="fu"><a href="../reference/uas_setflds.html">uas_setflds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"name_short"</span>, <span class="st">"name_long"</span>, <span class="st">"proj"</span>, <span class="st">"subproj"</span>, <span class="st">"site_name"</span>, <span class="st">"weather"</span>, <span class="st">"aircraft"</span>, <span class="st">"client"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;  - Default metadata fields set to: name_short, name_long, proj, subproj, site_name, weather, aircraft, client</span>
 
 <span class="co">## View default flight metadata fields</span>
-<span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span>()
+<span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; [1] "name_short" "name_long"  "proj"       "subproj"    "site_name" </span>
-<span class="co">#&gt; [6] "weather"    "aircraft"   "client"</span>
-</pre></div>
+<span class="co">#&gt; [6] "weather"    "aircraft"   "client"</span></code></pre></div>
 <p>Tip 1: <code>name_short</code> and <code>name_long</code> are used in several <code>uasimg</code> functions that export files and create flight summaries. Hence it is recommended to always include these fields in your flight metadata.</p>
 <p>Tip 2: to set the default metadata fields back to the factory presets, run <code><a href="../reference/uas_setflds.html">uas_setflds()</a></code> without any arguments</p>
 </div>
@@ -329,19 +327,17 @@ note about how the flight went, anything else
 <h1 class="hasAnchor">
 <a href="#how-do-i-create-metadata-files-with-default-values" class="anchor"></a>How do I create metadata files with default values?</h1>
 <p>You may have a few standard metadata fields for which the values can be safely pre-populated (e.g., name of the organization, name of the pilot, name of the aircraft, etc.). You can tell <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> to use these pre-populated values when generating new metadata text files with the <code>md_template</code> argument:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co">## Define a master metadata template, with some fields pre-populated</span>
-<span class="kw">md_template_fn</span> <span class="op">&lt;-</span> <span class="st">"~/master_flight_metadata.txt"</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Define a master metadata template, with some fields pre-populated</span>
+<span class="va">md_template_fn</span> <span class="op">&lt;-</span> <span class="st">"~/master_flight_metadata.txt"</span>
   
-<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span>(<span class="kw">barn_info</span>, make_new = <span class="fl">TRUE</span>, open = <span class="fl">TRUE</span>, md_template = <span class="kw">md_template_fn</span>)
-</pre></div>
+<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">barn_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, open <span class="op">=</span> <span class="cn">TRUE</span>, md_template <span class="op">=</span> <span class="va">md_template_fn</span><span class="op">)</span></code></pre></div>
 <p>The ‘master’ metadata template can even be online. Just make sure the URL returns raw text [<a href="https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata">example</a>].</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co">## Define a master metadata template, with some fields pre-populated</span>
-<span class="kw">md_template_url</span> <span class="op">&lt;-</span> <span class="st">"https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata"</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Define a master metadata template, with some fields pre-populated</span>
+<span class="va">md_template_url</span> <span class="op">&lt;-</span> <span class="st">"https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata"</span>
   
-<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span>(<span class="kw">barn_info</span>, make_new = <span class="fl">TRUE</span>, open = <span class="fl">TRUE</span>, md_template = <span class="kw">md_template_url</span>)
-</pre></div>
+<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">barn_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, open <span class="op">=</span> <span class="cn">TRUE</span>, md_template <span class="op">=</span> <span class="va">md_template_url</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level1">
 <h1 class="hasAnchor">

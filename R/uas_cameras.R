@@ -51,6 +51,7 @@ uas_readcameras <- function(cameras_fn) {
               filetype = col_character(),
               camera_name = col_character(),
               camera_abbrev = col_character(),
+              date_time = col_character(),
               sensor_width = col_double(),
               sensor_height = col_double(),
               img_width_def = col_integer(),

@@ -89,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
       </span>
     </div>
 
@@ -162,6 +162,41 @@
       <small>Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="uasimg-179-2021-11-11" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.9">
+<a href="#uasimg-179-2021-11-11" class="anchor"></a>uasimg 1.7.9 (2021-11-11)</h1>
+<ul>
+<li>
+<code><a href="../reference/uas_info.html">uas_info()</a></code>: added argument <code>path2name_fun</code>; modified to support new <code>date_time</code> column in cameras.csv</li>
+<li>
+<code><a href="../reference/uas_path2name_fun.html">uas_path2name_fun()</a></code>: new function that returns a function to parse a directory path and concatenate user-specified elements to form a flight name; designed to be passed as the value of the <code>path2name_fun</code> argument in <code><a href="../reference/uas_info.html">uas_info()</a></code> to construct default flight names</li>
+<li>
+<code><a href="../reference/uas_report.html">uas_report()</a></code> and <code><a href="../reference/uas_toc.html">uas_toc()</a></code>: arguments <code>header_html</code> and <code>footer_html</code> can now accept URLs</li>
+<li>
+<code>magrittr</code> package added to imports (needed to use the results of <code><a href="../reference/uas_path2name_fun.html">uas_path2name_fun()</a></code>)</li>
+<li>
+<code>cameras.csv</code> added <code>date_time</code> column (to accommodate the cameras like the Airphen that don’t have a DateTimeOrginal EXIF tag)</li>
+<li>
+<code><a href="../reference/uas_cameras.html">uas_readcameras()</a></code> added <code>date_time</code> column to import</li>
+</ul>
+</div>
+    <div id="uasimg-178-2021-10-25" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.8">
+<a href="#uasimg-178-2021-10-25" class="anchor"></a>uasimg 1.7.8 (2021-10-25)</h1>
+<ul>
+<li>
+<code><a href="../reference/uas_info.html">uas_info()</a></code>: fix a bug that occurred when gpslatitude and gpslongitude were not found in EXIF data</li>
+</ul>
+</div>
+    <div id="uasimg-177-2021-09-15" class="section level1">
+<h1 class="page-header" data-toc-text="1.7.7">
+<a href="#uasimg-177-2021-09-15" class="anchor"></a>uasimg 1.7.7 (2021-09-15)</h1>
+<ul>
+<li>added Airphen to the camera database</li>
+<li>
+<code><a href="../reference/uas_info.html">uas_info()</a></code>: modified such that a generic camera is used if the camera is not detected</li>
+</ul>
+</div>
     <div id="uasimg-176-2021-07-31" class="section level1">
 <h1 class="page-header" data-toc-text="1.7.6">
 <a href="#uasimg-176-2021-07-31" class="anchor"></a>uasimg 1.7.6 (2021-07-31)</h1>

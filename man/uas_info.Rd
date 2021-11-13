@@ -11,6 +11,7 @@ uas_info(
   fwd_overlap = fp,
   cameras = NULL,
   metadata = "metadata.*\\\\.txt",
+  path2name_fun = NULL,
   use_exiftoolr = TRUE,
   exiftool = NULL,
   exif_csv = NULL,
@@ -31,6 +32,8 @@ uas_info(
 \item{cameras}{Location of the cameras.csv file. Is NULL the package csv file will be used.}
 
 \item{metadata}{A filename pattern for a metadata file, or a metadata list object (see Details)}
+
+\item{path2name_fun}{A function to generate the default short name (see Details)}
 
 \item{use_exiftoolr}{Whether to use the exiftoolr package, logical}
 
@@ -90,9 +93,13 @@ name_long: Hopland Research and Extension Center, Watershed II Flight 3
 data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
 pilot: Andy Lyons
 description: These data were collected as part of a restoration monitoring program.
-notes: We had to pause the mission about half way through as an bird was getting close, hence there is a time
-of about 30 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
+notes: We had to pause the mission about half way through as a hawk was getting close, hence there is a time lapse
+of about 45 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
 }
+
+\code{path2name_fun} can be a function to generate a default short name for the flight. The function should
+be written to accept one and only one argument - a directory path. This can be useful if the default
+short names should be constructed from pieces of the image directory path. See also \code{\link{uas_path2name_fun}}.
 
 \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
 If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
@@ -102,5 +109,5 @@ the next time the function is run. \code{update_cache} is a logical value
 which forces an update of cached data when TRUE.
 }
 \seealso{
-\code{\link{uas_getcache}}, \code{\link{uas_report}}
+\code{\link{uas_getcache}}, \code{\link{uas_report}}, \code{\link{uas_path2name_fun}}
 }

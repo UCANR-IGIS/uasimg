@@ -20,8 +20,8 @@
 #' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
 #' @param google_api API key for Google Static Maps, see Details.
 #' @param report_rmd Rmd template used to generate the HTML file. See Details.
-#' @param header_html A HTML file for the header
-#' @param footer_html A HTML file for the footer
+#' @param header_html A HTML file name or URL to use as the header
+#' @param footer_html A HTML file name or URL to use as the footer
 #' @param use_tmpdir Use the temp dir for processing
 #' @param quiet TRUE to supress printing of the pandoc command line
 #' @param show_gps_coord Show GPS coordinates of images in the pop-up windows, YN (deprecated)
@@ -63,7 +63,7 @@
 #'
 #' @importFrom crayon green yellow bold silver
 #' @importFrom grDevices dev.off png rainbow
-#' @importFrom utils browseURL packageVersion
+#' @importFrom utils browseURL packageVersion download.file
 #' @importFrom tools file_path_sans_ext file_ext
 #' @importFrom rmarkdown render
 #' @importFrom methods is
@@ -351,28 +351,48 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
         includes_lst <- list()
 
         if (!is.null(header_html)) {
-          if (file.exists(header_html)) {
+
+          if (grepl("^http", header_html, ignore.case = TRUE)) {
+            header_html_fn <- tempfile("uas_header_", fileext = ".html")
+            download_successful <- download.file(url = header_html, destfile = header_html_fn)
+            if (download_successful != 0) stop("Could not download the header URL")
+            on.exit(unlink(header_html_fn))
+          } else {
+            header_html_fn <- header_html
+          }
+
+          if (file.exists(header_html_fn)) {
             if (use_tmpdir) {
-              file.copy(from = header_html, to = temp_dir, overwrite = ifelse(first_pass_yn, TRUE, FALSE))
-              includes_lst[["before_body"]] <- file.path(temp_dir, basename(header_html))
+              file.copy(from = header_html_fn, to = temp_dir, overwrite = ifelse(first_pass_yn, TRUE, FALSE))
+              includes_lst[["before_body"]] <- file.path(temp_dir, basename(header_html_fn))
             } else {
-              includes_lst[["before_body"]] <- header_html
+              includes_lst[["before_body"]] <- header_html_fn
             }
           } else {
-            stop(paste0("File not found: ", header_html))
+            stop(paste0("File not found: ", header_html_fn))
           }
         }
 
         if (!is.null(footer_html)) {
-          if (file.exists(footer_html)) {
+
+          if (grepl("^http", footer_html, ignore.case = TRUE)) {
+            footer_html_fn <- tempfile("uas_footer_", fileext = ".html")
+            download_successful <- download.file(url = footer_html, destfile = footer_html_fn)
+            if (download_successful != 0) stop("Could not download the footer URL")
+            on.exit(unlink(footer_html_fn))
+          } else {
+            footer_html_fn <- footer_html
+          }
+
+          if (file.exists(footer_html_fn)) {
             if (use_tmpdir) {
-              file.copy(from = footer_html, to = temp_dir, overwrite = ifelse(first_pass_yn, TRUE, FALSE))
-              includes_lst[["after_body"]] <- file.path(temp_dir, basename(footer_html))
+              file.copy(from = footer_html_fn, to = temp_dir, overwrite = ifelse(first_pass_yn, TRUE, FALSE))
+              includes_lst[["after_body"]] <- file.path(temp_dir, basename(footer_html_fn))
             } else {
-              includes_lst[["after_body"]] <- footer_html
+              includes_lst[["after_body"]] <- footer_html_fn
             }
           } else {
-            stop(paste0("File not found: ", footer_html))
+            stop(paste0("File not found: ", footer_html_fn))
           }
         }
 

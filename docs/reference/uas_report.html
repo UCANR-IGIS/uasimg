@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
       </span>
     </div>
 
@@ -168,31 +168,31 @@
     <p>Creates image collection summaries for individual flights (folders)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uas_report</span>(
-  <span class='kw'>x</span>,
-  col = <span class='kw'>NULL</span>,
-  group_img = <span class='fl'>TRUE</span>,
-  thumbnails = <span class='fl'>FALSE</span>,
-  show_local_dir = <span class='fl'>TRUE</span>,
-  report_title = <span class='st'>"Flight Summary"</span>,
-  attachments = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mcp_kml"</span>, <span class='st'>"ctr_kml"</span>)[<span class='fl'>0</span>],
-  output_dir = <span class='kw'>NULL</span>,
-  create_dir = <span class='fl'>TRUE</span>,
-  output_file = <span class='kw'>NULL</span>,
-  overwrite_html = <span class='fl'>FALSE</span>,
-  open_report = <span class='fl'>FALSE</span>,
-  self_contained = <span class='fl'>TRUE</span>,
-  png_map = <span class='fl'>FALSE</span>,
-  png_exp = <span class='fl'>0.2</span>,
-  overwrite_png = <span class='fl'>FALSE</span>,
-  google_api = <span class='kw'>NULL</span>,
-  report_rmd = <span class='kw'>NULL</span>,
-  header_html = <span class='kw'>NULL</span>,
-  footer_html = <span class='kw'>NULL</span>,
-  use_tmpdir = <span class='fl'>FALSE</span>,
-  quiet = <span class='fl'>FALSE</span>,
-  show_gps_coord = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>uas_report</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  col <span class='op'>=</span> <span class='cn'>NULL</span>,
+  group_img <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  thumbnails <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show_local_dir <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  report_title <span class='op'>=</span> <span class='st'>"Flight Summary"</span>,
+  attachments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mcp_kml"</span>, <span class='st'>"ctr_kml"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>0</span><span class='op'>]</span>,
+  output_dir <span class='op'>=</span> <span class='cn'>NULL</span>,
+  create_dir <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  output_file <span class='op'>=</span> <span class='cn'>NULL</span>,
+  overwrite_html <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  open_report <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  self_contained <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  png_map <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  png_exp <span class='op'>=</span> <span class='fl'>0.2</span>,
+  overwrite_png <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  google_api <span class='op'>=</span> <span class='cn'>NULL</span>,
+  report_rmd <span class='op'>=</span> <span class='cn'>NULL</span>,
+  header_html <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footer_html <span class='op'>=</span> <span class='cn'>NULL</span>,
+  use_tmpdir <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show_gps_coord <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -271,11 +271,11 @@
     </tr>
     <tr>
       <th>header_html</th>
-      <td><p>A HTML file for the header</p></td>
+      <td><p>A HTML file name or URL to use as the header</p></td>
     </tr>
     <tr>
       <th>footer_html</th>
-      <td><p>A HTML file for the footer</p></td>
+      <td><p>A HTML file name or URL to use as the footer</p></td>
     </tr>
     <tr>
       <th>use_tmpdir</th>

@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
       </span>
     </div>
 
@@ -168,23 +168,23 @@
     <p>Generate a Table of Contents of flight summaries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uas_toc</span>(
-  <span class='kw'>html_reports</span>,
-  output_dir = <span class='st'>"."</span>,
-  output_fn = <span class='st'>"index.html"</span>,
-  gather_dir = <span class='kw'>NULL</span>,
-  toc_title = <span class='st'>"UAS Flight Summaries"</span>,
-  toc_desc = <span class='kw'>NULL</span>,
-  fltmap_show = <span class='fl'>TRUE</span>,
-  fltmap_kml = <span class='fl'>FALSE</span>,
-  fltmap_base = <span class='kw'>NULL</span>,
-  header_html = <span class='kw'>NULL</span>,
-  footer_html = <span class='kw'>NULL</span>,
-  overwrite_toc = <span class='fl'>FALSE</span>,
-  overwrite_gather = <span class='fl'>FALSE</span>,
-  open_toc = <span class='fl'>FALSE</span>,
-  quiet = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>uas_toc</span><span class='op'>(</span>
+  <span class='va'>html_reports</span>,
+  output_dir <span class='op'>=</span> <span class='st'>"."</span>,
+  output_fn <span class='op'>=</span> <span class='st'>"index.html"</span>,
+  gather_dir <span class='op'>=</span> <span class='cn'>NULL</span>,
+  toc_title <span class='op'>=</span> <span class='st'>"UAS Flight Summaries"</span>,
+  toc_desc <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fltmap_show <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  fltmap_kml <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  fltmap_base <span class='op'>=</span> <span class='cn'>NULL</span>,
+  header_html <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footer_html <span class='op'>=</span> <span class='cn'>NULL</span>,
+  overwrite_toc <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  overwrite_gather <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  open_toc <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -227,11 +227,11 @@
     </tr>
     <tr>
       <th>header_html</th>
-      <td><p>HTML file name to use as a page header</p></td>
+      <td><p>HTML file name or URL to use as a page header</p></td>
     </tr>
     <tr>
       <th>footer_html</th>
-      <td><p>HTML file name to use as a page footer</p></td>
+      <td><p>HTML file name or URL to use as a page footer</p></td>
     </tr>
     <tr>
       <th>overwrite_toc</th>

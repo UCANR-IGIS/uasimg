@@ -2,8 +2,8 @@ Package: uasimg
 Type: Package
 Title: Drone Image Utilities
 Description: This package manages images from drone mapping projects, including data management, metadata creation, creating data catalogs, converting file formats, and utilities for single-image analysis.
-Date: 2021-07-31
-Version: 1.7.6
+Date: 2021-11-11
+Version: 1.7.9
 Authors@R: person("Andy", "Lyons", email = "andlyons@ucanr.edu", role = c("aut", "cre"))
 BugReports: https://github.com/ucanr-igis/uasimg/issues
 URL: https://github.com/ucanr-igis/uasimg
@@ -11,7 +11,8 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.0.0)
+    R (>= 3.6.0),
+    magrittr
 Imports:
     base64enc,
     crayon,
@@ -22,7 +23,6 @@ Imports:
     imager,
     leaflet,
     magick,
-    magrittr,
     methods,
     readr,
     rmarkdown,

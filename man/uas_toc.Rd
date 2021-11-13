@@ -41,9 +41,9 @@ uas_toc(
 
 \item{fltmap_base}{A list object containing of background KML files and their symbology for the flight map, see Details.}
 
-\item{header_html}{HTML file name to use as a page header}
+\item{header_html}{HTML file name or URL to use as a page header}
 
-\item{footer_html}{HTML file name to use as a page footer}
+\item{footer_html}{HTML file name or URL to use as a page footer}
 
 \item{overwrite_toc}{Overwrite existing file, logical}
 

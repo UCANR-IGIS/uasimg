@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Prints a UAS Image Collection Groups object — print.uas_grp • uasimg</title>
+<title>Creates a function that converts a directory path to a flight name — uas_path2name_fun • uasimg</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Prints a UAS Image Collection Groups object — print.uas_grp" />
-<meta property="og:description" content="Prints a UAS Image Collection Groups object" />
+<meta property="og:title" content="Creates a function that converts a directory path to a flight name — uas_path2name_fun" />
+<meta property="og:description" content="Creates a function that converts a directory path to a flight name" />
 <meta property="og:image" content="http://ucanr-igis.github.io/uasimg/logo.png" />
 
 
@@ -159,32 +159,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Prints a UAS Image Collection Groups object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_grp_generics.R'><code>R/uas_grp_generics.R</code></a></small>
-    <div class="hidden name"><code>print.uas_grp.Rd</code></div>
+    <h1>Creates a function that converts a directory path to a flight name</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ucanr-igis/uasimg/blob/master/R/uas_path2name_fun.R'><code>R/uas_path2name_fun.R</code></a></small>
+    <div class="hidden name"><code>uas_path2name_fun.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Prints a UAS Image Collection Groups object</p>
+    <p>Creates a function that converts a directory path to a flight name</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for uas_grp</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>uas_path2name_fun</span><span class='op'>(</span>idx_from_last <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A UAS Image Collection Groups object</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>unused</p></td>
+      <th>idx_from_last</th>
+      <td><p>Indices of the directory path, see Details</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A function that returns a flight name</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This will return a function that will parse a directory path into its constituent pieces and
+construct a name from one or more of those pieces. This can be useful for automatically naming flights
+based on the directory path in which the images are saved when running <code><a href='uas_info.html'>uas_info</a></code>.</p>
+<p><code>idx_from_last</code> are indices of the subdirectories in the path, starting from the end. Hence if you wanted to construct
+names for a flight based on the very subdirctory (only), let <code>idx_from_last = 1</code>. If you want the names to be constructed
+based on the 2nd to last subdirectory, let <code>idx_from_last = 2</code>, and so on. If more than one number is passed for
+<code>idx_from_last</code>, the name returned will concatenate the pieces separated by underscores.</p>
+<p>Note that this function does not actually convert a directory path to a flight name, but returns a function
+that will do the conversion.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='uas_info.html'>uas_info</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>data_dir</span> <span class='op'>&lt;-</span> <span class='st'>"D:/Drone_Data/HREC/PostRiverFire2020/imgs/ebX_Flt02_postproc/img/msp"</span>
+<span class='va'>flight_name_fun</span> <span class='op'>&lt;-</span> <span class='fu'>uas_path2name_fun</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>flight_name_fun</span><span class='op'>(</span><span class='va'>data_dir</span><span class='op'>)</span>
+<span class='va'>ebee_flt2_info</span> <span class='op'>&lt;-</span> <span class='fu'><a href='uas_info.html'>uas_info</a></span><span class='op'>(</span><span class='va'>data_dir</span>, fp <span class='op'>=</span> <span class='cn'>FALSE</span>, path2name_fun <span class='op'>=</span> <span class='va'>flight_name_fun</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

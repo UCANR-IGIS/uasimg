@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
       </span>
     </div>
 
@@ -168,20 +168,21 @@
     <p>Extracts info from geotagged images taken from a drone</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uas_info</span>(
-  <span class='kw'>img_dirs</span>,
-  alt_agl = <span class='kw'>NULL</span>,
-  fp = <span class='fl'>FALSE</span>,
-  fwd_overlap = <span class='kw'>fp</span>,
-  cameras = <span class='kw'>NULL</span>,
-  metadata = <span class='st'>"metadata.*\\.txt"</span>,
-  use_exiftoolr = <span class='fl'>TRUE</span>,
-  exiftool = <span class='kw'>NULL</span>,
-  exif_csv = <span class='kw'>NULL</span>,
-  cache = <span class='fl'>TRUE</span>,
-  update_cache = <span class='fl'>FALSE</span>,
-  quiet = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>uas_info</span><span class='op'>(</span>
+  <span class='va'>img_dirs</span>,
+  alt_agl <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fp <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  fwd_overlap <span class='op'>=</span> <span class='va'>fp</span>,
+  cameras <span class='op'>=</span> <span class='cn'>NULL</span>,
+  metadata <span class='op'>=</span> <span class='st'>"metadata.*\\.txt"</span>,
+  path2name_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  use_exiftoolr <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  exiftool <span class='op'>=</span> <span class='cn'>NULL</span>,
+  exif_csv <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cache <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  update_cache <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -209,6 +210,10 @@
     <tr>
       <th>metadata</th>
       <td><p>A filename pattern for a metadata file, or a metadata list object (see Details)</p></td>
+    </tr>
+    <tr>
+      <th>path2name_fun</th>
+      <td><p>A function to generate the default short name (see Details)</p></td>
     </tr>
     <tr>
       <th>use_exiftoolr</th>
@@ -274,9 +279,12 @@ name_long: Hopland Research and Extension Center, Watershed II Flight 3
 data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
 pilot: Andy Lyons
 description: These data were collected as part of a restoration monitoring program.
-notes: We had to pause the mission about half way through as an bird was getting close, hence there is a time
-of about 30 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75<!-- %. -->
+notes: We had to pause the mission about half way through as a hawk was getting close, hence there is a time lapse
+of about 45 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75<!-- %. -->
 </code></p>
+<p><code>path2name_fun</code> can be a function to generate a default short name for the flight. The function should
+be written to accept one and only one argument - a directory path. This can be useful if the default
+short names should be constructed from pieces of the image directory path. See also <code><a href='uas_path2name_fun.html'>uas_path2name_fun</a></code>.</p>
 <p><code>cache</code> can be a logical value or the name of a directory where EXIF data gets cached.
 If <code>cache = TRUE</code>, the default cache directory will be used (<code>~/.R</code>). Cached EXIF data is linked
 to a directory of images based on the directory name and total size of all image files.
@@ -285,7 +293,7 @@ the next time the function is run. <code>update_cache</code> is a logical value
 which forces an update of cached data when TRUE.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='uas_getcache.html'>uas_getcache</a></code>, <code><a href='uas_report.html'>uas_report</a></code></p></div>
+    <div class='dont-index'><p><code><a href='uas_getcache.html'>uas_getcache</a></code>, <code><a href='uas_report.html'>uas_report</a></code>, <code><a href='uas_path2name_fun.html'>uas_path2name_fun</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
