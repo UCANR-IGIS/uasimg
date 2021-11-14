@@ -642,6 +642,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       }
     }
 
+    ########################################################################################################
     ## Load the additional flight metadata (which is never cached!)
     ## Get the extra metadata either by an argument or finding an metadata.txt file
 
@@ -717,9 +718,13 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       names(metadata_use) <- flds_md
     }
 
-    ## Create a default name_short *if* it is NA (if NULL, do nothing)
-    if (!is.null(metadata_use$name_short)) {
+    ## Create a default name_short if needed
+    if (is.null(metadata_use$name_short)) {
+      metadata_use$name_short <- id_str
+    } else {
       if (is.na(metadata_use$name_short)) {
+        metadata_use$name_short <- id_str
+      } else if (metadata_use$name_short == "") {
         metadata_use$name_short <- id_str
       }
     }
