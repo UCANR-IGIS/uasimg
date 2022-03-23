@@ -3,6 +3,7 @@
 #' Extracts info from geotagged images taken from a drone
 #'
 #' @param img_dirs Directory(s) where the image files reside
+#' @param ext An optional file extension
 #' @param alt_agl The elevation above ground level in meters (optional for images with the relevative altitude saved)
 #' @param fp Compute image foot prints, T/F
 #' @param fwd_overlap Whether or not to compute the amount of overlap between one image and the next, T/F
@@ -16,12 +17,17 @@
 #' @param update_cache Whether to update the cache
 #' @param quiet Don't show messages
 #'
-#' @details This will read the EXIF header data from a directory of image files, and put out
-#' the centroids and image footprints on the ground. Mapping  image locations requires that the images have
-#' geostamps. In addition, mapping the image footprints requires that the camera parameters are known,
-#' and the flight elevation about ground level is either saved in the EXIF info, or provided in
+#' @details This will read the EXIF header data from a directory of image files, and extract
+#' the centroids and estimated ground-footprints. Extracting the image locations requires that the images have
+#' geostamps (common in most drone images but some drones require an extra processing step to geostamp the images).
+#' To index a specific file type, you can pass a file extension to \code{ext} (not case sensitive).
+#'
+#' Estimating the ground-footprints (\code{fp = TRUE}) further requires that the camera parameters are known,
+#' the flight elevation about ground level is either saved in the EXIF info or provided in
 #' the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data
-#' in the EXIF info.
+#' in the EXIF info. Ground-footprints are estimates only. They assume the camera was at nadir (common in
+#' mapping work but there are exceptions) and only as accurate as the provided altitude (which is typically the least
+#' accurate GPS coordinate).
 #'
 #' Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
 #' many popular drone cameras. If your drone camera is not in the database, you can create your own
@@ -33,9 +39,12 @@
 #' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}. After you download it, rename the executable file,
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
-#' \code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
-#' images (e.g., location name, pilot). \code{metadata} can also be a named list containing
-#' metadata fields / values. For supported field names, see \code{\link{uas_setflds}}.
+#' \code{metadata} is an optional argument to pass supplemental flight metadata that can not be extracted from the
+#' images (e.g., location name, pilot). For details, see the Vignette on Flight Metadata
+#' \code{vignette("flight_metadata", package = "uasimg")}.
+#'
+#' \code{metadata} can also be a named list containing
+#' metadata fields / values. For supported field names, see \code{vignette("flight_metadata", package = "uasimg")}.
 #'
 #' \code{metadata} can also be a filename regular expression (pattern) for a metadata text file
 #' (for details on how to write a pattern expression, see \code{\link{list.files}}). This is the recommended
@@ -49,11 +58,17 @@
 #' is using \code{\link{uas_metadata_make}}.) Each line should contain a key:value pair (with no quotes or delimiters).
 #' Lines starting with a hash or forward slash will be ignored. Example:
 #'
-#' \code{name_short: hrec_wtrshd2_flt03
+#' \preformatted{
+#' name_short: hrec_wtrshd2_flt03
+#'
 #' name_long: Hopland Research and Extension Center, Watershed II Flight 3
+#'
 #' data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
+#'
 #' pilot: Andy Lyons
+#'
 #' description: These data were collected as part of a restoration monitoring program.
+#'
 #' notes: We had to pause the mission about half way through as a hawk was getting close, hence there is a time lapse
 #' of about 45 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
 #' }
@@ -88,12 +103,13 @@
 #' @importFrom exiftoolr configure_exiftoolr
 #' @export
 
-uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
+uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overlap = fp,
                      cameras = NULL, metadata = "metadata.*\\.txt", path2name_fun = NULL,
-                     use_exiftoolr = TRUE, exiftool = NULL, exif_csv = NULL, cache = TRUE, update_cache = FALSE, quiet = FALSE) {
+                     use_exiftoolr = TRUE, exiftool = NULL, exif_csv = NULL,
+                     cache = TRUE, update_cache = FALSE, quiet = FALSE) {
 
 
-  ## Define the date for a cache to be considered valid (due to update in the package)
+  ## Define the date for a cache to be considered valid (due to updates in the package that modify what gets saved)
   cache_valid_date <- ISOdatetime(2021, 5, 9, 0, 0, 0)
 
   ## See if all directory(s) exist
@@ -109,29 +125,28 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
   if (!file.exists(cameras_fn)) stop(paste0("Can't find cameras.csv file: ", cameras_fn))
 
   ## Create a list that we'll use later to shorten field names
-  short_names <- list()
-  short_names[["sourcefile"]] <- "img_fn"
-  short_names[["filename"]] <- "file_name"
-  short_names[["gpslatitude"]] <- "gps_lat"
-  short_names[["gpslongitude"]] <- "gps_long"
-  short_names[["datetimeoriginal"]] <- "date_time"
-  short_names[["gpsdatestamp"]] <- "gps_date"
-  short_names[["gpstimestamp"]] <- "gps_time"
-  short_names[["gpsaltitude"]] <- "gps_alt"
-  short_names[["make"]] <- "make"
-  short_names[["model"]] <- "model"
-  short_names[["focallength"]] <- "focal_len"
-  short_names[["imagewidth"]] <- "img_width"
-  short_names[["imageheight"]] <- "img_height"
-  short_names[["relativealtitude"]] <- "alt_agl"
-  short_names[["sensor_width"]] <- "sens_wdth"
-  short_names[["sensor_height"]] <- "sens_hght"
-  short_names[["gsd"]] <- "gsd"
-  short_names[["foot_w"]] <- "fp_width"
-  short_names[["foot_h"]] <- "fp_height"
-  short_names[["fwd_overlap"]] <- "fwd_ovrlap"
+  short_names <- as.list(c("sourcefile" = "img_fn",
+                           "filename" = "file_name",
+                           "gpslatitude" = "gps_lat",
+                           "gpslongitude" = "gps_long",
+                           "datetimeoriginal" = "date_time",
+                           "gpsdatestamp" = "gps_date",
+                           "gpstimestamp" = "gps_time",
+                           "gpsaltitude" = "gps_alt",
+                           "make" = "make",
+                           "model" = "model",
+                           "focallength" = "focal_len",
+                           "imagewidth" = "img_width",
+                           "imageheight" = "img_height",
+                           "relativealtitude" = "alt_agl",
+                           "sensor_width" = "sens_wdth",
+                           "sensor_height" = "sens_hght",
+                           "gsd" = "gsd",
+                           "foot_w" = "fp_width",
+                           "foot_h" = "fp_height",
+                           "fwd_overlap" = "fwd_ovrlap"))
 
-  ## Nomap will (eventually) be a vector of images that should be excluded
+  ## nomap will (eventually) be a vector of images that should be excluded
   ## from the flight summary map, mcp computation, area computation, etc.
   ## This is for things like calibration images
   nomap <- NA
@@ -139,6 +154,8 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
   ## Look for the exiftool executable
   if (use_exiftoolr) {
     ## Note: system2() doesn't require you to quote an executable (only arguments with spaces)
+    ## I can't suppress printing the version number, even sink() doesn''t work.
+    ## Will have to live with it.
     exiftool_exec <- configure_exiftoolr(quiet = TRUE)
 
   } else {
@@ -157,6 +174,14 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
     } else {
       exiftool_exec <- exiftool_exec
     }
+  }
+
+  if (is.null(ext)) {
+    grep_pattern_use <- ".jpg$|.jpeg$|.tif$|.tiff$|.raw$|.dng$"
+    ext_use <- ""
+  } else {
+    grep_pattern_use <- paste0(".", ext, "$")
+    ext_use <- paste0("-ext ", ext, " ")
   }
 
   res <- list()
@@ -181,7 +206,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
           ## cache_dir_use is already NA.
         }
 
-
       } else {
         ## String was passed for cache, we presume this is a directory
         if (file.exists(cache)) {
@@ -198,7 +222,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         ## Construct the cache file name based on the image dir and total size
         ## Keep only image files for the purposes of computing the total file size
         dir_files <- list.files(img_dir, all.files = FALSE, full.names = TRUE)
-        dir_files <- dir_files[grepl(".jpg$|.jpeg$|.tif$|.tiff$|.raw$|.dng$", dir_files, ignore.case=TRUE)]
+        dir_files <- dir_files[grepl(grep_pattern_use, dir_files, ignore.case=TRUE)]
         #dir_files <- dir_files[!grepl(".txt$|.bak$", dir_files)]
 
         dir_size <- as.character(sum(file.size(dir_files)))
@@ -231,9 +255,9 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       ### (We assume all image files in the directory are from the same sensor, will not check)
       if (!quiet) message(yellow(" - Looking for image files"))
 
-      first_fn <- list.files(path=img_dir, full.names=TRUE, pattern="jpg$|JPG$|jpeg$|JPEG$|tif$|TIF$|dng$|DNG$")[1]
+      first_fn <- list.files(path=img_dir, full.names=TRUE, pattern=grep_pattern_use, ignore.case = TRUE)[1]
 
-      if (is.na(first_fn)) stop(paste0("Couldn't find any jpg or tif files in ", img_dir))
+      if (is.na(first_fn)) stop(paste0("Couldn't find any image files that match the pattern in ", img_dir))
 
       csv_first_fn <- tempfile(pattern="~map_uas_", fileext = ".csv")
 
@@ -264,7 +288,6 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
         ## right here I need to get **all** the fields, so I can see which one is the date time
         # system2(exiftool_exec, args=paste("-Make -Model -FileType -n -csv", shQuote(first_fn), sep=" "),
         #         stdout=csv_first_fn, stderr=FALSE)
-
 
         if (!quiet) message(yellow(paste0(" - Unknown sensor: ", camera_make, " ", camera_model)))
         if (!quiet) message(yellow(" - to add this camera to the database, please contact the package author via email, or create an issue on GitHub"))
@@ -334,7 +357,7 @@ uas_info <- function(img_dirs, alt_agl=NULL, fp = FALSE, fwd_overlap = fp,
       if (camera_has_agl) exif_tags <- c(exif_tags, camera_agl_tag)
 
       ## Construct args
-      str_args <- paste("-", paste(exif_tags, collapse=" -"), " -n -csv ", shQuote(img_dir), sep="")
+      str_args <- paste("-", paste(exif_tags, collapse=" -"), " -n -csv ", ext_use, shQuote(img_dir), sep="")
 
       # Run exiftool command
       if (!quiet) message(yellow(" - Running exiftool (this can take a while)..."), appendLF = FALSE)

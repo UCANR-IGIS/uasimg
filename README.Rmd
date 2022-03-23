@@ -38,7 +38,18 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-`uasimg` is not on CRAN (yet), but you can install it from GitHub.
+`uasimg` is not on CRAN (yet), but you can install it from R-Universe:
+
+```{r install_runiverse, eval=FALSE}
+options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',
+                  CRAN = 'https://cloud.r-project.org'))
+
+install.packages('uasimg')
+```
+
+### Alternative Installation: GitHub
+
+Alternately, you can install it from GitHub:
 
 *Note*: Windows users need *RTools* to build packages from source files (which is basically what you do when you install from GitHub). RTools is not a R package, rather its a set of utilities that you install separately. You can download and install RTools from <https://cran.r-project.org/bin/windows/Rtools/>. Alternately, you can install RTools from within R by running:
 
@@ -47,10 +58,10 @@ install.packages('installr')
 installr::install.Rtools()
 ```
 
-After RTools is installed, you can install `uasimg` with:
+After RTools is installed, install `uasimg` from GitHub with:
 
-```{r install_devtools, eval=FALSE}
-install.packages('remotes')
+```{r install_uasimg, eval=FALSE}
+## install.packages('remotes')
 remotes::install_github("ucanr-igis/uasimg")
 ```
 

@@ -1,3 +1,8 @@
+# uasimg 1.8.0 (2022-03-20)
+
+* `uas_info()`: argument `ext` added (filter by file type); minor code cleaning, 
+* cameras.csv: Phantom 4 Pro RTK and Phantom 4 Multispectral added
+
 # uasimg 1.7.9 (2021-11-11)
 
 * `uas_info()`: added argument `path2name_fun`; modified to support new `date_time` column in cameras.csv

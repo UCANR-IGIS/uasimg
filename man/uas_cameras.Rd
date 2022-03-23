@@ -24,15 +24,17 @@ Read a cameras.csv file
 }
 \details{
 In order to estimate the GSD and image footprint, certain properties of the camera are required,
-including the physical dimension of the sensor. Properties of several commonly used cameras have
-been collected and are stored in a csv file.
+including the focal length and physical dimension of the CCD sensor. Properties of several commonly used cameras have
+been collected and are bundled with the package as a csv file.
 
-If your drone camera is not in the database, you'll get an error message when you try to run \code{\link{uas_info}}.
-In this case, you can contact the package author by email, and/or start an
-issue on \href{https://github.com/ucanr-igis/uasimg/issues}{GitHub}. Alternately, you can create your own
-CSV file based on the one that comes with the package (to see where that lives, run
-\code{system.file("cameras/cameras.csv", package = "uasimg")}), and pass the file name as the value of \code{cameras}
-in \code{\link{uas_info}}.
+If your drone camera is not in the database, you can still index your images \code{\link{uas_info}}, however
+generic camera settings (EXIF fields) will be used. In most cases, these settings will work fine to get the
+GPS coordinates and timestamps, however it won't be able to model the on-the-ground image footprint.
+
+To add your camera to the database, you can start an issue on \href{https://github.com/ucanr-igis/uasimg/issues}{GitHub},
+or contact the package author by email. Alternately, you can find the cameras.csv file in the package folder
+(run \code{system.file("cameras/cameras.csv", package = "uasimg")}), and add a row for your camera. Or copy the
+csv file and pass the file name as the value of \code{cameras} in \code{\link{uas_info}}.
 
 This utility function will read a cameras.csv file. Note certain columns
 are required. To see an example of a valid CSV file, run \code{uas_cameras(names_only = FALSE)}
@@ -42,6 +44,15 @@ are required. To see an example of a valid CSV file, run \code{uas_cameras(names
 \item \code{uas_readcameras}: Read cameras csv file
 }}
 
+\examples{
+\dontrun{
+uas_cameras()
+}
+
+\dontrun{
+uas_readcameras(system.file("cameras/cameras.csv", package="uasimg"))
+}
+}
 \seealso{
-\code{\link{uas_cameras}}
+\code{\link{uas_info}}
 }

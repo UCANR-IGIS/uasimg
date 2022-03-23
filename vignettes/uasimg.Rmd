@@ -23,7 +23,7 @@ For better or worse, most photogrammetry / SfM software expects you&#8212;the hu
 
 A second need `uasimg` addresses is documenting and sharing collections of drone data. This is helpful for managing projects, but more importantly for long-term data archiving and reproducibility. Drone images are the raw data upon which everything else follows. Someone can always repeat the stitching process, but the images themselves can not be replaced or recreated. A system for locating images, and viewing their properties, is therefore needed for sound scientific practice. The next step - sharing the existence of images with colleagues and search engines, is likewise part and parcel of being part of the scientific community.
 
-Lastly, `uasimg` has several utility functions to help you analyze individual drone images. These include creating world files (so you can view the photos in GIS software) and cropping out the area of overlap (to make a non-photogrammetriic photo mosaic).
+Lastly, `uasimg` has several utility functions to help you analyze individual drone images. These include creating world files (so you can view the photos in GIS software) and cropping out the area of overlap (to make a non-photogrammetric photo mosaic).
 
 `uasimg` does *not*:
 

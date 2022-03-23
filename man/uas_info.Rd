@@ -6,6 +6,7 @@
 \usage{
 uas_info(
   img_dirs,
+  ext = NULL,
   alt_agl = NULL,
   fp = FALSE,
   fwd_overlap = fp,
@@ -22,6 +23,8 @@ uas_info(
 }
 \arguments{
 \item{img_dirs}{Directory(s) where the image files reside}
+
+\item{ext}{An optional file extension}
 
 \item{alt_agl}{The elevation above ground level in meters (optional for images with the relevative altitude saved)}
 
@@ -56,12 +59,17 @@ total directory size, the data flown, and external metadata.
 Extracts info from geotagged images taken from a drone
 }
 \details{
-This will read the EXIF header data from a directory of image files, and put out
-the centroids and image footprints on the ground. Mapping  image locations requires that the images have
-geostamps. In addition, mapping the image footprints requires that the camera parameters are known,
-and the flight elevation about ground level is either saved in the EXIF info, or provided in
+This will read the EXIF header data from a directory of image files, and extract
+the centroids and estimated ground-footprints. Extracting the image locations requires that the images have
+geostamps (common in most drone images but some drones require an extra processing step to geostamp the images).
+To index a specific file type, you can pass a file extension to \code{ext} (not case sensitive).
+
+Estimating the ground-footprints (\code{fp = TRUE}) further requires that the camera parameters are known,
+the flight elevation about ground level is either saved in the EXIF info or provided in
 the \code{alt_agl} argument (in meters). If \code{alt_agl} is passed, it will override any elevation data
-in the EXIF info.
+in the EXIF info. Ground-footprints are estimates only. They assume the camera was at nadir (common in
+mapping work but there are exceptions) and only as accurate as the provided altitude (which is typically the least
+accurate GPS coordinate).
 
 Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
 many popular drone cameras. If your drone camera is not in the database, you can create your own
@@ -73,9 +81,12 @@ you can install this by running \code{\link[exiftoolr]{install_exiftool}}. Alter
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}. After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
-\code{metadata} is an optional argument to pass supplemental metadata that can not be extracted from the
-images (e.g., location name, pilot). \code{metadata} can also be a named list containing
-metadata fields / values. For supported field names, see \code{\link{uas_setflds}}.
+\code{metadata} is an optional argument to pass supplemental flight metadata that can not be extracted from the
+images (e.g., location name, pilot). For details, see the Vignette on Flight Metadata
+\code{vignette("flight_metadata", package = "uasimg")}.
+
+\code{metadata} can also be a named list containing
+metadata fields / values. For supported field names, see \code{vignette("flight_metadata", package = "uasimg")}.
 
 \code{metadata} can also be a filename regular expression (pattern) for a metadata text file
 (for details on how to write a pattern expression, see \code{\link{list.files}}). This is the recommended
@@ -88,11 +99,17 @@ Metadata text files should be plain text in YAML format (the easiest way to crea
 is using \code{\link{uas_metadata_make}}.) Each line should contain a key:value pair (with no quotes or delimiters).
 Lines starting with a hash or forward slash will be ignored. Example:
 
-\code{name_short: hrec_wtrshd2_flt03
+\preformatted{
+name_short: hrec_wtrshd2_flt03
+
 name_long: Hopland Research and Extension Center, Watershed II Flight 3
+
 data_url: https://ucdavis.box.com/s/dp0sdfssxxxxxsdf
+
 pilot: Andy Lyons
+
 description: These data were collected as part of a restoration monitoring program.
+
 notes: We had to pause the mission about half way through as a hawk was getting close, hence there is a time lapse
 of about 45 seconds. Pix4Dcapture was used as the mission planning software with an overlap of 75%.
 }

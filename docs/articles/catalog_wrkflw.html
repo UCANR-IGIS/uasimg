@@ -32,6 +32,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
       </span>
     </div>
 
@@ -63,7 +65,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -80,22 +82,10 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Presentations
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2021-05-13.html">Overview of Drone Image Utilities</a>
-    </li>
-  </ul>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ucanr-igis/uasimg/">
+  <a href="https://github.com/ucanr-igis/uasimg/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -110,14 +100,13 @@
 
       
 
-      </header><script src="catalog_wrkflw_files/header-attrs-2.10/header-attrs.js"></script><script src="catalog_wrkflw_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="catalog_wrkflw_files/viz-1.8.2/viz.js"></script><link href="catalog_wrkflw_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="catalog_wrkflw_files/grViz-binding-1.0.6.1/grViz.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cataloging Workflow</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ucanr-igis/uasimg/blob/master/vignettes/catalog_wrkflw.Rmd"><code>vignettes/catalog_wrkflw.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ucanr-igis/uasimg/blob/master/vignettes/catalog_wrkflw.Rmd" class="external-link"><code>vignettes/catalog_wrkflw.Rmd</code></a></small>
       <div class="hidden name"><code>catalog_wrkflw.Rmd</code></div>
 
     </div>
@@ -132,15 +121,41 @@ span.optional {
   background-color:#18bc9c;
 }
 </style>
-<p>This article presents a workflow for using <code>uasimg</code> to create a <strong>catalog of drone images</strong> from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is <a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html" target="_blank" rel="noopener">here</a>. Although the workflow is presented a sequence of steps, in practice your workflow will probably <em>not</em> be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.</p>
+<p>This article presents a workflow for using <code>uasimg</code> to create a <strong>catalog of drone images</strong> from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is <a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html" target="_blank" rel="noopener" class="external-link">here</a>. Although the workflow is presented a sequence of steps, in practice your workflow will probably <em>not</em> be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.</p>
 <p><br></p>
-<div id="htmlwidget-c5713363b117e9f89588" style="width:600px;height:720px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c5713363b117e9f89588">{"x":{"diagram":"digraph flowchart {\n      node [fontname = Helvetica, shape = rectangle]\n      tab1 [label = \"Copy images to a hard drive\"]\n      tab2 [label = \"Extract image info for each folder of images\"]\n      tab3 [label = \"Create flight metadata text files for each folder\"]\n      tab4 [label = \"Edit and save flight metadata text files in a text editor\"]\n      tab5 [label = \"Delete or move oddball images into subfolders\"]\n      tab6 [label = \"Split and merge folders\"]\n      tab7 [label = \"Re-run uas_info() to update the flight metadata\"]\n      tab8 [label = \"Move images into a structured directory tree\"]\n      tab9 [label = \"Export flight geometries to shp / kml files\"]\n      tab10 [label = \"Create individual flight summaries\"]\n      tab11 [label = \"Create Table of Content page(s) for related flight summaries\"]\n\n      # edge definitions with the node IDs\n      tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7 -> tab8 -> tab9 -> tab10 -> tab11;\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><br></p>
+<pre><code><span class="co">#&gt; Warning: package 'DiagrammeR' was built under R version 4.1.3</span></code></pre>
+<p></p>
+<center>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="577pt" viewbox="0.00 0.00 397.40 764.00"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 760)"><title>flowchart</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-760 393.3982,-760 393.3982,4 -4,4"></polygon><g id="node1" class="node"><title>tab1</title>
+<polygon fill="none" stroke="#000000" points="290.2355,-756 99.1627,-756 99.1627,-720 290.2355,-720 290.2355,-756"></polygon><text text-anchor="middle" x="194.6991" y="-733.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Copy images to a hard drive</text></g><g id="node2" class="node"><title>tab2</title>
+<polygon fill="none" stroke="#000000" points="337.6471,-684 51.7511,-684 51.7511,-648 337.6471,-648 337.6471,-684"></polygon><text text-anchor="middle" x="194.6991" y="-661.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Extract image info for each folder of images</text></g><g id="edge1" class="edge"><title>tab1-&gt;tab2</title>
+<path fill="none" stroke="#000000" d="M194.6991,-719.8314C194.6991,-712.131 194.6991,-702.9743 194.6991,-694.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-694.4132 194.6991,-684.4133 191.1992,-694.4133 198.1992,-694.4132"></polygon></g><g id="node3" class="node"><title>tab3</title>
+<polygon fill="none" stroke="#000000" points="345.9908,-612 43.4074,-612 43.4074,-576 345.9908,-576 345.9908,-612"></polygon><text text-anchor="middle" x="194.6991" y="-589.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Create flight metadata text files for each folder</text></g><g id="edge2" class="edge"><title>tab2-&gt;tab3</title>
+<path fill="none" stroke="#000000" d="M194.6991,-647.8314C194.6991,-640.131 194.6991,-630.9743 194.6991,-622.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-622.4132 194.6991,-612.4133 191.1992,-622.4133 198.1992,-622.4132"></polygon></g><g id="node4" class="node"><title>tab4</title>
+<polygon fill="none" stroke="#000000" points="366.2406,-540 23.1576,-540 23.1576,-504 366.2406,-504 366.2406,-540"></polygon><text text-anchor="middle" x="194.6991" y="-517.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Edit and save flight metadata text files in a text editor</text></g><g id="edge3" class="edge"><title>tab3-&gt;tab4</title>
+<path fill="none" stroke="#000000" d="M194.6991,-575.8314C194.6991,-568.131 194.6991,-558.9743 194.6991,-550.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-550.4132 194.6991,-540.4133 191.1992,-550.4133 198.1992,-550.4132"></polygon></g><g id="node5" class="node"><title>tab5</title>
+<polygon fill="none" stroke="#000000" points="346.5377,-468 42.8605,-468 42.8605,-432 346.5377,-432 346.5377,-468"></polygon><text text-anchor="middle" x="194.6991" y="-445.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Delete or move oddball images into subfolders</text></g><g id="edge4" class="edge"><title>tab4-&gt;tab5</title>
+<path fill="none" stroke="#000000" d="M194.6991,-503.8314C194.6991,-496.131 194.6991,-486.9743 194.6991,-478.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-478.4132 194.6991,-468.4133 191.1992,-478.4133 198.1992,-478.4132"></polygon></g><g id="node6" class="node"><title>tab6</title>
+<polygon fill="none" stroke="#000000" points="274.6163,-396 114.7819,-396 114.7819,-360 274.6163,-360 274.6163,-396"></polygon><text text-anchor="middle" x="194.6991" y="-373.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Split and merge folders</text></g><g id="edge5" class="edge"><title>tab5-&gt;tab6</title>
+<path fill="none" stroke="#000000" d="M194.6991,-431.8314C194.6991,-424.131 194.6991,-414.9743 194.6991,-406.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-406.4132 194.6991,-396.4133 191.1992,-406.4133 198.1992,-406.4132"></polygon></g><g id="node7" class="node"><title>tab7</title>
+<polygon fill="none" stroke="#000000" points="347.8968,-324 41.5014,-324 41.5014,-288 347.8968,-288 347.8968,-324"></polygon><text text-anchor="middle" x="194.6991" y="-301.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Re-run uas_info() to update the flight metadata</text></g><g id="edge6" class="edge"><title>tab6-&gt;tab7</title>
+<path fill="none" stroke="#000000" d="M194.6991,-359.8314C194.6991,-352.131 194.6991,-342.9743 194.6991,-334.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-334.4132 194.6991,-324.4133 191.1992,-334.4133 198.1992,-334.4132"></polygon></g><g id="node8" class="node"><title>tab8</title>
+<polygon fill="none" stroke="#000000" points="339.2439,-252 50.1543,-252 50.1543,-216 339.2439,-216 339.2439,-252"></polygon><text text-anchor="middle" x="194.6991" y="-229.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Move images into a structured directory tree</text></g><g id="edge7" class="edge"><title>tab7-&gt;tab8</title>
+<path fill="none" stroke="#000000" d="M194.6991,-287.8314C194.6991,-280.131 194.6991,-270.9743 194.6991,-262.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-262.4132 194.6991,-252.4133 191.1992,-262.4133 198.1992,-262.4132"></polygon></g><g id="node9" class="node"><title>tab9</title>
+<polygon fill="none" stroke="#000000" points="328.46,-180 60.9382,-180 60.9382,-144 328.46,-144 328.46,-180"></polygon><text text-anchor="middle" x="194.6991" y="-157.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Export flight geometries to shp / kml files</text></g><g id="edge8" class="edge"><title>tab8-&gt;tab9</title>
+<path fill="none" stroke="#000000" d="M194.6991,-215.8314C194.6991,-208.131 194.6991,-198.9743 194.6991,-190.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-190.4132 194.6991,-180.4133 191.1992,-190.4133 198.1992,-190.4132"></polygon></g><g id="node10" class="node"><title>tab10</title>
+<polygon fill="none" stroke="#000000" points="307.7117,-108 81.6865,-108 81.6865,-72 307.7117,-72 307.7117,-108"></polygon><text text-anchor="middle" x="194.6991" y="-85.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Create individual flight summaries</text></g><g id="edge9" class="edge"><title>tab9-&gt;tab10</title>
+<path fill="none" stroke="#000000" d="M194.6991,-143.8314C194.6991,-136.131 194.6991,-126.9743 194.6991,-118.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-118.4132 194.6991,-108.4133 191.1992,-118.4133 198.1992,-118.4132"></polygon></g><g id="node11" class="node"><title>tab11</title>
+<polygon fill="none" stroke="#000000" points="389.5975,-36 -.1993,-36 -.1993,0 389.5975,0 389.5975,-36"></polygon><text text-anchor="middle" x="194.6991" y="-13.8" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Create Table of Content page(s) for related flight summaries</text></g><g id="edge10" class="edge"><title>tab10-&gt;tab11</title>
+<path fill="none" stroke="#000000" d="M194.6991,-71.8314C194.6991,-64.131 194.6991,-54.9743 194.6991,-46.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-46.4132 194.6991,-36.4133 191.1992,-46.4133 198.1992,-46.4132"></polygon></g></g></svg>
+</center>
+<p><br></p>
 <p>Currently, executing this workflow in <code>uasimg</code> requires <strong>writing R commands</strong> (i.e., in a script). This requires a knowledge of R, and a general understanding of what the functions do (explained below). In a future release, <code>uasimg</code> will have a GUI (wizard) that walks users through data management steps.</p>
 <p><br></p>
-<div id="copy-image-files-from-the-drone-to-a-hard-drive" class="section level1">
-<h1 class="hasAnchor">
-<a href="#copy-image-files-from-the-drone-to-a-hard-drive" class="anchor"></a>1. Copy image files from the drone to a hard drive</h1>
+<div class="section level2">
+<h2 id="copy-image-files-from-the-drone-to-a-hard-drive">1. Copy image files from the drone to a hard drive<a class="anchor" aria-label="anchor" href="#copy-image-files-from-the-drone-to-a-hard-drive"></a>
+</h2>
 <p><em>Notes</em></p>
 <ul>
 <li><p>The first step is getting the images off the drone and onto your hard drive.</p></li>
@@ -151,16 +166,16 @@ span.optional {
 <p><em>Tips:</em></p>
 <ul>
 <li><p>You can save yourself some time by creating the directories before you go out into the field.</p></li>
-<li><p>If you have enough blank SD cards for all your flights, then you can just leave the images on the SD card as a temporary backup until you get back to the office. Label each card and put it somewhere safe. If you need it to use it again, reformat the SD card. Windows Explorer generally works fine for this, unless your memory card is &gt;32GB and your drone camera only reads FAT32 (see <a href="http://igis.ucanr.edu/Tech_Notes/Memory_Cards/"><em>Best Practices Working with Memory Cards</em></a> for details).</p></li>
+<li><p>If you have enough blank SD cards for all your flights, then you can just leave the images on the SD card as a temporary backup until you get back to the office. Label each card and put it somewhere safe. If you need it to use it again, reformat the SD card. Windows Explorer generally works fine for this, unless your memory card is &gt;32GB and your drone camera only reads FAT32 (see <a href="http://igis.ucanr.edu/Tech_Notes/Memory_Cards/" class="external-link"><em>Best Practices Working with Memory Cards</em></a> for details).</p></li>
 </ul>
 <p><br></p>
 </div>
-<div id="extract-image-info" class="section level1">
-<h1 class="hasAnchor">
-<a href="#extract-image-info" class="anchor"></a>2. Extract image info</h1>
+<div class="section level2">
+<h2 id="extract-image-info">2. Extract image info<a class="anchor" aria-label="anchor" href="#extract-image-info"></a>
+</h2>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vegsrvy_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">vegsrvy_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,
                  <span class="st">"c:/uas/hopland-veg-survey/flight02/DCIM"</span>,
                  <span class="st">"c:/uas/hopland-veg-survey/flight03/DCIM"</span><span class="op">)</span>
 
@@ -176,16 +191,16 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="create-flight-metadata-files" class="section level1">
-<h1 class="hasAnchor">
-<a href="#create-flight-metadata-files" class="anchor"></a>3. Create flight metadata files</h1>
+<div class="section level2">
+<h2 id="create-flight-metadata-files">3. Create flight metadata files<a class="anchor" aria-label="anchor" href="#create-flight-metadata-files"></a>
+</h2>
 <p><em>Flight metadata</em> refers to info that isn’t saved in the images. For example the name of the pilot, the project code, site name, etc. Creating flight metadata is strongly recommended if you wish to generate flight summary reports or move images into a structured directory tree. For additional info, see the <a href="flight_metadata.html">Flight Metadata</a> vignette.</p>
 <p>The recommended way to enter and save flight metadata is to create a <em>metadata.txt</em> file in each directory. The function below gets you started, but then you have to manually continue editing the flight info using a text editor.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Create the metadata text files and open them in a text editor</span>
 <span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span>, open <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>In this case, <code><a href="../reference/uas_metadata_make.html">uas_metadata_make(vegsrvy_info)</a></code> will create a ‘blank’ metadata text file in each folder in <code>vegsrvy_info</code> (where <code>vegsrvy_info</code> was created by <code><a href="../reference/uas_info.html">uas_info()</a></code>).</p>
+<p>In this case, <code>uas_metadata_make(vegsrvy_info)</code> will create a ‘blank’ metadata text file in each folder in <code>vegsrvy_info</code> (where <code>vegsrvy_info</code> was created by <code><a href="../reference/uas_info.html">uas_info()</a></code>).</p>
 <p><em>Notes</em></p>
 <ul>
 <li><p>To customize the flight metadata fields, run <code>uas_setfld()</code> first.</p></li>
@@ -194,9 +209,9 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="move-oddball-images-into-their-own-folders" class="section level1">
-<h1 class="hasAnchor">
-<a href="#move-oddball-images-into-their-own-folders" class="anchor"></a>4. Move oddball images into their own folders</h1>
+<div class="section level2">
+<h2 id="move-oddball-images-into-their-own-folders">4. Move oddball images into their own folders<a class="anchor" aria-label="anchor" href="#move-oddball-images-into-their-own-folders"></a>
+</h2>
 <p><span class="optional">Optional</span></p>
 <p>‘Oddball’ images in this context are those images you aren’t going stitch in your photogrammetry software. This include photos of calibration targets, images from aborted flights, test photos, drone selfies, etc. The idea is these should be separated (or deleted) so you don’t have to mess with them during stitching process. You can move images with Windows Explorer.</p>
 <p><em>Notes</em></p>
@@ -207,9 +222,9 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="split-andor-merge-images-across-folders" class="section level1">
-<h1 class="hasAnchor">
-<a href="#split-andor-merge-images-across-folders" class="anchor"></a>5. Split and/or merge images across folders</h1>
+<div class="section level2">
+<h2 id="split-andor-merge-images-across-folders">5. Split and/or merge images across folders<a class="anchor" aria-label="anchor" href="#split-andor-merge-images-across-folders"></a>
+</h2>
 <p><span class="optional">Optional</span></p>
 <p><em>Notes</em></p>
 <ul>
@@ -219,13 +234,13 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="rerun-uas_info-to-refresh-the-metadata" class="section level1">
-<h1 class="hasAnchor">
-<a href="#rerun-uas_info-to-refresh-the-metadata" class="anchor"></a>6. (Re)run <code>uas_info()</code> to refresh the metadata</h1>
+<div class="section level2">
+<h2 id="rerun-uas_info-to-refresh-the-metadata">6. (Re)run <code>uas_info()</code> to refresh the metadata<a class="anchor" aria-label="anchor" href="#rerun-uas_info-to-refresh-the-metadata"></a>
+</h2>
 <p>After you’ve created metadata text files, and moved oddball images out of directories, you need to pull out the location info again</p>
 <p>Sample code (same as step 2):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_img_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_img_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,
                  <span class="st">"c:/uas/hopland-veg-survey/flight02/DCIM"</span>,
                  <span class="st">"c:/uas/hopland-veg-survey/flight03/DCIM"</span><span class="op">)</span>
 
@@ -238,13 +253,13 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="move-images-into-a-structured-directory-tree" class="section level1">
-<h1 class="hasAnchor">
-<a href="#move-images-into-a-structured-directory-tree" class="anchor"></a>7. Move images into a structured directory tree</h1>
+<div class="section level2">
+<h2 id="move-images-into-a-structured-directory-tree">7. Move images into a structured directory tree<a class="anchor" aria-label="anchor" href="#move-images-into-a-structured-directory-tree"></a>
+</h2>
 <p><span class="optional">Optional</span></p>
 <p>If desired, you can move your images into a structured directory tree to help make them easier to find. Creating structured directory trees requires that i) you’ve entered flight metadata for every flight, and ii) you’ve passed a template that specifies how the directory tree should be constructed.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/uas_move.html">uas_move</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, 
          tree <span class="op">=</span> <span class="st">"my_dir_tree_template.txt"</span>,
          outdir_base <span class="op">=</span> <span class="st">"d:/uas_data"</span>,
@@ -256,13 +271,13 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="export-flight-geometries-to-gis-files" class="section level1">
-<h1 class="hasAnchor">
-<a href="#export-flight-geometries-to-gis-files" class="anchor"></a>8. Export flight geometries to GIS files</h1>
+<div class="section level2">
+<h2 id="export-flight-geometries-to-gis-files">8. Export flight geometries to GIS files<a class="anchor" aria-label="anchor" href="#export-flight-geometries-to-gis-files"></a>
+</h2>
 <p><span class="optional">Optional</span></p>
 <p>If desired, you can export the geometries of individual flights as KML and/or Shapefiles.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_kml</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_shp</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
@@ -276,12 +291,12 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="create-flight-summaries" class="section level1">
-<h1 class="hasAnchor">
-<a href="#create-flight-summaries" class="anchor"></a>9. Create flight summaries</h1>
+<div class="section level2">
+<h2 id="create-flight-summaries">9. Create flight summaries<a class="anchor" aria-label="anchor" href="#create-flight-summaries"></a>
+</h2>
 <p>This step involves creating standalone HTML pages that summarize images in a single folder. These can be thought of as the individual ‘pages’ of a data catalog.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vegsrvy_rpt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">vegsrvy_info</span><span class="op">)</span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
@@ -290,12 +305,12 @@ span.optional {
 </ul>
 <p><br></p>
 </div>
-<div id="create-a-table-of-contents-for-all-the-flight-summaries" class="section level1">
-<h1 class="hasAnchor">
-<a href="#create-a-table-of-contents-for-all-the-flight-summaries" class="anchor"></a>10. Create a Table of Contents for all the flight summaries</h1>
+<div class="section level2">
+<h2 id="create-a-table-of-contents-for-all-the-flight-summaries">10. Create a Table of Contents for all the flight summaries<a class="anchor" aria-label="anchor" href="#create-a-table-of-contents-for-all-the-flight-summaries"></a>
+</h2>
 <p>If you have several flights in the same general area, the final step is to create a master Table of Contents (TOC) for a series of flight summaries. The TOC is a standalone HTML file with links to individual flight summaries.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">toc_rgb_fn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_toc.html">uas_toc</a></span><span class="op">(</span><span class="va">vegsrvy_rpt</span>, 
                       output_dir <span class="op">=</span> <span class="st">"c:/drone_data/catalogs/pt_pinole"</span>,
                       gather_dir <span class="op">=</span> <span class="st">"."</span>, fltmap_show <span class="op">=</span> <span class="cn">TRUE</span>, open_toc <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
@@ -319,11 +334,13 @@ span.optional {
 
 
       <footer><div class="copyright">
-  <p>Developed by Andy Lyons.</p>
+  <p></p>
+<p>Developed by Andy Lyons.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -331,6 +348,8 @@ span.optional {
 
   
 
+
+  
 
   </body>
 </html>

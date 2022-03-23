@@ -2,18 +2,65 @@
 title: "Cataloging Workflow" 
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Cataloging Drone Images with uasimg: A Workflow}
+  %\VignetteIndexEntry{Cataloging Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
 library(uasimg)
+library(htmltools)
+
+gv2svg <- function(gr, width = 300) {
+
+  if (!requireNamespace("DiagrammeRsvg", quietly = TRUE)) stop("DiagrammeRsvg is required")
+  if (!requireNamespace("xml2", quietly = TRUE)) stop("xml2 is required")
+  library(magrittr)
+
+  svg_char <- DiagrammeRsvg::export_svg(gr)
+
+  ## Create an xml object so we can parse it
+  svg_xml <- xml2::read_xml(svg_char)
+
+  svg_node <- svg_xml %>% xml2::xml_find_first("//d1:svg")
+
+  ## Get the width (which is saved in pts)
+  width_orig_pts <- svg_node %>%
+    xml2::xml_attr("width") %>%
+    gsub("pt$", "", .) %>%
+    as.numeric()
+
+  ## Get the width (which is saved in pts)
+  height_orig_pts <- svg_node %>%
+    xml2::xml_attr("height") %>%
+    gsub("pt$", "", .) %>%
+    as.numeric()
+
+  ## Get the ratio
+  height_width_ratio <- height_orig_pts / width_orig_pts
+
+  ## Compute the required width and height in pts
+  width_desired_pts <- (width / 1.333333) %>% round()
+  height_desired_pts <- (width_desired_pts * height_width_ratio) %>% round()
+
+  ## Update the height and width attributes
+  xml2::xml_attr(svg_node, "height") <- paste0(height_desired_pts, "pt")
+  xml2::xml_attr(svg_node, "width") <- paste0(width_desired_pts, "pt")
+
+  ## Return the text, cleaning up some non-printing stuff
+  svg_xml %>%
+    as.character() %>%
+    gsub("<!--.*?-->", "", .) %>%
+    gsub("\\n", "", .)
+
+}
+
+
 ```
 
 ```{css echo=FALSE}
@@ -30,9 +77,10 @@ This article presents a workflow for using `uasimg` to create a **catalog of dro
 
 \
 
-```{r echo = FALSE}
+```{r echo = FALSE, eval = TRUE}
 library(DiagrammeR)
-grViz("digraph flowchart {
+
+wrkflow_gv <- grViz("digraph flowchart {
       node [fontname = Helvetica, shape = rectangle]
       tab1 [label = '@@1']
       tab2 [label = '@@2']
@@ -61,8 +109,16 @@ grViz("digraph flowchart {
       [9]: 'Export flight geometries to shp / kml files'
       [10]: 'Create individual flight summaries'
       [11]: 'Create Table of Content page(s) for related flight summaries'
-      ",
-      width = 600, height = 720)
+      ") 
+
+# source("gv2svg.R")
+
+wrkflow_html <- wrkflow_gv %>% 
+  gv2svg(width = 400) 
+
+htmltools::HTML(paste0("<center>",
+                       wrkflow_html,
+                       "</center>"))
 ```
 
 \

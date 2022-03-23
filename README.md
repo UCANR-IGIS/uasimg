@@ -47,7 +47,18 @@ camera compass direction), and are *estimates only*.
 
 ## Installation
 
-`uasimg` is not on CRAN (yet), but you can install it from GitHub.
+`uasimg` is not on CRAN (yet), but you can install it from R-Universe.
+
+``` r
+options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',
+                  CRAN = 'https://cloud.r-project.org'))
+
+install.packages('uasimg')
+```
+
+### Alternative Installation: GitHub
+
+Alternately, you can install it from GitHub:
 
 *Note*: Windows users need *RTools* to build packages from source files
 (which is basically what you do when you install from GitHub). RTools is
@@ -61,10 +72,10 @@ install.packages('installr')
 installr::install.Rtools()
 ```
 
-After RTools is installed, you can install `uasimg` with:
+After RTools is installed, install `uasimg` from GitHub with:
 
 ``` r
-install.packages('remotes')
+## install.packages('remotes')
 remotes::install_github("ucanr-igis/uasimg")
 ```
 
@@ -181,7 +192,7 @@ Vignette and function help pages.
 ## Example
 
 The general usage is to first create a flight info object for one or
-more directories of images using the *uas\_info()* function. Save the
+more directories of images using the *uas_info()* function. Save the
 result to a variable:
 
 ``` r
