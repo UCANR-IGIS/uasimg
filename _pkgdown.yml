@@ -41,6 +41,7 @@ reference:
       - uas_worldfile
       - uas_cropctr
       - uas_convert
+      - uas_rename
   - title: Metadata
     desc: Managing metadata
     contents:

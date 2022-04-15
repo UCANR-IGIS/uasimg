@@ -47,7 +47,7 @@ camera compass direction), and are *estimates only*.
 
 ## Installation
 
-`uasimg` is not on CRAN (yet), but you can install it from R-Universe.
+`uasimg` is not on CRAN (yet), but you can install it from R-Universe:
 
 ``` r
 options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',

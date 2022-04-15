@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.1</span>
       </span>
     </div>
 
@@ -141,7 +141,7 @@ total directory size, the data flown, and external metadata.</p>
     <p>This will read the EXIF header data from a directory of image files, and extract
 the centroids and estimated ground-footprints. Extracting the image locations requires that the images have
 geostamps (common in most drone images but some drones require an extra processing step to geostamp the images).
-To index a specific file type, you can pass a file extension to <code>ext</code>.</p>
+To index a specific file type, you can pass a file extension to <code>ext</code> (not case sensitive).</p>
 <p>Estimating the ground-footprints (<code>fp = TRUE</code>) further requires that the camera parameters are known,
 the flight elevation about ground level is either saved in the EXIF info or provided in
 the <code>alt_agl</code> argument (in meters). If <code>alt_agl</code> is passed, it will override any elevation data
@@ -189,7 +189,9 @@ of about 45 seconds. Pix4Dcapture was used as the mission planning software with
 be written to accept one and only one argument - a directory path. This can be useful if the default
 short names should be constructed from pieces of the image directory path. See also <code><a href="uas_path2name_fun.html">uas_path2name_fun</a></code>.</p>
 <p><code>cache</code> can be a logical value or the name of a directory where EXIF data gets cached.
-If <code>cache = TRUE</code>, the default cache directory will be used (<code>~/.R</code>). Cached EXIF data is linked
+If <code>cache = TRUE</code>, the default cache directory will be used (<code>~/.R</code>). The only information
+that gets cached is image metadata. Flight metadata is never cached (see the Vignette on Flight Metadata
+for a discussion of image and flight metadata). Cached EXIF data is linked
 to a directory of images based on the directory name and total size of all image files.
 So if images are added or removed from the directory, the cache will be automatically rebuilt
 the next time the function is run. <code>update_cache</code> is a logical value

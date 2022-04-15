@@ -85,7 +85,7 @@ uas_move <- function(x,
   #dir_nofltimg_idx <- NULL
 
   for (tree_ln in tree_input) {
-    ## First trim any which space
+    ## First trim any white space
     tree_ln_clean <- trimws(tree_ln)
 
     ## Next, make sure it isn't a comment
@@ -188,7 +188,7 @@ uas_move <- function(x,
       }
     }
 
-    ## Next, if any of the field names in $pts are tokens, make the replaecments
+    ## Next, if any of the field names in $pts are tokens, make the replacements
     ## This could result in duplicate lines in the tree if the attribute column contains
     ## more than one unique value
 
@@ -269,7 +269,7 @@ uas_move <- function(x,
         if (copymove_yn) {
           imgs_go_here <- normalizePath(file.path(outdir_base, flt_tree[1]), mustWork = FALSE)
 
-          ## Append the 'images go here' path to the pts attribute table
+          ## Append the 'images go here' path from the pts attribute table
           img_fromto_tbl <- x[[i]]$pts %>%
             st_drop_geometry() %>%
             mutate(dest_path = imgs_go_here)

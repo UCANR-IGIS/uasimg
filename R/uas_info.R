@@ -78,7 +78,9 @@
 #' short names should be constructed from pieces of the image directory path. See also \code{\link{uas_path2name_fun}}.
 #'
 #' \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
-#' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). Cached EXIF data is linked
+#' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). The only information
+#' that gets cached is image metadata. Flight metadata is never cached (see the Vignette on Flight Metadata
+#' for a discussion of image and flight metadata). Cached EXIF data is linked
 #' to a directory of images based on the directory name and total size of all image files.
 #' So if images are added or removed from the directory, the cache will be automatically rebuilt
 #' the next time the function is run. \code{update_cache} is a logical value

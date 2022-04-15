@@ -1,3 +1,10 @@
+# uasimg 1.8.1 (2022-04-12)
+
+* `uas_rename()`: new function to rename images based on a name template with placeholders for image and flight metadata
+* `uas_info()`: updated documentation
+* `uas_metadata_make()`: updated default flight metadata template
+* `uas_report.Rmd`: changed the default Window title to the short version of the flight name 
+
 # uasimg 1.8.0 (2022-03-20)
 
 * `uas_info()`: argument `ext` added (filter by file type); minor code cleaning, 

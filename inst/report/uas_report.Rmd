@@ -1,5 +1,6 @@
 ---
 title: "`r params$report_title`"
+pagetitle: "`r ifelse(is.null(params$metadata$name_short), params$report_title, params$metadata$name_short)`"
 output: 
   html_document: 
     self_contained: yes
