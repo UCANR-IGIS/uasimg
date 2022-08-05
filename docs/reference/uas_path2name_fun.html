@@ -81,17 +81,20 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_path2name_fun</span><span class="op">(</span>idx_from_last <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_path2name_fun</span><span class="op">(</span>idx_from_last <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>idx_from_last</dt>
 <dd><p>Indices of the directory path, see Details</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A function that returns a flight name</p>
+    
+
+<p>A function that returns a flight name</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -112,12 +115,12 @@ that will do the conversion.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">"D:/Drone_Data/HREC/PostRiverFire2020/imgs/ebX_Flt02_postproc/img/msp"</span></span>
-<span class="r-in"><span class="va">flight_name_fun</span> <span class="op">&lt;-</span> <span class="fu">uas_path2name_fun</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">flight_name_fun</span><span class="op">(</span><span class="va">data_dir</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ebee_flt2_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">data_dir</span>, fp <span class="op">=</span> <span class="cn">FALSE</span>, path2name_fun <span class="op">=</span> <span class="va">flight_name_fun</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">"D:/Drone_Data/HREC/PostRiverFire2020/imgs/ebX_Flt02_postproc/img/msp"</span></span></span>
+<span class="r-in"><span><span class="va">flight_name_fun</span> <span class="op">&lt;-</span> <span class="fu">uas_path2name_fun</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">flight_name_fun</span><span class="op">(</span><span class="va">data_dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ebee_flt2_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">data_dir</span>, fp <span class="op">=</span> <span class="cn">FALSE</span>, path2name_fun <span class="op">=</span> <span class="va">flight_name_fun</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -132,7 +135,7 @@ that will do the conversion.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

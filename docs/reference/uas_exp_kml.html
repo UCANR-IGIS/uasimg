@@ -81,67 +81,92 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_exp_kml</span><span class="op">(</span>
-  <span class="va">x</span>,
-  flt_idx <span class="op">=</span> <span class="cn">NULL</span>,
-  ctr <span class="op">=</span> <span class="cn">FALSE</span>,
-  fp <span class="op">=</span> <span class="cn">FALSE</span>,
-  mcp <span class="op">=</span> <span class="cn">FALSE</span>,
-  combine_feats <span class="op">=</span> <span class="cn">FALSE</span>,
-  combine_fn <span class="op">=</span> <span class="cn">NULL</span>,
-  output_dir <span class="op">=</span> <span class="cn">NULL</span>,
-  out_fnbase <span class="op">=</span> <span class="cn">NULL</span>,
-  create_dir <span class="op">=</span> <span class="cn">TRUE</span>,
-  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">uas_exp_shp</span><span class="op">(</span>
-  <span class="va">x</span>,
-  flt_idx <span class="op">=</span> <span class="cn">NULL</span>,
-  ctr <span class="op">=</span> <span class="cn">FALSE</span>,
-  fp <span class="op">=</span> <span class="cn">FALSE</span>,
-  mcp <span class="op">=</span> <span class="cn">FALSE</span>,
-  combine_feats <span class="op">=</span> <span class="cn">FALSE</span>,
-  combine_fn <span class="op">=</span> <span class="cn">NULL</span>,
-  output_dir <span class="op">=</span> <span class="cn">NULL</span>,
-  out_fnbase <span class="op">=</span> <span class="cn">NULL</span>,
-  create_dir <span class="op">=</span> <span class="cn">TRUE</span>,
-  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_exp_kml</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  flt_idx <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ctr <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  mcp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  combine_feats <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  combine_fn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  out_fnbase <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  create_dir <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">uas_exp_shp</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  flt_idx <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ctr <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  mcp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  combine_feats <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  combine_fn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  out_fnbase <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  create_dir <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A list of class 'uas_info'</p></dd>
+
+
 <dt>flt_idx</dt>
 <dd><p>Flight indices in x to process, integer</p></dd>
+
+
 <dt>ctr</dt>
 <dd><p>Export the image centroids, Logical</p></dd>
+
+
 <dt>fp</dt>
 <dd><p>Export the image footprints, Logical</p></dd>
+
+
 <dt>mcp</dt>
 <dd><p>Export the minimum convex polygon of the image footprints, logical</p></dd>
+
+
 <dt>combine_feats</dt>
 <dd><p>Combine features into a single Shapefile / KML, logical</p></dd>
+
+
 <dt>combine_fn</dt>
 <dd><p>File name (minus path and extension) for the combined features layer</p></dd>
+
+
 <dt>output_dir</dt>
 <dd><p>The output directory. If NULL, the layers will be saved in a 'map' sub-directory of the image folder</p></dd>
+
+
 <dt>out_fnbase</dt>
 <dd><p>The base of output filenames</p></dd>
+
+
 <dt>create_dir</dt>
 <dd><p>Create the output directory if it doesn't exist, logical</p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>Overwrite existing files, Logical</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Suppress messages, Logical</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of filenames</p>
+    
+
+<p>A vector of filenames</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -157,7 +182,7 @@ For this to happen, you must also pass a value for <code>combine_fn</code> (a ba
     <div id="functions">
     <h2>Functions</h2>
     
-<ul><li><p><code>uas_exp_shp</code>: Export flight info to Shapefile</p></li>
+<ul><li><p><code>uas_exp_shp()</code>: Export flight info to Shapefile</p></li>
 </ul></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -176,7 +201,7 @@ For this to happen, you must also pass a value for <code>combine_fn</code> (a ba
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

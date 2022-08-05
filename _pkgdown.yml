@@ -6,6 +6,9 @@ template:
     ganalytics: UA-81567502-3
 development:
   mode: release
+home:
+  sidebar:
+    structure: [links, license, community, citation, authors]
 repo:
   url:
     home: https://github.com/ucanr-igis/uasimg/

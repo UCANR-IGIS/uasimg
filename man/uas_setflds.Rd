@@ -35,13 +35,13 @@ a new metadata.txt file is created.
 }
 \section{Functions}{
 \itemize{
-\item \code{uas_setflds}: Set default fields for image collection metadata.
+\item \code{uas_setflds()}: Set default fields for image collection metadata.
 
-\item \code{uas_getflds}: Get default supplemental metadata field names.
+\item \code{uas_getflds()}: Get default supplemental metadata field names.
 
-\item \code{uas_flds_oem}: Get a standard set of image collection metedata fields
+\item \code{uas_flds_oem()}: Get a standard set of image collection metedata fields
+
 }}
-
 \seealso{
 \code{\link{uas_getcache}}, \code{\link{uas_info}}
 }

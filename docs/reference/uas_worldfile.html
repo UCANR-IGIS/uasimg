@@ -81,40 +81,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_worldfile</span><span class="op">(</span>
-  <span class="va">x</span>,
-  idx <span class="op">=</span> <span class="cn">NULL</span>,
-  aux.xml <span class="op">=</span> <span class="cn">TRUE</span>,
-  wld <span class="op">=</span> <span class="cn">FALSE</span>,
-  wldext <span class="op">=</span> <span class="st">"auto"</span>,
-  prj <span class="op">=</span> <span class="cn">FALSE</span>,
-  rotated <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_worldfile</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  idx <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  aux.xml <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  wld <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  wldext <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  prj <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rotated <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A list of class 'uas_info'</p></dd>
+
+
 <dt>idx</dt>
 <dd><p>Which rows in x to process (default is all)</p></dd>
+
+
 <dt>aux.xml</dt>
 <dd><p>Create an aux.xml file, logical. See details.</p></dd>
+
+
 <dt>wld</dt>
 <dd><p>Create a world file, logical. See details.</p></dd>
+
+
 <dt>wldext</dt>
 <dd><p>Extension for the world file, character. Ignored if <code>wld = FALSE</code>.</p></dd>
+
+
 <dt>prj</dt>
 <dd><p>Create a prj file, logical. See details.</p></dd>
+
+
 <dt>rotated</dt>
 <dd><p>Compute parameters that replicate the camera Yaw.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Show messages.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of filenames generated.</p>
+    
+
+<p>A vector of filenames generated.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -161,7 +178,7 @@ seem to be recognized for rasters by ArcGIS, however QGIS picks them up.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

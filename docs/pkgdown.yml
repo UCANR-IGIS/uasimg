@@ -1,11 +1,11 @@
-pandoc: 2.14.0.3
-pkgdown: 2.0.2
+pandoc: '2.18'
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   catalog_wrkflw: catalog_wrkflw.html
   flight_metadata: flight_metadata.html
   uasimg: uasimg.html
-last_built: 2022-04-15T05:58Z
+last_built: 2022-08-05T22:33Z
 urls:
   reference: http://ucanr-igis.github.io/uasimg/reference
   article: http://ucanr-igis.github.io/uasimg/articles

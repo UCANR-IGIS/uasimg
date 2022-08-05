@@ -104,9 +104,11 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Managing Drone Images with uasimg</h1>
-                        <h4 data-toc-skip class="author">Andy Lyons, University of California Division of Agriculture and Natural Resources</h4>
+                        <h4 data-toc-skip class="author">Andy Lyons,
+University of California Division of Agriculture and Natural
+Resources</h4>
             
-            <h4 data-toc-skip class="date">2022-04-14</h4>
+            <h4 data-toc-skip class="date">2022-08-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ucanr-igis/uasimg/blob/master/vignettes/uasimg.Rmd" class="external-link"><code>vignettes/uasimg.Rmd</code></a></small>
       <div class="hidden name"><code>uasimg.Rmd</code></div>
@@ -118,47 +120,123 @@
 <div class="section level2">
 <h2 id="package-goals">Package Goals<a class="anchor" aria-label="anchor" href="#package-goals"></a>
 </h2>
-<p>Like many R packages, <code>uasimg</code> was born to solve a specific practical problem - how to manage thousands of images from drone projects!</p>
-<p>Creating maps and 3D models with drones begins with collecting still images taken with a lot of overlap. This produces <em>a lot</em> of individual images. You then feed these images into photogrammetry or structure from motion (SfM) software, which produces a lot more data (that’s another story, uasimg doesn’t help you manage the outputs from photogrammetry).</p>
-<p>For better or worse, most photogrammetry / SfM software expects you—the humble user—to have all your images cleaned and organized ahead of time. For a single project, you can move images around manually with Windows Explorer. But this quickly becomes unmanageable when you have lots of projects, and/or a lot of people involved in different parts of the workflow. <code>uasimg</code> has functions to semi-automate data management and make it more consistent.</p>
-<p>A second need <code>uasimg</code> addresses is documenting and sharing collections of drone data. This is helpful for managing projects, but more importantly for long-term data archiving and reproducibility. Drone images are the raw data upon which everything else follows. Someone can always repeat the stitching process, but the images themselves can not be replaced or recreated. A system for locating images, and viewing their properties, is therefore needed for sound scientific practice. The next step - sharing the existence of images with colleagues and search engines, is likewise part and parcel of being part of the scientific community.</p>
-<p>Lastly, <code>uasimg</code> has several utility functions to help you analyze individual drone images. These include creating world files (so you can view the photos in GIS software) and cropping out the area of overlap (to make a non-photogrammetric photo mosaic).</p>
+<p>Like many R packages, <code>uasimg</code> was born to solve a
+specific practical problem - how to manage thousands of images from
+drone projects!</p>
+<p>Creating maps and 3D models with drones begins with collecting still
+images taken with a lot of overlap. This produces <em>a lot</em> of
+individual images. You then feed these images into photogrammetry or
+structure from motion (SfM) software, which produces a lot more data
+(that’s another story, uasimg doesn’t help you manage the outputs from
+photogrammetry).</p>
+<p>For better or worse, most photogrammetry / SfM software expects
+you—the humble user—to have all your images cleaned and organized ahead
+of time. For a single project, you can move images around manually with
+Windows Explorer. But this quickly becomes unmanageable when you have
+lots of projects, and/or a lot of people involved in different parts of
+the workflow. <code>uasimg</code> has functions to semi-automate data
+management and make it more consistent.</p>
+<p>A second need <code>uasimg</code> addresses is documenting and
+sharing collections of drone data. This is helpful for managing
+projects, but more importantly for long-term data archiving and
+reproducibility. Drone images are the raw data upon which everything
+else follows. Someone can always repeat the stitching process, but the
+images themselves can not be replaced or recreated. A system for
+locating images, and viewing their properties, is therefore needed for
+sound scientific practice. The next step - sharing the existence of
+images with colleagues and search engines, is likewise part and parcel
+of being part of the scientific community.</p>
+<p>Lastly, <code>uasimg</code> has several utility functions to help you
+analyze individual drone images. These include creating world files (so
+you can view the photos in GIS software) and cropping out the area of
+overlap (to make a non-photogrammetric photo mosaic).</p>
 <p><code>uasimg</code> does <em>not</em>:</p>
 <ul>
 <li>plan drone flights<br>
 </li>
 <li>do any photogrammetry or structure from motion processing</li>
-<li>manage the intermediate or final ouputs from photogrammetry software</li>
+<li>manage the intermediate or final ouputs from photogrammetry
+software</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="universal-step-1--extract-image-info">Universal Step 1. Extract Image Info<a class="anchor" aria-label="anchor" href="#universal-step-1--extract-image-info"></a>
 </h2>
-<p>Regardless of what you want to do with <code>uasimg</code>, the first step is extracting the location info from a directory of images. This includes the GPS coordinates of each image, as well as image dimensions, camera name, focal length, drone altitude, bearing, and so forth.</p>
-<p>You extract metadata from folder(s) of images with <code><a href="../reference/uas_info.html">uas_info()</a></code>:</p>
+<p>Regardless of what you want to do with <code>uasimg</code>, the first
+step is extracting the location info from a directory of images. This
+includes the GPS coordinates of each image, as well as image dimensions,
+camera name, focal length, drone altitude, bearing, and so forth.</p>
+<p>You extract metadata from folder(s) of images with
+<code><a href="../reference/uas_info.html">uas_info()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ucanr-igis/uasimg" class="external-link">uasimg</a></span><span class="op">)</span>
-<span class="va">flt1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt01"</span>, cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ucanr-igis/uasimg" class="external-link">uasimg</a></span><span class="op">)</span></span>
+<span><span class="va">flt1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt01"</span>, cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes:</em></p>
 <ul>
-<li><p>As shown above, the object returned by <code><a href="../reference/uas_info.html">uas_info()</a></code> should be saved to a variable so you can use it as input in other functions.</p></li>
-<li><p>If your drone camera isn’t recognized, you’ll get an error message. Don’t panic. Contact the package maintainer to get your camera added, or see the help page for instructions on how to pass the parameters for your camera.</p></li>
-<li><p>You can pass a vector of folders to <code><a href="../reference/uas_info.html">uas_info()</a></code> to extract the image info for all of them at once. Those folders could represent individual flights, or images from a single flight that has been spread across multiple directories.</p></li>
-<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> requires a companion command line utility called <code>EXIFtool</code>, which needs to be installed separately. See the <a href="https://ucanr-igis.github.io/uasimg/" class="external-link">README</a> for details.</p></li>
-<li><p>Setting <code>cache = TRUE</code> is recommended. This will save the image locations so if the command is run on the folder again it won’t have to run EXIFtool again.</p></li>
-<li><p>Most modern drones record the altitude about the launch point, however older cameras like the GoPro and multispectral cameras like the Sequoia don’t record relative altitude. In these case, you have the option to pass the relative altitude with the <code>alt_agl</code> argument, or simply leaving it out. Omitting the relative altitude is not a big deal. The only thing it prevents is estimating the GSD and image footprints.</p></li>
+<li><p>As shown above, the object returned by <code><a href="../reference/uas_info.html">uas_info()</a></code>
+should be saved to a variable so you can use it as input in other
+functions.</p></li>
+<li><p>If your drone camera isn’t recognized, you’ll get an error
+message. Don’t panic. Contact the package maintainer to get your camera
+added, or see the help page for instructions on how to pass the
+parameters for your camera.</p></li>
+<li><p>You can pass a vector of folders to <code><a href="../reference/uas_info.html">uas_info()</a></code> to
+extract the image info for all of them at once. Those folders could
+represent individual flights, or images from a single flight that has
+been spread across multiple directories.</p></li>
+<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> requires a companion command line utility
+called <code>EXIFtool</code>, which needs to be installed separately.
+See the <a href="https://ucanr-igis.github.io/uasimg/" class="external-link">README</a> for
+details.</p></li>
+<li><p>Setting <code>cache = TRUE</code> is recommended. This will save
+the image locations so if the command is run on the folder again it
+won’t have to run EXIFtool again.</p></li>
+<li><p>Most modern drones record the altitude about the launch point,
+however older cameras like the GoPro and multispectral cameras like the
+Sequoia don’t record relative altitude. In these case, you have the
+option to pass the relative altitude with the <code>alt_agl</code>
+argument, or simply leaving it out. Omitting the relative altitude is
+not a big deal. The only thing it prevents is estimating the GSD and
+image footprints.</p></li>
 </ul>
 <div class="section level4">
 <h4 id="details-accuracy-of-the-estimated-gsd-and-image-footprints">Details: Accuracy of the Estimated GSD and Image Footprints<a class="anchor" aria-label="anchor" href="#details-accuracy-of-the-estimated-gsd-and-image-footprints"></a>
 </h4>
-<p><code>uasimg</code> estimates image footprints and GSD (ground sampling distance, aka pixel size) based on the camera type and recorded height above ground level. Many drones record the altitude above the launch point, so if the study area is flat these estimates are reasonable (although the accuracy of the recorded altitude is not as accurate as the xy location). If the drone does not record the relative altitude (i.e., most multispectral cameras), you can pass the AGL altitude as an argument to <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
-<p>In hilly areas, or where the altitude of camera locations was variable, image footprints and GSD will always be over or under-estimated. If the distance from the drone to the ground is larger than the altitude above the launch point (e.g., flying over a valley), the GSD and footprint will be under-estimated (i.e., too small). Conversely when the distance to the ground is smaller than the above launch altitude (e.g., flying over a hill), the estimated GSD and footprint will be over-estimated.</p>
+<p><code>uasimg</code> estimates image footprints and GSD (ground
+sampling distance, aka pixel size) based on the camera type and recorded
+height above ground level. Many drones record the altitude above the
+launch point, so if the study area is flat these estimates are
+reasonable (although the accuracy of the recorded altitude is not as
+accurate as the xy location). If the drone does not record the relative
+altitude (i.e., most multispectral cameras), you can pass the AGL
+altitude as an argument to <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
+<p>In hilly areas, or where the altitude of camera locations was
+variable, image footprints and GSD will always be over or
+under-estimated. If the distance from the drone to the ground is larger
+than the altitude above the launch point (e.g., flying over a valley),
+the GSD and footprint will be under-estimated (i.e., too small).
+Conversely when the distance to the ground is smaller than the above
+launch altitude (e.g., flying over a hill), the estimated GSD and
+footprint will be over-estimated.</p>
 </div>
 <div class="section level3">
 <h3 id="flight-metadata">Flight Metadata<a class="anchor" aria-label="anchor" href="#flight-metadata"></a>
 </h3>
-<p>A lot of information can be extracted from the image files, including the date, time, GPS location, camera type, focal length, etc. However other metadata fields pertaining to the flight have to be manually provided. These include things like the name of the pilot, a short description of the mission goals, download link, contact info, etc. These are referred to as <em>flight metadata</em>. Entering flight metadata is completely optional, but many of the more useful functions of uasimg, such as creating useful data catalogs and organizing images into structured directory trees, require flight metadata.</p>
-<p>There are two ways you can enter flight metadata - as function arguments or text files. The recommended way is to create a little text file in each image folder. This file will be automatically read assuming the file name starts with ‘metadata’ and ends with a ‘txt’ extension (e.g., <em>metadata.txt</em>, or <em>metadata-flt01.txt</em>). The file should be formatted as YAML, which looks like:</p>
+<p>A lot of information can be extracted from the image files, including
+the date, time, GPS location, camera type, focal length, etc. However
+other metadata fields pertaining to the flight have to be manually
+provided. These include things like the name of the pilot, a short
+description of the mission goals, download link, contact info, etc.
+These are referred to as <em>flight metadata</em>. Entering flight
+metadata is completely optional, but many of the more useful functions
+of uasimg, such as creating useful data catalogs and organizing images
+into structured directory trees, require flight metadata.</p>
+<p>There are two ways you can enter flight metadata - as function
+arguments or text files. The recommended way is to create a little text
+file in each image folder. This file will be automatically read assuming
+the file name starts with ‘metadata’ and ends with a ‘txt’ extension
+(e.g., <em>metadata.txt</em>, or <em>metadata-flt01.txt</em>). The file
+should be formatted as YAML, which looks like:</p>
 <pre><code>name_long: Point Pinole, West Grove, Flight 03
 name_short: ptpinole_wg_flt03
 description: Flight over west grove of Eucalyptus trees, 390ft, 90% overlap, 75 degrees off-nadir
@@ -168,36 +246,55 @@ subloc: westgrove
 contact: Andy Lyons
 pilot: Andy Lyons
 data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
-<p>As seen in the example above, each line of the text file should start with a field name (without spaces), followed by a colon, followed by the value (this formatting style is also known as <em>YAML</em>). Blank lines and lines that start with <code>#</code> are ignored.</p>
-<p>Any metadata field can be added to the file as long as it follows these rules. The built-in Flight Summary page recognizes the following metadata fields:</p>
+<p>As seen in the example above, each line of the text file should start
+with a field name (without spaces), followed by a colon, followed by the
+value (this formatting style is also known as <em>YAML</em>). Blank
+lines and lines that start with <code>#</code> are ignored.</p>
+<p>Any metadata field can be added to the file as long as it follows
+these rules. The built-in Flight Summary page recognizes the following
+metadata fields:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span>
-<span class="co">##  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span>
-<span class="co">## [11] "notes"</span></code></pre>
-<p>You can manually create <em>metadata.txt</em> files using Notepad or any text editor. Just be sure to save it in the same folder as the images. Alternately <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> can be used to create ‘blank’ <em>metadata.txt</em> files several directories at once:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span></span>
+<span><span class="co">##  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span></span>
+<span><span class="co">## [11] "notes"</span></span></code></pre>
+<p>You can manually create <em>metadata.txt</em> files using Notepad or
+any text editor. Just be sure to save it in the same folder as the
+images. Alternately <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> can be used to
+create ‘blank’ <em>metadata.txt</em> files several directories at
+once:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D:/uas/HREC/Watershed1/Data/2017-01-16_X5/Flight01_1514_1526_400ft"</span>,
-             <span class="st">"D:/uas/HREC/Watershed1/Data/2017-01-16_X5/Flight02_1532_1540_400ft"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span>dirs <span class="op">=</span> <span class="va">my_dirs</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">my_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D:/uas/HREC/Watershed1/Data/2017-01-16_X5/Flight01_1514_1526_400ft"</span>,</span>
+<span>             <span class="st">"D:/uas/HREC/Watershed1/Data/2017-01-16_X5/Flight02_1532_1540_400ft"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span>dirs <span class="op">=</span> <span class="va">my_dirs</span><span class="op">)</span></span></code></pre></div>
 <p>Additional notes about <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code>:</p>
 <ul>
-<li><p>The fields that <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> inserts in the blank metadata text files can passed as , with defaults set by <code><a href="../reference/uas_setflds.html">uas_setflds()</a></code>. Fields can also be pre-populated using . See the help page for details.</p></li>
-<li><p>Include <code>open = TRUE</code> to open and edit the metadata files in your text editor.</p></li>
-<li><p>After you edit a <em>metadata</em>.txt* file, you need to (re)run <code><a href="../reference/uas_info.html">uas_info()</a></code> in order to use the latest values in other functions. Unlike EXIF data from the image files, supplemental metadata is always read fresh and never cached.</p></li>
+<li><p>The fields that <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> inserts in the
+blank metadata text files can passed as , with defaults set by
+<code><a href="../reference/uas_setflds.html">uas_setflds()</a></code>. Fields can also be pre-populated using . See
+the help page for details.</p></li>
+<li><p>Include <code>open = TRUE</code> to open and edit the metadata
+files in your text editor.</p></li>
+<li><p>After you edit a <em>metadata</em>.txt* file, you need to (re)run
+<code><a href="../reference/uas_info.html">uas_info()</a></code> in order to use the latest values in other
+functions. Unlike EXIF data from the image files, supplemental metadata
+is always read fresh and never cached.</p></li>
 </ul>
-<p>The second way to save supplemental metadata is by passing a named list as the <code>metadata</code> argument when running <code><a href="../reference/uas_info.html">uas_info()</a></code>. The fields supported and their uses are the same as before. For example:</p>
+<p>The second way to save supplemental metadata is by passing a named
+list as the <code>metadata</code> argument when running
+<code><a href="../reference/uas_info.html">uas_info()</a></code>. The fields supported and their uses are the
+same as before. For example:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">metadata_lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name_short <span class="op">=</span> <span class="st">"ptpinol_wg_flt03"</span>,
-                     name_long <span class="op">=</span> <span class="st">"Point Pinole, West Grove, Flight 03"</span>,
-                     description <span class="op">=</span> <span class="st">"Flight over west grove of Eucalyptus trees"</span>,
-                     contact <span class="op">=</span> <span class="st">"Andy Lyons"</span>,
-                     notes <span class="op">=</span> <span class="st">"There might be a cloud shadow half way thru the flight"</span><span class="op">)</span>
-
-<span class="va">flt1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="st">"D:/uas/PtPinole/imgs/wg/wg_flt01"</span>, 
-                      metadata <span class="op">=</span> <span class="va">metadata_lst</span>,
-                      cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">metadata_lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name_short <span class="op">=</span> <span class="st">"ptpinol_wg_flt03"</span>,</span>
+<span>                     name_long <span class="op">=</span> <span class="st">"Point Pinole, West Grove, Flight 03"</span>,</span>
+<span>                     description <span class="op">=</span> <span class="st">"Flight over west grove of Eucalyptus trees"</span>,</span>
+<span>                     contact <span class="op">=</span> <span class="st">"Andy Lyons"</span>,</span>
+<span>                     notes <span class="op">=</span> <span class="st">"There might be a cloud shadow half way thru the flight"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">flt1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="st">"D:/uas/PtPinole/imgs/wg/wg_flt01"</span>, </span>
+<span>                      metadata <span class="op">=</span> <span class="va">metadata_lst</span>,</span>
+<span>                      cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 </div>
 </div>
@@ -207,45 +304,88 @@ data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
 <div class="section level3">
 <h3 id="flight-summaries">Flight Summaries<a class="anchor" aria-label="anchor" href="#flight-summaries"></a>
 </h3>
-<p><code>uasimg</code> can generate simple HTML pages that show the location and properties of images in a folder (<a href="https://ucanr-igis.github.io/uasimg/samples/hrec/Flt03_1501_1517_240ft_report.html" class="external-link">sample</a>). These are generically referred to as ‘Flight Summaries’, even though you sometimes have images from multiple flights saved in one folder. Flight summaries may include an interactive map of the camera locations, their estimated footprints, and image thumbnails. Histograms show the distribution of the estimated ground sampling distance (GSD) and forward overlap. These stand-alone HTML pages can be viewed locally, zipped up and emailed to colleagues, or uploaded to a web server. You can also create a ‘Table of Contents’ page for several Flight Summaries using <code><a href="../reference/uas_toc.html">uas_toc()</a></code> (see <a href="#creating-a-table-of-contents">below</a>).</p>
-<p>Create Flight Summaries with <code><a href="../reference/uas_report.html">uas_report()</a></code>. The main argument required is a flight info object from <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
+<p><code>uasimg</code> can generate simple HTML pages that show the
+location and properties of images in a folder (<a href="https://ucanr-igis.github.io/uasimg/samples/hrec/Flt03_1501_1517_240ft_report.html" class="external-link">sample</a>).
+These are generically referred to as ‘Flight Summaries’, even though you
+sometimes have images from multiple flights saved in one folder. Flight
+summaries may include an interactive map of the camera locations, their
+estimated footprints, and image thumbnails. Histograms show the
+distribution of the estimated ground sampling distance (GSD) and forward
+overlap. These stand-alone HTML pages can be viewed locally, zipped up
+and emailed to colleagues, or uploaded to a web server. You can also
+create a ‘Table of Contents’ page for several Flight Summaries using
+<code><a href="../reference/uas_toc.html">uas_toc()</a></code> (see <a href="#creating-a-table-of-contents">below</a>).</p>
+<p>Create Flight Summaries with <code><a href="../reference/uas_report.html">uas_report()</a></code>. The main
+argument required is a flight info object from
+<code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">flt1_info</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">flt1_info</span><span class="op">)</span></span></code></pre></div>
 <p>Notes:</p>
-<p><code><a href="../reference/uas_report.html">uas_report()</a></code> has several optional arguments you can use to tailor the Flight Summary:</p>
+<p><code><a href="../reference/uas_report.html">uas_report()</a></code> has several optional arguments you can use
+to tailor the Flight Summary:</p>
 <ul>
 <li>
-<code>output_dir</code>. Where to save the HTML file(s). The default is a sub-folder in each image folder called ‘map’.<br>
+<code>output_dir</code>. Where to save the HTML file(s). The default
+is a sub-folder in each image folder called ‘map’.<br>
 </li>
 <li>
-<code>thumbnails</code>. If TRUE, this will generate preview images for the popup windows in the interactive map.<br>
+<code>thumbnails</code>. If TRUE, this will generate preview images
+for the popup windows in the interactive map.<br>
 </li>
 <li>
-<code>show_gps_coord</code>. Display the image GPS coordinate in the popup windows.<br>
+<code>show_gps_coord</code>. Display the image GPS coordinate in the
+popup windows.<br>
 </li>
 <li>
-<code>show_local_dir</code>. Report the local directory where the images are saved.<br>
+<code>show_local_dir</code>. Report the local directory where the
+images are saved.<br>
 </li>
 <li>
 <code>report_title</code>. Customize the report title.</li>
 <li>
-<code>png_map</code>. Create a static png image showing the camera locations (see below).<br>
+<code>png_map</code>. Create a static png image showing the camera
+locations (see below).<br>
 </li>
 <li>
-<code>attachments</code>. Create and link a KML file of the camera locations and/or flight area (minimum convex polygon for all the images) (see below).<br>
+<code>attachments</code>. Create and link a KML file of the camera
+locations and/or flight area (minimum convex polygon for all the images)
+(see below).<br>
 </li>
 <li>
 <code>open_report</code>. Open the HTML page when done.</li>
 </ul>
-<p>If <strong><code>png_map = TRUE</code></strong>, <code>uasimg</code> will attempt to download a background image for the entire flight area from Google Maps or Stamen. This background image will not appear in the Flight Summary, but is useful for other types of previews, including markdown and the Table of Contents (<a href="#creating-a-table-of-contents-of-flight-summaries-1">below</a>). To use a satellite image as the background, you must pass a Google Maps API key with the <code>google_api</code> argument or save your API key to an environment variable ahead of time (see the help page for details). Alternately the background image will be a terrain map from Stamen.</p>
-<p>If <strong><code>attachments = 'mcp_kml'</code></strong>, the minimum convex polygon for all images will be exported to a KML file, and a link to this file added to the Flight Summary. This is a reasonable proxy for the flight area, and can be used to fly the area again, or see where you’ve already flown. Many flight planning apps allow you to import a KML file.</p>
+<p>If <strong><code>png_map = TRUE</code></strong>, <code>uasimg</code>
+will attempt to download a background image for the entire flight area
+from Google Maps or Stamen. This background image will not appear in the
+Flight Summary, but is useful for other types of previews, including
+markdown and the Table of Contents (<a href="#creating-a-table-of-contents-of-flight-summaries-1">below</a>).
+To use a satellite image as the background, you must pass a Google Maps
+API key with the <code>google_api</code> argument or save your API key
+to an environment variable ahead of time (see the help page for
+details). Alternately the background image will be a terrain map from
+Stamen.</p>
+<p>If <strong><code>attachments = 'mcp_kml'</code></strong>, the minimum
+convex polygon for all images will be exported to a KML file, and a link
+to this file added to the Flight Summary. This is a reasonable proxy for
+the flight area, and can be used to fly the area again, or see where
+you’ve already flown. Many flight planning apps allow you to import a
+KML file.</p>
 </div>
 <div class="section level3">
 <h3 id="creating-a-table-of-contents-of-flight-summaries">Creating a Table of Contents of Flight Summaries<a class="anchor" aria-label="anchor" href="#creating-a-table-of-contents-of-flight-summaries"></a>
 </h3>
-<p><code><a href="../reference/uas_toc.html">uas_toc()</a></code> creates a Table of Contents (TOC) for multiple Flight Summaries created by <code><a href="../reference/uas_report.html">uas_report()</a></code> (<a href="https://github.com/ucanr-igis/uasimg/samples/hrec/index.html" class="external-link">sample</a>). The main argument in <code><a href="../reference/uas_toc.html">uas_toc()</a></code> is a character vector of HTML file names (i.e., returned by <code><a href="../reference/uas_report.html">uas_report()</a></code>).</p>
-<p>The TOC page will include links to the Flight Summaries wherever they may be on your hard drive. The optional <code>gather_dir</code> argument allows you to copy the Flight Summary HTML files and their dependencies (e.g., thumbnail images, KML files) to a single folder. This allows you to create a TOC page for Flight Summaries across your hard drive in a single folder, which can then be FTPed to a web server.</p>
-<p>Additional arguments you use to customize the appearance of a TOC page include:</p>
+<p><code><a href="../reference/uas_toc.html">uas_toc()</a></code> creates a Table of Contents (TOC) for multiple
+Flight Summaries created by <code><a href="../reference/uas_report.html">uas_report()</a></code> (<a href="https://github.com/ucanr-igis/uasimg/samples/hrec/index.html" class="external-link">sample</a>).
+The main argument in <code><a href="../reference/uas_toc.html">uas_toc()</a></code> is a character vector of
+HTML file names (i.e., returned by <code><a href="../reference/uas_report.html">uas_report()</a></code>).</p>
+<p>The TOC page will include links to the Flight Summaries wherever they
+may be on your hard drive. The optional <code>gather_dir</code> argument
+allows you to copy the Flight Summary HTML files and their dependencies
+(e.g., thumbnail images, KML files) to a single folder. This allows you
+to create a TOC page for Flight Summaries across your hard drive in a
+single folder, which can then be FTPed to a web server.</p>
+<p>Additional arguments you use to customize the appearance of a TOC
+page include:</p>
 <ul>
 <li>
 <code>toc_title</code>. Title for the page.<br>
@@ -254,10 +394,12 @@ data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
 <code>toc_desc</code>. Short description or tag line.<br>
 </li>
 <li>
-<code>summary_map</code>. Show a summary map of all the flight areas.<br>
+<code>summary_map</code>. Show a summary map of all the flight
+areas.<br>
 </li>
 <li>
-<code>header_html</code> and <code>footer_html</code>. HTML files to insert at the top and bottom of the Table of Contents page.<br>
+<code>header_html</code> and <code>footer_html</code>. HTML files to
+insert at the top and bottom of the Table of Contents page.<br>
 </li>
 <li>
 <code>open_toc</code>. Open the TOC in a browser.</li>
@@ -265,32 +407,34 @@ data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
 <div class="section level4">
 <h4 id="example-creating-an-image-catalog-for-several-flights">Example: Creating an Image Catalog for Several Flights<a class="anchor" aria-label="anchor" href="#example-creating-an-image-catalog-for-several-flights"></a>
 </h4>
-<p>The following example illustrates how you could loop through a set of image folders, create a Flight Summary for each one, and then compile a TOC for all of them.</p>
+<p>The following example illustrates how you could loop through a set of
+image folders, create a Flight Summary for each one, and then compile a
+TOC for all of them.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Create a character vector of folders</span>
-<span class="va">img_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt1_p4p_sw"</span>,
-              <span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt1_p4p_se"</span>,
-              <span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt2_m2p"</span>,
-              <span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt3_m2p"</span>,
-              <span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt01"</span>,
-              <span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt02"</span>,
-              <span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt03"</span><span class="op">)</span>
-
-<span class="co">## Save the metadata from these flights into a single object</span>
-<span class="va">flts_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">img_dirs</span>, cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co">## Create individual flight summaries</span>
-<span class="va">flts_sum</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">flts_info</span>, show_local_dir <span class="op">=</span> <span class="cn">TRUE</span>, thumbnails <span class="op">=</span> <span class="cn">TRUE</span>,
-                         show_gps_coord <span class="op">=</span> <span class="cn">TRUE</span>, overwrite_html <span class="op">=</span> <span class="cn">TRUE</span>,
-                         open_report <span class="op">=</span> <span class="cn">FALSE</span>, attachments <span class="op">=</span> <span class="st">"mcp_kml"</span>, png_map <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co">## Create TOC, copying all the individual HTML files to one place</span>
-<span class="fu"><a href="../reference/uas_toc.html">uas_toc</a></span><span class="op">(</span><span class="va">flts_sum</span>, 
-        output_dir <span class="op">=</span> <span class="st">"D:/Pix4D/catalog/ptpinole"</span>,
-        toc_title <span class="op">=</span> <span class="st">"Point Pinole Eucalyptus Survey Flights"</span>, 
-        gather_dir <span class="op">=</span> <span class="st">"."</span>, 
-        overwrite_toc <span class="op">=</span> <span class="cn">TRUE</span>, 
-        open_toc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Create a character vector of folders</span></span>
+<span><span class="va">img_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt1_p4p_sw"</span>,</span>
+<span>              <span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt1_p4p_se"</span>,</span>
+<span>              <span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt2_m2p"</span>,</span>
+<span>              <span class="st">"D:/Pix4D/PtPinole/imgs/eg/eg_flt3_m2p"</span>,</span>
+<span>              <span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt01"</span>,</span>
+<span>              <span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt02"</span>,</span>
+<span>              <span class="st">"D:/Pix4D/PtPinole/imgs/wg/wg_flt03"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Save the metadata from these flights into a single object</span></span>
+<span><span class="va">flts_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">img_dirs</span>, cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Create individual flight summaries</span></span>
+<span><span class="va">flts_sum</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">flts_info</span>, show_local_dir <span class="op">=</span> <span class="cn">TRUE</span>, thumbnails <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                         show_gps_coord <span class="op">=</span> <span class="cn">TRUE</span>, overwrite_html <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                         open_report <span class="op">=</span> <span class="cn">FALSE</span>, attachments <span class="op">=</span> <span class="st">"mcp_kml"</span>, png_map <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Create TOC, copying all the individual HTML files to one place</span></span>
+<span><span class="fu"><a href="../reference/uas_toc.html">uas_toc</a></span><span class="op">(</span><span class="va">flts_sum</span>, </span>
+<span>        output_dir <span class="op">=</span> <span class="st">"D:/Pix4D/catalog/ptpinole"</span>,</span>
+<span>        toc_title <span class="op">=</span> <span class="st">"Point Pinole Eucalyptus Survey Flights"</span>, </span>
+<span>        gather_dir <span class="op">=</span> <span class="st">"."</span>, </span>
+<span>        overwrite_toc <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>        open_toc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 </div>
 </div>
@@ -298,17 +442,30 @@ data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
 <div class="section level2">
 <h2 id="exporting-image-collection-geometry">Exporting Image Collection Geometry<a class="anchor" aria-label="anchor" href="#exporting-image-collection-geometry"></a>
 </h2>
-<p>You can export the geometry from a flight using <code><a href="../reference/uas_exp_kml.html">uas_exp_kml()</a></code> and <code><a href="../reference/uas_exp_kml.html">uas_exp_shp()</a></code>. Features include image centroids, their (estimated) footprints, and MCP (minimum convex polygon). Layers are exported as Shapefiles, a common file format for GIS data.</p>
+<p>You can export the geometry from a flight using
+<code><a href="../reference/uas_exp_kml.html">uas_exp_kml()</a></code> and <code><a href="../reference/uas_exp_kml.html">uas_exp_shp()</a></code>. Features
+include image centroids, their (estimated) footprints, and MCP (minimum
+convex polygon). Layers are exported as Shapefiles, a common file format
+for GIS data.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Export </span>
-<span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_shp</a></span><span class="op">(</span><span class="va">flts_sum</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, fp <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_kml</a></span><span class="op">(</span><span class="va">flts_sum</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, fp <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Export </span></span>
+<span><span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_shp</a></span><span class="op">(</span><span class="va">flts_sum</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, fp <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_kml</a></span><span class="op">(</span><span class="va">flts_sum</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, fp <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Notes:</p>
 <ul>
-<li><p>Specify the feature(s) you want to export using the <code>ctr</code>, <code>fp</code>, and <code>mcp</code> arguments.</p></li>
-<li><p><code>output_dir</code> lets you specify where you want the files exported. The default location is a sub-folder called <code>map</code> in each image folder.</p></li>
-<li><p>To combine the geometries from several flights into a single GIS file, pass <code>combine_feats = TRUE</code> and a value for <code>combine_fn</code>.</p></li>
-<li><p>For finer control of the export process, including exporting to different file formats, you can dig down into the object returned by <code><a href="../reference/uas_info.html">uas_info()</a></code> and use an export function from another package like <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">sf::st_write()</a></code>.</p></li>
+<li><p>Specify the feature(s) you want to export using the
+<code>ctr</code>, <code>fp</code>, and <code>mcp</code>
+arguments.</p></li>
+<li><p><code>output_dir</code> lets you specify where you want the files
+exported. The default location is a sub-folder called <code>map</code>
+in each image folder.</p></li>
+<li><p>To combine the geometries from several flights into a single GIS
+file, pass <code>combine_feats = TRUE</code> and a value for
+<code>combine_fn</code>.</p></li>
+<li><p>For finer control of the export process, including exporting to
+different file formats, you can dig down into the object returned by
+<code><a href="../reference/uas_info.html">uas_info()</a></code> and use an export function from another package
+like <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">sf::st_write()</a></code>.</p></li>
 </ul>
 </div>
   </div>
@@ -330,7 +487,7 @@ data_url: https://drive.google.com/file/d/1ZpMrYY0xxxxxxxxxxxxxxx</code></pre>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

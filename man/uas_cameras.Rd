@@ -41,9 +41,9 @@ are required. To see an example of a valid CSV file, run \code{uas_cameras(names
 }
 \section{Functions}{
 \itemize{
-\item \code{uas_readcameras}: Read cameras csv file
-}}
+\item \code{uas_readcameras()}: Read cameras csv file
 
+}}
 \examples{
 \dontrun{
 uas_cameras()

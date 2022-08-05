@@ -81,58 +81,87 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_info</span><span class="op">(</span>
-  <span class="va">img_dirs</span>,
-  ext <span class="op">=</span> <span class="cn">NULL</span>,
-  alt_agl <span class="op">=</span> <span class="cn">NULL</span>,
-  fp <span class="op">=</span> <span class="cn">FALSE</span>,
-  fwd_overlap <span class="op">=</span> <span class="va">fp</span>,
-  cameras <span class="op">=</span> <span class="cn">NULL</span>,
-  metadata <span class="op">=</span> <span class="st">"metadata.*\\.txt"</span>,
-  path2name_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  use_exiftoolr <span class="op">=</span> <span class="cn">TRUE</span>,
-  exiftool <span class="op">=</span> <span class="cn">NULL</span>,
-  exif_csv <span class="op">=</span> <span class="cn">NULL</span>,
-  cache <span class="op">=</span> <span class="cn">TRUE</span>,
-  update_cache <span class="op">=</span> <span class="cn">FALSE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_info</span><span class="op">(</span></span>
+<span>  <span class="va">img_dirs</span>,</span>
+<span>  ext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alt_agl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fwd_overlap <span class="op">=</span> <span class="va">fp</span>,</span>
+<span>  cameras <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  metadata <span class="op">=</span> <span class="st">"metadata.*\\.txt"</span>,</span>
+<span>  path2name_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  use_exiftoolr <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  exiftool <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exif_csv <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  update_cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>img_dirs</dt>
 <dd><p>Directory(s) where the image files reside</p></dd>
+
+
 <dt>ext</dt>
 <dd><p>An optional file extension</p></dd>
+
+
 <dt>alt_agl</dt>
 <dd><p>The elevation above ground level in meters (optional for images with the relevative altitude saved)</p></dd>
+
+
 <dt>fp</dt>
 <dd><p>Compute image foot prints, T/F</p></dd>
+
+
 <dt>fwd_overlap</dt>
 <dd><p>Whether or not to compute the amount of overlap between one image and the next, T/F</p></dd>
+
+
 <dt>cameras</dt>
 <dd><p>Location of the cameras.csv file. Is NULL the package csv file will be used.</p></dd>
+
+
 <dt>metadata</dt>
 <dd><p>A filename pattern for a metadata file, or a metadata list object (see Details)</p></dd>
+
+
 <dt>path2name_fun</dt>
 <dd><p>A function to generate the default short name (see Details)</p></dd>
+
+
 <dt>use_exiftoolr</dt>
 <dd><p>Whether to use the exiftoolr package, logical</p></dd>
+
+
 <dt>exiftool</dt>
 <dd><p>The path to the exiftool command line tool (omit if on the OS path). Ignored if use_exiftoolr = TRUE.</p></dd>
+
+
 <dt>exif_csv</dt>
 <dd><p>The file name of a new csv file where the exif data will be saved (omit to make a temp one)</p></dd>
+
+
 <dt>cache</dt>
 <dd><p>Logical or a directory where EXIF data should be cached (see Details)</p></dd>
+
+
 <dt>update_cache</dt>
 <dd><p>Whether to update the cache</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Don't show messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A UAS Image Collection object. This is a named list with elements for
+    
+
+<p>A UAS Image Collection object. This is a named list with elements for
 image centroids (as a sf data frame), footprints, total area, minimum convex polygon,
 total directory size, the data flown, and external metadata.</p>
     </div>
@@ -214,7 +243,7 @@ which forces an update of cached data when TRUE.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -121,10 +121,15 @@ span.optional {
   background-color:#18bc9c;
 }
 </style>
-<p>This article presents a workflow for using <code>uasimg</code> to create a <strong>catalog of drone images</strong> from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is <a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html" target="_blank" rel="noopener" class="external-link">here</a>. Although the workflow is presented a sequence of steps, in practice your workflow will probably <em>not</em> be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.</p>
+<p>This article presents a workflow for using <code>uasimg</code> to
+create a <strong>catalog of drone images</strong> from multiple flights
+that are part of a bigger mapping project / campaign. An example of the
+final output is <a href="https://ucanr-igis.github.io/uasimg/samples/hrec/index.html" target="_blank" rel="noopener" class="external-link">here</a>. Although the workflow is
+presented a sequence of steps, in practice your workflow will probably
+<em>not</em> be linear. Some of the steps below are optional and others
+may have to be repeated. But the outline presents a typical order of the
+steps.</p>
 <p><br></p>
-<pre><code><span class="co">#&gt; Warning: package 'DiagrammeR' was built under R version 4.1.3</span></code></pre>
-<p></p>
 <center>
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300pt" height="577pt" viewbox="0.00 0.00 397.40 764.00"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 760)"><title>flowchart</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-760 393.3982,-760 393.3982,4 -4,4"></polygon><g id="node1" class="node"><title>tab1</title>
@@ -151,22 +156,40 @@ span.optional {
 <path fill="none" stroke="#000000" d="M194.6991,-71.8314C194.6991,-64.131 194.6991,-54.9743 194.6991,-46.4166"></path><polygon fill="#000000" stroke="#000000" points="198.1992,-46.4132 194.6991,-36.4133 191.1992,-46.4133 198.1992,-46.4132"></polygon></g></g></svg>
 </center>
 <p><br></p>
-<p>Currently, executing this workflow in <code>uasimg</code> requires <strong>writing R commands</strong> (i.e., in a script). This requires a knowledge of R, and a general understanding of what the functions do (explained below). In a future release, <code>uasimg</code> will have a GUI (wizard) that walks users through data management steps.</p>
+<p>Currently, executing this workflow in <code>uasimg</code> requires
+<strong>writing R commands</strong> (i.e., in a script). This requires a
+knowledge of R, and a general understanding of what the functions do
+(explained below). In a future release, <code>uasimg</code> will have a
+GUI (wizard) that walks users through data management steps.</p>
 <p><br></p>
 <div class="section level2">
 <h2 id="copy-image-files-from-the-drone-to-a-hard-drive">1. Copy image files from the drone to a hard drive<a class="anchor" aria-label="anchor" href="#copy-image-files-from-the-drone-to-a-hard-drive"></a>
 </h2>
 <p><em>Notes</em></p>
 <ul>
-<li><p>The first step is getting the images off the drone and onto your hard drive.</p></li>
-<li><p>Usually this involves a memory card reader or USB cable, and a file management utility like Windows Explorer. <code>uasimg</code> does not help with this step.</p></li>
-<li><p>Internal drives are recommended as they tend to be faster and more reliable than external drives (but either can work).</p></li>
-<li><p>Make sure the directory names will help you remember what images are in there. For example, you might name your directories using the pattern: date + flight number (e.g., <em>2020-10-19 Flight 03</em>).</p></li>
+<li><p>The first step is getting the images off the drone and onto your
+hard drive.</p></li>
+<li><p>Usually this involves a memory card reader or USB cable, and a
+file management utility like Windows Explorer. <code>uasimg</code> does
+not help with this step.</p></li>
+<li><p>Internal drives are recommended as they tend to be faster and
+more reliable than external drives (but either can work).</p></li>
+<li><p>Make sure the directory names will help you remember what images
+are in there. For example, you might name your directories using the
+pattern: date + flight number (e.g., <em>2020-10-19 Flight
+03</em>).</p></li>
 </ul>
 <p><em>Tips:</em></p>
 <ul>
-<li><p>You can save yourself some time by creating the directories before you go out into the field.</p></li>
-<li><p>If you have enough blank SD cards for all your flights, then you can just leave the images on the SD card as a temporary backup until you get back to the office. Label each card and put it somewhere safe. If you need it to use it again, reformat the SD card. Windows Explorer generally works fine for this, unless your memory card is &gt;32GB and your drone camera only reads FAT32 (see <a href="http://igis.ucanr.edu/Tech_Notes/Memory_Cards/" class="external-link"><em>Best Practices Working with Memory Cards</em></a> for details).</p></li>
+<li><p>You can save yourself some time by creating the directories
+before you go out into the field.</p></li>
+<li><p>If you have enough blank SD cards for all your flights, then you
+can just leave the images on the SD card as a temporary backup until you
+get back to the office. Label each card and put it somewhere safe. If
+you need it to use it again, reformat the SD card. Windows Explorer
+generally works fine for this, unless your memory card is &gt;32GB and
+your drone camera only reads FAT32 (see <a href="http://igis.ucanr.edu/Tech_Notes/Memory_Cards/" class="external-link"><em>Best Practices
+Working with Memory Cards</em></a> for details).</p></li>
 </ul>
 <p><br></p>
 </div>
@@ -174,38 +197,63 @@ span.optional {
 <h2 id="extract-image-info">2. Extract image info<a class="anchor" aria-label="anchor" href="#extract-image-info"></a>
 </h2>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vegsrvy_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,
-                 <span class="st">"c:/uas/hopland-veg-survey/flight02/DCIM"</span>,
-                 <span class="st">"c:/uas/hopland-veg-survey/flight03/DCIM"</span><span class="op">)</span>
-
-<span class="va">vegsrvy_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">vegsrvy_dir</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vegsrvy_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,</span>
+<span>                 <span class="st">"c:/uas/hopland-veg-survey/flight02/DCIM"</span>,</span>
+<span>                 <span class="st">"c:/uas/hopland-veg-survey/flight03/DCIM"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">vegsrvy_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">vegsrvy_dir</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
 <li><p>No internet connection is required for this step.</p></li>
-<li><p>This can be done in the field if you want to verify image locations, see if there were any dropouts, or check overlap.</p></li>
-<li><p>Always save the results of <code><a href="../reference/uas_info.html">uas_info()</a></code> to a variable.</p></li>
-<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> can process multiple directories at once. Simply pass a character vector of directory names (as shown above).</p></li>
-<li><p>The first time <code><a href="../reference/uas_info.html">uas_info()</a></code> runs on a directory, it may take a little while to extract the EXIF data from all the images. Subsequent calls should go much faster, because the EXIF data are cached.</p></li>
-<li><p>The object returned by <code><a href="../reference/uas_info.html">uas_info()</a></code> contains image locations, the flight area (minimum convex polygon around all the images), some basic flight metadata, and potentially footprints (if <code>fp = TRUE</code>).</p></li>
+<li><p>This can be done in the field if you want to verify image
+locations, see if there were any dropouts, or check overlap.</p></li>
+<li><p>Always save the results of <code><a href="../reference/uas_info.html">uas_info()</a></code> to a
+variable.</p></li>
+<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> can process multiple directories at once.
+Simply pass a character vector of directory names (as shown
+above).</p></li>
+<li><p>The first time <code><a href="../reference/uas_info.html">uas_info()</a></code> runs on a directory, it
+may take a little while to extract the EXIF data from all the images.
+Subsequent calls should go much faster, because the EXIF data are
+cached.</p></li>
+<li><p>The object returned by <code><a href="../reference/uas_info.html">uas_info()</a></code> contains image
+locations, the flight area (minimum convex polygon around all the
+images), some basic flight metadata, and potentially footprints (if
+<code>fp = TRUE</code>).</p></li>
 </ul>
 <p><br></p>
 </div>
 <div class="section level2">
 <h2 id="create-flight-metadata-files">3. Create flight metadata files<a class="anchor" aria-label="anchor" href="#create-flight-metadata-files"></a>
 </h2>
-<p><em>Flight metadata</em> refers to info that isn’t saved in the images. For example the name of the pilot, the project code, site name, etc. Creating flight metadata is strongly recommended if you wish to generate flight summary reports or move images into a structured directory tree. For additional info, see the <a href="flight_metadata.html">Flight Metadata</a> vignette.</p>
-<p>The recommended way to enter and save flight metadata is to create a <em>metadata.txt</em> file in each directory. The function below gets you started, but then you have to manually continue editing the flight info using a text editor.</p>
+<p><em>Flight metadata</em> refers to info that isn’t saved in the
+images. For example the name of the pilot, the project code, site name,
+etc. Creating flight metadata is strongly recommended if you wish to
+generate flight summary reports or move images into a structured
+directory tree. For additional info, see the <a href="flight_metadata.html">Flight Metadata</a> vignette.</p>
+<p>The recommended way to enter and save flight metadata is to create a
+<em>metadata.txt</em> file in each directory. The function below gets
+you started, but then you have to manually continue editing the flight
+info using a text editor.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Create the metadata text files and open them in a text editor</span>
-<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span>, open <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>In this case, <code>uas_metadata_make(vegsrvy_info)</code> will create a ‘blank’ metadata text file in each folder in <code>vegsrvy_info</code> (where <code>vegsrvy_info</code> was created by <code><a href="../reference/uas_info.html">uas_info()</a></code>).</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Create the metadata text files and open them in a text editor</span></span>
+<span><span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span>, open <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>In this case, <code>uas_metadata_make(vegsrvy_info)</code> will
+create a ‘blank’ metadata text file in each folder in
+<code>vegsrvy_info</code> (where <code>vegsrvy_info</code> was created
+by <code><a href="../reference/uas_info.html">uas_info()</a></code>).</p>
 <p><em>Notes</em></p>
 <ul>
-<li><p>To customize the flight metadata fields, run <code>uas_setfld()</code> first.</p></li>
-<li><p>To pre-populate some of the metadata fields (e.g., the name of the organization), pass the path or URL to an existing metadata file as the <code>md_template</code> argument.</p></li>
-<li><p>Pass <code>open = TRUE</code> to open the metadata text files for further editing. To use the system text editor instead of the text editor defined by R, let <code>use_system_editor = TRUE</code>.</p></li>
+<li><p>To customize the flight metadata fields, run
+<code>uas_setfld()</code> first.</p></li>
+<li><p>To pre-populate some of the metadata fields (e.g., the name of
+the organization), pass the path or URL to an existing metadata file as
+the <code>md_template</code> argument.</p></li>
+<li><p>Pass <code>open = TRUE</code> to open the metadata text files for
+further editing. To use the system text editor instead of the text
+editor defined by R, let <code>use_system_editor = TRUE</code>.</p></li>
 </ul>
 <p><br></p>
 </div>
@@ -213,12 +261,22 @@ span.optional {
 <h2 id="move-oddball-images-into-their-own-folders">4. Move oddball images into their own folders<a class="anchor" aria-label="anchor" href="#move-oddball-images-into-their-own-folders"></a>
 </h2>
 <p><span class="optional">Optional</span></p>
-<p>‘Oddball’ images in this context are those images you aren’t going stitch in your photogrammetry software. This include photos of calibration targets, images from aborted flights, test photos, drone selfies, etc. The idea is these should be separated (or deleted) so you don’t have to mess with them during stitching process. You can move images with Windows Explorer.</p>
+<p>‘Oddball’ images in this context are those images you aren’t going
+stitch in your photogrammetry software. This include photos of
+calibration targets, images from aborted flights, test photos, drone
+selfies, etc. The idea is these should be separated (or deleted) so you
+don’t have to mess with them during stitching process. You can move
+images with Windows Explorer.</p>
 <p><em>Notes</em></p>
 <ul>
-<li><p>Put images you want to keep (like calibration photos) into subfolders so they stay with the originals.</p></li>
-<li><p>In the future, <code>uasimg</code> may have a function / GUI to help identify and move oddball images</p></li>
-<li><p>If your flight management software includes a post-processing step (e.g., eMotion), remember to keep the flight logs so you can post-process the images (or better yet do the post-processing before you move or catalog any images).</p></li>
+<li><p>Put images you want to keep (like calibration photos) into
+subfolders so they stay with the originals.</p></li>
+<li><p>In the future, <code>uasimg</code> may have a function / GUI to
+help identify and move oddball images</p></li>
+<li><p>If your flight management software includes a post-processing
+step (e.g., eMotion), remember to keep the flight logs so you can
+post-process the images (or better yet do the post-processing before you
+move or catalog any images).</p></li>
 </ul>
 <p><br></p>
 </div>
@@ -228,28 +286,47 @@ span.optional {
 <p><span class="optional">Optional</span></p>
 <p><em>Notes</em></p>
 <ul>
-<li><p>Sometimes you need to divide up the images from a single folder into different folders to achieve the gold standard of having one processing job per folder. For example, a folder may contain images from multiple flights. Or you might want to split up the RGB (jpg) files and the mulitspectral (tif) files into separate folders (because you normally stitch these separately).</p></li>
-<li><p>Other times, you many have several folders of images that were all part of the same flight (because most cameras have a limit of 999 images per folder). In this case, you have to merge them together. But take note, combining files from different directories may require changing file names first to prevent duplicates.</p></li>
-<li><p>Currently, you have to split and/or merge folders manually (i.e., with Windows Explorer). Functions are coming to <code>uasimg</code> that will facilitate splitting and merging image folders.</p></li>
+<li><p>Sometimes you need to divide up the images from a single folder
+into different folders to achieve the gold standard of having one
+processing job per folder. For example, a folder may contain images from
+multiple flights. Or you might want to split up the RGB (jpg) files and
+the mulitspectral (tif) files into separate folders (because you
+normally stitch these separately).</p></li>
+<li><p>Other times, you many have several folders of images that were
+all part of the same flight (because most cameras have a limit of 999
+images per folder). In this case, you have to merge them together. But
+take note, combining files from different directories may require
+changing file names first to prevent duplicates.</p></li>
+<li><p>Currently, you have to split and/or merge folders manually (i.e.,
+with Windows Explorer). Functions are coming to <code>uasimg</code> that
+will facilitate splitting and merging image folders.</p></li>
 </ul>
 <p><br></p>
 </div>
 <div class="section level2">
 <h2 id="rerun-uas_info-to-refresh-the-metadata">6. (Re)run <code>uas_info()</code> to refresh the metadata<a class="anchor" aria-label="anchor" href="#rerun-uas_info-to-refresh-the-metadata"></a>
 </h2>
-<p>After you’ve created metadata text files, and moved oddball images out of directories, you need to pull out the location info again</p>
+<p>After you’ve created metadata text files, and moved oddball images
+out of directories, you need to pull out the location info again</p>
 <p>Sample code (same as step 2):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_img_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,
-                 <span class="st">"c:/uas/hopland-veg-survey/flight02/DCIM"</span>,
-                 <span class="st">"c:/uas/hopland-veg-survey/flight03/DCIM"</span><span class="op">)</span>
-
-<span class="va">vegsrvy_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">my_img_dirs</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_img_dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c:/uas/hopland-veg-survey/flight01/DCIM"</span>,</span>
+<span>                 <span class="st">"c:/uas/hopland-veg-survey/flight02/DCIM"</span>,</span>
+<span>                 <span class="st">"c:/uas/hopland-veg-survey/flight03/DCIM"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">vegsrvy_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="va">my_img_dirs</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
-<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> ‘sucks up’ the flight metadata it finds in metadata text files. So every time you edit and save the metadata text files in your text editor, you should rerun <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p></li>
-<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> should go quickly after the initial extraction of EXIF data from the images. But if you add or move images out of a folder, the cache is invalidated and it will extract the EXIF data all over again. Don’t be alarmed.</p></li>
-<li><p>To see what information is saved in a flight info object, type the name of the object at the console and hit enter.</p></li>
+<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> ‘sucks up’ the flight metadata it finds
+in metadata text files. So every time you edit and save the metadata
+text files in your text editor, you should rerun
+<code><a href="../reference/uas_info.html">uas_info()</a></code>.</p></li>
+<li><p><code><a href="../reference/uas_info.html">uas_info()</a></code> should go quickly after the initial
+extraction of EXIF data from the images. But if you add or move images
+out of a folder, the cache is invalidated and it will extract the EXIF
+data all over again. Don’t be alarmed.</p></li>
+<li><p>To see what information is saved in a flight info object, type
+the name of the object at the console and hit enter.</p></li>
 </ul>
 <p><br></p>
 </div>
@@ -257,17 +334,28 @@ span.optional {
 <h2 id="move-images-into-a-structured-directory-tree">7. Move images into a structured directory tree<a class="anchor" aria-label="anchor" href="#move-images-into-a-structured-directory-tree"></a>
 </h2>
 <p><span class="optional">Optional</span></p>
-<p>If desired, you can move your images into a structured directory tree to help make them easier to find. Creating structured directory trees requires that i) you’ve entered flight metadata for every flight, and ii) you’ve passed a template that specifies how the directory tree should be constructed.</p>
+<p>If desired, you can move your images into a structured directory tree
+to help make them easier to find. Creating structured directory trees
+requires that i) you’ve entered flight metadata for every flight, and
+ii) you’ve passed a template that specifies how the directory tree
+should be constructed.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/uas_move.html">uas_move</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, 
-         tree <span class="op">=</span> <span class="st">"my_dir_tree_template.txt"</span>,
-         outdir_base <span class="op">=</span> <span class="st">"d:/uas_data"</span>,
-         imgs_action <span class="op">=</span> <span class="st">"copy"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/uas_move.html">uas_move</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, </span>
+<span>         tree <span class="op">=</span> <span class="st">"my_dir_tree_template.txt"</span>,</span>
+<span>         outdir_base <span class="op">=</span> <span class="st">"d:/uas_data"</span>,</span>
+<span>         imgs_action <span class="op">=</span> <span class="st">"copy"</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
-<li><p>Moving images into a structured directory tree can be done at any time. The only thing that could potentially ‘break’ if you move images to a new location are the links that point to flight summary reports in a TOC (and that will only happen if those flight summary reports were saved in the default ‘map’ sub-directory of the image directory, and you didn’t ‘gather’ the flight summary reports into one location when you created tht TOC.)</p></li>
-<li><p>See the help page for <code><a href="../reference/uas_move.html">uas_move()</a></code> for additional arguments and details.</p></li>
+<li><p>Moving images into a structured directory tree can be done at any
+time. The only thing that could potentially ‘break’ if you move images
+to a new location are the links that point to flight summary reports in
+a TOC (and that will only happen if those flight summary reports were
+saved in the default ‘map’ sub-directory of the image directory, and you
+didn’t ‘gather’ the flight summary reports into one location when you
+created tht TOC.)</p></li>
+<li><p>See the help page for <code><a href="../reference/uas_move.html">uas_move()</a></code> for additional
+arguments and details.</p></li>
 </ul>
 <p><br></p>
 </div>
@@ -275,50 +363,84 @@ span.optional {
 <h2 id="export-flight-geometries-to-gis-files">8. Export flight geometries to GIS files<a class="anchor" aria-label="anchor" href="#export-flight-geometries-to-gis-files"></a>
 </h2>
 <p><span class="optional">Optional</span></p>
-<p>If desired, you can export the geometries of individual flights as KML and/or Shapefiles.</p>
+<p>If desired, you can export the geometries of individual flights as
+KML and/or Shapefiles.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_kml</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_shp</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_kml</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/uas_exp_kml.html">uas_exp_shp</a></span><span class="op">(</span><span class="va">vegsrvy_info</span>, ctr <span class="op">=</span> <span class="cn">TRUE</span>, mcp <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
-<li><p>Features you can export include the image centroids, a minimum convex polygon around all the images (used to approximate the flight area), and estimated footprints.</p></li>
-<li><p>Be default, KML and Shapefiles will be saved to the ‘map’ subdirectory of the image folder. If this subdirectory doesn’t already exist, it will be created. You can specify a different output directory with the <code>output_dir</code> argument.</p></li>
-<li><p>To combine the features from multiple flights into a single KML / Shapefile, use the <code>combine_feats</code> argument. This could be useful, for example, to import into your flight planning software to see where you’ve already flown. See help for details.</p></li>
-<li><p><code><a href="../reference/uas_report.html">uas_report()</a></code> and <code>uas_toc</code> also have arguments to export flight geometries and link them to the flight summary HTML pages.</p></li>
-<li><p>You can import the MCP KML when planning missions, to see where you’ve already flown. Flight area (i.e., MCP) KML files have been tested for compatibility with eMotion, Pix4Dcapture (Android), Drone Deploy (Android), and DJI Pilot.</p></li>
+<li><p>Features you can export include the image centroids, a minimum
+convex polygon around all the images (used to approximate the flight
+area), and estimated footprints.</p></li>
+<li><p>Be default, KML and Shapefiles will be saved to the ‘map’
+subdirectory of the image folder. If this subdirectory doesn’t already
+exist, it will be created. You can specify a different output directory
+with the <code>output_dir</code> argument.</p></li>
+<li><p>To combine the features from multiple flights into a single KML /
+Shapefile, use the <code>combine_feats</code> argument. This could be
+useful, for example, to import into your flight planning software to see
+where you’ve already flown. See help for details.</p></li>
+<li><p><code><a href="../reference/uas_report.html">uas_report()</a></code> and <code>uas_toc</code> also have
+arguments to export flight geometries and link them to the flight
+summary HTML pages.</p></li>
+<li><p>You can import the MCP KML when planning missions, to see where
+you’ve already flown. Flight area (i.e., MCP) KML files have been tested
+for compatibility with eMotion, Pix4Dcapture (Android), Drone Deploy
+(Android), and DJI Pilot.</p></li>
 </ul>
 <p><br></p>
 </div>
 <div class="section level2">
 <h2 id="create-flight-summaries">9. Create flight summaries<a class="anchor" aria-label="anchor" href="#create-flight-summaries"></a>
 </h2>
-<p>This step involves creating standalone HTML pages that summarize images in a single folder. These can be thought of as the individual ‘pages’ of a data catalog.</p>
+<p>This step involves creating standalone HTML pages that summarize
+images in a single folder. These can be thought of as the individual
+‘pages’ of a data catalog.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vegsrvy_rpt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">vegsrvy_info</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vegsrvy_rpt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_report.html">uas_report</a></span><span class="op">(</span><span class="va">vegsrvy_info</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
-<li><p>If you want image thumbnails in the pop-up windows, set <code>thumbnails = TRUE</code>. Be advised that creating thumbnails can take a while.</p></li>
-<li><p><code><a href="../reference/uas_report.html">uas_report()</a></code> has several other arguments you can use to tweak the appearance of the flight summary. These include a custom title (<code>report_title</code>), whether or not to add links for the image centroids and MCP as KML files (<code>attachments</code>), whether or not to download a background image (<code>png_map</code>), HTML files to use as a custom header or footer, etc. See help for details.</p></li>
+<li><p>If you want image thumbnails in the pop-up windows, set
+<code>thumbnails = TRUE</code>. Be advised that creating thumbnails can
+take a while.</p></li>
+<li><p><code><a href="../reference/uas_report.html">uas_report()</a></code> has several other arguments you can use
+to tweak the appearance of the flight summary. These include a custom
+title (<code>report_title</code>), whether or not to add links for the
+image centroids and MCP as KML files (<code>attachments</code>), whether
+or not to download a background image (<code>png_map</code>), HTML files
+to use as a custom header or footer, etc. See help for details.</p></li>
 </ul>
 <p><br></p>
 </div>
 <div class="section level2">
 <h2 id="create-a-table-of-contents-for-all-the-flight-summaries">10. Create a Table of Contents for all the flight summaries<a class="anchor" aria-label="anchor" href="#create-a-table-of-contents-for-all-the-flight-summaries"></a>
 </h2>
-<p>If you have several flights in the same general area, the final step is to create a master Table of Contents (TOC) for a series of flight summaries. The TOC is a standalone HTML file with links to individual flight summaries.</p>
+<p>If you have several flights in the same general area, the final step
+is to create a master Table of Contents (TOC) for a series of flight
+summaries. The TOC is a standalone HTML file with links to individual
+flight summaries.</p>
 <p>Sample code:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">toc_rgb_fn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_toc.html">uas_toc</a></span><span class="op">(</span><span class="va">vegsrvy_rpt</span>, 
-                      output_dir <span class="op">=</span> <span class="st">"c:/drone_data/catalogs/pt_pinole"</span>,
-                      gather_dir <span class="op">=</span> <span class="st">"."</span>, fltmap_show <span class="op">=</span> <span class="cn">TRUE</span>, open_toc <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">toc_rgb_fn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uas_toc.html">uas_toc</a></span><span class="op">(</span><span class="va">vegsrvy_rpt</span>, </span>
+<span>                      output_dir <span class="op">=</span> <span class="st">"c:/drone_data/catalogs/pt_pinole"</span>,</span>
+<span>                      gather_dir <span class="op">=</span> <span class="st">"."</span>, fltmap_show <span class="op">=</span> <span class="cn">TRUE</span>, open_toc <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><em>Notes</em></p>
 <ul>
-<li><p>Use <code>fltmap_show = TRUE</code> to insert a little interactive map of all the flight areas at the top of the TOC.</p></li>
-<li><p><code>fltmap_base</code> can be used to display additional KML files in the summary map. For example this could be overall boundary for the campaign.</p></li>
-<li><p><code>gather_dir</code> tells R to <strong>copy</strong> all files for the catalog into a subdirectoy of <code>output_dir</code>. This includes the individual flight summary pages and all their dependent files - KML files, and thumbnails. Your entire data catalog is then in a single folder, which you can FTP to a web server, zip and share with colleagues, etc.</p></li>
+<li><p>Use <code>fltmap_show = TRUE</code> to insert a little
+interactive map of all the flight areas at the top of the TOC.</p></li>
+<li><p><code>fltmap_base</code> can be used to display additional KML
+files in the summary map. For example this could be overall boundary for
+the campaign.</p></li>
+<li><p><code>gather_dir</code> tells R to <strong>copy</strong> all
+files for the catalog into a subdirectoy of <code>output_dir</code>.
+This includes the individual flight summary pages and all their
+dependent files - KML files, and thumbnails. Your entire data catalog is
+then in a single folder, which you can FTP to a web server, zip and
+share with colleagues, etc.</p></li>
 </ul>
 </div>
   </div>
@@ -340,7 +462,7 @@ span.optional {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

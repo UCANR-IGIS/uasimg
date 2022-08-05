@@ -83,21 +83,26 @@ Read a cameras.csv file"><meta property="og:image" content="http://ucanr-igis.gi
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_cameras</span><span class="op">(</span>names_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">uas_readcameras</span><span class="op">(</span><span class="va">cameras_fn</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_cameras</span><span class="op">(</span>names_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">uas_readcameras</span><span class="op">(</span><span class="va">cameras_fn</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>names_only</dt>
 <dd><p>Return only camera names</p></dd>
+
+
 <dt>cameras_fn</dt>
 <dd><p>The file name (including path) of a cameras.csv file</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector containing the names of cameras known to the uasimg package</p>
+    
+
+<p>A character vector containing the names of cameras known to the uasimg package</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -117,7 +122,7 @@ are required. To see an example of a valid CSV file, run <code>uas_cameras(names
     <div id="functions">
     <h2>Functions</h2>
     
-<ul><li><p><code>uas_readcameras</code>: Read cameras csv file</p></li>
+<ul><li><p><code>uas_readcameras()</code>: Read cameras csv file</p></li>
 </ul></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -126,13 +131,13 @@ are required. To see an example of a valid CSV file, run <code>uas_cameras(names
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">uas_cameras</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">uas_readcameras</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"cameras/cameras.csv"</span>, package<span class="op">=</span><span class="st">"uasimg"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">uas_cameras</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">uas_readcameras</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"cameras/cameras.csv"</span>, package<span class="op">=</span><span class="st">"uasimg"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -147,7 +152,7 @@ are required. To see an example of a valid CSV file, run <code>uas_cameras(names
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

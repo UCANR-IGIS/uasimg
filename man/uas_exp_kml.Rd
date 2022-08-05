@@ -80,9 +80,9 @@ For this to happen, you must also pass a value for \code{combine_fn} (a base for
 }
 \section{Functions}{
 \itemize{
-\item \code{uas_exp_shp}: Export flight info to Shapefile
-}}
+\item \code{uas_exp_shp()}: Export flight info to Shapefile
 
+}}
 \seealso{
 \code{\link{uas_info}}, \code{\link{uas_report}}
 }

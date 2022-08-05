@@ -118,30 +118,75 @@
   padding: 10px 30px;
 }
 </style>
-<p>This article describes what flight metadata is, why it’s useful, and how to create and manage flight metadata in <code>uasimg</code>.</p>
+<p>This article describes what flight metadata is, why it’s useful, and
+how to create and manage flight metadata in <code>uasimg</code>.</p>
 <div class="section level2">
 <h2 id="image-metadata-vs--flight-metadata">Image Metadata vs. Flight Metadata<a class="anchor" aria-label="anchor" href="#image-metadata-vs--flight-metadata"></a>
 </h2>
-<p><em>Image metadata</em> generally refers to the information about individual images. For example, the location, altitude, type of camera, focal length, resolution, etc. Modern cameras do a great job saving this information in the header of JPG / TIF files (also known as EXIF data). Photogrammetry programs rely on image metadata to help stitch the images together.</p>
-<p><em>Flight metadata</em> refers to properties images inherit from the flight they were on. These include things like the name of the site, pilot, drone, weather conditions, where the images are actually saved, etc. These bits of information are not essential for photogrammetry, but they are extremely useful for data management.</p>
-<p>Flight metadata can also help you interpret the results of photogrammetry. For example inconsistent color tones or brightness in an orthomosaic could be the result of clouds during the flight, that you wouldn’t necessarily know just by looking at the images.</p>
+<p><em>Image metadata</em> generally refers to the information about
+individual images. For example, the location, altitude, type of camera,
+focal length, resolution, etc. Modern cameras do a great job saving this
+information in the header of JPG / TIF files (also known as EXIF data).
+Photogrammetry programs rely on image metadata to help stitch the images
+together.</p>
+<p><em>Flight metadata</em> refers to properties images inherit from the
+flight they were on. These include things like the name of the site,
+pilot, drone, weather conditions, where the images are actually saved,
+etc. These bits of information are not essential for photogrammetry, but
+they are extremely useful for data management.</p>
+<p>Flight metadata can also help you interpret the results of
+photogrammetry. For example inconsistent color tones or brightness in an
+orthomosaic could be the result of clouds during the flight, that you
+wouldn’t necessarily know just by looking at the images.</p>
 </div>
 <div class="section level2">
 <h2 id="how-does-uasimg-use-flight-metadata">How does <code>uasimg</code> use flight metadata?<a class="anchor" aria-label="anchor" href="#how-does-uasimg-use-flight-metadata"></a>
 </h2>
-<p><code>uasimg</code> uses both image and flight metadata to help you organize, catalog, and share your drone images.</p>
-<p>Image metadata is read from the image files. GPS locations are used to make interactive maps on the flight summary pages. Properties such as the resolution and time stamps are reported on flight summary pages. If the image metadata specifies i) a known camera and ii) the relative above ground altitude, then <code>uasimg</code> can also compute estimated image footprints and generate world files.</p>
-<p><code>uasimg</code> uses flight metadata<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> primarily for <em>cataloging</em> and <em>sorting</em><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> images.</p>
-<p>You can create metadata fields for things like the pilot, the aircraft used, weather conditions, etc. There is no ‘standard’ set of metadata fields for drone flights. You can define whichever flight metadata fields you’d like to record based on your specific requirements. For example, if your goal is to publish your data catalog online so other people can view it and potentially request the data, you’d probably want a more comprehensive set of metadata fields than if the catalog is simply for internal use.</p>
-<p>Some common metadata fields include the site, sub-site, project, sub-project. In addition to documentation, these and other flight metadata fields can be used to create standard directory trees based on a user-defined template, and move images into those trees<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
-<p>For large collections of drone data, flight metadata can also help you manage your catalog production workflow. For example you may want to (re)generate thumbnails for all flights that were part of a specific project, or a specific site. If the project has been saved in the flight metadata, you can easily write loops that operate only on those flights.</p>
+<p><code>uasimg</code> uses both image and flight metadata to help you
+organize, catalog, and share your drone images.</p>
+<p>Image metadata is read from the image files. GPS locations are used
+to make interactive maps on the flight summary pages. Properties such as
+the resolution and time stamps are reported on flight summary pages. If
+the image metadata specifies i) a known camera and ii) the relative
+above ground altitude, then <code>uasimg</code> can also compute
+estimated image footprints and generate world files.</p>
+<p><code>uasimg</code> uses flight metadata<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> primarily for
+<em>cataloging</em> and <em>sorting</em><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> images.</p>
+<p>You can create metadata fields for things like the pilot, the
+aircraft used, weather conditions, etc. There is no ‘standard’ set of
+metadata fields for drone flights. You can define whichever flight
+metadata fields you’d like to record based on your specific
+requirements. For example, if your goal is to publish your data catalog
+online so other people can view it and potentially request the data,
+you’d probably want a more comprehensive set of metadata fields than if
+the catalog is simply for internal use.</p>
+<p>Some common metadata fields include the site, sub-site, project,
+sub-project. In addition to documentation, these and other flight
+metadata fields can be used to create standard directory trees based on
+a user-defined template, and move images into those trees<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>For large collections of drone data, flight metadata can also help
+you manage your catalog production workflow. For example you may want to
+(re)generate thumbnails for all flights that were part of a specific
+project, or a specific site. If the project has been saved in the flight
+metadata, you can easily write loops that operate only on those
+flights.</p>
 </div>
 <div class="section level2">
 <h2 id="where-do-i-enter-flight-metadata">Where do I enter flight metadata?<a class="anchor" aria-label="anchor" href="#where-do-i-enter-flight-metadata"></a>
 </h2>
-<p>There are basically two ways to enter flight metadata. You can enter flight metadata in <em>metadata.txt</em> text files saved in the same folder as the images, or programmatically when you call <code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
-<p>The recommended way to enter flight metadata is with <em>metadata.txt</em><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> files. These are regular text files so editing them is easy with any text editor (like Notepad). By saving flight metadata in a file that lives with the images, it will persist and can be read again and again.</p>
-<p>Here is an example of an actual metadata text file. The basic format is a field name, followed by a colon, followed by the value (aka YAML). Field names should not contain spaces. You can add comments and blank lines to make it more readable.</p>
+<p>There are basically two ways to enter flight metadata. You can enter
+flight metadata in <em>metadata.txt</em> text files saved in the same
+folder as the images, or programmatically when you call
+<code><a href="../reference/uas_info.html">uas_info()</a></code>.</p>
+<p>The recommended way to enter flight metadata is with
+<em>metadata.txt</em><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> files. These are regular text files so
+editing them is easy with any text editor (like Notepad). By saving
+flight metadata in a file that lives with the images, it will persist
+and can be read again and again.</p>
+<p>Here is an example of an actual metadata text file. The basic format
+is a field name, followed by a colon, followed by the value (aka YAML).
+Field names should not contain spaces. You can add comments and blank
+lines to make it more readable.</p>
 <div style="margin-left:2em; border:1px solid grey;">
 <pre><code>## FLIGHT METADATA FILE FOR:
 ## D:/Pix4D/HREC/RiverFire2020/imgs/ebPlus_Flt05_orig/DCIM/EP-01-26841_0085/metadata.txt
@@ -167,7 +212,9 @@ data_url: NA
 tags: HREC, RiverFire2020</code></pre>
 </div>
 <p><br></p>
-<p>You don’t have to create <em>metadata.txt</em> files from scratch! <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> is a convenience function that can do all of the following:</p>
+<p>You don’t have to create <em>metadata.txt</em> files from scratch!
+<code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> is a convenience function that can do
+all of the following:</p>
 <ol style="list-style-type: lower-roman">
 <li>create new metadata text files for one or more image folders<br>
 </li>
@@ -176,18 +223,24 @@ tags: HREC, RiverFire2020</code></pre>
 <li>pre-populate the fields with defaults values</li>
 <li>open the text file(s) in a text editor to complete the editing</li>
 </ol>
-<p>Typically, after you edit and save <em>metadata.txt</em> files, you’ll want to re-run <code><a href="../reference/uas_info.html">uas_info()</a></code> so the new metadata is read in R.</p>
-<p>The second way to record flight metadata is by passing a named list as the <code>metadata</code> argument to <code><a href="../reference/uas_info.html">uas_info()</a></code>. This code-centric approach might make sense if your flight metadata is saved in a separate database, and you enjoy coding.</p>
+<p>Typically, after you edit and save <em>metadata.txt</em> files,
+you’ll want to re-run <code><a href="../reference/uas_info.html">uas_info()</a></code> so the new metadata is
+read in R.</p>
+<p>The second way to record flight metadata is by passing a named list
+as the <code>metadata</code> argument to <code><a href="../reference/uas_info.html">uas_info()</a></code>. This
+code-centric approach might make sense if your flight metadata is saved
+in a separate database, and you enjoy coding.</p>
 </div>
 <div class="section level2">
 <h2 id="what-are-the-standard-flight-metadata-fields">What are the ‘standard’ flight metadata fields?<a class="anchor" aria-label="anchor" href="#what-are-the-standard-flight-metadata-fields"></a>
 </h2>
-<p>There are no industry standards for metadata for drone flights. <code>uasimg</code> provide the following ‘out-of-the-box’ defaults:</p>
+<p>There are no industry standards for metadata for drone flights.
+<code>uasimg</code> provide the following ‘out-of-the-box’ defaults:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span>
-<span class="co">#&gt;  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span>
-<span class="co">#&gt; [11] "notes"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/uas_setflds.html">uas_flds_oem</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span></span>
+<span><span class="co">#&gt;  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span></span>
+<span><span class="co">#&gt; [11] "notes"</span></span></code></pre></div>
 <p><br></p>
 <p><em>Default Metadata Fields for Drone Flights</em></p>
 <table class="table tbl_compact">
@@ -205,7 +258,8 @@ Usage
 name_short
 </td>
 <td style="text-align:left;">
-used primarily as the base for file names, such as the HTML summary page, kml files, shp files, etc.
+used primarily as the base for file names, such as the HTML summary
+page, kml files, shp files, etc.
 </td>
 </tr>
 <tr>
@@ -229,7 +283,8 @@ a 1-2 sentence blurb about the flight
 proj
 </td>
 <td style="text-align:left;">
-project name (typically abbreviated). Can be used for filtering and constructing a directory tree.
+project name (typically abbreviated). Can be used for filtering and
+constructing a directory tree.
 </td>
 </tr>
 <tr>
@@ -237,7 +292,8 @@ project name (typically abbreviated). Can be used for filtering and constructing
 loc
 </td>
 <td style="text-align:left;">
-location name (typically abbreviated). Can be used for filtering and constructing a directory tree.
+location name (typically abbreviated). Can be used for filtering and
+constructing a directory tree.
 </td>
 </tr>
 <tr>
@@ -294,53 +350,78 @@ note about how the flight went, anything else
 <div class="section level2">
 <h2 id="how-do-i-change-the-default-flight-metadata-fields">How do I change the default flight metadata fields?<a class="anchor" aria-label="anchor" href="#how-do-i-change-the-default-flight-metadata-fields"></a>
 </h2>
-<p><code><a href="../reference/uas_info.html">uas_info()</a></code> will always import whatever it finds in the accompanying <em>metadata.txt</em> file. You can however customize the fields that appear in a ‘blank’ metadata file created by <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code>:</p>
+<p><code><a href="../reference/uas_info.html">uas_info()</a></code> will always import whatever it finds in the
+accompanying <em>metadata.txt</em> file. You can however customize the
+fields that appear in a ‘blank’ metadata file created by
+<code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## View default flight metadata fields</span>
-<span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span>
-<span class="co">#&gt;  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span>
-<span class="co">#&gt; [11] "notes"</span>
-
-<span class="co">## Set default flight metadata fields</span>
-<span class="fu"><a href="../reference/uas_setflds.html">uas_setflds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name_short"</span>, <span class="st">"name_long"</span>, <span class="st">"proj"</span>, <span class="st">"subproj"</span>, <span class="st">"site_name"</span>, <span class="st">"weather"</span>, <span class="st">"aircraft"</span>, <span class="st">"client"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #BBBB00;"> - Default metadata fields set to: name_short, name_long, proj, subproj, site_name, weather, aircraft, client</span></span>
-
-<span class="co">## View default flight metadata fields</span>
-<span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] "name_short" "name_long"  "proj"       "subproj"    "site_name" </span>
-<span class="co">#&gt; [6] "weather"    "aircraft"   "client"</span></code></pre></div>
-<p>Tip 1: <code>name_short</code> and <code>name_long</code> are used in several <code>uasimg</code> functions that export files and create flight summaries. Hence it is recommended to always include these fields in your flight metadata.</p>
-<p>Tip 2: to set the default metadata fields back to the factory presets, run <code><a href="../reference/uas_setflds.html">uas_setflds()</a></code> without any arguments</p>
+<code class="sourceCode R"><span><span class="co">## View default flight metadata fields</span></span>
+<span><span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "name_short"  "name_long"   "description" "proj"        "loc"        </span></span>
+<span><span class="co">#&gt;  [6] "pilot"       "contact"     "uav"         "data_url"    "tags"       </span></span>
+<span><span class="co">#&gt; [11] "notes"</span></span>
+<span></span>
+<span><span class="co">## Set default flight metadata fields</span></span>
+<span><span class="fu"><a href="../reference/uas_setflds.html">uas_setflds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name_short"</span>, <span class="st">"name_long"</span>, <span class="st">"proj"</span>, <span class="st">"subproj"</span>, <span class="st">"site_name"</span>, <span class="st">"weather"</span>, <span class="st">"aircraft"</span>, <span class="st">"client"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;"> - Default metadata fields set to: name_short, name_long, proj, subproj, site_name, weather, aircraft, client</span></span></span>
+<span></span>
+<span><span class="co">## View default flight metadata fields</span></span>
+<span><span class="fu"><a href="../reference/uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "name_short" "name_long"  "proj"       "subproj"    "site_name" </span></span>
+<span><span class="co">#&gt; [6] "weather"    "aircraft"   "client"</span></span></code></pre></div>
+<p>Tip 1: <code>name_short</code> and <code>name_long</code> are used in
+several <code>uasimg</code> functions that export files and create
+flight summaries. Hence it is recommended to always include these fields
+in your flight metadata.</p>
+<p>Tip 2: to set the default metadata fields back to the factory
+presets, run <code><a href="../reference/uas_setflds.html">uas_setflds()</a></code> without any arguments</p>
 </div>
 <div class="section level2">
 <h2 id="how-do-i-create-metadata-files-with-default-values">How do I create metadata files with default values?<a class="anchor" aria-label="anchor" href="#how-do-i-create-metadata-files-with-default-values"></a>
 </h2>
-<p>You may have a few standard metadata fields for which the values can be safely pre-populated (e.g., name of the organization, name of the pilot, name of the aircraft, etc.). You can tell <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> to use these pre-populated values when generating new metadata text files with the <code>md_template</code> argument:</p>
+<p>You may have a few standard metadata fields for which the values can
+be safely pre-populated (e.g., name of the organization, name of the
+pilot, name of the aircraft, etc.). You can tell
+<code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> to use these pre-populated values when
+generating new metadata text files with the <code>md_template</code>
+argument:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Define a master metadata template, with some fields pre-populated</span>
-<span class="va">md_template_fn</span> <span class="op">&lt;-</span> <span class="st">"~/master_flight_metadata.txt"</span>
-  
-<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">barn_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, open <span class="op">=</span> <span class="cn">TRUE</span>, md_template <span class="op">=</span> <span class="va">md_template_fn</span><span class="op">)</span></code></pre></div>
-<p>The ‘master’ metadata template can even be online. Just make sure the URL returns raw text [<a href="https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata" class="external-link">example</a>].</p>
+<code class="sourceCode R"><span><span class="co">## Define a master metadata template, with some fields pre-populated</span></span>
+<span><span class="va">md_template_fn</span> <span class="op">&lt;-</span> <span class="st">"~/master_flight_metadata.txt"</span></span>
+<span>  </span>
+<span><span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">barn_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, open <span class="op">=</span> <span class="cn">TRUE</span>, md_template <span class="op">=</span> <span class="va">md_template_fn</span><span class="op">)</span></span></code></pre></div>
+<p>The ‘master’ metadata template can even be online. Just make sure the
+URL returns raw text [<a href="https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata" class="external-link">example</a>].</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Define a master metadata template, with some fields pre-populated</span>
-<span class="va">md_template_url</span> <span class="op">&lt;-</span> <span class="st">"https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata"</span>
-  
-<span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">barn_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, open <span class="op">=</span> <span class="cn">TRUE</span>, md_template <span class="op">=</span> <span class="va">md_template_url</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## Define a master metadata template, with some fields pre-populated</span></span>
+<span><span class="va">md_template_url</span> <span class="op">&lt;-</span> <span class="st">"https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21c62aff619bc2/raw/a6f3dde133652a729283b0e03f8a923f54f73a67/hrec_riverfire2020_metadata"</span></span>
+<span>  </span>
+<span><span class="fu"><a href="../reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">barn_info</span>, make_new <span class="op">=</span> <span class="cn">TRUE</span>, open <span class="op">=</span> <span class="cn">TRUE</span>, md_template <span class="op">=</span> <span class="va">md_template_url</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>Flight metadata is useful for a variety of data management purposes. Entering metadata is rarely enjoyable, but <code>uasimg</code> has several ways to customize the metadata fields for your work and facilitate creating metadata text files. Include flight metadata in your workflow and the results will be more useful catalogs and the ability to automate common data management tasks.</p>
+<p>Flight metadata is useful for a variety of data management purposes.
+Entering metadata is rarely enjoyable, but <code>uasimg</code> has
+several ways to customize the metadata fields for your work and
+facilitate creating metadata text files. Include flight metadata in your
+workflow and the results will be more useful catalogs and the ability to
+automate common data management tasks.</p>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p>in the context of uasimg, ‘flight’ simply refers to any collection of images. In practice we typically process and analyze images by flight, but there are cases where you may want to work with images taken on multiple flights, portions of flights, etc.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>sorting images into standardized directory trees is coming soon<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>in the context of uasimg, ‘flight’ simply refers to any
+collection of images. In practice we typically process and analyze
+images by flight, but there are cases where you may want to work with
+images taken on multiple flights, portions of flights, etc.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>sorting images into standardized directory trees is
+coming soon<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 <li id="fn3"><p>this feature will be implemented in a future update<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>you don’t have to name the files <em>metadata.txt</em>. That’s just the default. You can name them anything you want, as well as provide a suffix so each one is named differently. See the help page for <code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> for details.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>you don’t have to name the files <em>metadata.txt</em>.
+That’s just the default. You can name them anything you want, as well as
+provide a suffix so each one is named differently. See the help page for
+<code><a href="../reference/uas_metadata_make.html">uas_metadata_make()</a></code> for details.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
@@ -362,7 +443,7 @@ note about how the flight went, anything else
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

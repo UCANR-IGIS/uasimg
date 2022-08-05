@@ -38,5 +38,5 @@ Suggests:
     knitr,
     DiagrammeR,
     DiagrammeRsvg
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr

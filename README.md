@@ -1,20 +1,23 @@
+Drone Image Utilities
+================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![uasimg status
+badge](https://ajlyons.r-universe.dev/badges/uasimg)](https://ajlyons.r-universe.dev)
 <!-- badges: end -->
 
-# Drone Image Utilities <a href='http://ucanr-igis.github.io/uasimg'><img src='man/figures/logo.png' align="right" height="138" style="padding:10px;"/></a>
-
-`uasimg` helps manage images taken from an unoccupied aerial vehicle
-(UAV, or drone) that have been collected with the intent to stitch them
-into 2D and 3D products with photogrammetry software. The package does
-**not** stitch images, but helps you create catalogs of your image data,
-examine their locations and properties, export image centroids and
-estimated footprints as GIS files, convert formats, and create world
-files for individual images can be viewed in GIS software.
+<a href='http://ucanr-igis.github.io/uasimg'><img src='man/figures/logo.png' align="right" height="138" style="padding:10px; height:200px; width:177px;"/></a>`uasimg`
+helps manage images taken from an unoccupied aerial vehicle (UAV, or
+drone) that have been collected with the intent to stitch them into 2D
+and 3D products with photogrammetry software. The package does **not**
+stitch images, but helps you create catalogs of your image data, examine
+their locations and properties, export image centroids and estimated
+footprints as GIS files, convert formats, and create world files for
+individual images can be viewed in GIS software.
 
 ## Applications
 
@@ -25,9 +28,10 @@ tasks:
     their locations and estimated image overlap. This can help a pilot
     determine if a flight was successful, or needs to be redone.
 
-2.  Subsetting images for further processing with a photogrammetry
-    (stitching) program like Pix4D or Agisoft. Omitting images with an
-    extreme amount of overlap can reduce processing time and improve
+2.  Subsetting images for further processing with photogrammetry
+    (stitching) software like [Pix4Dmapper](https://www.pix4d.com/) or
+    [OpenDroneMap](https://www.opendronemap.org/). Omitting images with
+    an extreme amount of overlap can reduce processing time and improve
     results.
 
 3.  Creating individual Flight Summary pages in HTML, as the backbone of
@@ -112,7 +116,7 @@ exiftoolr::exif_version()
 
 Alternately, you can install exiftool manually by downloading it from
 <http://www.sno.phy.queensu.ca/~phil/exiftool/>. Be sure to unzip it to
-a folder on the path (e.g, c:\\windows) and rename the executable file
+a folder on the path (e.g, c:\windows) and rename the executable file
 from *exiftool(-k).exe* to *exiftool.exe*.
 
 ## Supported Cameras
@@ -258,9 +262,17 @@ average side distance between flight lines. The resulting mosaic will
 not be orthorectified, but may be good enough for visualization and/or
 object detection particularly if the area is flat.
 
-# Bugs, Questions, and Feature Requests
+# Get Involved!
+
+## Bugs, Questions, and Feature Requests
 
 To report a bug, add your camera to the package, or suggest a new
 feature, please create an
 [issue](https://github.com/ucanr-igis/uasimg/issues) on GitHub, or
 contact the package author.
+
+## Code of Conduct
+
+Please note that the uasimg project is released with a [Contributor Code
+of Conduct](http://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.

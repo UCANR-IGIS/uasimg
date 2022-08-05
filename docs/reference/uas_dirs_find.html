@@ -81,23 +81,32 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_dirs_find</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"jpg"</span>, <span class="st">"tif"</span><span class="op">)</span>, min_images <span class="op">=</span> <span class="fl">3</span>, exclude_tb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_dirs_find</span><span class="op">(</span><span class="va">x</span>, ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"jpg"</span>, <span class="st">"tif"</span><span class="op">)</span>, min_images <span class="op">=</span> <span class="fl">3</span>, exclude_tb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>The base directory</p></dd>
+
+
 <dt>ext</dt>
 <dd><p>A character vector of the file extensions to search for (excluding the '.')</p></dd>
+
+
 <dt>min_images</dt>
 <dd><p>The minimum number of image files a directory must contain to be included in the results</p></dd>
+
+
 <dt>exclude_tb</dt>
 <dd><p>Exclude folders called 'tb' (thumbnails)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A tibble with 3 columns: <code>path</code>, <code>ext</code>, and <code>num_files</code>.</p>
+    
+
+<p>A tibble with 3 columns: <code>path</code>, <code>ext</code>, and <code>num_files</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -120,7 +129,7 @@ images) are excluded. Hidden directories and directories that start with `.` are
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

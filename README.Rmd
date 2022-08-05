@@ -1,11 +1,12 @@
 ---
+title: Drone Image Utilities
 output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![uasimg status badge](https://ajlyons.r-universe.dev/badges/uasimg)](https://ajlyons.r-universe.dev)
 <!-- badges: end -->
 
 ```{r, echo = FALSE}
@@ -16,9 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Drone Image Utilities <a href='http://ucanr-igis.github.io/uasimg'><img src='man/figures/logo.png' align="right" height="138" style="padding:10px;"/></a>
-
-`uasimg` helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does **not** stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, convert formats, and create world files for individual images can be viewed in GIS software.
+<a href='http://ucanr-igis.github.io/uasimg'><img src='man/figures/logo.png' align="right" height="138" style="padding:10px; height:200px; width:177px;"/></a>`uasimg` helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does **not** stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, convert formats, and create world files for individual images can be viewed in GIS software.
 
 ## Applications
 
@@ -26,7 +25,7 @@ knitr::opts_chunk$set(
 
 1. Doing a quick check in the field of photos after a flight, assessing their locations and estimated image overlap. This can help a pilot determine if a flight was successful, or needs to be redone.
 
-1. Subsetting images for further processing with a photogrammetry (stitching) program like Pix4D or Agisoft. Omitting images with an extreme amount of overlap can reduce processing time and improve results.
+1. Subsetting images for further processing with photogrammetry (stitching) software like [Pix4Dmapper](https://www.pix4d.com/) or [OpenDroneMap](https://www.opendronemap.org/). Omitting images with an extreme amount of overlap can reduce processing time and improve results.
 
 1. Creating individual Flight Summary pages in HTML, as the backbone of an image catalog, and higher level 'Table of Contents' pages for groups of related flights (e.g., from the same site).
 
@@ -166,6 +165,13 @@ You can create world files, readable by ArcGIS and QGIS, with `uas_worldfile()`.
 
 Sometimes images will simply not stitch, forcing you to do your analysis and visualization with individual images. `uas_cropctr()` crops out the center part of each image (which normally has the least amount of distortion if the image was taken at nadir). The function will also produce a world file for the cropped center, so they can be visualized together in a GIS software as a kind of crude mosaic. `uas_cropctr()` provides arguments to specify how tall and wide to make the crop, which you can set to the average forward distance between images and the average side distance between flight lines. The resulting mosaic will not be orthorectified, but may be good enough for visualization and/or object detection particularly if the area is flat.
 
-# Bugs, Questions, and Feature Requests
+# Get Involved!
+
+## Bugs, Questions, and Feature Requests
 
 To report a bug, add your camera to the package, or suggest a new feature, please create an [issue](https://github.com/ucanr-igis/uasimg/issues) on GitHub, or contact the package author.
+
+## Code of Conduct
+
+Please note that the uasimg project is released with a [Contributor Code of Conduct](http://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+

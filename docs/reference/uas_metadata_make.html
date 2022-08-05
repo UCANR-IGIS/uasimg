@@ -81,49 +81,72 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_metadata_make</span><span class="op">(</span>
-  <span class="va">x</span>,
-  md_file <span class="op">=</span> <span class="st">"metadata.txt"</span>,
-  md_suffix <span class="op">=</span> <span class="cn">NULL</span>,
-  make_new <span class="op">=</span> <span class="cn">FALSE</span>,
-  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,
-  open <span class="op">=</span> <span class="cn">TRUE</span>,
-  md_flds <span class="op">=</span> <span class="fu"><a href="uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span>,
-  md_template <span class="op">=</span> <span class="cn">NULL</span>,
-  read_uasinfo <span class="op">=</span> <span class="cn">FALSE</span>,
-  use_system_editor <span class="op">=</span> <span class="cn">FALSE</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_metadata_make</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  md_file <span class="op">=</span> <span class="st">"metadata.txt"</span>,</span>
+<span>  md_suffix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  make_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  open <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  md_flds <span class="op">=</span> <span class="fu"><a href="uas_setflds.html">uas_getflds</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  md_template <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  read_uasinfo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  use_system_editor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A character vector of directories, or a uas_info object</p></dd>
+
+
 <dt>md_file</dt>
 <dd><p>Name of the file to create</p></dd>
+
+
 <dt>md_suffix</dt>
 <dd><p>A suffix to append to the file names</p></dd>
+
+
 <dt>make_new</dt>
 <dd><p>Create new metadata file(s), Logical</p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>Overwrite existing metadata files, Logical</p></dd>
+
+
 <dt>open</dt>
 <dd><p>Open the file for editing</p></dd>
+
+
 <dt>md_flds</dt>
 <dd><p>A character vector of field names</p></dd>
+
+
 <dt>md_template</dt>
 <dd><p>A template metadata file</p></dd>
+
+
 <dt>read_uasinfo</dt>
 <dd><p>Incorporate existing flight metadata already saved in x (assuming x is a uas_info object)</p></dd>
+
+
 <dt>use_system_editor</dt>
 <dd><p>Whether to open metadata files in the operating system text editor (as opposed to RStudio), Logical</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Suppress messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector of the external metadata text file(s) created.</p>
+    
+
+<p>A character vector of the external metadata text file(s) created.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -156,7 +179,7 @@ online (<a href="https://gist.githubusercontent.com/ajlyons/d0826f4775413ba27a21
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

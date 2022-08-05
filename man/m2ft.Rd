@@ -29,10 +29,10 @@ These unit conversion functions are vectorized.
 }
 \section{Functions}{
 \itemize{
-\item \code{ft2m}: Feet to meters
+\item \code{ft2m()}: Feet to meters
 
-\item \code{cm2in}: Centimeters to inches
+\item \code{cm2in()}: Centimeters to inches
 
-\item \code{msq2acres}: Meters squared to acres
+\item \code{msq2acres()}: Meters squared to acres
+
 }}
-

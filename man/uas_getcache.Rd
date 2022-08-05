@@ -45,11 +45,11 @@ a package update.
 }
 \section{Functions}{
 \itemize{
-\item \code{uas_setcache}: Set cache directory
+\item \code{uas_setcache()}: Set cache directory
 
-\item \code{uas_clearcache}: Clear cache directory
+\item \code{uas_clearcache()}: Clear cache directory
+
 }}
-
 \seealso{
 \code{\link{uas_info}}
 }

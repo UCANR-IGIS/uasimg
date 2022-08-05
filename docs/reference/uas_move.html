@@ -81,55 +81,82 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_move</span><span class="op">(</span>
-  <span class="va">x</span>,
-  flt_idx <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">tree</span>,
-  <span class="va">outdir_base</span>,
-  req_all_fltmdflds <span class="op">=</span> <span class="cn">TRUE</span>,
-  create_dirs <span class="op">=</span> <span class="st">"ask"</span>,
-  imgs_action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"copy"</span>, <span class="st">"move"</span>, <span class="st">"none"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-  imgs_prepend_fn <span class="op">=</span> <span class="cn">FALSE</span>,
-  write_metadata <span class="op">=</span> <span class="cn">TRUE</span>,
-  preview_only <span class="op">=</span> <span class="cn">FALSE</span>,
-  tb_action <span class="op">=</span> <span class="va">imgs_action</span>,
-  map_action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"copy"</span>, <span class="st">"move"</span>, <span class="st">"none"</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_move</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  flt_idx <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">tree</span>,</span>
+<span>  <span class="va">outdir_base</span>,</span>
+<span>  req_all_fltmdflds <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  create_dirs <span class="op">=</span> <span class="st">"ask"</span>,</span>
+<span>  imgs_action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"copy"</span>, <span class="st">"move"</span>, <span class="st">"none"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  imgs_prepend_fn <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  write_metadata <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  preview_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tb_action <span class="op">=</span> <span class="va">imgs_action</span>,</span>
+<span>  map_action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"copy"</span>, <span class="st">"move"</span>, <span class="st">"none"</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A list of class 'uas_info'</p></dd>
+
+
 <dt>flt_idx</dt>
 <dd><p>Elements of x to move, integer</p></dd>
+
+
 <dt>tree</dt>
 <dd><p>Directory tree template filename or character vector, see Details</p></dd>
+
+
 <dt>outdir_base</dt>
 <dd><p>Output directory root</p></dd>
+
+
 <dt>req_all_fltmdflds</dt>
 <dd><p>Require all flight metadata fields in the directory tree template to be defined</p></dd>
+
+
 <dt>create_dirs</dt>
 <dd><p>Create the output directory tree</p></dd>
+
+
 <dt>imgs_action</dt>
 <dd><p>The action to take with images</p></dd>
+
+
 <dt>imgs_prepend_fn</dt>
 <dd><p>Whether th prepend image file names with datestamp (to ensure they'll be unique)</p></dd>
+
+
 <dt>write_metadata</dt>
 <dd><p>Write a metadtata.txt file in the output image folder</p></dd>
+
+
 <dt>preview_only</dt>
 <dd><p>Preview the directory tree only</p></dd>
+
+
 <dt>tb_action</dt>
 <dd><p>The action to take with thumbnail images saved in the default location</p></dd>
+
+
 <dt>map_action</dt>
 <dd><p>The action to take with the contents of the map folder</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Suppress messages</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of directory locations where images were copied / moved</p>
+    
+
+<p>A vector of directory locations where images were copied / moved</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -152,7 +179,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -81,36 +81,51 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uas_grp_flt</span><span class="op">(</span>
-  <span class="va">x</span>,
-  interflt_val <span class="op">=</span> <span class="fl">10</span>,
-  interflt_units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"med_int"</span>, <span class="st">"secs"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-  init_fltnum <span class="op">=</span> <span class="fl">1</span>,
-  min_images <span class="op">=</span> <span class="fl">5</span>,
-  cross_dirs <span class="op">=</span> <span class="cn">TRUE</span>,
-  options <span class="op">=</span> <span class="cn">NULL</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uas_grp_flt</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  interflt_val <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  interflt_units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"med_int"</span>, <span class="st">"secs"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  init_fltnum <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  min_images <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  cross_dirs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  options <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A list of class 'uas_info'</p></dd>
+
+
 <dt>interflt_val</dt>
 <dd><p>Time value between flights</p></dd>
+
+
 <dt>interflt_units</dt>
 <dd><p>Time units between flights, see details "med_int" or "secs"</p></dd>
+
+
 <dt>init_fltnum</dt>
 <dd><p>Initial flight number</p></dd>
+
+
 <dt>min_images</dt>
 <dd><p>Minimum number of images to be considered a flight</p></dd>
+
+
 <dt>cross_dirs</dt>
 <dd><p>Parse the images in directories collectively</p></dd>
+
+
 <dt>options</dt>
 <dd><p>Options and overrides for creating groups</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Suppress messages</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -130,7 +145,7 @@ would be appropriate if the images from one flight were spread across multiple f
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
