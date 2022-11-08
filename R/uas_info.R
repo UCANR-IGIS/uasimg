@@ -181,9 +181,11 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
   if (is.null(ext)) {
     grep_pattern_use <- ".jpg$|.jpeg$|.tif$|.tiff$|.raw$|.dng$"
     ext_use <- ""
+    ext_msg <- " (all image files)"
   } else {
     grep_pattern_use <- paste0(".", ext, "$")
     ext_use <- paste0("-ext ", ext, " ")
+    ext_msg <- paste0(" (", ext, " files)")
   }
 
   res <- list()
@@ -255,7 +257,7 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
 
       ### Run EXIF tool on the first image to get the camera model
       ### (We assume all image files in the directory are from the same sensor, will not check)
-      if (!quiet) message(yellow(" - Looking for image files"))
+      if (!quiet) message(yellow(paste0(" - Looking for image files", ext_msg)))
 
       first_fn <- list.files(path=img_dir, full.names=TRUE, pattern=grep_pattern_use, ignore.case = TRUE)[1]
 
@@ -309,7 +311,7 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
         camera_name <- sensor_this_df[1, "camera_name", drop = TRUE]
 
         ## TODO NOT SURE WHY ITS PUTTING A BLANK LINE AFTER THE FOLLOWING MESSAGE
-        ## I'VE TRIED A LOT OF DIFFERENT THINGS
+        ## I'VE TRIED A LOT OF DIFFERENT THINGS!!
         if (!quiet) message(yellow(paste(" - Found", camera_name)))
 
         ## Get the tag for yaw for this camera

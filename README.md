@@ -110,8 +110,8 @@ To verify it worked:
 
 ``` r
 exiftoolr::exif_version()
-#> Using ExifTool version 12.00
-#> [1] "12.00"
+#> Using ExifTool version 12.50
+#> [1] "12.50"
 ```
 
 Alternately, you can install exiftool manually by downloading it from
@@ -141,19 +141,19 @@ as an argument when you run `uas_info()`.
 
 Requirements for `uasimg` therefore include:
 
--   images must have GPS coordinates saved in them  
--   image files should be grouped in folders (typically one flight per
-    folder)
--   the camera must be one of the ones known by the `uasimg` package
-    (see below)
+- images must have GPS coordinates saved in them  
+- image files should be grouped in folders (typically one flight per
+  folder)
+- the camera must be one of the ones known by the `uasimg` package (see
+  below)
 
 Additional requirements to generate estimated footprints:
 
--   the height above ground level must be saved in the image files, or
-    passed as an argument. If passed as an argument, the assumption is
-    that all images were taken from the same height.  
--   it is presumed that images were taken at nadir (camera pointing
-    straight down)
+- the height above ground level must be saved in the image files, or
+  passed as an argument. If passed as an argument, the assumption is
+  that all images were taken from the same height.  
+- it is presumed that images were taken at nadir (camera pointing
+  straight down)
 
 # Usage Overview
 
@@ -165,29 +165,28 @@ The object returned by `uas_info()` is not very useful by itself. The
 results are generally saved to a variable then fed into other functions
 that do useful things, such as:
 
--   `uas_report()` creates ‘Flight Summaries’ as standalone HTML pages,
-    with options to create image thumbnails
-    ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/hrec_wtrshd2_2017_flt1_report.html)).
-    Flight summaries also be grouped using `uas_toc()`, which generates
-    a Table of Contents page for several Flight Summaries, with options
-    to copy all the catalog files to a single folder so the catalog is
-    in one place
-    ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/index.html)).
+- `uas_report()` creates ‘Flight Summaries’ as standalone HTML pages,
+  with options to create image thumbnails
+  ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/hrec_wtrshd2_2017_flt1_report.html)).
+  Flight summaries also be grouped using `uas_toc()`, which generates a
+  Table of Contents page for several Flight Summaries, with options to
+  copy all the catalog files to a single folder so the catalog is in one
+  place
+  ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/index.html)).
 
--   `uas_exp_shp()` and `uas_exp_kml()` exports flight geometries (image
-    centroids, image footprints, and/or flight area) as Shapefiles or
-    KML files. KML files can be imported into most flight planning
-    software to refly the same area and/or plan a flight for an adjacent
-    area.
+- `uas_exp_shp()` and `uas_exp_kml()` exports flight geometries (image
+  centroids, image footprints, and/or flight area) as Shapefiles or KML
+  files. KML files can be imported into most flight planning software to
+  refly the same area and/or plan a flight for an adjacent area.
 
--   `uas_worldfile()` creates small external XML files that allow images
-    to be imported into GIS software and appear in their approximate
-    footprint.
+- `uas_worldfile()` creates small external XML files that allow images
+  to be imported into GIS software and appear in their approximate
+  footprint.
 
--   `uas_convert()` converts image files from one format to another.
+- `uas_convert()` converts image files from one format to another.
 
--   `uas_move()` moves images into a standardized directory tree based
-    on metadata
+- `uas_move()` moves images into a standardized directory tree based on
+  metadata
 
 For more info, see the [Managing Drone Images with
 uasimg](https://ucanr-igis.github.io/uasimg/articles/uasimg.html)
