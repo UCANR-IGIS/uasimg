@@ -1,7 +1,7 @@
 # uasimg 1.8.2 (2022-11-08)
 
 * cameras.csv: updated EXIF fields for Phantom 4 MS RGB (added tag_elev_agl)
-* `uas_info()`: updated status message
+* `uas_info()`: updated status message (to include the optional ext argument)
 
 # uasimg 1.8.1 (2022-04-12)
 
