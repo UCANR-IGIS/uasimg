@@ -42,12 +42,12 @@ tasks:
     while preserving all the image metadata needed for photogrammetry.
 
 5.  Creating world files for individual drone images, using the image
-    EXIF data to model the ground footprint and rotation, so they can
-    imported in GIS software and appear in their approximate location.
-
-**Note**: image locations and footprints are based on the metadata saved
-in the image files (e.g., relative altitude above the launch point,
-camera compass direction), and are *estimates only*.
+    EXIF data to model the ground footprint and rotation, so they can be
+    imported in GIS software and appear in their approximate location.  
+      
+    **Note**: image locations and footprints are based on the metadata
+    saved in the image files (e.g., relative altitude above the launch
+    point, camera compass direction), and are *estimates only*.
 
 ## Installation
 
