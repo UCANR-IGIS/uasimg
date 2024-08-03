@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">uasimg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.8.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.0</span>
       </span>
     </div>
 
@@ -108,7 +108,7 @@
 </h1></div>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
-<p><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://ajlyons.r-universe.dev" class="external-link"><img src="https://ajlyons.r-universe.dev/badges/uasimg" alt="uasimg status badge"></a> <!-- badges: end --></p>
+
 <p><a href="http://ucanr-igis.github.io/uasimg"><img src="reference/figures/logo.png" align="right" height="138" style="padding:10px; height:200px; width:177px;"></a><code>uasimg</code> helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does <strong>not</strong> stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, convert formats, and create world files for individual images can be viewed in GIS software.</p>
 <div class="section level2">
 <h2 id="applications">Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
@@ -158,10 +158,10 @@
 <p>To read the EXIF data from the image files, <code>uasimg</code> requires an external command line tool called ‘exiftool’.</p>
 <p><strong>UPDATE: As of version 1.6.0, you no longer need to manually install the exiftool command line utility. Rather you can install by running:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">exiftoolr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/exiftoolr/man/install_exiftool.html" class="external-link">install_exiftool</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">exiftoolr</span><span class="fu">::</span><span class="fu"><a href="https://joshobrien.github.io/exiftoolr/reference/install_exiftool.html" class="external-link">install_exiftool</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>To verify it worked:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">exiftoolr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/exiftoolr/man/exif_call.html" class="external-link">exif_version</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">exiftoolr</span><span class="fu">::</span><span class="fu"><a href="https://joshobrien.github.io/exiftoolr/reference/exif_call.html" class="external-link">exif_version</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using ExifTool version 12.50</span></span>
 <span><span class="co">#&gt; [1] "12.50"</span></span></code></pre></div>
 <p>Alternately, you can install exiftool manually by downloading it from <a href="http://www.sno.phy.queensu.ca/~phil/exiftool/" class="external-link uri">http://www.sno.phy.queensu.ca/~phil/exiftool/</a>. Be sure to unzip it to a folder on the path (e.g, c:) and rename the executable file from <em>exiftool(-k).exe</em> to <em>exiftool.exe</em>.</p>
@@ -309,7 +309,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

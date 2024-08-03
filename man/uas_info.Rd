@@ -74,10 +74,11 @@ accurate GPS coordinate).
 Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
 many popular drone cameras. If your drone camera is not in the database, you can create your own
 \emph{cameras.csv} file (see \code{\link{uas_cameras}} for details) and pass the file name as the
-\code{cameras} argument. Or contact the package maintainer to add your camera to the database.
+\code{cameras} argument. Or \href{https://github.com/ucanr-igis/uasimg/issues}{contact} the package maintainer
+to add your camera to the database.
 
-This function uses a free command line tool called EXIFtool to read the EXIF data. If you haven't already,
-you can install this by running \code{\link[exiftoolr]{install_exiftool}}. Alternately you can download exiftool
+This function uses a free command line tool called EXIFtool to read the EXIF data. You can install this by
+running \code{\link[exiftoolr]{install_exiftool}}. Alternately you can download exiftool
 from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}. After you download it, rename the executable file,
 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 
@@ -119,7 +120,7 @@ be written to accept one and only one argument - a directory path. This can be u
 short names should be constructed from pieces of the image directory path. See also \code{\link{uas_path2name_fun}}.
 
 \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
-If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). The only information
+If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R/uasimg}). The only information
 that gets cached is image metadata. Flight metadata is never cached (see the Vignette on Flight Metadata
 for a discussion of image and flight metadata). Cached EXIF data is linked
 to a directory of images based on the directory name and total size of all image files.

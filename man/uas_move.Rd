@@ -6,7 +6,7 @@
 \usage{
 uas_move(
   x,
-  flt_idx = NULL,
+  flt = NULL,
   tree,
   outdir_base,
   req_all_fltmdflds = TRUE,
@@ -17,13 +17,14 @@ uas_move(
   preview_only = FALSE,
   tb_action = imgs_action,
   map_action = c("copy", "move", "none")[3],
-  quiet = FALSE
+  quiet = FALSE,
+  flt_idx = deprecated()
 )
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{flt_idx}{Elements of x to move, integer}
+\item{flt}{Flight(s) in x to process (character or numeric vector, default is all)}
 
 \item{tree}{Directory tree template filename or character vector, see Details}
 
@@ -46,6 +47,8 @@ uas_move(
 \item{map_action}{The action to take with the contents of the map folder}
 
 \item{quiet}{Suppress messages}
+
+\item{flt_idx}{`r lifecycle::badge("deprecated")` Use `flt` instead}
 }
 \value{
 A vector of directory locations where images were copied / moved

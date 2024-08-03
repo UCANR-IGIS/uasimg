@@ -3,6 +3,7 @@
 #' Create world files and projection files for UAS images
 #'
 #' @param x A list of class 'uas_info'
+#' @param flt Which flight(s) in x to process (character or numeric vector, default is all)
 #' @param idx Which rows in x to process (default is all)
 #' @param aux.xml Create an aux.xml file, logical. See details.
 #' @param wld Create a world file, logical. See details.
@@ -50,7 +51,7 @@
 #' \code{prj} files contain just the Coordinate Reference System info. They do not
 #' seem to be recognized for rasters by ArcGIS, however QGIS picks them up.
 #'
-#' @return A vector of filenames generated.
+#' @return A list of vectors of filenames generated.
 #'
 #' @seealso \code{\link{uas_info}}
 #'
@@ -58,7 +59,7 @@
 #' @import crayon
 #' @export
 
-uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "auto", prj = FALSE,
+uas_worldfile <- function(x, flt = NULL, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "auto", prj = FALSE,
                              rotated = TRUE, quiet = FALSE) {
 
     if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
@@ -66,58 +67,72 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
 
     wldext_lst <- list("jpg" ="jpw", "tif" = "tfw", "bil" = "blw")
 
-    for (iinfo_idx in 1:length(x)) {
+    if (is.null(flt)) {
+      flt_idx_use <- 1:length(x)
+    } else {
+      if (is.numeric(flt)) {
+        if (max(flt) > length(x)) stop("flt should not be larger than the number of flights saved in the uas image collection object")
+        flt_idx_use <- flt
+      } else if (is.character(flt)) {
+        if (FALSE %in% (flt %in% names(x))) stop("flight name not found in the uas image collection object")
+        flt_idx_use <- which(names(x) %in% flt)
+      } else {
+        stop("Invalid value for flt")
+      }
+    }
 
-      if (identical(x[[iinfo_idx]]$pts, NA)) {
-        warning(paste0("Centroids not found for ", names(x)[iinfo_idx], ". Can not create world file."))
+    for (flt_idx in flt_idx_use) {
+
+      if (identical(x[[flt_idx]]$pts, NA)) {
+        warning(paste0("Centroids not found for ", names(x)[flt_idx], ". Can not create world file."))
         next
       }
 
-      ## Make sure there's footprint info saveed
-      if (is.null(x[[iinfo_idx]]$fp)) {
-        stop("Image footprint info not found. Can't create WorldFile(s).")
+      ## Make sure there's footprint info saved
+      if (is.null(x[[flt_idx]]$fp)) {
+        stop("Image footprints are required to create worldfiles, but were not found in the image info object. Try re-running `uas_info()` with fp=TRUE")
       }
 
-      if (identical(x[[iinfo_idx]]$fp, NA)) {
-        warning(paste0("Can not generate world file(s). ", names(x)[iinfo_idx], " does not have footprints."))
+      if (identical(x[[flt_idx]]$fp, NA)) {
+        warning(paste0("Can not generate world file(s). ", names(x)[flt_idx], " does not have footprints."))
         next
       }
 
-      if (!"gsd" %in% names(x[[iinfo_idx]]$pts)) {
-        warning(paste0("Can not generate world file(s). ", names(x)[iinfo_idx], " does not have gsd."))
+      if (!"gsd" %in% names(x[[flt_idx]]$pts)) {
+        warning(paste0("Can not generate world file(s). ", names(x)[flt_idx], " does not have gsd."))
         next
       }
 
       files_gen <- NULL
 
       ## Get the CRS which will be used to generate the prj files.
-      img_wkt <- (x[[iinfo_idx]]$pts %>% st_crs())$proj4string
+      img_wkt <- (x[[flt_idx]]$pts %>% st_crs())$proj4string
 
       ## Loop through the rows
       if (is.null(idx)) {
-        idx_use <- 1:nrow(x[[iinfo_idx]]$pts)
+        idx_use <- 1:nrow(x[[flt_idx]]$pts)
       } else {
         idx_use <- idx
       }
       for (i in idx_use) {
 
         ## Get the input file name (minus path)
-        img_fn_in <- x[[iinfo_idx]]$pts[i, "file_name", drop = TRUE]
+        img_fn_in <- x[[flt_idx]]$pts[i, "file_name", drop = TRUE]
         img_ext <- tolower(substr(img_fn_in, nchar(img_fn_in)-2, nchar(img_fn_in)))
-        img_fnfull <- x[[iinfo_idx]]$pts[i, "img_fn", drop = TRUE]
+        img_fnfull <- x[[flt_idx]]$pts[i, "img_fn", drop = TRUE]
 
         ## Extract the GSD in map units (meter)
-        img_gsd_m <- x[[iinfo_idx]]$pts[i, "gsd", drop = TRUE] / 100
+        img_gsd_m <- x[[flt_idx]]$pts[i, "gsd", drop = TRUE] / 100
 
         ## Extract the footprint width, height, and center
-        img_fp_width <- x[[iinfo_idx]]$fp[i, "fp_width", drop = TRUE]
-        img_fp_height <- x[[iinfo_idx]]$fp[i, "fp_height", drop = TRUE]
-        #img_ctr <- coordinates(x[[iinfo_idx]]$pts[i,])
-        img_ctr <- x[[iinfo_idx]]$pts %>% slice(i) %>% sf::st_coordinates()
+        img_fp_width <- x[[flt_idx]]$fp[i, "fp_width", drop = TRUE]
+        img_fp_height <- x[[flt_idx]]$fp[i, "fp_height", drop = TRUE]
+        #img_ctr <- coordinates(x[[flt_idx]]$pts[i,])
+        img_ctr <- x[[flt_idx]]$pts %>% slice(i) %>% sf::st_coordinates()
 
         if (rotated) {
           ## Extract the yaw
-          img_yaw <- x[[iinfo_idx]]$pts[i, "yaw", drop = TRUE]
+          img_yaw <- x[[flt_idx]]$pts[i, "yaw", drop = TRUE]
 
           ## Convert compass angle to radians of rotation on the Cartesian plane
           theta <- (180 - img_yaw) *  pi / 180
@@ -211,9 +226,9 @@ uas_worldfile <- function(x, idx = NULL, aux.xml = TRUE, wld = FALSE, wldext = "
       } # for 1 in 1:nrow
 
       ## Append this list of world files to the result
-      reslt[[names(x)[iinfo_idx]]] <- files_gen
+      reslt[[names(x)[flt_idx]]] <- files_gen
 
-    } #for (iinfo_idx in 1:length(x))
+    } #for (flt_idx in 1:length(x))
 
     if (!quiet) message(crayon::green("Done."))
 

@@ -7,9 +7,10 @@
 uas_report(
   x,
   col = NULL,
-  group_img = TRUE,
+  group_img = FALSE,
   thumbnails = FALSE,
   show_local_dir = TRUE,
+  units = c("imperial", "metric")[1],
   report_title = "Flight Summary",
   attachments = c("mcp_kml", "ctr_kml")[0],
   output_dir = NULL,
@@ -27,7 +28,7 @@ uas_report(
   footer_html = NULL,
   use_tmpdir = FALSE,
   quiet = FALSE,
-  show_gps_coord = NULL
+  show_gps_coord = lifecycle::deprecated()
 )
 }
 \arguments{
@@ -37,9 +38,11 @@ uas_report(
 
 \item{group_img}{Group images within ~1m of each other into 1 point}
 
-\item{thumbnails}{Create thumbails}
+\item{thumbnails}{Display thumbnail images, logical}
 
-\item{show_local_dir}{Show the local image directory, TF}
+\item{show_local_dir}{Show the local image directory, logical}
+
+\item{units}{imperial or metric units, character}
 
 \item{report_title}{Title to appear at the top of the summary}
 
@@ -57,11 +60,11 @@ uas_report(
 
 \item{self_contained}{Make the output HTML file self-contained}
 
-\item{png_map}{Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)}
+\item{png_map}{Whether to create a PNG version of the map. May be logical, or dimensions of the output image in pixels (see Details)}
 
 \item{png_exp}{A proportion to expand the bounding box of the PNG map, see Details.}
 
-\item{overwrite_png}{Overwrite existing PNG files without warning, YN}
+\item{overwrite_png}{Overwrite existing PNG files without warning, logical}
 
 \item{google_api}{API key for Google Static Maps, see Details.}
 
@@ -75,7 +78,7 @@ uas_report(
 
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 
-\item{show_gps_coord}{Show GPS coordinates of images in the pop-up windows, YN (deprecated)}
+\item{show_gps_coord}{`r lifecycle::badge("deprecated")` Does nothing}
 }
 \value{
 The HTML file name(s) of the flight summaries generated
@@ -86,7 +89,11 @@ Creates image collection summaries for individual flights (folders)
 \details{
 This will generate HTML report(s) of the images in the UAS metadata object based.
 
-\code{group_img} determinies whether images at the same location are represented by a single point on the map. This is common with multi-spectral sensors that take generate multiple images per location. 'Same location' is determined by looking at the 5th decimal place of the x and y geographic coordinates (~1m),
+\code{group_img} determinies whether images at the same location are represented by a single point on the map. This is common with
+multi-spectral sensors that take generate multiple images per location. 'Same location' is determined by looking at the 5th decimal
+place of the x and y geographic coordinates (~1m).
+
+\code{units} defines whether the units for the flight area, above ground altitude, and GSD are reported in imperial or metric units.
 
 If no value for \code{output_dir} is passed, the report will be saved in a sub-directory of the image directory
 called 'map'. This sub-directory will be created if \code{create_dir = TRUE}.

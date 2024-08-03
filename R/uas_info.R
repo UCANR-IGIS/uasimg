@@ -32,10 +32,11 @@
 #' Camera parameters are saved in a csv file called \emph{cameras.csv}. The package ships with a CSV file containing
 #' many popular drone cameras. If your drone camera is not in the database, you can create your own
 #' \emph{cameras.csv} file (see \code{\link{uas_cameras}} for details) and pass the file name as the
-#' \code{cameras} argument. Or contact the package maintainer to add your camera to the database.
+#' \code{cameras} argument. Or \href{https://github.com/ucanr-igis/uasimg/issues}{contact} the package maintainer
+#' to add your camera to the database.
 #'
-#' This function uses a free command line tool called EXIFtool to read the EXIF data. If you haven't already,
-#' you can install this by running \code{\link[exiftoolr]{install_exiftool}}. Alternately you can download exiftool
+#' This function uses a free command line tool called EXIFtool to read the EXIF data. You can install this by
+#' running \code{\link[exiftoolr]{install_exiftool}}. Alternately you can download exiftool
 #' from \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}. After you download it, rename the executable file,
 #' 'exiftool(-k).exe' to 'exiftool.exe', and save it somewhere on your system's PATH (e.g., c:\\Windows).
 #'
@@ -78,7 +79,7 @@
 #' short names should be constructed from pieces of the image directory path. See also \code{\link{uas_path2name_fun}}.
 #'
 #' \code{cache} can be a logical value or the name of a directory where EXIF data gets cached.
-#' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R}). The only information
+#' If \code{cache = TRUE}, the default cache directory will be used (\code{~/.R/uasimg}). The only information
 #' that gets cached is image metadata. Flight metadata is never cached (see the Vignette on Flight Metadata
 #' for a discussion of image and flight metadata). Cached EXIF data is linked
 #' to a directory of images based on the directory name and total size of all image files.
@@ -112,7 +113,7 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
 
 
   ## Define the date for a cache to be considered valid (due to updates in the package that modify what gets saved)
-  cache_valid_date <- ISOdatetime(2021, 5, 9, 0, 0, 0)
+  cache_valid_date <- ISOdatetime(2023, 8, 10, 0, 0, 0)
 
   ## See if all directory(s) exist
   for (img_dir in img_dirs) {
@@ -241,8 +242,15 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
             ## Make sure its newer than the release of version 1.7.0
             if (file.mtime(cache_pathfn) > cache_valid_date) {
               load(cache_pathfn)
-              cache_loaded <- TRUE
-              if (!quiet) message(yellow(" - Using cached data"))
+              if (identical(fp_utm_sf, NA) && fp) {
+                cache_loaded <- FALSE
+                if (!quiet) message(yellow(" - Found cached data (but no footprints)"))
+                if (!quiet) message(yellow(" - Updating cached data"))
+              } else {
+                cache_loaded <- TRUE
+                if (!quiet) message(yellow(" - Using cached data"))
+              }
+
             } else {
               if (!quiet) message(yellow(" - Updating cached data"))
             }
@@ -314,9 +322,12 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
         ## I'VE TRIED A LOT OF DIFFERENT THINGS!!
         if (!quiet) message(yellow(paste(" - Found", camera_name)))
 
-        ## Get the tag for yaw for this camera
+        ## Get the tag for camera yaw
         camera_tag_yaw <- sensor_this_df[1, "tag_yaw"]
+
+        ## Add elements to short_names to standardize the column names for camera and flight yaw
         short_names[[tolower(camera_tag_yaw)]] <- "yaw"
+        short_names[[tolower(sensor_this_df[1, "tag_flt_yaw"])]] <- "flt_yaw"
 
         ## Get the date_time field(s) for this camera. Usually this will be "DateTimeOriginal" but there are
         ## some cameras that don't have this EXIF tag, in which case we can use GPSDateStamp|GPSTimeStamp
@@ -344,7 +355,7 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
       }
 
       ######################################
-      ## Still to come - incorporate non-nadir GimbalPitchDegree
+      ## TODO Still to come - incorporate non-nadir GimbalPitchDegree
 
       # Construct exif_csv file name
       if (is.null(exif_csv)) {
@@ -360,7 +371,11 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
 
       if (camera_has_agl) exif_tags <- c(exif_tags, camera_agl_tag)
 
-      ## Construct args
+      if (!is.na(sensor_this_df[1, "tag_flt_yaw", drop = TRUE])) {
+        exif_tags <- c(exif_tags, sensor_this_df[1, "tag_flt_yaw", drop = TRUE])
+      }
+
+      ## Construct args for exiftool.exe
       str_args <- paste("-", paste(exif_tags, collapse=" -"), " -n -csv ", ext_use, shQuote(img_dir), sep="")
 
       # Run exiftool command
@@ -376,6 +391,7 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
 
       exif_df <- read.csv(exif_csv_fn, stringsAsFactors=FALSE)
       if (is.null(exif_csv)) file.remove(exif_csv_fn)
+
       names(exif_df) <- tolower(names(exif_df))
 
       ## TODO Right here we need to do some checks for tags
@@ -399,11 +415,11 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
       total_size_mb <- round(sum(exif_df$filesize) / 1048576)
       if (!quiet) message(yellow(paste0(" - Total file size: ", total_size_mb, " MB")))
 
-      ## If datetimeoriginal doesn't exist, try to create it
+      ## If datetimeoriginal doesn't exist, try to create it by concatenating the two columns in camera_tag_dt
       if (!"datetimeoriginal" %in% names(exif_df)) {
         exif_df[["datetimeoriginal"]] <- apply(exif_df[, tolower(camera_tag_dt), drop = FALSE], 1, paste, collapse = " ")
 
-        ## see if it worked
+        ## See if the concatenation produced a valid date-time string
         test_dt <- as.POSIXct(exif_df[1, "datetimeoriginal", drop=TRUE], format = "%Y:%m:%d %H:%M:%S")
         if (!inherits(test_dt, "POSIXct")) {
           warning_msg <- "Can't construct the timestamps"
@@ -416,7 +432,13 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
         }
       }
 
-      ## Get the date flown
+      ## We can assume now that datetimeoriginal (a character column) exists.
+      ## Next we sort the rows by datetimeoriginal for the odd case where the original sort order
+      ## (presumably alphabetically by filenames) was not sequential (which we need of course
+      ## for accurately computing percent overlap).
+      exif_df <- exif_df[order(exif_df$datetimeoriginal), ]
+
+      ## Get the date flown from the first image
       flight_date_dt <- as.Date(exif_df[1, "datetimeoriginal", drop=TRUE], format = "%Y:%m:%d %H:%M:%S")
       flight_date_str <- format(flight_date_dt, "%Y-%m-%d")
 
@@ -507,8 +529,9 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
           for (i in 1:nrow(imgs_ctr_utm_sf)) {
             dx <- imgs_ctr_utm_sf[i, "foot_w", drop = TRUE]
             dy <- imgs_ctr_utm_sf[i, "foot_h", drop = TRUE]
+            if (is.na(dx) || is.na(dy)) stop("Can not compute footprints for this collection of images. Makes sure they are all images taken from a drone.")
 
-            if (dx>0 && dy>0) {
+            if (dx > 0 && dy > 0) {
 
               ## Compute the nodes of the corners (centered around 0,0)
               corners_mat <- corners_sign_mat * matrix(data=c(dx/2, dy/2), byrow=TRUE, ncol=2, nrow=5)
@@ -692,7 +715,7 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
                                 full.names = TRUE)
 
       if (length(metadata_fn) == 0) {
-        if (!quiet) message(yellow(" - Metadata file not found"))
+        if (!quiet) message(yellow(" - Flight metadata file not found, using defaults"))
         flds_md <- uas_getflds()
         metadata_use <- as.list(rep(as.character(NA), length(flds_md)))
         names(metadata_use) <- flds_md

@@ -70,6 +70,7 @@ uas_readcameras <- function(cameras_fn) {
               img_height_def = col_integer(),
               focal_length_def = col_double(),
               tag_yaw = col_character(),
+              tag_flt_yaw = col_character(),
               tag_elev_agl = col_character(),
               source = col_character()
             ))

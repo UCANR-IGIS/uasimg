@@ -21,3 +21,7 @@ cm2in <- function(x) return(x/2.54)
 #' @describeIn m2ft Meters squared to acres
 
 msq2acres <- function(x) return(x * 0.000247105)
+
+#' @describeIn m2ft Meters squared to hectacres
+
+msq2ha <- function(x) return(x * 0.0001)

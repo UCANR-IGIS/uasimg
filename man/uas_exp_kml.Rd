@@ -7,7 +7,7 @@
 \usage{
 uas_exp_kml(
   x,
-  flt_idx = NULL,
+  flt = NULL,
   ctr = FALSE,
   fp = FALSE,
   mcp = FALSE,
@@ -17,12 +17,13 @@ uas_exp_kml(
   out_fnbase = NULL,
   create_dir = TRUE,
   overwrite = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  flt_idx = deprecated()
 )
 
 uas_exp_shp(
   x,
-  flt_idx = NULL,
+  flt = NULL,
   ctr = FALSE,
   fp = FALSE,
   mcp = FALSE,
@@ -32,13 +33,14 @@ uas_exp_shp(
   out_fnbase = NULL,
   create_dir = TRUE,
   overwrite = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  flt_idx = deprecated()
 )
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{flt_idx}{Flight indices in x to process, integer}
+\item{flt}{Flight(s) in x to process (character or numeric vector, default is all)}
 
 \item{ctr}{Export the image centroids, Logical}
 
@@ -59,6 +61,8 @@ uas_exp_shp(
 \item{overwrite}{Overwrite existing files, Logical}
 
 \item{quiet}{Suppress messages, Logical}
+
+\item{flt_idx}{`r lifecycle::badge("deprecated")` Use `flt` instead}
 }
 \value{
 A vector of filenames
@@ -67,7 +71,8 @@ A vector of filenames
 Export geometry(s) from a flight to KML and Shapefile
 }
 \details{
-\code{flt_idx} allows you to specify a subset of image folders in \code{x} to process (use names(x) to see what those are).
+\code{flt} allows you to specify a subset of image folders in \code{x} to process. You can pass a vector of flight names (use names(x)
+to see what those are) or integers.
 
 \code{ctr}, \code{fp}, and \code{mcp} (all TRUE/FALSE) specify which geometry(s) to export.
 Output file names will be generated from the flight metadata saved in the uas_info object. Alternately,

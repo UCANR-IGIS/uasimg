@@ -9,6 +9,7 @@ output:
 params:
   report_title: "UAS Image Collection"
   show_local_dir: TRUE
+  units: "imperial"
   id: !r NA
   pts: !r NA
   fp: !r NA
@@ -96,6 +97,10 @@ td.dt3 {
 }
 img.bln_img {
   border:1px solid dimgray;
+  max-width: 440px;
+  max-height: 360px;
+  margin: 0.5em auto;
+  display: block;
 }
 
 ```
@@ -105,7 +110,9 @@ img.bln_img {
 knitr::opts_chunk$set(echo = TRUE)
 library(htmltools)
 library(leaflet)
+library(leaflet.extras)
 library(base64enc)
+library(dplyr)
 
 ## Get the image dimensions
 img_pixels <- paste0(params$pts[1, "img_width", drop = TRUE], " x ", params$pts[1, "img_height", drop = TRUE])
@@ -113,6 +120,16 @@ img_pixels <- paste0(params$pts[1, "img_width", drop = TRUE], " x ", params$pts[
 ## Get the start and end time formatted
 dt_posix <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
 dt_range <- format(range(dt_posix), "%b %d %Y, %I:%M:%S %p")
+
+convert_me <- list(
+  alt_agl = list(imperial = list(fun = m2ft, lbl = "feet"),
+                 metric = list(fun = I, lbl = "m")),
+  gsd = list(imperial = list(fun = cm2in, lbl = "inches"),
+                 metric = list(fun = I, lbl = "cm")),
+  flight_area = list(imperial = list(fun = msq2acres, lbl = "acres"),
+                     metric = list(fun = msq2ha, lbl = "hectacres"))
+)
+
 ```
 
 ```{r data_uris_insert, results="asis", echo=FALSE}
@@ -125,17 +142,17 @@ cat("<meta name='kml_ctr_fn' content='", params$kml_ctr_fn, "'>\n", sep = "")
 
 ## Encode the MCP simple feature polygon to Base64 (text), and save it in a meta tag
 #mcp_raw <- serialize(params$mcp, connection = NULL)
-mcp_b64 <- serialize(params$mcp, connection = NULL) %>% base64encode()
+mcp_b64 <- serialize(params$mcp, connection = NULL) |> base64encode()
 cat("<meta name='mcp_b64' content='", mcp_b64, "'>\n", sep = "")
 ```
 
 ```{r show_flight_info, results="asis", echo=FALSE}
 ## Come up with a name to use as the title. First, try name_long:
-if (!is.na(params$metadata$name_long %>% null2na())) {
+if (!is.na(params$metadata$name_long |> null2na())) {
   name_use <- params$metadata$name_long
 } else {
   ## Next, try name_short
-  if (!is.na(params$metadata$name_short %>% null2na())) {
+  if (!is.na(params$metadata$name_short |> null2na())) {
     name_use <- params$metadata$name_short
   } else {
     ## Last resort - use the id
@@ -147,15 +164,15 @@ cat("<h2><span id='name_use'>", name_use, "</span></h2>\n", sep = "")
 
 cat("<table>")
 
-if (!is.na(params$metadata$description %>% null2na())) cat("<tr><td>__Description__:</td><td><span id='description'>",  params$metadata$description, "</span></td></tr>", sep = "")
+if (!is.na(params$metadata$description |> null2na())) cat("<tr><td>__Description__:</td><td><span id='description'>",  params$metadata$description, "</span></td></tr>", sep = "")
 
-if (!is.na(params$metadata$pilot %>% null2na())) cat("<tr><td>__Pilot__:</td><td><span id='pilot'>",  params$metadata$pilot, "</span></td></tr>", sep = "")
+if (!is.na(params$metadata$pilot |> null2na())) cat("<tr><td>__Pilot__:</td><td><span id='pilot'>",  params$metadata$pilot, "</span></td></tr>", sep = "")
 
-if (!is.na(params$metadata$contact %>% null2na())) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$metadata$contact, "</span></td></tr>", sep = "")
+if (!is.na(params$metadata$contact |> null2na())) cat("<tr><td>__Contact__:</td><td><span id='contact'>",  params$metadata$contact, "</span></td></tr>", sep = "")
 
 if (params$show_local_dir) cat("<tr><td>__Local dir__:</td><td>", gsub("\\\\", "/", params$img_dir), "</td></tr>", sep = "")
 
-if (!is.na(params$metadata$data_url %>% null2na())) cat("<tr><td>__Data URL__:</td><td>",  params$metadata$data_url, "</td></tr>", sep = "")
+if (!is.na(params$metadata$data_url |> null2na())) cat("<tr><td>__Data URL__:</td><td>",  params$metadata$data_url, "</td></tr>", sep = "")
 
 ## Report the number of images
 cameras_lst <- as.list(table(params$pts$camera_name))
@@ -166,7 +183,7 @@ cat("<tr><td>__Num&nbsp;images__:</td><td><span id='num_img'>", paste(unlist(cam
   
 cat("<tr><td>__Total&nbsp;file&nbsp;size__:</td><td><span id='size_mb'>", params$size_mb, "</span> MB</td></tr>", sep = "")
 
-cat("<tr><td>__Area__:</td><td><span id='area_acres'>", round(msq2acres(params$area_m2),2), " acres</span></td></tr>", sep = "")
+cat("<tr><td>__Area__:</td><td><span id='area_acres'>", round(convert_me$flight_area[[params$units]]$fun(params$area_m2),2), " ", convert_me$flight_area[[params$units]]$lbl, "</span></td></tr>", sep = "")
 
 cat("<tr><td>__Start__:</td><td><span id='dt_start'>", dt_range[1], "</span></td></tr>", sep = "")
 
@@ -174,7 +191,7 @@ cat("<tr><td>__End__:</td><td><span id='dt_end'>", dt_range[2], "</span></td></t
 
 cat("<tr><td>__Image&nbsp;dimensions__:</td><td><span id='img_dim'>", img_pixels, "</span></td></tr>", sep = "")
 
-if (!is.na(params$metadata$notes %>% null2na())) cat("<tr><td>__Notes__:</td><td><span id='notes'>",  params$metadata$notes, "</span></td></tr>", sep = "")
+if (!is.na(params$metadata$notes |> null2na())) cat("<tr><td>__Notes__:</td><td><span id='notes'>",  params$metadata$notes, "</span></td></tr>", sep = "")
 
 cat("</table>")
 ```
@@ -191,19 +208,20 @@ tiles_esri_attr <- "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS,
 
 ## Initiate a new leaflet object
 m <- leaflet(width="800px", height="600px",
-             options = leafletOptions(maxZoom = 23))
-
-m <- m %>% addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) %>% addTiles(group="Open Street Map") %>% addLayersControl(baseGroups = c("Satellite", "Open Street Map"), options = layersControlOptions(collapsed = FALSE))
+             options = leafletOptions(maxZoom = 23)) |> 
+  addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) |> 
+  addTiles(group="Open Street Map") |> 
+  addLayersControl(baseGroups = c("Satellite", "Open Street Map"), options = layersControlOptions(collapsed = FALSE)) |> 
+  addFullscreenControl()
 
 ## Create a leaflet object for the points
 lng_rng <- range(params$pts$gps_long)
 lat_rng <- range(params$pts$gps_lat)
-m_pts <- m %>% fitBounds(lng_rng[1], lat_rng[1], lng_rng[2], lat_rng[2])
+m_pts <- m |> fitBounds(lng_rng[1], lat_rng[1], lng_rng[2], lat_rng[2])
 
 ## Create the popup options
 if (params$thumbnails) {
-  pup_opts <- popupOptions(maxWidth = 450, minWidth = 450,
-                           closeOnClick = TRUE, keepInView = TRUE)
+  pup_opts <- popupOptions(maxWidth = 450, minWidth = 450, closeOnClick = TRUE, keepInView = TRUE)
 } else {
   pup_opts <- NULL
 }
@@ -213,15 +231,15 @@ if (group_img) {
   ## Group points to the 5th decimal place (approx 1m on the ground)
   ## There will be one point for each group. The popup window will show info for all the images
   ## at that location
-  leaf_pts_tbl <- params$pts %>% st_drop_geometry() %>% 
+  leaf_pts_tbl <- params$pts |> st_drop_geometry() |> 
     mutate(gps_long_rnd = round(gps_long, 5), 
          gps_lat_rnd = round(gps_lat, 5),
-         pts_dt = as.POSIXct(date_time, format="%Y:%m:%d %H:%M:%S")) %>% 
-    select(gps_long, gps_long_rnd, gps_lat, gps_lat_rnd, file_name, pts_dt, tb_fn) %>% 
+         pts_dt = as.POSIXct(date_time, format="%Y:%m:%d %H:%M:%S")) |> 
+    select(gps_long, gps_long_rnd, gps_lat, gps_lat_rnd, file_name, pts_dt, tb_fn) |> 
     group_by(gps_long_rnd, gps_lat_rnd) 
   
   if (params$thumbnails) {
-    leaf_pts_tbl <- leaf_pts_tbl %>% 
+    leaf_pts_tbl <- leaf_pts_tbl |> 
       summarise(count = n(), first_dt = first(pts_dt),
                 balloon_html = paste0("<div><p>",
                                       paste("<span onclick='set_src(this)' data-tbfn='", tb_fn,
@@ -237,14 +255,14 @@ if (group_img) {
                                       format(first(pts_dt), "%Y-%m-%d %H:%M:%S"), "</td></tr></table>",
                                       "<img src='./tb/",
                                       first(tb_fn), 
-                                      "' width='440' height='300' class='bln_img'/></div>")) %>%
+                                      "' class='bln_img'/></div>")) |>    ## removed height='300' width='440' 
       arrange(first_dt)
       
   } else {
     ## Grouping but no thumnbails
-    leaf_pts_tbl <- leaf_pts_tbl %>% 
+    leaf_pts_tbl <- leaf_pts_tbl |> 
       summarise(count = n(), first_dt = first(pts_dt),
-                balloon_html = paste(file_name, "<br/><em>", format(pts_dt, "%Y-%m-%d, %H:%M:%S"), "</em><br/>", sep = "", collapse = "<br/>")) %>% 
+                balloon_html = paste(file_name, "<br/><em>", format(pts_dt, "%Y-%m-%d, %H:%M:%S"), "</em><br/>", sep = "", collapse = "<br/>")) |> 
     arrange(first_dt)
   }
 
@@ -256,7 +274,7 @@ if (group_img) {
   }
 
   ## Add circle markers
-  m_pts <- m_pts %>% addCircleMarkers(data = leaf_pts_tbl,
+  m_pts <- m_pts |> addCircleMarkers(data = leaf_pts_tbl,
                    lng = ~gps_long_rnd, lat = ~gps_lat_rnd, 
                    radius = 5, fillColor = col_use, fillOpacity = 1,  
                    stroke = (max(leaf_pts_tbl$count) > 1), 
@@ -266,14 +284,15 @@ if (group_img) {
 
 } else {
 
-  ## NO GROUPING
+  ## NOT GROUPING
   
   ## Create the balloons
   pts_dt <- as.POSIXct(params$pts$date_time, format="%Y:%m:%d %H:%M:%S")
   
   if (params$thumbnails) {
-    ## No grouping, thumbnails yes
-    thumbnail_html <- paste0("<img src='tb/", params$pts$tb_fn, "' width='440' height='300' class='bln_img'/>")
+    ## Create the IMG tag
+    thumbnail_html <- paste0("<img src='tb/", params$pts$tb_fn, "' class='bln_img'/>")
+    
     balloons_html <- paste0("<div><p><b>", params$pts$file_name, "</b></p>",
                           "<table class='fn_dt'><tr><td class='gps'>", 
                           paste0(round(params$pt$gps_long, 5), ", ",  round(params$pt$gps_lat, 5)),
@@ -294,7 +313,7 @@ if (group_img) {
   }
 
   ## Add the circle markers
-  m_pts <- m_pts %>% addCircleMarkers(lng = params$pts$gps_long, lat = params$pts$gps_lat, 
+  m_pts <- m_pts |> addCircleMarkers(lng = params$pts$gps_long, lat = params$pts$gps_lat, 
                                    radius = 4, fillColor = col_use, fillOpacity = 1, 
                                    stroke = FALSE, popup = balloons_html,
                                    popupOptions = pup_opts)
@@ -324,7 +343,7 @@ if (!identical(params$fp, NA)) {
   cat("### Footprints \n")
   
   ## Reproject footprints to lat-long (required by leaflet)
-  fp_ll_sf <- params$fp %>% st_geometry() %>%  st_transform(crs = 4326)
+  fp_ll_sf <- params$fp |> st_geometry() |>  st_transform(crs = 4326)
 
     ## Compute colors  
   if (is.na(params$col)) {
@@ -333,7 +352,7 @@ if (!identical(params$fp, NA)) {
     col_use <- params$col
   }
 
-  m_fp <- m %>% addPolygons(data=fp_ll_sf, fill=FALSE, stroke=TRUE, color=col_use, weight=2, dashArray="1,2")
+  m_fp <- m |> addPolygons(data=fp_ll_sf, fill=FALSE, stroke=TRUE, color=col_use, weight=2, dashArray="1,2")
   
   ## Display HTML Widget
   m_fp
@@ -371,13 +390,20 @@ if (!"gsd" %in% names(params$pts) && (!"alt_agl" %in% names(params$pts)) && (ide
 
 ```{r echo=FALSE}
 if ("gsd" %in% names(params$pts)) {
-  hist(cm2in(params$pts$gsd), col="grey50", breaks=20, main="Ground Sampling Distance", xlab="estimated GSD (inches)", ylab="freq")
+  hist(convert_me$gsd[[params$units]]$fun(params$pts$gsd), col="grey50", breaks=20, main="Ground Sampling Distance", 
+       xlab = paste0("estimated GSD (", convert_me$gsd[[params$units]]$lbl, ")"), 
+       ylab = "freq")
+  
+  #hist(cm2in(params$pts$gsd), col="grey50", breaks=20, main="Ground Sampling Distance", xlab="estimated GSD (inches)", ylab="freq")
 }
 ```
 
 ```{r echo=FALSE}
 if ("alt_agl" %in% names(params$pts)) {
-  hist(m2ft(params$pts$alt_agl), col="grey50", breaks=20, main=" Altitude", xlab="recorded altitude above launch (ft)", ylab="freq")
+  
+  hist(convert_me$alt_agl[[params$units]]$fun(params$pts$alt_agl), col="grey50", breaks = 20, main = "Altitude", 
+       xlab = paste0("recorded altitude above launch (", convert_me$alt_agl[[params$units]]$lbl, ")"), 
+       ylab = "freq")
 }
 ```
 

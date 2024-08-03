@@ -6,23 +6,27 @@
 \usage{
 uas_thumbnails_make(
   x,
-  flt_idx = NULL,
+  flt = NULL,
   output_dir = NULL,
   tb_width = 400,
+  rotate = FALSE,
   overwrite = FALSE,
   use_magick = FALSE,
   stats = FALSE,
-  quiet = FALSE
+  quiet = FALSE,
+  flt_idx = deprecated()
 )
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{flt_idx}{Flight indices in x to process, integer}
+\item{flt}{Flight(s) in x to process (character or numeric vector, default is all)}
 
 \item{output_dir}{Output directory}
 
 \item{tb_width}{Thumbnail width}
+
+\item{rotate}{Rotate the thumbnails by the camera yaw, Logical}
 
 \item{overwrite}{Overwrite existing files}
 
@@ -31,6 +35,8 @@ uas_thumbnails_make(
 \item{stats}{Report the amount of time it takes to create each thumbnail, logical}
 
 \item{quiet}{Suppress messages}
+
+\item{flt_idx}{`r lifecycle::badge("deprecated")` Use `flt` instead}
 }
 \value{
 A named list (one element for each directory processed) of thumbnail files created in the output directory
@@ -39,10 +45,18 @@ A named list (one element for each directory processed) of thumbnail files creat
 Move UAS images into sub-directories by group
 }
 \details{
-This will create thumbnail images for the drone images in \code{x}. \code{flt_idx} allows you to specify a subset of flights
-in \code{x} to process. The default output folder is a sub-directory of each image
+This will create thumbnail images for the drone images in \code{x}. The default output folder is a sub-directory of each image
 folder called \emph{map/tb}, which will be created if needed. This location can be overridden with \code{output_dir}.
 The dimensions of the thumbnails is determined by \code{tb_width}, from which the height is set automatically.
+
+\code{flt} allows you to specify a subset of image folders in \code{x} to process. You can pass a vector of flight names (use names(x)
+to see what those are) or integers.
+
+\code{rotate} will rotate the thumbnails by the camera yaw. This can make it easier to match up ground features when viewing the
+thumbnails in a flight report. Note when thumbnails are rotated the \code{tb_width} parameter sets the width of the image
+\emph{before} the rotation. The width and height of the rotated thumbnail will vary according to the angle of rotation.
+If your rotations look off feel free to contact the package author, as this feature is still experimental (i.e., some drones record
+the yaw of the drone and the yaw of the gimbal camera separately).
 
 Thumbnail files will be given an 8-character suffix that looks random but is actually generated from the image contents.
 This is to prevent clashes when thumnbail files from different flights are 'gathered' into a single folder attached to

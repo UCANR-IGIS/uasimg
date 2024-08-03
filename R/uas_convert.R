@@ -39,7 +39,6 @@
 #' }
 #'
 #' @importFrom utils setTxtProgressBar txtProgressBar
-#' @importFrom magick image_read image_write
 #' @importFrom tools file_path_sans_ext
 #' @importFrom exiftoolr exif_call
 #' @export
@@ -49,6 +48,10 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
 
   if (!is.null(dir_out)) {
     if (FALSE %in% file.exists(dir_out)) stop(paste0("Can't find output directory(s): ", paste0("`", dir_out[!file.exists(dir_out)], "`", collapse = ", ")))
+  }
+
+  if (use_magick) {
+    if (!requireNamespace("magick", quietly = TRUE)) stop("The `magick` package is required")
   }
 
   ## Build up a list of input images
@@ -134,7 +137,7 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
 
         if (!file.exists(out_fn) || overwrite) {
 
-          try_read_image <- try({in_mag <- image_read(in_fn)}, silent = TRUE)
+          try_read_image <- try({in_mag <- magick::image_read(in_fn)}, silent = TRUE)
 
           if (is(try_read_image, "try-error")) {
             warning(paste0("Could not read: ", basename(in_fn)))
@@ -145,12 +148,12 @@ uas_convert <- function(x, dir_out = NULL, idx = NULL, format_out = c("jpg", "ti
             if (format_out == "tif") {
               ## After a small bit of trial-and-error, I decided to make no compression
               ## the default. Zip compression gave a 10% ratio; LZW was bigger than uncompressed
-              image_write(in_mag,
+              magick::image_write(in_mag,
                           path = out_fn,
                           format = format_out,
                           compression = c("none", "LZW", "Zip")[1])
             } else {
-              image_write(in_mag,
+              magick::image_write(in_mag,
                           path = out_fn,
                           format = format_out,
                           quality = quality)

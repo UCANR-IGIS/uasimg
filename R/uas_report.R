@@ -5,18 +5,19 @@
 #' @param x A list of class 'uas_info'
 #' @param col Color value(s) of the centroids and/or footprints
 #' @param group_img Group images within ~1m of each other into 1 point
-#' @param thumbnails Create thumbails
-#' @param show_local_dir Show the local image directory, TF
+#' @param thumbnails Display thumbnail images, logical
+#' @param show_local_dir Show the local image directory, logical
+#' @param units imperial or metric, character
 #' @param report_title Title to appear at the top of the summary
 #' @param attachments Supplementary files to create and link to the flight summary, see Details.
 #' @param output_dir If NULL, then will be placed in a 'map' sub-directory of the images
 #' @param create_dir Create the output directory if it doesn't exist
 #' @param output_file	Name of the HTML file. If NULL a default based on the name of the input directory is chosen.
-#' @param overwrite_html Overwrite existing HTML files without warning, YN
+#' @param overwrite_html Overwrite existing HTML files without warning, logical
 #' @param open_report Open the HTML file in a browser
 #' @param self_contained Make the output HTML file self-contained
-#' @param png_map Whether to create a PNG version of the map. May be T/F, or dimensions of the output image in pixels (see Details)
-#' @param overwrite_png Overwrite existing PNG files without warning, YN
+#' @param png_map Whether to create a PNG version of the map. May be logical, or dimensions of the output image in pixels (see Details)
+#' @param overwrite_png Overwrite existing PNG files without warning, logical
 #' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
 #' @param google_api API key for Google Static Maps, see Details.
 #' @param report_rmd Rmd template used to generate the HTML file. See Details.
@@ -24,11 +25,16 @@
 #' @param footer_html A HTML file name or URL to use as the footer
 #' @param use_tmpdir Use the temp dir for processing
 #' @param quiet TRUE to supress printing of the pandoc command line
-#' @param show_gps_coord Show GPS coordinates of images in the pop-up windows, YN (deprecated)
+#' @param show_gps_coord `r lifecycle::badge("deprecated")` Does nothing
+
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
 #'
-#' \code{group_img} determinies whether images at the same location are represented by a single point on the map. This is common with multi-spectral sensors that take generate multiple images per location. 'Same location' is determined by looking at the 5th decimal place of the x and y geographic coordinates (~1m),
+#' \code{group_img} determinies whether images at the same location are represented by a single point on the map. This is common with
+#' multi-spectral sensors that take generate multiple images per location. 'Same location' is determined by looking at the 5th decimal
+#' place of the x and y geographic coordinates (~1m).
+#'
+#' \code{units} defines whether the units for the flight area, above ground altitude, and GSD are reported in imperial or metric units.
 #'
 #' If no value for \code{output_dir} is passed, the report will be saved in a sub-directory of the image directory
 #' called 'map'. This sub-directory will be created if \code{create_dir = TRUE}.
@@ -66,24 +72,28 @@
 #' @importFrom utils browseURL packageVersion download.file
 #' @importFrom tools file_path_sans_ext file_ext
 #' @importFrom rmarkdown render
+#' @importFrom lifecycle deprecated is_present deprecate_warn
+
 #' @importFrom methods is
 #'
 #' @export
 
-uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show_local_dir = TRUE, report_title = "Flight Summary",
+uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
+                       show_local_dir = TRUE, units = c("imperial", "metric")[1], report_title = "Flight Summary",
                        attachments = c("mcp_kml", "ctr_kml")[0],
                        output_dir = NULL, create_dir = TRUE, output_file = NULL, overwrite_html = FALSE,
                        open_report = FALSE, self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
                        overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
                        header_html = NULL, footer_html = NULL, use_tmpdir = FALSE, quiet = FALSE,
-                       show_gps_coord = NULL) {
-
-  ## THE MAGICK.EXE option has been disabled pending testing.
-  ## When asked to process a folder of >1000 images, it quit after ~700 (consistently)
-  ## @param use_magick Use ImageMagick command line tool to create the image thumbnails.
-  ## use_magick = FALSE,
+                       show_gps_coord = lifecycle::deprecated()) {
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
+
+  if (lifecycle::is_present(show_gps_coord)) {
+    lifecycle::deprecate_warn("1.6.8", "uas_report(show_gps_coord)", "uas_report(show_gps_coord)")
+  }
+
+  if (!units %in% c("imperial", "metric")) stop("Unknown value for `units`")
 
   ## Get the Rmd template
   if (is.null(report_rmd)) {
@@ -286,13 +296,11 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       if (thumbnails) {
 
         ## Call uas_thumbnails()
-        tb_fn_lst <- uas_thumbnails_make(x, flt_idx = i, output_dir = tb_dir_use,
-                                         tb_width = 400)
-
-        # , use_magick = use_magick
+        tb_fn_lst <- uas_thumbnails_make(x, flt = i, output_dir = tb_dir_use,
+                                         tb_width = 400, overwrite = FALSE)
 
         ## Save the base name (minus the path) of the thumbnail in the attribute table for the points, so it can be
-        ## used in the leaflet map
+        ## used in the leaflet map. This is only for passing the filenames to the Rmd file, not permanently saved
         x[[i]]$pts$tb_fn <- basename(tb_fn_lst[[names(x)[i]]])
 
       }
@@ -415,7 +423,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       if ("mcp_kml" %in% attachments) {
         kml_mcp_fn <- paste0(fnbase, "_mcp.kml")
         if (!file.exists(file.path(output_dir_use, kml_mcp_fn))) {
-          uas_exp_kml(x, flt_idx = i, mcp = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
+          uas_exp_kml(x, flt = i, mcp = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
         }
       } else {
         kml_mcp_fn <- NA
@@ -425,7 +433,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
       if ("ctr_kml" %in% attachments) {
         kml_ctr_fn <- paste0(fnbase, "_ctr.kml")
         if (!file.exists(file.path(output_dir_use, kml_ctr_fn))) {
-          uas_exp_kml(x, flt_idx = i, ctr = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
+          uas_exp_kml(x, flt = i, ctr = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
         }
       } else {
         kml_ctr_fn <- NA
@@ -439,6 +447,7 @@ uas_report <- function(x, col = NULL, group_img = TRUE, thumbnails = FALSE, show
                                                   img_dir = img_dir,
                                                   group_img = group_img,
                                                   show_local_dir = show_local_dir,
+                                                  units = units,
                                                   map_fn = map_fn,
                                                   thumbnails = thumbnails,
                                                   kml_mcp_fn = kml_mcp_fn,

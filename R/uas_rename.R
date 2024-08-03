@@ -3,11 +3,12 @@
 #' Rename UAS images
 #'
 #' @param x A list of class 'uas_info'
-#' @param flt_idx Indices of x to change file names, integer
+#' @param flt Flight(s) in x to process (character or numeric vector, default is all)
 #' @param name_template A template for generating the file names (see Details)
 #' @param all_lower Make file names all lowercase, Logical
 #' @param preview Preview the new names only
 #' @param confirm Confirm continue before changing file names
+#' @param flt_idx `r lifecycle::badge("deprecated")` Use `flt` instead
 #'
 #' @details This function will rename image files on disk based on a naming template which can include
 #' placeholders (tokens) from image and/or flight metadata. This can be useful when you want
@@ -19,6 +20,9 @@
 #' \strong{Caution is advised} when using this function, because it will actually \strong{rename your files!} Use \code{preview = TRUE}
 #' to test your naming template. When \code{preview = TRUE}, the function will return a tibble with the 'old' and 'new' names, but not actually change
 #' any file names.
+#'
+#' \code{flt} allows you to specify a subset of image folders in \code{x} to process. You can pass a vector of flight names (use names(x)
+#' to see what those are) or integers.
 #'
 #' When you're ready, set \code{preview = FALSE}. Aafter renaming files, you'll need to rerun
 #' \code{\link{uas_info}} on the directory(s) to update the info.
@@ -68,12 +72,17 @@
 #' @importFrom tools file_ext
 #' @importFrom dplyr tibble
 #' @importFrom crayon red
-#'
+#' @importFrom lifecycle deprecated is_present deprecate_warn
 #' @export
 
-uas_rename <- function(x, flt_idx = NULL,
+uas_rename <- function(x, flt = NULL,
                        name_template = "img{i}_{alt_agl}m_{camera_abbrev}_{Y}_{m}_{d}_{H}_{M}_{S}",
-                       all_lower = TRUE, preview = TRUE, confirm = TRUE) {
+                       all_lower = TRUE, preview = TRUE, confirm = TRUE, flt_idx = deprecated()) {
+
+  if (lifecycle::is_present(flt_idx)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_rename(flt_idx)", "uas_rename(flt)")
+    flt <- flt_idx
+  }
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
@@ -85,12 +94,19 @@ uas_rename <- function(x, flt_idx = NULL,
   ## Look for invalid characters
   if (grepl("<|>|:|/|\\\\|\\||\\?|\\*", name_template)) stop("name_template has one or more characters that are not allowed in file names")
 
-  ## Verify that the value(s) in flt_idx (if any) are valid
-  if (is.null(flt_idx)) {
+  ## Verify that that value(s) in flt (if any) are valid
+  if (is.null(flt)) {
     flt_idx_use <- 1:length(x)
   } else {
-    if (TRUE %in% (flt_idx > length(x))) stop("Invalid value for flt_idx")
-    flt_idx_use <- flt_idx
+    if (is.numeric(flt)) {
+      if (max(flt) > length(x)) stop("flt should not be larger than the number of flights saved in the uas image collection object")
+      flt_idx_use <- flt
+    } else if (is.character(flt)) {
+      if (FALSE %in% (flt %in% names(x))) stop("flight name not found in the uas image collection object")
+      flt_idx_use <- which(names(x) %in% flt)
+    } else {
+      stop("Invalid value for `flt`")
+    }
   }
 
   if (!preview && confirm) {
@@ -102,10 +118,10 @@ uas_rename <- function(x, flt_idx = NULL,
   ## Initialize the result
   res <- NULL
 
-  for (i in flt_idx_use) {
+  for (flt_idx in flt_idx_use) {
 
     ## Get the old and new file names
-    fn_old <- x[[i]]$pts$file_name
+    fn_old <- x[[flt_idx]]$pts$file_name
     fn_new <- rep(name_template, length(fn_old))
 
     ## Tack on the extensions
@@ -114,7 +130,7 @@ uas_rename <- function(x, flt_idx = NULL,
     ## Do all the date-time replacements
 
     ## Convert the character date times to POSIXct
-    flt_imgs_dt <- as.POSIXct(x[[i]]$pts$date_time, format="%Y:%m:%d %H:%M:%S")
+    flt_imgs_dt <- as.POSIXct(x[[flt_idx]]$pts$date_time, format="%Y:%m:%d %H:%M:%S")
 
     ## Replace the {i} token with an appropriate amount of leading 0s
     if (grepl("\\{i\\}", name_template)) {
@@ -139,7 +155,7 @@ uas_rename <- function(x, flt_idx = NULL,
       if (grepl(paste0("\\{", search_token, "\\}"), name_template)) {
         fn_new <- str_replace_all(fn_new,
                                   paste0("\\{", search_token, "\\}"),
-                                  x[[i]]$pts[[search_token]])
+                                  x[[flt_idx]]$pts[[search_token]])
       }
     }
 
@@ -151,9 +167,9 @@ uas_rename <- function(x, flt_idx = NULL,
         if (grepl(paste0("\\{", search_token, ",(.*?)\\}"), name_template)) {
           ## PUll out the 'roundto' value using a lookbehind and lookahead pattern
           roundto <- as.numeric(str_extract(name_template, paste0("(?<=\\{", search_token, ",).*?(?=\\})")))
-          replace_vals <- round(x[[i]]$pts[[search_token]], roundto)
+          replace_vals <- round(x[[flt_idx]]$pts[[search_token]], roundto)
         } else {
-          replace_vals <- x[[i]]$pts[[search_token]]
+          replace_vals <- x[[flt_idx]]$pts[[search_token]]
         }
 
         fn_new <- str_replace_all(fn_new,
@@ -164,26 +180,26 @@ uas_rename <- function(x, flt_idx = NULL,
 
     ## Go through the flight metadata fields. If any of them are found as tokens in name_template,
     ## swap them out
-    for (search_token in names(x[[i]]$metadata)) {
+    for (search_token in names(x[[flt_idx]]$metadata)) {
       if (grepl(paste0("\\{", search_token, "\\}"), name_template)) {
         fn_new <- str_replace_all(fn_new,
                                   paste0("\\{", search_token, "\\}"),
-                                  x[[i]]$metadata[[search_token]])
+                                  x[[flt_idx]]$metadata[[search_token]])
       }
     }
 
     if (all_lower) fn_new <- tolower(fn_new)
 
     ## Add the old and new names to the result
-    df <- tibble(dir = names(x)[i], fn_old = fn_old, fn_new = fn_new)
+    df <- tibble(dir = names(x)[flt_idx], fn_old = fn_old, fn_new = fn_new)
     res <- rbind(res, df)
 
     if (!preview) {
-      if (FALSE %in% file.exists(x[[i]]$pts$img_fn)) stop("One or more input files not found. Can not proceed.")
+      if (FALSE %in% file.exists(x[[flt_idx]]$pts$img_fn)) stop("One or more input files not found. Can not proceed.")
       if (anyDuplicated(fn_new) > 0 ) stop("Duplicate output file names detected. Try to modify your name_template to get unique file names.")
 
-      file.rename(from = x[[i]]$pts$img_fn,
-                  to = file.path(dirname(x[[i]]$pts$img_fn), fn_new))
+      file.rename(from = x[[flt_idx]]$pts$img_fn,
+                  to = file.path(dirname(x[[flt_idx]]$pts$img_fn), fn_new))
     }
 
   } ##  for (i in flt_idx_use)

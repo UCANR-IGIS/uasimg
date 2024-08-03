@@ -6,17 +6,18 @@
 \usage{
 uas_rename(
   x,
-  flt_idx = NULL,
+  flt = NULL,
   name_template = "img{i}_{alt_agl}m_{camera_abbrev}_{Y}_{m}_{d}_{H}_{M}_{S}",
   all_lower = TRUE,
   preview = TRUE,
-  confirm = TRUE
+  confirm = TRUE,
+  flt_idx = deprecated()
 )
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{flt_idx}{Indices of x to change file names, integer}
+\item{flt}{Flight(s) in x to process (character or numeric vector, default is all)}
 
 \item{name_template}{A template for generating the file names (see Details)}
 
@@ -25,6 +26,8 @@ uas_rename(
 \item{preview}{Preview the new names only}
 
 \item{confirm}{Confirm continue before changing file names}
+
+\item{flt_idx}{`r lifecycle::badge("deprecated")` Use `flt` instead}
 }
 \value{
 A tibble showing the old and new names for each image.
@@ -43,6 +46,9 @@ names to help you identify groups of images for stitching.
 \strong{Caution is advised} when using this function, because it will actually \strong{rename your files!} Use \code{preview = TRUE}
 to test your naming template. When \code{preview = TRUE}, the function will return a tibble with the 'old' and 'new' names, but not actually change
 any file names.
+
+\code{flt} allows you to specify a subset of image folders in \code{x} to process. You can pass a vector of flight names (use names(x)
+to see what those are) or integers.
 
 When you're ready, set \code{preview = FALSE}. Aafter renaming files, you'll need to rerun
 \code{\link{uas_info}} on the directory(s) to update the info.

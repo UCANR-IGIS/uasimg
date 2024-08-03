@@ -3,7 +3,7 @@
 #' Move UAS images into sub-directories
 #'
 #' @param x A list of class 'uas_info'
-#' @param flt_idx Elements of x to move, integer
+#' @param flt Flight(s) in x to process (character or numeric vector, default is all)
 #' @param tree Directory tree template filename or character vector, see Details
 #' @param outdir_base Output directory root
 #' @param req_all_fltmdflds Require all flight metadata fields in the directory tree template to be defined
@@ -15,6 +15,7 @@
 #' @param tb_action The action to take with thumbnail images saved in the default location
 #' @param map_action The action to take with the contents of the map folder
 #' @param quiet Suppress messages
+#' @param flt_idx `r lifecycle::badge("deprecated")` Use `flt` instead
 #'
 #' @details
 #' req_all_fltmdflds means don't move anything unless all uas_info objects have all tokens in the directory tree
@@ -27,11 +28,12 @@
 #' @importFrom sf st_drop_geometry
 #' @importFrom dplyr mutate select
 #' @importFrom crayon yellow green red bold
+#' @importFrom lifecycle deprecated is_present deprecate_warn
 #'
 #' @export
 
 uas_move <- function(x,
-                     flt_idx = NULL,
+                     flt = NULL,
                      tree,
                      outdir_base,
                      req_all_fltmdflds = TRUE,
@@ -42,13 +44,19 @@ uas_move <- function(x,
                      preview_only = FALSE,
                      tb_action = imgs_action,
                      map_action = c("copy", "move", "none")[3],
-                     quiet = FALSE) {
+                     quiet = FALSE,
+                     flt_idx = deprecated()) {
 
-  ## If there are multiple metadata files going to one place, that's an issue
+  ## TODO If there are multiple metadata files going to one place, that's an issue
   ## maybe give them different file names
 
   ## Do we really want to copy the map folder? I suppose so. Risk is that local_dir will be
   ## out of date.
+
+  if (lifecycle::is_present(flt_idx)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_move(flt_idx)", "uas_move(flt)")
+    flt <- flt_idx
+  }
 
   debug <- FALSE
 
@@ -60,12 +68,19 @@ uas_move <- function(x,
   outdir_base_use <-  gsub("\\\\$|/$", "", outdir_base)
   if (!file.exists(outdir_base)) stop(paste0("Base directory not found: ", outdir_base))
 
-  ## Verify that that value(s) in flt_idx (if any) are valid
-  if (is.null(flt_idx)) {
+  ## Verify that that value(s) in flt (if any) are valid
+  if (is.null(flt)) {
     flt_idx_use <- 1:length(x)
   } else {
-    if (TRUE %in% (flt_idx > length(x))) stop("Invalid value for flt_idx")
-    flt_idx_use <- flt_idx
+    if (is.numeric(flt)) {
+      if (max(flt) > length(x)) stop("flt should not be larger than the number of flights saved in the uas image collection object")
+      flt_idx_use <- flt
+    } else if (is.character(flt)) {
+      if (FALSE %in% (flt %in% names(x))) stop("flight name not found in the uas image collection object")
+      flt_idx_use <- which(names(x) %in% flt)
+    } else {
+      stop("Invalid value for `flt`")
+    }
   }
 
   ## Load the tree template
@@ -161,13 +176,13 @@ uas_move <- function(x,
 
   ## We've verified all tokens are available.
 
-  for (i in flt_idx_use) {
+  for (flt_idx in flt_idx_use) {
 
     flt_tokens <- list()
 
     ## Gather all computed flight-tokens
     ## flt_start", "flt_end", "flt_date", "flt_agl""
-    flt_imgs_dt <- as.POSIXct(x[[i]]$pts$date_time, format="%Y:%m:%d %H:%M:%S")
+    flt_imgs_dt <- as.POSIXct(x[[flt_idx]]$pts$date_time, format="%Y:%m:%d %H:%M:%S")
     if (NA %in% flt_imgs_dt) stop("Unable to parse image timestamps")
     flt_tokens[["flt_date"]] <- format(min(flt_imgs_dt), "%Y-%m-%d")
     flt_tokens[["flt_start"]] <- format(min(flt_imgs_dt), "%H%M")
@@ -175,7 +190,7 @@ uas_move <- function(x,
 
     ## Add all metadata flight token
     flt_tokens <- c(flt_tokens,
-                    x[[i]]$metadata)
+                    x[[flt_idx]]$metadata)
 
     ## Expand the directories needed for this flight
     flt_tree <- tree_use
@@ -194,8 +209,8 @@ uas_move <- function(x,
 
     flt_img_tree <- NULL
     for (my_token in tokens) {
-      if (my_token %in% names(x[[i]]$pts)) {
-        for (replacement_val in unique(x[[i]]$pts[[my_token]])) {
+      if (my_token %in% names(x[[flt_idx]]$pts)) {
+        for (replacement_val in unique(x[[flt_idx]]$pts[[my_token]])) {
           flt_img_tree <- c(flt_img_tree,
                             gsub(paste0("\\{", my_token, "\\}"), replacement_val, flt_tree))
         }
@@ -211,7 +226,7 @@ uas_move <- function(x,
     }
 
     # if (debug) {
-    #   cat("\n", names(x)[i], ":\n", sep = "")
+    #   cat("\n", names(x)[flt_idx], ":\n", sep = "")
     #   cat("Flight tree final: \n")
     #   cat(paste0("  ", flt_tree_final, collapse = "\n"), "\n")
     # }
@@ -229,7 +244,7 @@ uas_move <- function(x,
     if (!quiet) {
       dir_asterik <- rep("", length(dirs_needed))
       dir_asterik[dir_missing] <- crayon::yellow(" **")
-      message(crayon::yellow("\n", names(x)[i]), sep = "")
+      message(crayon::yellow("\n", names(x)[flt_idx]), sep = "")
       message(" - output directory tree for this flight:")
       message(paste0("   - ", dirs_needed, dir_asterik, collapse = "\n"))
     }
@@ -253,7 +268,6 @@ uas_move <- function(x,
 
     }
 
-
     ## Move / copy images
     if (imgs_action != "none" && !preview_only) {
       ## See if the directories are
@@ -270,7 +284,7 @@ uas_move <- function(x,
           imgs_go_here <- normalizePath(file.path(outdir_base, flt_tree[1]), mustWork = FALSE)
 
           ## Append the 'images go here' path from the pts attribute table
-          img_fromto_tbl <- x[[i]]$pts %>%
+          img_fromto_tbl <- x[[flt_idx]]$pts %>%
             st_drop_geometry() %>%
             mutate(dest_path = imgs_go_here)
 
@@ -313,7 +327,7 @@ uas_move <- function(x,
 
           ## Write a metadata.txt file the destination folder(s)
           if (write_metadata) {
-            md_lst <- x[[i]]$metadata
+            md_lst <- x[[flt_idx]]$metadata
             fltmd_yaml <- paste(sapply(1:length(md_lst), function(j) paste0(names(md_lst)[j], ": ", md_lst[[j]])), collapse = "\n\n")
 
             for (out_dir in unique(img_fromto_tbl$dest_path)) {
@@ -336,7 +350,7 @@ uas_move <- function(x,
 
           if (tb_action != "none") {
 
-            tb_src <- file.path(unique(dirname(x[[i]]$pts$img_fn)), "map", "tb")
+            tb_src <- file.path(unique(dirname(x[[flt_idx]]$pts$img_fn)), "map", "tb")
 
             for (my_tb_src in tb_src) {
               if (file.exists(my_tb_src)) {

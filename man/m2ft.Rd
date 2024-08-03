@@ -5,6 +5,7 @@
 \alias{ft2m}
 \alias{cm2in}
 \alias{msq2acres}
+\alias{msq2ha}
 \title{Unit conversion functions}
 \usage{
 m2ft(x)
@@ -14,6 +15,8 @@ ft2m(x)
 cm2in(x)
 
 msq2acres(x)
+
+msq2ha(x)
 }
 \arguments{
 \item{x}{A numeric vector to convert}
@@ -34,5 +37,7 @@ These unit conversion functions are vectorized.
 \item \code{cm2in()}: Centimeters to inches
 
 \item \code{msq2acres()}: Meters squared to acres
+
+\item \code{msq2ha()}: Meters squared to hectacres
 
 }}

@@ -38,6 +38,7 @@ reference:
     contents:
       - uas_exp_kml
       - uas_exp_shp
+      - uas_exp_geotiff
   - title: Single Images
     desc: Individual image utilities
     contents:
