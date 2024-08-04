@@ -6,35 +6,42 @@
 \usage{
 uas_report(
   x,
-  col = NULL,
+  flt = NULL,
   group_img = FALSE,
   thumbnails = FALSE,
   show_local_dir = TRUE,
   units = c("imperial", "metric")[1],
   report_title = "Flight Summary",
   attachments = c("mcp_kml", "ctr_kml")[0],
+  pts_col = NULL,
   output_dir = NULL,
   create_dir = TRUE,
   output_file = NULL,
   overwrite_html = FALSE,
   open_report = FALSE,
   self_contained = TRUE,
-  png_map = FALSE,
-  png_exp = 0.2,
-  overwrite_png = FALSE,
-  google_api = NULL,
+  tbm_use = FALSE,
+  tbm_overwrite = FALSE,
+  tbm_size = 480,
+  tbm_src = c("Google", "Stadia")[1],
+  tbm_api_key = NULL,
+  tbm_exp = 0.2,
   report_rmd = NULL,
   header_html = NULL,
   footer_html = NULL,
   use_tmpdir = FALSE,
   quiet = FALSE,
-  show_gps_coord = lifecycle::deprecated()
+  show_gps_coord = lifecycle::deprecated(),
+  png_map = lifecycle::deprecated(),
+  png_exp = lifecycle::deprecated(),
+  google_api = lifecycle::deprecated(),
+  col = lifecycle::deprecated()
 )
 }
 \arguments{
 \item{x}{A list of class 'uas_info'}
 
-\item{col}{Color value(s) of the centroids and/or footprints}
+\item{flt}{Flight(s) in x to process (character or numeric vector, default is all)}
 
 \item{group_img}{Group images within ~1m of each other into 1 point}
 
@@ -42,11 +49,13 @@ uas_report(
 
 \item{show_local_dir}{Show the local image directory, logical}
 
-\item{units}{imperial or metric units, character}
+\item{units}{imperial or metric, character}
 
 \item{report_title}{Title to appear at the top of the summary}
 
 \item{attachments}{Supplementary files to create and link to the flight summary, see Details.}
+
+\item{pts_col}{Color value(s) of the centroids and/or footprints}
 
 \item{output_dir}{If NULL, then will be placed in a 'map' sub-directory of the images}
 
@@ -54,19 +63,23 @@ uas_report(
 
 \item{output_file}{Name of the HTML file. If NULL a default based on the name of the input directory is chosen.}
 
-\item{overwrite_html}{Overwrite existing HTML files without warning, YN}
+\item{overwrite_html}{Overwrite existing HTML files without warning, logical}
 
 \item{open_report}{Open the HTML file in a browser}
 
 \item{self_contained}{Make the output HTML file self-contained}
 
-\item{png_map}{Whether to create a PNG version of the map. May be logical, or dimensions of the output image in pixels (see Details)}
+\item{tbm_use}{Whether to create a PNG version of the map. May be logical, or dimensions of the output image in pixels (see Details)}
 
-\item{png_exp}{A proportion to expand the bounding box of the PNG map, see Details.}
+\item{tbm_overwrite}{Overwrite existing PNG files without warning, logical}
 
-\item{overwrite_png}{Overwrite existing PNG files without warning, logical}
+\item{tbm_size}{The size of a square flight thumbnail image in pixels, number}
 
-\item{google_api}{API key for Google Static Maps, see Details.}
+\item{tbm_src}{The API service to use to get the flight thumbnail background image, see Details.}
+
+\item{tbm_api_key}{API key for Google Static Maps or Stadia, see Details.}
+
+\item{tbm_exp}{A proportion to expand the bounding box of the PNG map, see Details.}
 
 \item{report_rmd}{Rmd template used to generate the HTML file. See Details.}
 
@@ -79,6 +92,16 @@ uas_report(
 \item{quiet}{TRUE to supress printing of the pandoc command line}
 
 \item{show_gps_coord}{`r lifecycle::badge("deprecated")` Does nothing}
+
+\item{png_map}{`r lifecycle::badge("deprecated")` Use tbm_use}
+
+\item{png_exp}{`r lifecycle::badge("deprecated")` Use tbm_exp}
+
+\item{google_api}{`r lifecycle::badge("deprecated")`}
+
+\item{col}{`r lifecycle::badge("deprecated")`}
+
+\item{overwrite_png}{`r lifecycle::badge("deprecated")` Use tbm_overwrite}
 }
 \value{
 The HTML file name(s) of the flight summaries generated
@@ -105,17 +128,19 @@ If saving multiple HTML reports to the same output directory, passing \code{self
 The HTML report is generated from a RMarkdown file. If you know how to edit RMarkdown, you can modify the default template and pass the filename
 of your preferred template using the \code{report_rmd} argument.
 
-\code{png_map} controls whether a PNG version of the map will be created in \code{output_dir}.
-If TRUE, a PNG file at the default dimensions (480x480) will be created. If a single integer
-is passed, it will be taken to be the width and height on the PNG file in pixels.
-\code{png_exp} is a percentage of the points bounding box that will be used as a buffer
-for the background map. If the map seems too cropped, or you get a warning message about rows
-removed, try increasing it. By default, the background image will be a satellite photo from
-Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
-pass with \code{google_api} (for
-details see \url{https://developers.google.com/maps/documentation/maps-static/}. Alternately you
-can save your API key with \code{ggmap::register_google()}, after which it will be read automatically.
-If a Google API key is not found, a terrain map from Stamen will be substituted.
+\code{tbm_use} determines whether a thumbnail image of the flight will be downloaded from Google or StadiaMaps, and saved in \code{output_dir}.
+Although this thumbnail image of the flight is not be displayed in the flight summary report, it is used when generated a Table-of-Contents for
+a series of flights, and can be useful as a standalone quick glance of the flight in Windows Explorer, GitHub repos, etc.
+
+Note that both Google Maps and StadiaMaps require an API key (that you pass using \code{tbm_api_key}). If you don't have an API
+key for one of these services, then you can't download a thumbnail image of the flight. To get an API key for the Google Static Maps service, see
+\url{https://developers.google.com/maps/documentation/maps-static/} (there are also a number of tutorials available). Note that Google does require
+a credit card or their APIs, but the monthly quota before you get charged should be more than enough if all you're doing is downloading thumbnail images
+for your drone flights. To get an API key for StadiaMaps (no credit card required), start here. See the \href{https://github.com/dkahle/ggmap/}{ggmap package} for details.
+
+The flight thumbnail image will be created at the dimensions given by \code{tbm_size}. \code{tbm_exp} is a percentage of
+the flight bounding box that will be used as a buffer around the background map. If the map seems too cropped, or you get a warning message about rows
+removed, try increasing it. \code{pts_col} can be used to pass a single color or vector of custom colors for the image locations (the default is a rainbow color ramp).
 
 \code{attachment} specifies which supplementary files to create and link to the flight summary. Choices are
 \code{ctr_kml} and \code{mcp_kml} for KML versions of the camera locations and MCP (minimum convex

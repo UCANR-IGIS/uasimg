@@ -4,7 +4,7 @@
 #'
 #' @param x A list of class 'uas_info'
 #' @param flt Which flight(s) in x to process (default is all)
-#' @param idx Which rows in x to process (default is all)
+#' @param idx Which row numbers (i.e., images) in the selected flights to process (default is all)
 #' @param method Resampling method to use for the rotation
 #' @param crs coordinate reference system of the output file
 #' @param dir_out The output directory (default is the same folder as the source images)
@@ -13,29 +13,31 @@
 #' @param quiet Show messages.
 #'
 #' @details
-#' This function will export individual image(s) to a georectified GeoTIFF, using the estimated ground footprint modeled from the EXIF data.
-#' It should be self-evident that footprints modeled from the recorded above-launch-point elevation, GPS location, and yaw, should
-#' be considered approximate at best. Also note if your goal is simply to view individual images in their approximate location
-#' in desktop GIS software, this function is probably overkill. Use \code{\link{uas_worldfile}} instead.
+#' This function will export individual image(s) to a pseudo-georectified GeoTIFF, using the estimated ground footprint modeled from the EXIF data.
+#' It should be self-evident that footprints should be considered approximate at best, as they modeled from a) the above-launch-point
+#' elevation, b) GPS location, c) yaw, and d) camera parameters (all of which have error).
 #'
-#' Note that a prerequisite of this is that you compute footprints when you first create the image collection object (in other words,
-#' be sure to pass pass \code{fp = TRUE} when you run \code{\link{uas_info}}).
+#' Note: if your goal is simply to view individual images in their approximate
+#' location in desktop GIS software, this function is probably overkill (use \code{\link{uas_worldfile}} instead).
+#'
+#' A prerequisite for using this function is that you computed footprints when you first created the image collection object (in other words,
+#' be sure to pass pass \code{fp = TRUE} when you run \code{\link{uas_info}}). This function also requires that you have `terra` installed.
 #'
 #' \code{method} is the name of a resampling method used to create the pseudo-georectified image. The default is \code{near} which is fastest
-#' and should give good results because the pixel size isn't being altered. See also \code{\link[terra]{resample}}.
+#' and should give reasonably good results. See also \code{\link[terra:resample]{terra::resample()}}.
 #'
-#' The crs of the pseudo-georectified will be the crs of the image collection
-#' object (UTM). You can override this with the \code{crs} argument. If
-#' provided, \code{crs} should be provided as text as a <authority:number> code (ex. "epsg:4326") or WKT syntax.
-#' For details see \code{\link[terra]{project}}.
+#' The crs of the pseudo-georectified image will be the crs of the image collection
+#' object (i.e., UTM). You can override this with the \code{crs} argument. If
+#' provided, \code{crs} should be provided as text as a <authority:number> code (e.g., \code{"epsg:4326"}) or WKT syntax.
+#' For details see \code{\link[terra:project]{terra::project()}}.
 #'
 #' Note rectifying (unrotating) images can take a long time and result in much larger image files (because GeoTiffs are uncompressed). You can use the
-#' \code{flt} and \code{idx} arguments to specify individual images within an image collection object to export.
+#' \code{flt} and \code{idx} arguments to specify which flight(s) and images(s) within selected the flights respectively to export.
 #'
 #' This function has been tested with JPG files from DJI cameras. It has not yet been fully tested for TIF files from
 #' multispectral cameras, and may not work with those formats (contact the package author if you want to try).
 #'
-#' Un-rotating the images requires write permission for the directory where the images are saved (to write a
+#' Un-rotating the images requires write permission for the directory where the input images are saved (to write a
 #' temporary worldfile). If you don't have write permission where the images reside, pass \code{use_tmpdir = TRUE}.
 #' This will make a temporary copy of the image in the temp directory.
 #'

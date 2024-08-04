@@ -266,17 +266,18 @@ if (group_img) {
     arrange(first_dt)
   }
 
-  ## Compute colors for the pts and fp 
-  if (is.na(params$col)) {
-    col_use <- rainbow(nrow(leaf_pts_tbl), end=5/6)
-  } else {
-    col_use <- params$col
-  }
-
+  ## Compute colors for the pts and fp. THESE WERE COMPUTED IN uas_report.R and passed as params$col
+  # if (is.na(params$col)) {
+  #   col_use <- rainbow(nrow(leaf_pts_tbl), end=5/6)
+  # } else {
+  #   col_use <- params$col
+  # }
+  # col_use <- params$col
+  
   ## Add circle markers
   m_pts <- m_pts |> addCircleMarkers(data = leaf_pts_tbl,
                    lng = ~gps_long_rnd, lat = ~gps_lat_rnd, 
-                   radius = 5, fillColor = col_use, fillOpacity = 1,  
+                   radius = 5, fillColor = params$col, fillOpacity = 1,  
                    stroke = (max(leaf_pts_tbl$count) > 1), 
                    color = "black", weight = 2,
                    popup = ~balloon_html,
@@ -305,16 +306,16 @@ if (group_img) {
                             "<em>", format(pts_dt, "%Y-%m-%d, %H:%M:%S"), "</em></p>")
   }
   
-  ## Compute colors  
-  if (is.na(params$col)) {
-    col_use <- rainbow(nrow(params$pts), end=5/6)
-  } else {
-    col_use <- params$col
-  }
+  ## Compute colors. THESE WERE COMPUTED IN uas_report.R and passed as params$col
+  # if (is.na(params$col)) {
+  #   col_use <- rainbow(nrow(params$pts), end=5/6)
+  # } else {
+  #   col_use <- params$col
+  # }
 
   ## Add the circle markers
   m_pts <- m_pts |> addCircleMarkers(lng = params$pts$gps_long, lat = params$pts$gps_lat, 
-                                   radius = 4, fillColor = col_use, fillOpacity = 1, 
+                                   radius = 4, fillColor = params$col, fillOpacity = 1, 
                                    stroke = FALSE, popup = balloons_html,
                                    popupOptions = pup_opts)
   
@@ -345,14 +346,14 @@ if (!identical(params$fp, NA)) {
   ## Reproject footprints to lat-long (required by leaflet)
   fp_ll_sf <- params$fp |> st_geometry() |>  st_transform(crs = 4326)
 
-    ## Compute colors  
-  if (is.na(params$col)) {
-    col_use <- rainbow(nrow(params$fp), end=5/6)
-  } else {
-    col_use <- params$col
-  }
+  ## Compute colors. THESE WERE COMPUTED IN uas_report.R and passed as params$col
+  # if (is.na(params$col)) {
+  #   col_use <- rainbow(nrow(params$fp), end=5/6)
+  # } else {
+  #   col_use <- params$col
+  # }
 
-  m_fp <- m |> addPolygons(data=fp_ll_sf, fill=FALSE, stroke=TRUE, color=col_use, weight=2, dashArray="1,2")
+  m_fp <- m |> addPolygons(data = fp_ll_sf, fill = FALSE, stroke = TRUE, color = params$col, weight = 2, dashArray = "1,2")
   
   ## Display HTML Widget
   m_fp

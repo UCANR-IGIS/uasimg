@@ -1,25 +1,25 @@
 Drone Image Utilities
 ================
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![uasimg status
 badge](https://ajlyons.r-universe.dev/badges/uasimg)](https://ajlyons.r-universe.dev)
+
 <!-- badges: end -->
 
-<a href='http://ucanr-igis.github.io/uasimg'><img src='man/figures/logo.png' align="right" height="138" style="padding:10px; height:200px; width:177px;"/></a>`uasimg`
-helps manage images taken from an unoccupied aerial vehicle (UAV, or
-drone) that have been collected with the intent to stitch them into 2D
-and 3D products with photogrammetry software. The package does **not**
-stitch images, but helps you create catalogs of your image data, examine
-their locations and properties, export image centroids and estimated
-footprints as GIS files, convert formats, and create world files for
-individual images can be viewed in GIS software.
+[`uasimg`](http://ucanr-igis.github.io/uasimg/) helps manage images
+taken from an unoccupied aerial vehicle (UAV, or drone) that have been
+collected with the intent to stitch them into 2D and 3D products with
+photogrammetry software. The package does **not** stitch images, but
+helps you create catalogs of your image data, examine their locations
+and properties, export image centroids and estimated footprints as GIS
+files, and prepare images for visualization and analysis in GIS and
+remote sensing applications.
 
-## Applications
+## Motivation
 
 `uasimg` was developed to help with the following common data management
 tasks:
@@ -28,20 +28,23 @@ tasks:
     their locations and estimated image overlap. This can help a pilot
     determine if a flight was successful, or needs to be redone.
 
-2.  Subsetting images for further processing with photogrammetry
-    (stitching) software like [Pix4Dmapper](https://www.pix4d.com/) or
-    [OpenDroneMap](https://www.opendronemap.org/). Omitting images with
-    an extreme amount of overlap can reduce processing time and improve
-    results.
+2.  Organizing images into structured folder trees based on the project,
+    location, platform, etc.
 
-3.  Creating individual Flight Summary pages in HTML, as the backbone of
+3.  Subsetting images for further processing with photogrammetry
+    (stitching) software like [Pix4Dmapper](https://www.pix4d.com/) or
+    [OpenDroneMap](https://www.opendronemap.org/). For example omitting
+    images with an extreme amount of overlap can actually improve
+    photogrammetry results and reduce processing time.
+
+4.  Creating individual Flight Summary pages in HTML, as the backbone of
     an image catalog, and higher level ‘Table of Contents’ pages for
     groups of related flights (e.g., from the same site).
 
-4.  Converting images from one format to another (e.g., DNG to JPG),
+5.  Converting images from one format to another (e.g., DNG to JPG),
     while preserving all the image metadata needed for photogrammetry.
 
-5.  Creating world files for individual drone images, using the image
+6.  Creating world files for individual drone images, using the image
     EXIF data to model the ground footprint and rotation, so they can be
     imported in GIS software and appear in their approximate location.  
       
@@ -49,9 +52,17 @@ tasks:
     saved in the image files (e.g., relative altitude above the launch
     point, camera compass direction), and are *estimates only*.
 
+7.  Exporting individual images as pseudo-georeferenced GeoTIFFs, so
+    that you can do pixel operations with remote sensing tools such as
+    pixel classification, spatial overlays, object detection, zonal
+    stats, etc.
+
 ## Installation
 
-`uasimg` is not on CRAN (yet), but you can install it from R-Universe:
+### Install from R-Universe
+
+`uasimg` is not on CRAN (yet), but you can install it from R-Universe
+(recommended):
 
 ``` r
 options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',
@@ -60,7 +71,7 @@ options(repos = c(ajlyons = 'https://ajlyons.r-universe.dev',
 install.packages('uasimg')
 ```
 
-### Alternative Installation: GitHub
+### Install from GitHub
 
 Alternately, you can install it from GitHub:
 
@@ -83,24 +94,13 @@ After RTools is installed, install `uasimg` from GitHub with:
 remotes::install_github("ucanr-igis/uasimg")
 ```
 
-### Dependent Packages
-
-`uasimg` requires several dependent packages, including *sf*, *dplyr*,
-*tidyr*, *leaflet*, *htmltools* and others (see the
-[DESCRIPTION](https://github.com/UCANR-IGIS/uasimg/blob/master/DESCRIPTION)
-file for a complete list). Normally missing packages are installed at
-the same time, but if you get an error message about a missing
-package(s), install the dependent packages separately (i.e., from the
-‘Packages’ pane in RStudio) then run
-`remotes::install_github("ucanr-igis/uasimg", dependencies=FALSE)`.
+## Dependencies
 
 ### exiftool
 
 To read the EXIF data from the image files, `uasimg` requires an
-external command line tool called ‘exiftool’.
-
-**UPDATE: As of version 1.6.0, you no longer need to manually install
-the exiftool command line utility. Rather you can install by running:**
+external command line tool called ‘exiftool’. You can install exiftool
+by running:
 
 ``` r
 exiftoolr::install_exiftool()
@@ -116,8 +116,21 @@ exiftoolr::exif_version()
 
 Alternately, you can install exiftool manually by downloading it from
 <http://www.sno.phy.queensu.ca/~phil/exiftool/>. Be sure to unzip it to
-a folder on the path (e.g, c:\windows) and rename the executable file
-from *exiftool(-k).exe* to *exiftool.exe*.
+a folder on the path (e.g, c:\windows), rename the executable file from
+*exiftool(-k).exe* to *exiftool.exe*, and pass `use_exiftoolr = FALSE`
+when you call `uas_info()`.
+
+### Dependent Packages
+
+`uasimg` requires several dependent packages, including *sf*, *dplyr*,
+*tidyr*, *leaflet*, *htmltools*, and several suggested packages for
+specific features (see the
+[DESCRIPTION](https://github.com/UCANR-IGIS/uasimg/blob/master/DESCRIPTION)
+file for a complete list). Normally missing packages are installed at
+the same time, but if you get an error message about a missing
+package(s), install the dependent packages separately (i.e., from the
+‘Packages’ pane in RStudio) then run
+`remotes::install_github("ucanr-igis/uasimg", dependencies=FALSE)`.
 
 ## Supported Cameras
 
@@ -155,11 +168,12 @@ Additional requirements to generate estimated footprints:
 - it is presumed that images were taken at nadir (camera pointing
   straight down)
 
-# Usage Overview
+## Usage Overview
 
 You always start with `uas_info()`, feeding it one or more folders of
 drone images. This function extracts image information, computes
-footprints, and reads supplemental flight metadata.
+footprints, and reads supplemental flight metadata (see also the article
+on Flight Metadata).
 
 The object returned by `uas_info()` is not very useful by itself. The
 results are generally saved to a variable then fed into other functions
@@ -167,12 +181,11 @@ that do useful things, such as:
 
 - `uas_report()` creates ‘Flight Summaries’ as standalone HTML pages,
   with options to create image thumbnails
-  ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/hrec_wtrshd2_2017_flt1_report.html)).
+  ([sample](http://uas.igis-data.click/hrec/watershed2/hrec_wtrshd2_2017_flt2_rpt.html)).
   Flight summaries also be grouped using `uas_toc()`, which generates a
   Table of Contents page for several Flight Summaries, with options to
   copy all the catalog files to a single folder so the catalog is in one
-  place
-  ([sample](https://ucanr-igis.github.io/uasimg/samples/hrec/index.html)).
+  place ([sample](http://uas.igis-data.click/hrec/watershed2/)).
 
 - `uas_exp_shp()` and `uas_exp_kml()` exports flight geometries (image
   centroids, image footprints, and/or flight area) as Shapefiles or KML
@@ -192,7 +205,7 @@ For more info, see the [Managing Drone Images with
 uasimg](https://ucanr-igis.github.io/uasimg/articles/uasimg.html)
 Vignette and function help pages.
 
-## Example
+### Example
 
 The general usage is to first create a flight info object for one or
 more directories of images using the *uas_info()* function. Save the
@@ -226,14 +239,14 @@ uas_exp_shp(hast_ft1_info)
 uas_worldfile(hast_ft1_info)
 ```
 
-# Utilities for Individual Images
+## Utilities for Individual Images
 
 The following utilities can help visualize and analyze individual
 images. These functions are based on the modeled image footprints, which
 as described above require the camera to record the relative altitude
 above ground.
 
-## World Files
+### World Files
 
 Drone images typically save the coordinates of the camera, but do not
 include the width, length, or compass angle. A “world file” is a small
@@ -247,7 +260,7 @@ files, including `aux.xml`, `jpw` and `tfw`, and `prj` files. `aux.xml`
 is the most recognized format and hence the default. See the
 `uas_worldfile()` help page for details.
 
-## Cropping out the Center of Images
+### Cropping the Center of Images
 
 Sometimes images will simply not stitch, forcing you to do your analysis
 and visualization with individual images. `uas_cropctr()` crops out the
@@ -261,16 +274,25 @@ average side distance between flight lines. The resulting mosaic will
 not be orthorectified, but may be good enough for visualization and/or
 object detection particularly if the area is flat.
 
-# Get Involved!
+### Exporting Images as Psuedo-Georefrenced TIFFs
 
-## Bugs, Questions, and Feature Requests
+Many remote sensing tools can not read WorldFiles. In these cases, you
+can export individual images in their modeled footprint as GeoTIFFs.
+This may allow you for example to do traditional remote sensing analyses
+including spatial joins and queries (e.g., with field data), pixel
+classification, zonal statistics, using Deep Learning / CNN methods to
+detect objects, etc. See `uas_exp_geotiff()` for details.
+
+## Get Involved!
+
+### Bugs, Questions, and Feature Requests
 
 To report a bug, add your camera to the package, or suggest a new
 feature, please create an
 [issue](https://github.com/ucanr-igis/uasimg/issues) on GitHub, or
 contact the package author.
 
-## Code of Conduct
+### Code of Conduct
 
 Please note that the uasimg project is released with a [Contributor Code
 of Conduct](http://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html). By

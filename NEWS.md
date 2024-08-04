@@ -1,5 +1,7 @@
 # uasimg 1.9.0 (2024-08-01)
 
+This is a fairly significant update. Key feature improvements include i) rotated thumbnail images in flight summary reports, ii) the ability to export individual images as pseudo-rectified GeoTIFFs, and iii) repairing the ability to download thumbnail images of flights from Google Maps and StadiaMaps (via ggmap).
+
 * `uas_exp_geotiff()`: new function to create a pseudo-georectified image (using the modeled footprint) as a GeoTIFF (#7)
 * `uas_thumbnails_make()`: new argument `rotated` will create rotated thumbnails (FALSE by default for backward compatibility)
 * `uas_worldfile()`: added new argument `flt` for the flight index (because a uas_info object can contain metadata for multiple flights / image collections). Improved error messages.
@@ -8,8 +10,8 @@
 * `uas_convert()`: checks added to see if `magick` is installed
 * `leaflet.extras` added to imports (to add a full screen control to the leaflet map on flight summary reports)
 * `lifecycle` package added to imports (to communicate renamed arguments)  
-* `uas_exp_kml()`, `uas_exp_shp()`, `uas_thumbnails_make()`, `uas_move()`, `uas_rename()`: argument `flt` added for consistency across functions; `flt_idx` deprecated. Improved error messages (#6)  
-* `uas_report.R`: `units` argument added to set whether to use imperial or metrics units for the flight area, altitude AGL, and GSD (#11)  
+* `uas_exp_kml()`, `uas_exp_shp()`, `uas_thumbnails_make()`, `uas_move()`, `uas_rename()`, `uas_report()`: argument `flt` added for consistency across functions; `flt_idx` deprecated. Improved error messages (#6)  
+* `uas_report()`: `units` argument added to set whether to use imperial or metrics units for the flight area, altitude AGL, and GSD (#11). Several arguments related to downloading thumbnail images of flight areas have been deprecated, renamed, or added, for consistency and to deal with changes in ggmap.  
 * `uas_report.Rmd`: modified so the thumbnail image height is automatically set by the browser (to accommodate thumbnail images with different aspect ratios, including rotated images); added full screen control; added code to support `units` argument
 * `uas_info()`: the cache is auto-refreshed if `fp=TRUE` and `cache=TRUE` but the cache doesn't contain footprints (#6); added an extra sort by datetimeoriginal to deal with the odd case where sorting images by their filenames doesn't result in a sequential order (#9). 
 * `cameras.csv`: added DJI Zenmuse P1 (#8), Autel Evo2 RGB

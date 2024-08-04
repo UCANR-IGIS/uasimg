@@ -3,7 +3,7 @@
 #' Creates image collection summaries for individual flights (folders)
 #'
 #' @param x A list of class 'uas_info'
-#' @param col Color value(s) of the centroids and/or footprints
+#' @param flt Flight(s) in x to process (character or numeric vector, default is all)
 #' @param group_img Group images within ~1m of each other into 1 point
 #' @param thumbnails Display thumbnail images, logical
 #' @param show_local_dir Show the local image directory, logical
@@ -16,17 +16,24 @@
 #' @param overwrite_html Overwrite existing HTML files without warning, logical
 #' @param open_report Open the HTML file in a browser
 #' @param self_contained Make the output HTML file self-contained
-#' @param png_map Whether to create a PNG version of the map. May be logical, or dimensions of the output image in pixels (see Details)
-#' @param overwrite_png Overwrite existing PNG files without warning, logical
-#' @param png_exp A proportion to expand the bounding box of the PNG map, see Details.
-#' @param google_api API key for Google Static Maps, see Details.
+#' @param tbm_use Whether to create a PNG version of the map. May be logical, or dimensions of the output image in pixels (see Details)
+#' @param tbm_overwrite Overwrite existing PNG files without warning, logical
+#' @param tbm_size The size of a square flight thumbnail image in pixels, number
+#' @param tbm_exp A proportion to expand the bounding box of the PNG map, see Details.
+#' @param tbm_src The API service to use to get the flight thumbnail background image, see Details.
+#' @param tbm_api_key API key for Google Static Maps or Stadia, see Details.
+#' @param pts_col Color value(s) of the centroids and/or footprints
 #' @param report_rmd Rmd template used to generate the HTML file. See Details.
 #' @param header_html A HTML file name or URL to use as the header
 #' @param footer_html A HTML file name or URL to use as the footer
 #' @param use_tmpdir Use the temp dir for processing
 #' @param quiet TRUE to supress printing of the pandoc command line
 #' @param show_gps_coord `r lifecycle::badge("deprecated")` Does nothing
-
+#' @param png_map `r lifecycle::badge("deprecated")` Use tbm_use
+#' @param png_exp `r lifecycle::badge("deprecated")` Use tbm_exp
+#' @param overwrite_png `r lifecycle::badge("deprecated")` Use tbm_overwrite
+#' @param google_api `r lifecycle::badge("deprecated")`
+#' @param col `r lifecycle::badge("deprecated")`
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
 #'
@@ -46,17 +53,19 @@
 #' The HTML report is generated from a RMarkdown file. If you know how to edit RMarkdown, you can modify the default template and pass the filename
 #' of your preferred template using the \code{report_rmd} argument.
 #'
-#' \code{png_map} controls whether a PNG version of the map will be created in \code{output_dir}.
-#' If TRUE, a PNG file at the default dimensions (480x480) will be created. If a single integer
-#' is passed, it will be taken to be the width and height on the PNG file in pixels.
-#' \code{png_exp} is a percentage of the points bounding box that will be used as a buffer
-#' for the background map. If the map seems too cropped, or you get a warning message about rows
-#' removed, try increasing it. By default, the background image will be a satellite photo from
-#' Google Maps. However this requires a valid API Key for the Google Maps Static service, which you
-#' pass with \code{google_api} (for
-#' details see \url{https://developers.google.com/maps/documentation/maps-static/}. Alternately you
-#' can save your API key with \code{ggmap::register_google()}, after which it will be read automatically.
-#' If a Google API key is not found, a terrain map from Stamen will be substituted.
+#' \code{tbm_use} determines whether a thumbnail image of the flight will be downloaded from Google or StadiaMaps, and saved in \code{output_dir}.
+#' Although this thumbnail image of the flight is not be displayed in the flight summary report, it is used when generated a Table-of-Contents for
+#' a series of flights, and can be useful as a standalone quick glance of the flight in Windows Explorer, GitHub repos, etc.
+#'
+#' Note that both Google Maps and StadiaMaps require an API key (that you pass using \code{tbm_api_key}). If you don't have an API
+#' key for one of these services, then you can't download a thumbnail image of the flight. To get an API key for the Google Static Maps service, see
+#' \url{https://developers.google.com/maps/documentation/maps-static/} (there are also a number of tutorials available). Note that Google does require
+#' a credit card or their APIs, but the monthly quota before you get charged should be more than enough if all you're doing is downloading thumbnail images
+#' for your drone flights. To get an API key for StadiaMaps (no credit card required), start here. See the \href{https://github.com/dkahle/ggmap/}{ggmap package} for details.
+#'
+#' The flight thumbnail image will be created at the dimensions given by \code{tbm_size}. \code{tbm_exp} is a percentage of
+#' the flight bounding box that will be used as a buffer around the background map. If the map seems too cropped, or you get a warning message about rows
+#' removed, try increasing it. \code{pts_col} can be used to pass a single color or vector of custom colors for the image locations (the default is a rainbow color ramp).
 #'
 #' \code{attachment} specifies which supplementary files to create and link to the flight summary. Choices are
 #' \code{ctr_kml} and \code{mcp_kml} for KML versions of the camera locations and MCP (minimum convex
@@ -73,33 +82,75 @@
 #' @importFrom tools file_path_sans_ext file_ext
 #' @importFrom rmarkdown render
 #' @importFrom lifecycle deprecated is_present deprecate_warn
-
+#' @importFrom sf st_transform st_bbox st_drop_geometry
 #' @importFrom methods is
 #'
 #' @export
 
-uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
+uas_report <- function(x, flt = NULL, group_img = FALSE, thumbnails = FALSE,
                        show_local_dir = TRUE, units = c("imperial", "metric")[1], report_title = "Flight Summary",
                        attachments = c("mcp_kml", "ctr_kml")[0],
+                       pts_col = NULL,
                        output_dir = NULL, create_dir = TRUE, output_file = NULL, overwrite_html = FALSE,
-                       open_report = FALSE, self_contained = TRUE, png_map = FALSE, png_exp = 0.2,
-                       overwrite_png = FALSE, google_api = NULL, report_rmd = NULL,
+                       open_report = FALSE, self_contained = TRUE,
+                       tbm_use = FALSE, tbm_overwrite = FALSE, tbm_size = 480, tbm_src = c("Google", "Stadia")[1], tbm_api_key = NULL, tbm_exp = 0.2,
+                       report_rmd = NULL,
                        header_html = NULL, footer_html = NULL, use_tmpdir = FALSE, quiet = FALSE,
-                       show_gps_coord = lifecycle::deprecated()) {
+                       show_gps_coord = lifecycle::deprecated(),
+                       png_map = lifecycle::deprecated(),
+                       png_exp = lifecycle::deprecated(),
+                       google_api = lifecycle::deprecated(),
+                       col = lifecycle::deprecated()) {
 
   if (!inherits(x, "uas_info")) stop("x should be of class \"uas_info\"")
 
   if (lifecycle::is_present(show_gps_coord)) {
-    lifecycle::deprecate_warn("1.6.8", "uas_report(show_gps_coord)", "uas_report(show_gps_coord)")
+    lifecycle::deprecate_warn("1.6.8", "uas_report(show_gps_coord)", details = "No longer needed")
+  }
+
+  if (lifecycle::is_present(png_map)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_report(png_map)", "uas_report(tbm_use)")
+  }
+
+  if (lifecycle::is_present(png_exp)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_report(png_exp)", "uas_report(tbm_exp)")
+  }
+
+  if (lifecycle::is_present(google_api)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_report(google_api)", "uas_report(tbm_api_key)")
+  }
+
+  if (lifecycle::is_present(col)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_report(col)", "uas_report(pts_col)")
+  }
+
+  if (lifecycle::is_present(overwrite_png)) {
+    lifecycle::deprecate_warn("1.9.0", "uas_report(overwrite_png)", "uas_report(tbm_overwrite)")
   }
 
   if (!units %in% c("imperial", "metric")) stop("Unknown value for `units`")
+  if (!tbm_src %in% c("Google", "Stadia")) stop("Unknown value for `tbm_src`")
+
+  ## Verify that that value(s) in flt (if any) are valid
+  if (is.null(flt)) {
+    flt_idx_use <- 1:length(x)
+  } else {
+    if (is.numeric(flt)) {
+      if (max(flt) > length(x)) stop("flt should not be larger than the number of flights saved in the uas image collection object")
+      flt_idx_use <- flt
+    } else if (is.character(flt)) {
+      if (FALSE %in% (flt %in% names(x))) stop("flight name not found in the uas image collection object")
+      flt_idx_use <- which(names(x) %in% flt)
+    } else {
+      stop("Invalid value for `flt`")
+    }
+  }
 
   ## Get the Rmd template
   if (is.null(report_rmd)) {
     report_rmd <- system.file("report/uas_report.Rmd", package="uasimg")
   }
-  if (!file.exists(report_rmd)) stop("Cant find the report template")
+  if (!file.exists(report_rmd)) stop("Can't find the report template")
 
   ## Validate value(s) of attachments argument
   if (is.null(attachments)) attachments <- character(0)
@@ -116,36 +167,38 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
   if (use_tmpdir) temp_dir <- tempdir()
 
   ## Set the size of the PNG map
-  make_png <- FALSE
-  if (identical(png_map, TRUE)) {
-    png_dim <- c(480,480)
-    make_png <- TRUE
-  } else if (is.numeric(png_map)) {
-    if (length(png_map)==1) png_map <- rep(png_map,2)
-    if (length(png_map)!=2) stop("Invalid value for png_map")
-    png_dim <- png_map
-    make_png <- TRUE
-  }
+  ## THIS IS NOW DONE BY TBM_SIZE
+  # make_png <- FALSE
+  # if (identical(png_map, TRUE)) {
+  #   png_dim <- c(480,480)
+  #   make_png <- TRUE
+  # } else if (is.numeric(png_map)) {
+  #   if (length(png_map)==1) png_map <- rep(png_map,2)
+  #   if (length(png_map)!=2) stop("Invalid value for png_map")
+  #   png_dim <- png_map
+  #   make_png <- TRUE
+  # }
 
-  if (make_png) {
-    #if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
-    if (!require("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")
+  if (tbm_use) {
+    if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the thumbnail map")
+    #if (!require("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")   ### DONT WANT TO LOAD IT
     if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
+    png_dim <- rep(tbm_size, 2)
   }
 
   report_fn_vec <- NULL
   first_pass_yn <- TRUE
 
   ## Start the loop
-  for (i in 1:length(x)) {
+  for (flt_idx in flt_idx_use) {
 
-    if (identical(x[[i]]$pts, NA)) {
+    if (identical(x[[flt_idx]]$pts, NA)) {
       warning(paste0("Centroids not found for ", flt_name, ". Skipping report."))
       next
     }
 
     ## Get the actual image directory(s)
-    img_dir <- unique(dirname(x[[i]]$pts$img_fn))
+    img_dir <- unique(dirname(x[[flt_idx]]$pts$img_fn))
 
     ## Verify that img_dir exists
     if (FALSE %in% file.exists(img_dir)) {
@@ -162,13 +215,13 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
 
       ## Test for write permission.
       if (file.access(img_dir, mode = 2) != 0) {
-        stop(paste0("Sorry, you don't have write permissions for ", img_dir))
+        stop(paste0("Sorry, you don't have write permissions for ", img_dir, ". Use `output_dir` to specify a directory can write to."))
       }
 
       output_dir_use <- file.path(img_dir, "map")
       if (!file.exists(output_dir_use) && create_dir) {
         if (!quiet) message(green("Creating", output_dir_use))
-        if (!dir.create(output_dir_use, recursive = TRUE)) stop(paste0("Unable to create ", output_dir_use))
+        if (!dir.create(output_dir_use, recursive = TRUE)) stop(paste0("Unable to create ", output_dir_use, ". Use `output_dir` to specify a directory can write to."))
       }
 
     } else {
@@ -184,15 +237,24 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
     }
 
     ## Construct a base filename (to use for the HTML report, PNG, and KML files)
-    if (is.na(x[[i]]$metadata$name_short %>% null2na())) {
-      fnbase <- x[[i]]$id
+    if (is.na(x[[flt_idx]]$metadata$name_short %>% null2na())) {
+      fnbase <- x[[flt_idx]]$id
     } else {
-      fnbase <- x[[i]]$metadata$name_short
+      fnbase <- x[[flt_idx]]$metadata$name_short
+    }
+
+    ## Construct a vector of colors for the points. These will be used both for
+    ## the leaflet map as well as the thumbnail image
+
+    if (is.null(pts_col)) {
+      col_use <- rainbow(nrow(x[[flt_idx]]$pts), end=5/6)
+    } else {
+      col_use <- pts_col
     }
 
     ##################################################################
-    ## Make the PNG map
-    if (make_png) {
+    ## Get the thumbnail map image
+    if (tbm_use) {
 
       ## Construct the map.png filename
       if (is.null(output_file)) {
@@ -202,20 +264,12 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
         map_fn <- paste0(file_path_sans_ext(basename(output_file)), ".png")
       }
 
-      if (overwrite_png || !file.exists(file.path(output_dir_use, map_fn))) {
+      if (tbm_overwrite || !file.exists(file.path(output_dir_use, map_fn))) {
 
         ## Lets make a png map
 
-        ## Compute colors for the pts
-        ## Note for the PNG map, there is no spatial grouping, but that shouldn't matter
-        if (is.null(col)) {
-          col_use <- rainbow(nrow(x[[i]]$pts), end=5/6)
-        } else {
-          col_use <- col
-        }
-
         # Define the extent and center point of the flight area
-        pts_ext <- x[[i]]$pts %>% sf::st_transform(4326) %>% st_bbox() %>% as.numeric()
+        pts_ext <- x[[flt_idx]]$pts %>% st_transform(4326) %>% st_bbox() %>% as.numeric()
         lon_idx <- c(1, 3)
         lat_idx <- c(2, 4)
         ctr_ll <- c(mean(pts_ext[lon_idx]), mean(pts_ext[lat_idx]))
@@ -225,35 +279,33 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
                                              lat = range( pts_ext[lat_idx]),
                                              adjust=as.integer(-1)))
 
-        if (is.null(google_api) && !ggmap::has_google_key()) {
-          ## Grab a Stamen map
-          if (!quiet) message(yellow("Downloading a PNG image from STAMEN"))
-          dx <- diff(pts_ext[lon_idx]) * png_exp
-          dy <- diff(pts_ext[lat_idx]) * png_exp
-          pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
-          m <- ggmap::get_stamenmap(bbox=pts_ext, zoom=zoom_lev, maptype="terrain")
-
-        } else {
-          ## Grab a Google Maps Static image
-          if (!is.null(google_api)) {
-            ggmap::register_google(key=google_api)
-          }
-          if (!quiet) message(yellow("Downloading a PNG image from GOOGLE"))
-          m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev,
-                                        format="png8", maptype="satellite"))
+        if (tbm_src == "Google") {
+          if (is.null(tbm_api_key)) stop("To download a thumbnail map of the flight area from Google, you must pass an API key for Google Static Maps ")
+          ggmap::register_google(key = tbm_api_key)
+          if (!quiet) message(yellow(" - downloading a thumbnail image of the flight area from Google"))
+          m <- try(ggmap::get_googlemap(center=ctr_ll, zoom=zoom_lev, format="png8", maptype="satellite"))
           if (is(m, "try-error")) {
-            warning("Failed to retrieve static map from Google Maps, check your API key. To use Stamen, don't pass google_api (if you saved it, run Sys.unsetenv('GGMAP_GOOGLE_API_KEY') )")
+            warning("Failed to retrieve static map from Google Maps, check your API key.")
             m <- NULL
           }
+        } else if (tbm_src == "Stadia") {
+          ## Grab a Stadia map
+          if (is.null(tbm_api_key)) stop("To download a thumbnail map of the flight area from Stadia, you must pass an API key for StadiaMaps.")
+          ggmap::register_stadiamaps(key = tbm_api_key)
+          if (!quiet) message(yellow(" - downloading a thumbnail image of the flight area from Stadia"))
+          dx <- diff(pts_ext[lon_idx]) * tbm_exp
+          dy <- diff(pts_ext[lat_idx]) * tbm_exp
+          pts_ext <- pts_ext + c(-dx, -dy, dx, dy)
+          m <- ggmap::get_stadiamap(bbox = pts_ext, zoom = zoom_lev, maptype="stamen_terrain")
         }
 
         if (!is.null(m)) {
 
           # Create the ggmap object and save to a variable
           pts_ggmap <- ggmap::ggmap(m) +
-            geom_point(data = x[[i]]$pts %>% sf::st_drop_geometry(),
+            geom_point(data = x[[flt_idx]]$pts %>% st_drop_geometry(),
                        aes(gps_long, gps_lat),
-                       colour = col_use,
+                       color = col_use,
                        show.legend = FALSE,
                        size = 3) +
             theme_void()
@@ -276,12 +328,12 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
 
     } else {
       map_fn <- ""
-    } ## if png_make
+    } ## if tbm_use
     ###########################################
 
 
     ##################################################################
-    ## Create image thumbnails
+    ## Create image thumbnails if needed
     if (thumbnails) {
 
       ## Get the output folder
@@ -296,19 +348,19 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
       if (thumbnails) {
 
         ## Call uas_thumbnails()
-        tb_fn_lst <- uas_thumbnails_make(x, flt = i, output_dir = tb_dir_use,
+        tb_fn_lst <- uas_thumbnails_make(x, flt = flt_idx, output_dir = tb_dir_use,
                                          tb_width = 400, overwrite = FALSE)
 
         ## Save the base name (minus the path) of the thumbnail in the attribute table for the points, so it can be
         ## used in the leaflet map. This is only for passing the filenames to the Rmd file, not permanently saved
-        x[[i]]$pts$tb_fn <- basename(tb_fn_lst[[names(x)[i]]])
+        x[[flt_idx]]$pts$tb_fn <- basename(tb_fn_lst[[names(x)[flt_idx]]])
 
       }
 
     }  ## if thumbnails = TRUE
 
     ## If thumbnails is (still) FALSE, fill the column with NA
-    if (!thumbnails) x[[i]]$pts$tb_fn <- NA
+    if (!thumbnails) x[[flt_idx]]$pts$tb_fn <- NA
 
     ## Get the HTML report output filename
     if (is.null(output_file)) {
@@ -409,15 +461,16 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
 
       }
 
-      ## Compute colors for the pts and fp
-      if (is.null(col)) {
-        # col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
-        ## We pass col = NA to render() because colors for the footprints and center
-        ## could be different (e.g., there may be fewer footprints than centers)
-        col_use <- NA
-      } else {
-        col_use <- col
-      }
+      # ## Compute colors for the pts and fp
+      ## THIS WAS ALREADY DONE HIGHER UP IN THE LOOP
+      # if (is.null(col)) {
+      #   # col_use <- rainbow(nrow(x[[img_dir]]$pts), end=5/6)
+      #   ## We pass col = NA to render() because colors for the footprints and center
+      #   ## could be different (e.g., there may be fewer footprints than centers)
+      #   col_use <- NA
+      # } else {
+      #   col_use <- col
+      # }
 
       ## Generate a KML file with the MCP
       if ("mcp_kml" %in% attachments) {
@@ -443,7 +496,7 @@ uas_report <- function(x, col = NULL, group_img = FALSE, thumbnails = FALSE,
       report_fn <- render(input = report_rmd_use,
                           output_dir = render_dir, output_file = output_file_use,
                           output_options = output_options,
-                          params = c(x[[i]], list(col = col_use,
+                          params = c(x[[flt_idx]], list(col = col_use,
                                                   img_dir = img_dir,
                                                   group_img = group_img,
                                                   show_local_dir = show_local_dir,

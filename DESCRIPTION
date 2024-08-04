@@ -4,11 +4,16 @@ Title: Drone Image Utilities
 Description: This package manages images from drone mapping projects, including data management, metadata creation, creating data catalogs, converting file formats, and utilities for single-image analysis.
 Date: 2024-08-01
 Version: 1.9.0
-Authors@R: person("Andy", "Lyons", email = "andlyons@ucanr.edu", role = c("aut", "cre"))
+Authors@R: c(
+    person("Andy", "Lyons", , "andlyons@ucanr.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7505-6709")),
+    person("Regents of the University of California", role = "cph")
+  )
 BugReports: https://github.com/ucanr-igis/uasimg/issues
-URL: https://github.com/ucanr-igis/uasimg
+URL: https://ucanr-igis.github.io/uasimg/
 License: GPL-3
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Depends:
     R (>= 3.6.0),
@@ -41,5 +46,5 @@ Suggests:
     DiagrammeR,
     DiagrammeRsvg,
     terra
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr

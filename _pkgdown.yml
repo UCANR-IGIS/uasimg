@@ -1,14 +1,24 @@
 title: uasimg
-url: http://ucanr-igis.github.io/uasimg
+url: https://ucanr-igis.github.io/uasimg/
 template:
-  params:
-    bootswatch: flatly
-    ganalytics: UA-81567502-3
+  bootstrap: 5
+  bootswatch: yeti
+  includes:
+    in_header: |
+       <!-- Google tag (gtag.js) -->
+       <script async src="https://www.googletagmanager.com/gtag/js?id=G-68H6V5WRXH"></script>
+       <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-68H6V5WRXH');
+       </script>
 development:
-  mode: release
+  mode: unreleased
 home:
   sidebar:
-    structure: [links, license, community, citation, authors]
+    structure: [toc, links, license, community, citation, authors, dev]
 repo:
   url:
     home: https://github.com/ucanr-igis/uasimg/
@@ -91,6 +101,7 @@ navbar:
     home:
       icon: fas fa-home fa-lg
       href: index.html
+      aria-label: Home
     reference:
       text: Reference
       href: reference/index.html
@@ -100,6 +111,7 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/ucanr-igis/uasimg/
+      aria-label: GitHub
     presentations:
       text: Presentations
       menu:

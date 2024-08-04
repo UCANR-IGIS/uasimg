@@ -58,33 +58,35 @@ Generate a Table of Contents of flight summaries
 }
 \details{
 This function generates a master Table of Contents HTML page for a set
-of individual flight summaries created by \code{\link{uas_report}}.
+of individual flight summaries created by \code{\link{uas_report}}, saving the TOC in \code{output_dir}. The TOC page can either point
+to the flight summary reports where they are, or copy them to a single directory.
 
-\code{htmls_reports} should be a vector of HTML filenames, including the full path. Reports will
-be appear in the Table of Contents in the same order. To link to the reports, R will attempt
+\code{htmls_reports} should be a vector of HTML filenames including the full path (i.e., the object returned by \code{\link{uas_report}}). Reports will
+be appear in the Table of Contents in the same order.
+
+The default behavior is to create links to the flight summary reports where they currently are. The function will attempt
 to create relative paths from the \code{output_dir} to the locations
 of the \code{htmls_reports}. At a minimum, this requires \code{output_dir} and
-\code{htmls_reports} to be on the same volume. Preferably \code{output_dir} will be a parent
+\code{htmls_reports} to be on the same volume. Preferably \code{output_dir} is be a parent
 directory of \code{htmls_reports}. If your HTML reports are scattered across many directories,
 consider using \code{gather_dir} which will put them all in one place.
 
-\code{gather_dir} specifies an optional \emph{sub-directory} of \code{output_dir} where
+To copy the flight summary reports to a common location, pass a value for \code{gather_dir}. \code{gather_dir}
+should be a \emph{sub-directory} of \code{output_dir} where
 the HTML files in \code{htmls_reports} (and any associated files such as thumbnails) will be copied.
 \code{gather_dir} should be relative to \code{output_dir} (not an absolute path). To copy HTML files
 in \code{output_dir} itself (i.e., not a sub-directory), set \code{gather_dir = '.'}
-Links in the TOC will then point to the copies of the HTML files in \code{gather_dir}.
-If \code{gather_dir} does not already exist, R will attempt to create it. To link to the
-HTML files where they currently are (i.e., not make copies), let \code{gather_dir = NULL} (the default).
+If \code{gather_dir} does not already exist, R will attempt to create it.
 
 If \code{fltmap_show = TRUE}, the Table of Contents will include an interactive map showing the flight
 areas of all the flight summaries on the page. \code{fltmap_base} is an optional list
-of lists you can use to include additional base layers. Currently only polygon and polyline KML files are
+of lists that you can use to have additional layers appear on the map. Currently only polygon and polyline KML files are
 supported as additional base layers. Each list element should be a named list with three
 elements: \emph{kml_fn} (a KML file name), \emph{color} (a named color or hex code for the outline),
 and \emph{weight} (outline thickness in pixels).
 
-\code{header_html} and \code{footer_html} allow you to specify a page header and footer, i.e., to
-add branding elements to the TOC.
+\code{header_html} and \code{footer_html} allow you to specify filenames that contain HTML text for a page header
+and footer (i.e., for branding elements).
 }
 \seealso{
 \code{\link{uas_report}}

@@ -28,8 +28,6 @@
 #'
 #' @export
 
-
-
 uas_cameras <- function(names_only = TRUE) {
 
   cameras_fn <- system.file("cameras/cameras.csv", package="uasimg")

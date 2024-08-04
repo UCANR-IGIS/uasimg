@@ -73,7 +73,7 @@ span.optional {
 ```
 
 
-This article presents a workflow for using `uasimg` to create a **catalog of drone images** from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is [here](https://ucanr-igis.github.io/uasimg/samples/hrec/index.html){target="_blank" rel="noopener"}. Although the workflow is presented a sequence of steps, in practice your workflow will probably *not* be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.
+This article presents a workflow for using `uasimg` to create a **catalog of drone images** from multiple flights that are part of a bigger mapping project / campaign. An example of the final output is [here](http://uas.igis-data.click/hrec/watershed2/){target="_blank" rel="noopener"}. Although the workflow is presented a sequence of steps, in practice your workflow will probably *not* be linear. Some of the steps below are optional and others may have to be repeated. But the outline presents a typical order of the steps.
 
 \
 
