@@ -33,6 +33,7 @@ uas_report(
   quiet = FALSE,
   show_gps_coord = lifecycle::deprecated(),
   png_map = lifecycle::deprecated(),
+  overwrite_png = lifecycle::deprecated(),
   png_exp = lifecycle::deprecated(),
   google_api = lifecycle::deprecated(),
   col = lifecycle::deprecated()
@@ -95,13 +96,13 @@ uas_report(
 
 \item{png_map}{`r lifecycle::badge("deprecated")` Use tbm_use}
 
+\item{overwrite_png}{`r lifecycle::badge("deprecated")` Use tbm_overwrite}
+
 \item{png_exp}{`r lifecycle::badge("deprecated")` Use tbm_exp}
 
-\item{google_api}{`r lifecycle::badge("deprecated")`}
+\item{google_api}{`r lifecycle::badge("deprecated")` Use tbm_api_key}
 
-\item{col}{`r lifecycle::badge("deprecated")`}
-
-\item{overwrite_png}{`r lifecycle::badge("deprecated")` Use tbm_overwrite}
+\item{col}{`r lifecycle::badge("deprecated")` Use pts_col}
 }
 \value{
 The HTML file name(s) of the flight summaries generated

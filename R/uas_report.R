@@ -32,8 +32,9 @@
 #' @param png_map `r lifecycle::badge("deprecated")` Use tbm_use
 #' @param png_exp `r lifecycle::badge("deprecated")` Use tbm_exp
 #' @param overwrite_png `r lifecycle::badge("deprecated")` Use tbm_overwrite
-#' @param google_api `r lifecycle::badge("deprecated")`
-#' @param col `r lifecycle::badge("deprecated")`
+#' @param google_api `r lifecycle::badge("deprecated")` Use tbm_api_key
+#' @param col `r lifecycle::badge("deprecated")` Use pts_col
+#'
 #'
 #' @details This will generate HTML report(s) of the images in the UAS metadata object based.
 #'
@@ -98,6 +99,7 @@ uas_report <- function(x, flt = NULL, group_img = FALSE, thumbnails = FALSE,
                        header_html = NULL, footer_html = NULL, use_tmpdir = FALSE, quiet = FALSE,
                        show_gps_coord = lifecycle::deprecated(),
                        png_map = lifecycle::deprecated(),
+                       overwrite_png = lifecycle::deprecated(),
                        png_exp = lifecycle::deprecated(),
                        google_api = lifecycle::deprecated(),
                        col = lifecycle::deprecated()) {
