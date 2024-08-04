@@ -29,6 +29,10 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/catalog_wrkflw.html">Cataloging Workflow</a></li>
     <li><a class="dropdown-item" href="../articles/flight_metadata.html">Flight Metadata</a></li>
   </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-presentations" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Presentations</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-presentations"><li><a class="dropdown-item" href="https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2024-06-27.html">Drone Image Utilities for R Overview</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/ucanr-igis/uasimg/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
@@ -44,7 +48,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.9.0" id="uasimg-190-2024-08-01">uasimg 1.9.0 (2024-08-01)<a class="anchor" aria-label="anchor" href="#uasimg-190-2024-08-01"></a></h2>
-<p>This is a fairly significant update. Key feature improvements include i) rotated thumbnail images in flight summary reports, ii) the ability to export individual images as pseudo-rectified GeoTIFFs, and iii) repairing the ability to download thumbnail images of flights from Google Maps and StadiaMaps (via ggmap).</p>
+<p>This is a fairly significant update. Key changes include:</p>
+<ol style="list-style-type: decimal"><li>rotated thumbnail images in flight summary reports</li>
+<li>The ability to export individual images as pseudo-rectified GeoTIFFs</li>
+<li>Repairing the ability to download thumbnail images of flights from Google Maps or Stadia Maps (via ggmap) for flight summary reports, and several changes to the arguments in <code><a href="../reference/uas_report.html">uas_report()</a></code> that control this.</li>
+</ol><p>To use rotated thumbnail images for the flight summary reports, you must create the thumbnail images using <code><a href="../reference/uas_thumbnails_make.html">uas_thumbnails_make()</a></code> (and set the <code>rotate</code> argument to <code>TRUE</code>). If you don’t do this but ask for thumbnail images to be included in a flight summary report, <code><a href="../reference/uas_report.html">uas_report()</a></code> will still create thumbnail images on-the-fly, but there isn’t a rotation option (and in a future update <code><a href="../reference/uas_report.html">uas_report()</a></code> will no longer generate thumbnails on-the-fly).</p>
+<p>Changes were also made to several arguments in <code><a href="../reference/uas_report.html">uas_report()</a></code> that control downloading a thumbnail image for the entire flight (aka thumbnail map). See the help page for the new arguments (<code>pts_col</code>, <code>tbm_use</code>, <code>tbm_overwrite</code>, <code>tbm_size</code>, <code>tbm_src</code>, <code>tbm_api_key</code>, and <code>tbm_exp</code>) and deprecated arguments (<code>png_map</code>, <code>overwrite_png</code>, <code>png_exp</code>, <code>google_api</code>, and <code>col</code>). Some of these are simply name changes, while others are new or have different behavior. In a future update, downloading thumbnail images of the flight area will be moved to a separate function.</p>
+<p>Along the same lines, both Google Maps and Stadia Maps (which replaced the defunct Stamen Maps API) require passing an API key (see the <code><a href="../reference/uas_report.html">uas_report()</a></code> help page for info about how to get an API key) . Your preferred service should be passed as <code>tbm_src</code>, and your API key must be passed as <code>tbm_api_key</code>. If you use Google Maps, you’ll get a satellite image, while Stadia Maps will download a terrain image (similar to Stamen). Thumbnail maps are still downloaded using <code>ggmap</code>, however you can no longer ‘preload’ your API key in <code>.Renviron</code>; you must pass it in explicitly with <code>tbm_api_key</code>. If this present problems contact the package author.</p>
+<p>Other changes include:</p>
 <ul><li>
 <code><a href="../reference/uas_exp_geotiff.html">uas_exp_geotiff()</a></code>: new function to create a pseudo-georectified image (using the modeled footprint) as a GeoTIFF (<a href="https://github.com/ucanr-igis/uasimg/issues/7" class="external-link">#7</a>)</li>
 <li>
@@ -66,7 +77,7 @@
 <li>
 <code><a href="../reference/uas_report.html">uas_report()</a></code>: <code>units</code> argument added to set whether to use imperial or metrics units for the flight area, altitude AGL, and GSD (<a href="https://github.com/ucanr-igis/uasimg/issues/11" class="external-link">#11</a>). Several arguments related to downloading thumbnail images of flight areas have been deprecated, renamed, or added, for consistency and to deal with changes in ggmap.<br></li>
 <li>
-<code>uas_report.Rmd</code>: modified so the thumbnail image height is automatically set by the browser (to accommodate thumbnail images with different aspect ratios, including rotated images); added full screen control; added code to support <code>units</code> argument</li>
+<code>uas_report.Rmd</code>: modified so the thumbnail image height is automatically set by the browser (to accommodate thumbnail images with different aspect ratios, including rotated images); added a button to display the map full screen; added code to support <code>units</code> argument</li>
 <li>
 <code><a href="../reference/uas_info.html">uas_info()</a></code>: the cache is auto-refreshed if <code>fp=TRUE</code> and <code>cache=TRUE</code> but the cache doesn’t contain footprints (<a href="https://github.com/ucanr-igis/uasimg/issues/6" class="external-link">#6</a>); added an extra sort by datetimeoriginal to deal with the odd case where sorting images by their filenames doesn’t result in a sequential order (<a href="https://github.com/ucanr-igis/uasimg/issues/9" class="external-link">#9</a>).</li>
 <li>

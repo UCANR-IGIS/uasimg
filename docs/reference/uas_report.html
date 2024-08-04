@@ -29,6 +29,10 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/catalog_wrkflw.html">Cataloging Workflow</a></li>
     <li><a class="dropdown-item" href="../articles/flight_metadata.html">Flight Metadata</a></li>
   </ul></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-presentations" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Presentations</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-presentations"><li><a class="dropdown-item" href="https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2024-06-27.html">Drone Image Utilities for R Overview</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/ucanr-igis/uasimg/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
@@ -78,6 +82,7 @@
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_gps_coord <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  png_map <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  overwrite_png <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  png_exp <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  google_api <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -200,20 +205,20 @@
 <dd><p>`r lifecycle::badge("deprecated")` Use tbm_use</p></dd>
 
 
+<dt id="arg-overwrite-png">overwrite_png<a class="anchor" aria-label="anchor" href="#arg-overwrite-png"></a></dt>
+<dd><p>`r lifecycle::badge("deprecated")` Use tbm_overwrite</p></dd>
+
+
 <dt id="arg-png-exp">png_exp<a class="anchor" aria-label="anchor" href="#arg-png-exp"></a></dt>
 <dd><p>`r lifecycle::badge("deprecated")` Use tbm_exp</p></dd>
 
 
 <dt id="arg-google-api">google_api<a class="anchor" aria-label="anchor" href="#arg-google-api"></a></dt>
-<dd><p>`r lifecycle::badge("deprecated")`</p></dd>
+<dd><p>`r lifecycle::badge("deprecated")` Use tbm_api_key</p></dd>
 
 
 <dt id="arg-col">col<a class="anchor" aria-label="anchor" href="#arg-col"></a></dt>
-<dd><p>`r lifecycle::badge("deprecated")`</p></dd>
-
-
-<dt id="arg-overwrite-png">overwrite_png<a class="anchor" aria-label="anchor" href="#arg-overwrite-png"></a></dt>
-<dd><p>`r lifecycle::badge("deprecated")` Use tbm_overwrite</p></dd>
+<dd><p>`r lifecycle::badge("deprecated")` Use pts_col</p></dd>
 
 </dl></div>
     <div class="section level2">

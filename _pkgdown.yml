@@ -5,15 +5,15 @@ template:
   bootswatch: yeti
   includes:
     in_header: |
-       <!-- Google tag (gtag.js) -->
-       <script async src="https://www.googletagmanager.com/gtag/js?id=G-68H6V5WRXH"></script>
-       <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
-         gtag('js', new Date());
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-68H6V5WRXH"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-         gtag('config', 'G-68H6V5WRXH');
-       </script>
+        gtag('config', 'G-68H6V5WRXH');
+      </script>
 development:
   mode: unreleased
 home:
@@ -94,7 +94,7 @@ navbar:
     - intro
     - reference
     - articles
-    - tutorials
+    - presentations
     - news
     right: github
   components:
@@ -115,6 +115,6 @@ navbar:
     presentations:
       text: Presentations
       menu:
-       - text: "Overview of Drone Image Utilities"
-         href: https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2021-05-13.html
+       - text: "Drone Image Utilities for R Overview"
+         href: https://ucanr-igis.github.io/uasimg-res/pres/intro-uasimg_2024-06-27.html
 

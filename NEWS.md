@@ -1,6 +1,18 @@
 # uasimg 1.9.0 (2024-08-01)
 
-This is a fairly significant update. Key feature improvements include i) rotated thumbnail images in flight summary reports, ii) the ability to export individual images as pseudo-rectified GeoTIFFs, and iii) repairing the ability to download thumbnail images of flights from Google Maps and StadiaMaps (via ggmap).
+This is a fairly significant update. Key changes include:
+
+1. rotated thumbnail images in flight summary reports
+2. The ability to export individual images as pseudo-rectified GeoTIFFs
+3. Repairing the ability to download thumbnail images of flights from Google Maps or Stadia Maps (via ggmap) for flight summary reports, and several changes to the arguments in `uas_report()` that control this.
+
+To use rotated thumbnail images for the flight summary reports, you must create the thumbnail images using `uas_thumbnails_make()` (and set the `rotate` argument to `TRUE`). If you don't do this but ask for thumbnail images to be included in a flight summary report, `uas_report()` will still create thumbnail images on-the-fly, but there isn't a rotation option (and in a future update `uas_report()` will no longer generate thumbnails on-the-fly).
+
+Changes were also made to several arguments in `uas_report()` that control downloading a thumbnail image for the entire flight (aka thumbnail map). See the help page for the new arguments (`pts_col`, `tbm_use`, `tbm_overwrite`, `tbm_size`, `tbm_src`, `tbm_api_key`, and `tbm_exp`) and deprecated arguments (`png_map`, `overwrite_png`, `png_exp`, `google_api`, and `col`). Some of these are simply name changes, while others are new or have different behavior. In a future update, downloading thumbnail images of the flight area will be moved to a separate function.
+
+Along the same lines, both Google Maps and Stadia Maps (which replaced the defunct Stamen Maps API) require passing an API key (see the `uas_report()` help page for info about how to get an API key) . Your preferred service should be passed as `tbm_src`, and your API key must be passed as `tbm_api_key`. If you use Google Maps, you'll get a satellite image, while Stadia Maps will download a terrain image (similar to Stamen). Thumbnail maps are still downloaded using `ggmap`, however you can no longer 'preload' your API key in `.Renviron`; you must pass it in explicitly with `tbm_api_key`. If this present problems contact the package author.
+
+Other changes include:
 
 * `uas_exp_geotiff()`: new function to create a pseudo-georectified image (using the modeled footprint) as a GeoTIFF (#7)
 * `uas_thumbnails_make()`: new argument `rotated` will create rotated thumbnails (FALSE by default for backward compatibility)
@@ -12,7 +24,7 @@ This is a fairly significant update. Key feature improvements include i) rotated
 * `lifecycle` package added to imports (to communicate renamed arguments)  
 * `uas_exp_kml()`, `uas_exp_shp()`, `uas_thumbnails_make()`, `uas_move()`, `uas_rename()`, `uas_report()`: argument `flt` added for consistency across functions; `flt_idx` deprecated. Improved error messages (#6)  
 * `uas_report()`: `units` argument added to set whether to use imperial or metrics units for the flight area, altitude AGL, and GSD (#11). Several arguments related to downloading thumbnail images of flight areas have been deprecated, renamed, or added, for consistency and to deal with changes in ggmap.  
-* `uas_report.Rmd`: modified so the thumbnail image height is automatically set by the browser (to accommodate thumbnail images with different aspect ratios, including rotated images); added full screen control; added code to support `units` argument
+* `uas_report.Rmd`: modified so the thumbnail image height is automatically set by the browser (to accommodate thumbnail images with different aspect ratios, including rotated images); added a button to display the map full screen; added code to support `units` argument
 * `uas_info()`: the cache is auto-refreshed if `fp=TRUE` and `cache=TRUE` but the cache doesn't contain footprints (#6); added an extra sort by datetimeoriginal to deal with the odd case where sorting images by their filenames doesn't result in a sequential order (#9). 
 * `cameras.csv`: added DJI Zenmuse P1 (#8), Autel Evo2 RGB
 * `uas_cameras()`: updated to import and view the flight-yaw tag column
