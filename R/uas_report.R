@@ -478,7 +478,7 @@ uas_report <- function(x, flt = NULL, group_img = FALSE, thumbnails = FALSE,
       if ("mcp_kml" %in% attachments) {
         kml_mcp_fn <- paste0(fnbase, "_mcp.kml")
         if (!file.exists(file.path(output_dir_use, kml_mcp_fn))) {
-          uas_exp_kml(x, flt = i, mcp = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
+          uas_exp_kml(x, flt = flt_idx, mcp = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
         }
       } else {
         kml_mcp_fn <- NA
@@ -488,7 +488,7 @@ uas_report <- function(x, flt = NULL, group_img = FALSE, thumbnails = FALSE,
       if ("ctr_kml" %in% attachments) {
         kml_ctr_fn <- paste0(fnbase, "_ctr.kml")
         if (!file.exists(file.path(output_dir_use, kml_ctr_fn))) {
-          uas_exp_kml(x, flt = i, ctr = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
+          uas_exp_kml(x, flt = flt_idx, ctr = TRUE, output_dir = output_dir_use, out_fnbase = fnbase)
         }
       } else {
         kml_ctr_fn <- NA

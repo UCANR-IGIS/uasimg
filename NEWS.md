@@ -1,3 +1,8 @@
+# uasimg 1.9.1 (2024-08-05)
+
+* `uas_report()`: fixed a bug
+* `uas_info()`: trapped errors when Make and Model tags are blank, or not enough images to compute a MCP
+
 # uasimg 1.9.0 (2024-08-01)
 
 This is a fairly significant update. Key changes include:

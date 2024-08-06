@@ -282,7 +282,11 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
       if (nrow(exif_first_df) == 0) stop("Couldn't find EXIF info in the first image file")
 
       camera_make <- exif_first_df[1, "Make"]
+      if (is.na(camera_make)) camera_make <- ""
+
       camera_model <- exif_first_df[1, "Model"]
+      if (is.na(camera_model)) camera_model <- ""
+
       camera_filetype <- exif_first_df[1, "FileType"]
 
       ## Import database of known sensors
@@ -388,20 +392,29 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
       }
 
       # Import EXIF CSV
-
       exif_df <- read.csv(exif_csv_fn, stringsAsFactors=FALSE)
+
       if (is.null(exif_csv)) file.remove(exif_csv_fn)
 
       names(exif_df) <- tolower(names(exif_df))
 
       ## TODO Right here we need to do some checks for tags
+      ## See if focallength is undef (see D:\Data\DroneData\autel-evo2\samples-max-2\orig-missing-make-model)
 
       ## Filter out images with incomplete EXIF info
       idx_incomplete <- which(is.na(exif_df$gpslatitude) |
                                 is.na(exif_df$gpslongitude) |
                                 is.na(exif_df$model) |
                                 is.na(exif_df$filetype))
-      if (length(idx_incomplete) > 0) exif_df <- exif_df[-idx_incomplete, ]
+      if (length(idx_incomplete) > 0) {
+        exif_df <- exif_df[-idx_incomplete, ]
+        warning_msg <- paste0(length(idx_incomplete), " image(s) had one or more required EXIF tags missing, and will be excluded from the result")
+        if (quiet) {
+          warning(warning_msg)
+        } else {
+          message(red(" -", warning_msg))
+        }
+      }
 
       ## Filter out images with 0 elevation
       if (agl_avail) {
@@ -409,6 +422,17 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
           idx_onground <- which(exif_df[[tolower(camera_agl_tag)]] <= 0)
           if (length(idx_onground) > 0) exif_df <- exif_df[-idx_onground, ]
         }
+      }
+
+      if (nrow(exif_df) == 0) {
+        warning_msg <- "No valid images found. Skipping this directory."
+        if (quiet) {
+          warning(warning_msg)
+        } else {
+          message(red(" -", warning_msg))
+        }
+        ## Skip to next directory
+        next
       }
 
       ## Get the total file size
@@ -507,10 +531,11 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
 
         ## Compute footprints
         if (!fp || !agl_avail || tolower(camera_tag_yaw) == "none" || sum(exif_df$sensor_width) == 0) {
+          ## Going to skip footprints
           fp_utm_sf <- NA
             if (!quiet && sum(exif_df$sensor_width) == 0) message(yellow(" - Sensor size not available for this camera"))
           if (!quiet) message(yellow(" - Skipping footprints"))
-          nodes_all_mat <- imgs_ctr_utm_sf %>% st_coordinates()
+          nodes_all_mat <- st_coordinates(imgs_ctr_utm_sf)
 
         } else {
           if (!quiet) message(yellow(" - Creating footprints..."), appendLF = FALSE)
@@ -611,20 +636,27 @@ uas_info <- function(img_dirs, ext = NULL, alt_agl = NULL, fp = FALSE, fwd_overl
         }
 
         ## Create the MCP
-        ## Compute area based on the convex hull around all the corners of all the footprints
+        ## Compute area based on the convex hull around all the corners of all the footprints or centroids
         ## Find the indices of the combined set of corners that comprise the MCP nodes
-        chull_idx <- chull(nodes_all_mat)
-        chull_idx <- c(chull_idx, chull_idx[1])
+        if (nrow(nodes_all_mat) < 3) {
+          mcp_sf <- NA
+          area_m2 <- NA
 
-        ## Turn this into a sf polygon
-        mcp_polygon <- st_polygon(list(nodes_all_mat[chull_idx,]), dim = "XY")
-        mcp_sfc <- st_sfc(mcp_polygon, crs = utm_epsg)
+        } else {
+          chull_idx <- chull(nodes_all_mat)
+          chull_idx <- c(chull_idx, chull_idx[1])
 
-        ## Compute the area
-        area_m2 <- mcp_sfc %>% st_area() %>% as.numeric()
+          ## Turn this into a sf polygon
+          mcp_polygon <- st_polygon(list(nodes_all_mat[chull_idx,]), dim = "XY")
+          mcp_sfc <- st_sfc(mcp_polygon, crs = utm_epsg)
 
-        ## Generate a sf data frame for the MCP
-        mcp_sf <- st_sf(data.frame(img_dir=img_dir, area_m2=area_m2), geometry = mcp_sfc)
+          ## Compute the area
+          area_m2 <- mcp_sfc %>% st_area() %>% as.numeric()
+
+          ## Generate a sf data frame for the MCP
+          mcp_sf <- st_sf(data.frame(img_dir=img_dir, area_m2=area_m2), geometry = mcp_sfc)
+        }
+
 
         ## Shorten field names in imgs_ctr_utm_sf
         all_flds <- names(imgs_ctr_utm_sf)
