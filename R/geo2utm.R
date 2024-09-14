@@ -3,11 +3,11 @@
 #' Finds the UTM zone for a geographic coordinate
 #'
 #' @param x Longitude in decimal degrees. Can also be a numeric vector of length 2 containing longitude and latitude values.
-#' @param lat Latitude in decimal degrees
+#' @param lat Latitude in decimal degrees (omit if x is a vector of long and lat)
 #'
-#' @details This will return a crs object (from the sf package) for the correct UTM zone.
+#' @details This will return the EPSG number of the UTM zone in which \code{x} falls
 #'
-#' @return A \code{crs} object of the correct UTM zone
+#' @return The EPSG number of the correct UTM zone
 #' @export
 
 geo2utm <- function(x, lat=NULL) {
@@ -60,31 +60,4 @@ geo2utm <- function(x, lat=NULL) {
   return(utm)
 
 }
-
-# geo2utm_old <- function(x, lat=NULL) {
-# THIS FUNCTION HAS BEEN DEPRECATED IN FAVOR OF THE ONE ABOVE, BECAUSE WE'RE NO LONGER
-# SUPPOSED TO USE PROJ4 STRINGS
-#
-#   len_err_msg <- "Please pass single numbers for lon and lat. This function is not vectorized."
-#   if(length(x) == 1) {
-#     lon <- x[1]
-#     if (is.null(lat)) stop("lat is a required argument")
-#     if (length(lat) != 1) stop(len_err_msg)
-#   } else if (length(x) == 2) {
-#       if (!is.null(lat)) stop("If you pass a 2-item numeric vector with a longitude and latitude values, you should not pass lat")
-#       lon <- x[1]
-#       lat <- x[2]
-#   } else {
-#     stop(len_err_msg)
-#   }
-#
-#   ## Convert to UTM
-#   utm_zone <- floor((lon + 180) / 6) + 1
-#   utm_ns <- if (lat > 0) " +north" else " +south"
-#
-#   ## Return crs object
-#   sf::st_crs(paste("+proj=utm +zone=", utm_zone, utm_ns, " +ellps=WGS84", sep=""))
-# }
-
-
 

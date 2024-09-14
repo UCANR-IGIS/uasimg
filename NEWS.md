@@ -1,3 +1,7 @@
+# uasimg 1.9.2 (2024-09-13)
+
+* added the XT2 RGB image to the camera database
+
 # uasimg 1.9.1 (2024-08-05)
 
 * `uas_report()`: fixed a bug

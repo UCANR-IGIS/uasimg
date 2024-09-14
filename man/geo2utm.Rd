@@ -9,14 +9,14 @@ geo2utm(x, lat = NULL)
 \arguments{
 \item{x}{Longitude in decimal degrees. Can also be a numeric vector of length 2 containing longitude and latitude values.}
 
-\item{lat}{Latitude in decimal degrees}
+\item{lat}{Latitude in decimal degrees (omit if x is a vector of long and lat)}
 }
 \value{
-A \code{crs} object of the correct UTM zone
+The EPSG number of the correct UTM zone
 }
 \description{
 Finds the UTM zone for a geographic coordinate
 }
 \details{
-This will return a crs object (from the sf package) for the correct UTM zone.
+This will return the EPSG number of the UTM zone in which \code{x} falls
 }

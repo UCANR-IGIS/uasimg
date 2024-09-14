@@ -75,20 +75,6 @@ install.packages('uasimg')
 
 Alternately, you can install it from GitHub:
 
-*Note*: Windows users need *RTools* to build packages from source files
-(which is basically what you do when you install from GitHub). RTools is
-not a R package, rather its a set of utilities that you install
-separately. You can download and install RTools from
-<https://cran.r-project.org/bin/windows/Rtools/>. Alternately, you can
-install RTools from within R by running:
-
-``` r
-install.packages('installr')
-installr::install.Rtools()
-```
-
-After RTools is installed, install `uasimg` from GitHub with:
-
 ``` r
 ## install.packages('remotes')
 remotes::install_github("ucanr-igis/uasimg")
@@ -99,8 +85,8 @@ remotes::install_github("ucanr-igis/uasimg")
 ### exiftool
 
 To read the EXIF data from the image files, `uasimg` requires an
-external command line tool called ‘exiftool’. You can install exiftool
-by running:
+external command line tool called `exiftool`. `exiftool` is **not**
+bundled with `uasimg`, but you can install it by running:
 
 ``` r
 exiftoolr::install_exiftool()
