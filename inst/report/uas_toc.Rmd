@@ -140,7 +140,7 @@ for (i in 1:length(params$html_reports)) {
 
   ## Convert the mcp_b64 character back to sf
   if (!is.na(mcp_b64_txt)) {
-    mcp_sf <- base64decode(mcp_b64_txt) %>% unserialize()
+    mcp_sf <- base64decode(mcp_b64_txt) %>% unserialize() %>% st_transform(4326)
     mcp_all_sf <- rbind(mcp_all_sf, mcp_sf)
   }
 
@@ -184,7 +184,7 @@ if (params$fltmap_show && nrow(mcp_all_sf) > 0) {
                       sapply(1:length(i_lst), function(i) i_lst[[i]]$imgcol$name_use),
                       "</a>")
                   
-  mcp_leaf <- leaflet(mcp_all_sf %>% st_transform(4326), width="750px", height="450px",
+  mcp_leaf <- leaflet(mcp_all_sf, width="750px", height="450px",
                options = leafletOptions(maxZoom = 23)) %>% 
     addTiles(tiles_esri_url, group="Satellite", attribution=tiles_esri_attr) %>%
     addTiles(group="Open Street Map") %>% 
@@ -258,7 +258,7 @@ if (params$fltmap_kml && nrow(mcp_all_sf) > 0) {
     ## Create the string of coordinates
     coords_chr <- mcp_all_sf %>%
       slice(j) %>%
-      st_transform(4326) %>%
+      # st_transform(4326) %>%
       st_coordinates() %>%
       as_tibble() %>%
       mutate(coords = paste(X, Y, "0", sep = ",")) %>%

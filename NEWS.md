@@ -1,3 +1,10 @@
+# uasimg 1.9.3 (2025-01-11)
+
+* `uas_toc()`: fixed an error that occurred if flight summaries were in different UTM zones (#13)
+* `uas_report()`: fixed a dependency bug in when `tbm_use = TRUE`
+* `uas_info()`: make the `ext` argument a vector, changed the default value to common image extensions, updated checks for files with missing EXIF data (#12), added a check for multiple sensor types in one directory
+* `ggplot2` added to Suggests (used when creating whole flight thumbnails)
+
 # uasimg 1.9.2 (2024-09-13)
 
 * added the XT2 RGB image to the camera database
@@ -5,7 +12,7 @@
 # uasimg 1.9.1 (2024-08-05)
 
 * `uas_report()`: fixed a bug
-* `uas_info()`: trapped errors when Make and Model tags are blank, or not enough images to compute a MCP
+* `uas_info()`: trapped errors when Make and Model tags are blank, or if there not enough images to compute a MCP
 
 # uasimg 1.9.0 (2024-08-01)
 

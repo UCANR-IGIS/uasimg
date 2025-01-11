@@ -85,6 +85,10 @@
 #' @importFrom lifecycle deprecated is_present deprecate_warn
 #' @importFrom sf st_transform st_bbox st_drop_geometry
 #' @importFrom methods is
+#' @import htmltools
+#' @import leaflet
+#' @import leaflet.extras
+#' @import base64enc
 #'
 #' @export
 
@@ -183,8 +187,8 @@ uas_report <- function(x, flt = NULL, group_img = FALSE, thumbnails = FALSE,
 
   if (tbm_use) {
     if (!requireNamespace("ggmap", quietly = TRUE)) stop("Package ggmap required to make the thumbnail map")
-    #if (!require("ggmap", quietly = TRUE)) stop("Package ggmap required to make the png map")   ### DONT WANT TO LOAD IT
     if (packageVersion("ggmap") < '3.0.0') stop("Please update ggmap package")
+    if (!requireNamespace("ggplot2", quietly = TRUE)) stop("Package ggplot2 required to make the thumbnail map")
     png_dim <- rep(tbm_size, 2)
   }
 
@@ -305,12 +309,12 @@ uas_report <- function(x, flt = NULL, group_img = FALSE, thumbnails = FALSE,
 
           # Create the ggmap object and save to a variable
           pts_ggmap <- ggmap::ggmap(m) +
-            geom_point(data = x[[flt_idx]]$pts %>% st_drop_geometry(),
-                       aes(gps_long, gps_lat),
+            ggplot2::geom_point(data = x[[flt_idx]]$pts %>% st_drop_geometry(),
+                       ggplot2::aes(gps_long, gps_lat),
                        color = col_use,
                        show.legend = FALSE,
                        size = 3) +
-            theme_void()
+            ggplot2::theme_void()
 
           ## Open the PNG driver
           png(filename = file.path(output_dir_use, map_fn), width = png_dim[1], height = png_dim[2])

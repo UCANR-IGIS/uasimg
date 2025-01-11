@@ -96,8 +96,8 @@ To verify it worked:
 
 ``` r
 exiftoolr::exif_version()
-#> Using ExifTool version 12.50
-#> [1] "12.50"
+#> Using ExifTool version 13.11
+#> [1] "13.11"
 ```
 
 Alternately, you can install exiftool manually by downloading it from
