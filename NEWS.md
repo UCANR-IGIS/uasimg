@@ -1,4 +1,10 @@
+# uasimg 1.9.4 (2025-01-13)
+
+* `uas_info()`: added `pattern` argument to provide more options for specifying images to read in directories with data from mixed sensors; fixed a bug with the error trapping; updated help page.
+
 # uasimg 1.9.3 (2025-01-11)
+
+Note: there's a slight chance this update could break existing code, because the `ext` argument in `uas_info()` now has a non-NULL default value. Moving forward, it is recommended to always specify the image file name extensions using `ext`.
 
 * `uas_toc()`: fixed an error that occurred if flight summaries were in different UTM zones (#13)
 * `uas_report()`: fixed a dependency bug in when `tbm_use = TRUE`

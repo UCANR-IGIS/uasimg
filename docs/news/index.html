@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">uasimg</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.9.3</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,13 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.9.4" id="uasimg-194-2025-01-13">uasimg 1.9.4 (2025-01-13)<a class="anchor" aria-label="anchor" href="#uasimg-194-2025-01-13"></a></h2>
+<ul><li>
+<code><a href="../reference/uas_info.html">uas_info()</a></code>: added <code>pattern</code> argument to provide more options for specifying images to read in directories with data from mixed sensors; fixed a bug with the error trapping; updated help page.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.9.3" id="uasimg-193-2025-01-11">uasimg 1.9.3 (2025-01-11)<a class="anchor" aria-label="anchor" href="#uasimg-193-2025-01-11"></a></h2>
+<p>Note: there’s a slight chance this update could break existing code, because the <code>ext</code> argument in <code><a href="../reference/uas_info.html">uas_info()</a></code> now has a non-NULL default value. Moving forward, it is recommended to always specify the image file name extensions using <code>ext</code>.</p>
 <ul><li>
 <code><a href="../reference/uas_toc.html">uas_toc()</a></code>: fixed an error that occurred if flight summaries were in different UTM zones (<a href="https://github.com/ucanr-igis/uasimg/issues/13" class="external-link">#13</a>)</li>
 <li>

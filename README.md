@@ -10,7 +10,7 @@ badge](https://ajlyons.r-universe.dev/badges/uasimg)](https://ajlyons.r-universe
 
 <!-- badges: end -->
 
-[`uasimg`](http://ucanr-igis.github.io/uasimg/) helps manage images
+[`uasimg`](https://ucanr-igis.github.io/uasimg/) helps manage images
 taken from an unoccupied aerial vehicle (UAV, or drone) that have been
 collected with the intent to stitch them into 2D and 3D products with
 photogrammetry software. The package does **not** stitch images, but
@@ -199,7 +199,7 @@ result to a variable:
 
 ``` r
 library(uasimg)
-hast_ft1_info <- uas_info("c:/Drone_Projects/Hastingsx/Flt01_1443_1446_250ft")
+hast_ft1_info <- uas_info("c:/Drone_Projects/Hastings/Flt01_1443_1446_250ft")
 ```
 
 If you want to record additional metadata about the flight as a whole,
@@ -281,5 +281,5 @@ contact the package author.
 ### Code of Conduct
 
 Please note that the uasimg project is released with a [Contributor Code
-of Conduct](http://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html). By
-contributing to this project, you agree to abide by its terms.
+of Conduct](https://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.

@@ -36,7 +36,7 @@
 
     <a class="navbar-brand me-2" href="index.html">uasimg</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.9.3</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">1.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
-<p><a href="http://ucanr-igis.github.io/uasimg/" class="external-link"><code>uasimg</code></a> helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does <strong>not</strong> stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and prepare images for visualization and analysis in GIS and remote sensing applications.</p>
+<p><a href="https://ucanr-igis.github.io/uasimg/"><code>uasimg</code></a> helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does <strong>not</strong> stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and prepare images for visualization and analysis in GIS and remote sensing applications.</p>
 <div class="section level2">
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h2>
@@ -184,7 +184,7 @@
 <p>The general usage is to first create a flight info object for one or more directories of images using the <em>uas_info()</em> function. Save the result to a variable:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ucanr-igis.github.io/uasimg/">uasimg</a></span><span class="op">)</span></span>
-<span><span class="va">hast_ft1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="st">"c:/Drone_Projects/Hastingsx/Flt01_1443_1446_250ft"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">hast_ft1_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/uas_info.html">uas_info</a></span><span class="op">(</span><span class="st">"c:/Drone_Projects/Hastings/Flt01_1443_1446_250ft"</span><span class="op">)</span></span></code></pre></div>
 <p>If you want to record additional metadata about the flight as a whole, you can create a metadata.txt file in the image folder with <code><a href="reference/uas_metadata_make.html">uas_metadata_make()</a></code>. Edit the metadata.txt file in Notepad (or another text editor), save it, then run <code><a href="reference/uas_info.html">uas_info()</a></code> again.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/uas_metadata_make.html">uas_metadata_make</a></span><span class="op">(</span><span class="va">hast_ft1_info</span>, open <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -232,7 +232,7 @@
 <div class="section level3">
 <h3 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h3>
-<p>Please note that the uasimg project is released with a <a href="http://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the uasimg project is released with a <a href="https://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
 </div>

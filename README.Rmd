@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[`uasimg`](http://ucanr-igis.github.io/uasimg/) helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does **not** stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and prepare images for visualization and analysis in GIS and remote sensing applications.
+[`uasimg`](https://ucanr-igis.github.io/uasimg/) helps manage images taken from an unoccupied aerial vehicle (UAV, or drone) that have been collected with the intent to stitch them into 2D and 3D products with photogrammetry software. The package does **not** stitch images, but helps you create catalogs of your image data, examine their locations and properties, export image centroids and estimated footprints as GIS files, and prepare images for visualization and analysis in GIS and remote sensing applications.
 
 ## Motivation
 
@@ -126,7 +126,7 @@ The general usage is to first create a flight info object for one or more direct
 
 ```{r run_uas_info, eval=FALSE}
 library(uasimg)
-hast_ft1_info <- uas_info("c:/Drone_Projects/Hastingsx/Flt01_1443_1446_250ft")
+hast_ft1_info <- uas_info("c:/Drone_Projects/Hastings/Flt01_1443_1446_250ft")
 ```
 
 If you want to record additional metadata about the flight as a whole, you can create a metadata.txt file in the image folder with `uas_metadata_make()`. Edit the metadata.txt file in Notepad (or another text editor), save it, then run `uas_info()` again. 
@@ -174,5 +174,5 @@ To report a bug, add your camera to the package, or suggest a new feature, pleas
 
 ### Code of Conduct
 
-Please note that the uasimg project is released with a [Contributor Code of Conduct](http://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the uasimg project is released with a [Contributor Code of Conduct](https://ucanr-igis.github.io/uasimg/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 

@@ -2,8 +2,8 @@ Package: uasimg
 Type: Package
 Title: Drone Image Utilities
 Description: This package manages images from drone mapping projects, including data management, metadata creation, creating data catalogs, converting file formats, and utilities for single-image analysis.
-Date: 2025-01-11
-Version: 1.9.3
+Date: 2025-01-13
+Version: 1.9.4
 Authors@R: c(
     person("Andy", "Lyons", , "andlyons@ucanr.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7505-6709")),
